@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="External_Includes\glad\glad.c" />
+    <ClCompile Include="External_Includes\ImGui\imgui.cpp" />
+    <ClCompile Include="External_Includes\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="External_Includes\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="External_Includes\ImGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="External_Includes\ImGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="External_Includes\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="External_Includes\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Src\App.cpp" />
+    <ClCompile Include="Source\Src\Debug\Log.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\Editor.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\FileExplorer.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\Hierarchy.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\MainBar.cpp" />
+    <ClCompile Include="Source\Src\GameEngine2.0.cpp" />
+    <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
+    <ClCompile Include="Source\Src\Resources\Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="External_Includes\glad\glad.h" />
+    <ClInclude Include="External_Includes\ImGui\imconfig.h" />
+    <ClInclude Include="External_Includes\ImGui\imgui.h" />
+    <ClInclude Include="External_Includes\ImGui\imgui_impl_glfw.h" />
+    <ClInclude Include="External_Includes\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="External_Includes\ImGui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="External_Includes\ImGui\imgui_internal.h" />
+    <ClInclude Include="External_Includes\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="External_Includes\ImGui\imstb_textedit.h" />
+    <ClInclude Include="External_Includes\ImGui\imstb_truetype.h" />
+    <ClInclude Include="External_Includes\STB_Image\stb_image.h" />
+    <ClInclude Include="Source\Include\App.h" />
+    <ClInclude Include="Source\Include\Debug\Log.h" />
+    <ClInclude Include="Source\Include\EditorUi\Editor.h" />
+    <ClInclude Include="Source\Include\EditorUi\FileExplorer.h" />
+    <ClInclude Include="Source\Include\EditorUi\Hierarchy.h" />
+    <ClInclude Include="Source\Include\EditorUi\EditorWindow.h" />
+    <ClInclude Include="Source\Include\EditorUi\MainBar.h" />
+    <ClInclude Include="Source\Include\Resources\IResource.h" />
+    <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
+    <ClInclude Include="Source\Include\Resources\Texture.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{087c3b2a-583a-4374-8578-7e4063ae7f7c}</ProjectGuid>
+    <RootNamespace>GameEngine20</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>D:\Documents\Code\GameEngine2.0\GameEngine2.0\Libs;D:\Documents\Code\GameEngine2.0\GameEngine2.0\DLL;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>D:\Documents\Code\GameEngine2.0\GameEngine2.0\Libs;D:\Documents\Code\GameEngine2.0\GameEngine2.0\DLL;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>\Libs;\DLL;$(ProjectDir)Libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)External_Includes;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>D:\Documents\Code\GameEngine2.0\GameEngine2.0\Libs;D:\Documents\Code\GameEngine2.0\GameEngine2.0\DLL;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Documents\Code\GameEngine2.0\GameEngine2.0\External Includes;D:\Documents\Code\GameEngine2.0\GameEngine2.0\Source\Include;D:\Documents\Code\GameEngine2.0\GameEngine2.0\External_Includes</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Documents\Code\GameEngine2.0\GameEngine2.0\External Includes;D:\Documents\Code\GameEngine2.0\GameEngine2.0\Source\Include;D:\Documents\Code\GameEngine2.0\GameEngine2.0\External_Includes</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)External_Includes;$(ProjectDir)Source;D:\Documents\Code\GameEngine2.0\GameEngine2.0\External_Includes</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Documents\Code\GameEngine2.0\GameEngine2.0\External Includes;D:\Documents\Code\GameEngine2.0\GameEngine2.0\Source\Include;D:\Documents\Code\GameEngine2.0\GameEngine2.0\External_Includes</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
