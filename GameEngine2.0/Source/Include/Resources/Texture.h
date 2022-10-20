@@ -14,6 +14,8 @@ namespace Resources {
 
 		void Load(const char* filename) override;
 
+		int GetIndex() { return _index; }
+		GLuint GetData() { return _textureData; }
 	private:
 		const char* _name;
 		unsigned char* _data;

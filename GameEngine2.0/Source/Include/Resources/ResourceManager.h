@@ -14,19 +14,19 @@ namespace Resources {
 
 		template<typename T> T* Create(const char* filename)
 		{
-			auto res = std::shared_ptr<T>(new T());
+			auto res = new T();
 			res->Load(filename);
 			_resource[filename] = res;
-			return res.get();
+			return res;
 		}
 
-		template<typename T> T* Get(const char* filename)
+		template<typename T> static T* Get(const char* filename)
 		{
 			return dynamic_cast<T*>(_resource[filename]);
 		}
 		
 	private:
-		std::unordered_map<std::string, std::shared_ptr<Resources::IResource>> _resource;
+		static std::unordered_map<std::string, Resources::IResource*> _resource;
 
 		
 	};

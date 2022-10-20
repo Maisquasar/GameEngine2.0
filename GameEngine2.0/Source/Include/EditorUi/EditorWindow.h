@@ -8,7 +8,7 @@ namespace EditorUi {
 		
 		virtual void Draw() {}
 
-		void SetOpen(bool value) { _open = value; }
+		virtual void SetOpen(bool value) { _open = value; }
 	protected:
 		bool _open = true;
 

@@ -124,7 +124,7 @@ void App::LoadResources()
 {
 	std::string path = "Assets/Default/Textures";
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		//_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
+		_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
 	}
 }
 
