@@ -34,6 +34,7 @@ namespace EditorUi {
 		Resources::IResource* ResourceLink;
 
 		void FoundChildren();
+		File* GetParent();
 
 	private:
 
