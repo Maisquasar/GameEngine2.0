@@ -14,19 +14,18 @@ namespace Resources {
 
 		template<typename T> T* Create(const char* filename)
 		{
-			auto res = new T();
-			res->Load(filename);
-			_resource[filename] = res;
-			return res;
+			_resource[filename] = std::make_unique<T>();
+			_resource[filename]->Load(filename);
+			return dynamic_cast<T*>(_resource[filename].get());
 		}
 
 		template<typename T> static T* Get(const char* filename)
 		{
-			return dynamic_cast<T*>(_resource[filename]);
+			return dynamic_cast<T*>(_resource[filename].get());
 		}
 		
 	private:
-		static std::unordered_map<std::string, Resources::IResource*> _resource;
+		static std::unordered_map<std::string, std::unique_ptr<Resources::IResource>> _resource;
 
 		
 	};
