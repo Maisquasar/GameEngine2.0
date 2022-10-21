@@ -71,7 +71,11 @@ EditorUi::FileExplorer::FileExplorer()
 	std::replace(_path.begin(), _path.end(), '\\', '/');
 }
 
-EditorUi::FileExplorer::~FileExplorer() {}
+EditorUi::FileExplorer::~FileExplorer() {
+	delete _current;
+	if (_main != _current)
+		delete _main;
+}
 
 void EditorUi::FileExplorer::Draw()
 {
