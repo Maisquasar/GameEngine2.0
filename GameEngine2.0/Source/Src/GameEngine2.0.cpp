@@ -18,9 +18,8 @@ void Main()
 
 int main()
 {
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    _CrtSetBreakAlloc(162);
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
+    //_CrtSetBreakAlloc(160);
     Main();
-    _CrtDumpMemoryLeaks();
     return 0;
 }

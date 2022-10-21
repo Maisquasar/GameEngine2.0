@@ -2,6 +2,7 @@
 
 // -------------- File --------------
 EditorUi::File::File() {}
+
 EditorUi::File::File(std::string filename) {
 	Directory = filename;
 	this->Name = filename.substr(filename.find_last_of("//\\") + 1);
@@ -34,7 +35,11 @@ EditorUi::File::File(std::string filename) {
 
 }
 
-EditorUi::File::~File() {}
+
+EditorUi::File::~File() 
+{
+
+}
 
 void EditorUi::File::FoundChildren()
 {
@@ -62,6 +67,7 @@ EditorUi::File* EditorUi::File::GetParent()
 	return par;
 }
 
+
 // -------------- File Explorer --------------
 
 EditorUi::FileExplorer::FileExplorer()
@@ -72,6 +78,7 @@ EditorUi::FileExplorer::FileExplorer()
 }
 
 EditorUi::FileExplorer::~FileExplorer() {
+	_path.clear();
 	delete _current;
 	if (_main != _current)
 		delete _main;

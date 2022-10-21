@@ -23,7 +23,6 @@ namespace EditorUi {
 		File();
 		File(std::string filename);
 		~File();
-
 		std::string Name;
 		std::string Directory;
 		FileType Type;
