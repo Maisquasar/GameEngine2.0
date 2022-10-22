@@ -14,50 +14,44 @@ void EditorUi::Console::Draw()
 		return;
 	if (ImGui::Begin("Console", &_open))
 	{
-		if (ImGui::SmallButton("Add Log"))
-		{
-			this->AddLine(Debug::LogType::INFO, "Logggggggggggggggggg");
-		}
+		// ----------- LogType Buttons ----------- //
+		char info[64];
+		sprintf_s(info, "%d Info", GetNumberOfLogType(Debug::LogType::INFO));
+		ImGui::Checkbox(info, &_showInfo);
 		ImGui::SameLine();
-		if (ImGui::SmallButton("Info"))
-		{
-			_showInfo = !_showInfo;
-		}
+		char warning[64];
+		sprintf_s(warning, "%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
+		ImGui::Checkbox(warning, &_showWarning);
 		ImGui::SameLine();
-		if (ImGui::SmallButton("Warning"))
-		{
-			_showWarning = !_showWarning;
-		}
-		ImGui::SameLine();
-		if (ImGui::SmallButton("Error"))
-		{
-			_showError = !_showError;
-		}
+		char error[64];
+		sprintf_s(error, "%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));	
+		ImGui::Checkbox(error, &_showError);
+
 		ImGui::Separator();
 		const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 		ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar);
-			for (auto& t : _consoleText)
+		for (auto& t : _consoleText)
+		{
+			switch (t._type)
 			{
-				switch (t._type)
-				{
-				case Debug::LogType::INFO:
-					if (_showInfo)
-						ImGui::TextColored(ImColor(255, 255, 255), t._text.c_str());
-					break;
-				case Debug::LogType::WARNING:
-					if (_showWarning)
-						ImGui::TextColored(ImColor(255, 128, 0), t._text.c_str());
-					break;
-				case Debug::LogType::L_ERROR:
-					if (_showError)
-						ImGui::TextColored(ImColor(255, 0, 0), t._text.c_str());
-					break;
-				default:
-					break;
-				}
+			case Debug::LogType::INFO:
+				if (_showInfo)
+					ImGui::TextColored(ImColor(255, 255, 255), t._text.c_str());
+				break;
+			case Debug::LogType::WARNING:
+				if (_showWarning)
+					ImGui::TextColored(ImColor(255, 128, 0), t._text.c_str());
+				break;
+			case Debug::LogType::L_ERROR:
+				if (_showError)
+					ImGui::TextColored(ImColor(255, 0, 0), t._text.c_str());
+				break;
+			default:
+				break;
 			}
-			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-				ImGui::SetScrollHereY(1.0f);
+		}
+		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+			ImGui::SetScrollHereY(1.0f);
 		ImGui::EndChild();
 		ImGui::Separator();
 		static char input[64];
@@ -70,4 +64,15 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 {
 	auto Text = ConsoleText{ t, s };
 	_consoleText.push_back(Text);
+}
+
+int EditorUi::Console::GetNumberOfLogType(Debug::LogType t)
+{
+	int n = 0;
+	for (auto i : this->_consoleText)
+	{
+		if (i._type == t)
+			n++;
+	}
+	return n;
 }

@@ -36,5 +36,7 @@ namespace EditorUi {
 		bool _showInfo = true;
 		bool _showWarning = true;
 		bool _showError = true;
+
+		int GetNumberOfLogType(Debug::LogType);
 	};
 }
