@@ -8,7 +8,7 @@
 
 void Main()
 {
-    App app = App("GameEngine2.0", 800, 600);
+    App app = App("GameEngine2.0", 1920, 1080);
     app.InitializeApp();
 
     app.Update();

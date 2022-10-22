@@ -29,6 +29,7 @@
     <ClCompile Include="External_Includes\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Debug\Log.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\Console.cpp" />
     <ClCompile Include="Source\Src\EditorUi\Editor.cpp" />
     <ClCompile Include="Source\Src\EditorUi\FileExplorer.cpp" />
     <ClCompile Include="Source\Src\EditorUi\Hierarchy.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="External_Includes\STB_Image\stb_image.h" />
     <ClInclude Include="Source\Include\App.h" />
     <ClInclude Include="Source\Include\Debug\Log.h" />
+    <ClInclude Include="Source\Include\EditorUi\Console.h" />
     <ClInclude Include="Source\Include\EditorUi\Editor.h" />
     <ClInclude Include="Source\Include\EditorUi\FileExplorer.h" />
     <ClInclude Include="Source\Include\EditorUi\Hierarchy.h" />

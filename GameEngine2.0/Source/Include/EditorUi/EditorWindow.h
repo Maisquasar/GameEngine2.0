@@ -1,4 +1,6 @@
 #pragma once
+#include <ImGui/imgui.h>
+
 namespace EditorUi {
 	class EditorWindow
 	{

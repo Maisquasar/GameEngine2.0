@@ -1,16 +1,12 @@
 #pragma once
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 #include <Windows.h>
+#include <string>
+#include "Include/EditorUi/Console.h"
 
 namespace Debug {
-
-	enum class LogType
-	{
-		INFO,
-		WARNING,
-		L_ERROR,
-	};
 
 	class Log
 	{
@@ -39,16 +35,19 @@ namespace Debug {
 			default:
 				break;
 			}
+			Console.AddLine(type, buf);
 			printf(buf);
 			printf("\n");
 			SetConsoleTextAttribute(hConsole, 15);
 		}
-
+		static EditorUi::Console Console;
 	private:
 
 	};
 
 }
 
+
 #define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 #define DebugLog(t, x, ...) Debug::Log::Print(__FILENAME__, __LINE__, t, x, __VA_ARGS__);
+

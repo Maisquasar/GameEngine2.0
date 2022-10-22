@@ -3,6 +3,8 @@
 #include "Include/EditorUi/Hierarchy.h"
 #include "Include/EditorUi/MainBar.h"
 #include "Include/EditorUi/FileExplorer.h"
+#include "Include/EditorUi/Console.h"
+
 namespace EditorUi{
 	class Editor
 	{

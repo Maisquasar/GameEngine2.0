@@ -245,9 +245,9 @@ void EditorUi::FileExplorer::RightClickWindow()
 					{
 						std::filesystem::remove_all(_clicked->Directory.c_str());
 					}
-					catch (const std::exception&)
+					catch (const std::exception& e)
 					{
-						
+						DebugLog(Debug::LogType::L_ERROR, "Error Delete file %s", e.what());
 					}
 					_current->FoundChildren();
 					ImGui::CloseCurrentPopup();
