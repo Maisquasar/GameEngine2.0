@@ -78,6 +78,7 @@ void EditorUi::FileExplorer::Draw()
 {
 	if (!_open)
 		return;
+	bool rightclick = false;
 	if (ImGui::Begin("File Explorer", &_open))
 	{
 		// ------------- Back Button ------------- //
@@ -119,6 +120,7 @@ void EditorUi::FileExplorer::Draw()
 				_current = _main;
 			}
 		}
+		// ------------- Filter Text ------------- //
 		ImGui::SameLine();
 		static ImGuiTextFilter filter;
 		filter.Draw();
@@ -132,7 +134,16 @@ void EditorUi::FileExplorer::Draw()
 				ImGui::PushID(index);
 				ImGui::BeginGroup();
 				if (filter.PassFilter(items[index].c_str())) {
-					if (ImGui::ImageButton((void*)f->Icon->GetData(), ImVec2(86, 86))) {
+					ImGui::ImageButton((void*)f->Icon->GetData(), ImVec2(86, 86));
+					if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
+					{
+						ImGui::OpenPopup("RightClick");
+						_clicked = f;
+						rightclick = true;
+					}
+					RightClickWindow();
+					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+					{
 						try
 						{
 							if (f->Type == FileType::Folder) {
@@ -172,7 +183,14 @@ void EditorUi::FileExplorer::Draw()
 				ImGui::PopID();
 			}
 			ImGui::EndChild();
+
 		}
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && !rightclick)
+		{
+			ImGui::OpenPopup("RightClick");
+			_clicked = nullptr;
+		}
+		RightClickWindow();
 		ImGui::End();
 	}
 }
@@ -188,4 +206,60 @@ void EditorUi::FileExplorer::Refresh()
 	_main = std::make_shared<File>(_path);
 	_main->FoundChildren();
 	_current = _main;
+}
+
+void EditorUi::FileExplorer::RightClickWindow()
+{
+	if (ImGui::BeginPopup("RightClick", ImGuiWindowFlags_NoDecoration))
+	{
+		if (ImGui::Button("New Folder"))
+		{
+			std::filesystem::create_directory(_current->Directory + "/NewFolder");
+			_current->FoundChildren();
+		}
+		if (_clicked != nullptr)
+		{
+			// ------------- Rename ------------- //
+			char Name[64];
+			for (int i = 0; i < _clicked->Name.size(); i++)
+				Name[i] = _clicked->Name[i];
+			Name[_clicked->Name.size()] = '\0';
+			if (ImGui::InputText("Rename", Name, 64, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				std::filesystem::rename(_clicked->Directory, _clicked->Directory.substr(0, _clicked->Directory.find_last_of('/') + 1) + Name);
+				_current->FoundChildren();
+				ImGui::OpenPopup("Rename");
+				ImGui::CloseCurrentPopup();
+			}
+			// ------------- Delete ------------- //
+			if (ImGui::Button("Delete"))
+			{
+				ImGui::OpenPopup("Delete");
+			}
+			if (ImGui::BeginPopupModal("Delete"))
+			{
+				ImGui::Text("Are you sure ?");
+				if (ImGui::Button("Yes"))
+				{
+					try
+					{
+						std::filesystem::remove_all(_clicked->Directory.c_str());
+					}
+					catch (const std::exception&)
+					{
+						
+					}
+					_current->FoundChildren();
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("No"))
+				{
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
+		}
+		ImGui::EndPopup();
+	}
 }

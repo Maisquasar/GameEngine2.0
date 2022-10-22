@@ -27,6 +27,7 @@ namespace EditorUi {
 		std::string Directory;
 		FileType Type = FileType::None;
 		std::vector<std::shared_ptr<File>> Children;
+		bool Selected = false;
 
 		Resources::Texture* Icon = nullptr;
 		Resources::IResource* ResourceLink = nullptr;
@@ -51,5 +52,8 @@ namespace EditorUi {
 		std::string _path = "Assets";
 		std::shared_ptr<File> _current = nullptr;
 		std::shared_ptr<File> _main;
+
+		std::shared_ptr<File> _clicked = nullptr;
+		void RightClickWindow();
 	};
 }
