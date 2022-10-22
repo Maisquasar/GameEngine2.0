@@ -22,6 +22,7 @@ void EditorUi::MainBar::Draw()
 			if (ImGui::MenuItem("Open Scene", "Ctrl+O"))
 			{
 				//TODO: Open Scene via Explorer + shortcut.
+				EditorUi::Editor::GetFileExplorer()->SetOpen(true);
 			}
 			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 			{

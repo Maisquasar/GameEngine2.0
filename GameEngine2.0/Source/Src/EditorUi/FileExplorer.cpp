@@ -34,9 +34,7 @@ EditorUi::File::File(std::string filename) {
 }
 
 
-EditorUi::File::~File() 
-{
-}
+EditorUi::File::~File() {}
 
 void EditorUi::File::FoundChildren()
 {
@@ -74,9 +72,7 @@ EditorUi::FileExplorer::FileExplorer()
 	std::replace(_path.begin(), _path.end(), '\\', '/');
 }
 
-EditorUi::FileExplorer::~FileExplorer() {
-	_path.clear();
-}
+EditorUi::FileExplorer::~FileExplorer() {}
 
 void EditorUi::FileExplorer::Draw()
 {
@@ -84,49 +80,84 @@ void EditorUi::FileExplorer::Draw()
 		return;
 	if (ImGui::Begin("File Explorer", &_open))
 	{
+		// ------------- Back Button ------------- //
 		if (ImGui::Button("Back"))
 		{
 			_current = _current->GetParent();
 		}
 		ImGui::SameLine();
-		// Input Text.
+		// ------------- Directory Input ------------- //
 		char Path[2048];
 		for (int i = 0; i < _current->Directory.size(); i++)
 			Path[i] = _current->Directory[i];
 		Path[_current->Directory.size()] = '\0';
-		ImGui::InputText("Path", Path, 2048);
+		if (ImGui::InputText("Path", Path, 2048, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			try
+			{
+				std::shared_ptr<File> tmp = std::make_shared<File>(Path);
+				tmp->FoundChildren();
+				_current = tmp;
+			}
+			catch (const std::exception& e)
+			{
+				// Case when not found
+				DebugLog(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
+			}
+		}
+		ImGui::SameLine();
+		// ------------- Refresh Button ------------- //
+		if (ImGui::Button("Refresh"))
+		{
+			try
+			{
+				_current->FoundChildren();
+			}
+			catch (const std::exception& e)
+			{
+				DebugLog(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
+				_current = _main;
+			}
+		}
+		ImGui::SameLine();
+		static ImGuiTextFilter filter;
+		filter.Draw();
+		std::vector<std::string> items;
+		// ------------- Files Buttons ------------- //
 		ImGui::Separator();
-		// Folders Buttons.
 		if (ImGui::BeginChild("Child")) {
 			int index = 0;
-			for (auto &f : _current->Children) {
-				ImGui::PushID(index++);
+			for (auto& f : _current->Children) {
+				items.push_back(f->Name);
+				ImGui::PushID(index);
 				ImGui::BeginGroup();
-				if (ImGui::ImageButton((void*)f->Icon->GetData(), ImVec2(86, 86))) {
-					try
-					{
-						if (f->Type == FileType::Folder) {
-							f->FoundChildren();
-							_current = f;
-							ImGui::EndGroup();
-							ImGui::PopID();
-							break;
+				if (filter.PassFilter(items[index].c_str())) {
+					if (ImGui::ImageButton((void*)f->Icon->GetData(), ImVec2(86, 86))) {
+						try
+						{
+							if (f->Type == FileType::Folder) {
+								f->FoundChildren();
+								_current = f;
+								ImGui::EndGroup();
+								ImGui::PopID();
+								break;
+							}
+						}
+						catch (const std::exception& e)
+						{
+							// Case when not accessible because of rights.
+							DebugLog(Debug::LogType::L_ERROR, "Error opening folder %s : %s", f->Directory.c_str(), e.what());
 						}
 					}
-					catch (const std::exception&)
+					// Name of the file.
+					if (ImGui::IsItemHovered())
 					{
-						// Case when not accessible because of rights.
-						DebugLog(Debug::LogType::L_ERROR, "Error opening folder %s", f->Directory.c_str());
+						ImGui::BeginTooltip();
+						ImGui::Text(f->Name.c_str());
+						ImGui::EndTooltip();
 					}
+					ImGui::TextUnformatted(f->Name.substr(0, 10).c_str());
 				}
-				// Name of the file.
-				if (ImGui::IsItemHovered())
-				{
-					ImGui::BeginTooltip();
-					ImGui::Text(f->Name.c_str());
-					ImGui::EndTooltip();
-				}
-				ImGui::TextUnformatted(f->Name.substr(0, 10).c_str());
 				ImGui::EndGroup();
 
 				auto windowSize = ImGui::GetWindowSize();
@@ -137,6 +168,7 @@ void EditorUi::FileExplorer::Draw()
 						ImGui::SameLine();
 					}
 				}
+				index++;
 				ImGui::PopID();
 			}
 			ImGui::EndChild();
