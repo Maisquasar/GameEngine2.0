@@ -10,35 +10,32 @@ EditorUi::File::File(std::string filename) {
 	if (this->Name.substr(this->Name.find_last_of(".") + 1) == "png")
 	{
 		this->Type = EditorUi::FileType::Img;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>(this->Directory.c_str())) {
+		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>(this->Name.c_str())) {
 			this->Icon = tex;
 			this->ResourceLink = tex;
 		}
 		else
 		{
-			this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
+			this->Icon = Resources::ResourceManager::Get<Resources::Texture>("file_icon.png");
 		}
 	}
 	else if (std::filesystem::is_directory(Directory))
 	{
 		this->Type = EditorUi::FileType::Folder;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/folder_icon.png"))
+		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("folder_icon.png"))
 			this->Icon = tex;
 	}
 	else
 	{
 		this->Type = EditorUi::FileType::None;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png"))
+		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("file_icon.png"))
 			this->Icon = tex;
-
 	}
-
 }
 
 
 EditorUi::File::~File() 
 {
-
 }
 
 void EditorUi::File::FoundChildren()
@@ -50,7 +47,7 @@ void EditorUi::File::FoundChildren()
 		std::string dir = entry.path().generic_string().data();
 		try
 		{
-			Children.push_back(new File(dir));
+			Children.push_back(std::make_shared<File>(dir));
 		}
 		catch (const std::exception&)
 		{
@@ -59,10 +56,10 @@ void EditorUi::File::FoundChildren()
 	}
 }
 
-EditorUi::File* EditorUi::File::GetParent()
+std::shared_ptr<EditorUi::File> EditorUi::File::GetParent()
 {
 	auto dir = this->Directory.substr(0, this->Directory.find_last_of("/"));
-	auto par = new File(dir);
+	auto par = std::make_shared<File>(dir);
 	par->FoundChildren();
 	return par;
 }
@@ -79,9 +76,6 @@ EditorUi::FileExplorer::FileExplorer()
 
 EditorUi::FileExplorer::~FileExplorer() {
 	_path.clear();
-	delete _current;
-	if (_main != _current)
-		delete _main;
 }
 
 void EditorUi::FileExplorer::Draw()
@@ -105,15 +99,18 @@ void EditorUi::FileExplorer::Draw()
 		// Folders Buttons.
 		if (ImGui::BeginChild("Child")) {
 			int index = 0;
-			for (auto f : _current->Children) {
+			for (auto &f : _current->Children) {
 				ImGui::PushID(index++);
 				ImGui::BeginGroup();
-				if (ImGui::ImageButton((ImTextureID)f->Icon->GetData(), ImVec2(86, 86))) {
+				if (ImGui::ImageButton((void*)f->Icon->GetData(), ImVec2(86, 86))) {
 					try
 					{
 						if (f->Type == FileType::Folder) {
 							f->FoundChildren();
 							_current = f;
+							ImGui::EndGroup();
+							ImGui::PopID();
+							break;
 						}
 					}
 					catch (const std::exception&)
@@ -133,7 +130,7 @@ void EditorUi::FileExplorer::Draw()
 				ImGui::EndGroup();
 
 				auto windowSize = ImGui::GetWindowSize();
-				int rounded = round(windowSize.x / 105);
+				int rounded = (int)round(windowSize.x / 105);
 				if (rounded > 0) {
 					if (index % rounded != rounded - 1)
 					{
@@ -156,7 +153,7 @@ void EditorUi::FileExplorer::SetOpen(bool value)
 
 void EditorUi::FileExplorer::Refresh()
 {
-	_main = new File(_path);
+	_main = std::make_shared<File>(_path);
 	_main->FoundChildren();
 	_current = _main;
 }

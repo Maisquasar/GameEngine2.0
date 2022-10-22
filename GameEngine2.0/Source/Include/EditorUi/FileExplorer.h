@@ -25,15 +25,14 @@ namespace EditorUi {
 		~File();
 		std::string Name;
 		std::string Directory;
-		FileType Type;
-		File* Parent;
-		std::vector<File*> Children;
+		FileType Type = FileType::None;
+		std::vector<std::shared_ptr<File>> Children;
 
-		Resources::Texture* Icon;
-		Resources::IResource* ResourceLink;
+		Resources::Texture* Icon = nullptr;
+		Resources::IResource* ResourceLink = nullptr;
 
 		void FoundChildren();
-		File* GetParent();
+		std::shared_ptr<File> GetParent();
 
 	private:
 
@@ -50,7 +49,7 @@ namespace EditorUi {
 		void Refresh();
 	private:
 		std::string _path = "Assets";
-		File* _current = nullptr;
-		File* _main;
+		std::shared_ptr<File> _current = nullptr;
+		std::shared_ptr<File> _main;
 	};
 }

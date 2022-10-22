@@ -12,9 +12,12 @@ namespace Resources {
 		ResourceManager();
 		~ResourceManager();
 
-		template<typename T> T* Create(const char* filename)
+		template<typename T> T* Create(std::string filename)
 		{
+			std::string Path = filename;
+			filename = filename.substr(filename.find_last_of("//\\") + 1);
 			_resource[filename] = new T();
+			_resource[filename]->SetPath(Path);
 			_resource[filename]->Load(filename);
 			return dynamic_cast<T*>(_resource[filename]);
 		}

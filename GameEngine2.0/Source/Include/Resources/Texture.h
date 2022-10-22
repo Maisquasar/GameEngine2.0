@@ -12,12 +12,12 @@ namespace Resources {
 		Texture();
 		~Texture();
 
-		void Load(const char* filename) override;
+		void Load(std::string filename) override;
 
 		int GetIndex() { return _index; }
 		GLuint GetData() { return _textureData; }
 	private:
-		const char* _name;
+		std::string _name;
 		unsigned char* _data;
 		GLuint _textureData = 0;
 		int _width;
