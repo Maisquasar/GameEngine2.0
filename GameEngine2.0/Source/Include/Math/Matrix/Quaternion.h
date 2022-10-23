@@ -23,7 +23,7 @@ namespace Math {
 
 		static Quaternion Identity() { return Quaternion(0, 0, 0, 1); }
 
-		static Quaternion AngleAxis(float angle, Vector3 axis);
+		inline static Quaternion AngleAxis(float angle, Vector3 axis);
 
 		void Inverse();
 
@@ -35,9 +35,9 @@ namespace Math {
 
 		float Dot(Quaternion a);
 
-		Vector3 ToEuler();
+		inline Vector3 ToEuler();
 
-		Matrix4 ToRotationMatrix();
+		inline Matrix4 ToRotationMatrix();
 
 		void Print() const;
 	};

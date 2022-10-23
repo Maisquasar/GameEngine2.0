@@ -1,5 +1,6 @@
 #pragma once
 #include "Math.h"
+
 inline float Math::ToRadians(float in)
 {
 	return in / 180.f * PI;

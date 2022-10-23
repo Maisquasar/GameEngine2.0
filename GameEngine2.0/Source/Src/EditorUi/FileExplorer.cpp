@@ -134,7 +134,7 @@ void EditorUi::FileExplorer::Draw()
 				ImGui::PushID(index);
 				ImGui::BeginGroup();
 				if (filter.PassFilter(items[index].c_str())) {
-					ImGui::ImageButton((void*)f->Icon->GetData(), ImVec2(86, 86));
+					ImGui::ImageButton((ImTextureID)static_cast<uintptr_t>(f->Icon->GetData()), ImVec2(86, 86));
 					if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
 					{
 						ImGui::OpenPopup("RightClick");

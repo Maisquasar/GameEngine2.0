@@ -30,33 +30,35 @@ namespace Math {
 
 		Matrix4 operator*(const Matrix4& a) const;
 
-		Vector4 operator*(const Vector4& a) const;
+		inline Vector4 operator*(const Vector4& a) const;
 
 		Matrix4 operator+(const Matrix4& a) const;
 
 		static Matrix4 Identity();
 
-		static Matrix4 CreateTransformMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale);
+		inline static Matrix4 CreateTransformMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale);
 
-		static Matrix4 CreateTranslationMatrix(const Vector3& translation);
+		inline static Matrix4 CreateTranslationMatrix(const Vector3& translation);
 
-		static Matrix4 CreateScaleMatrix(const Vector3& scale);
+		inline static Matrix4 CreateScaleMatrix(const Vector3& scale);
 
-		static Matrix4 CreateXRotationMatrix(float angle);
+		inline static Matrix4 CreateXRotationMatrix(float angle);
 
-		static Matrix4 CreateYRotationMatrix(float angle);
+		inline static Matrix4 CreateYRotationMatrix(float angle);
 
-		static Matrix4 CreateZRotationMatrix(float angle);
+		inline static Matrix4 CreateZRotationMatrix(float angle);
 
-		static Matrix4 CreateRotationMatrix(const Vector3& rotation);
+		inline static Matrix4 CreateRotationMatrix(const Vector3& rotation);
 
-		static Matrix4 CreatePerspectiveProjectionMatrix(float, float, float);
+		inline static Matrix4 CreatePerspectiveProjectionMatrix(float, float, float);
 
-		const Quaternion ToQuaternion();
+		inline const Quaternion ToQuaternion();
 
-		Vector3 GetPosition();
-		Vector3 GetRotation();
-		Vector3 GetScale();
+		inline Vector3 GetPosition();
+
+		inline Vector3 GetRotation();
+
+		inline Vector3 GetScale();
 
 		Matrix4 CreateInverseMatrix();
 
