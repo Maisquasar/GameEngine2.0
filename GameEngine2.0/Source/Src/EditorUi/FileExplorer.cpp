@@ -88,11 +88,11 @@ void EditorUi::FileExplorer::Draw()
 		}
 		ImGui::SameLine();
 		// ------------- Directory Input ------------- //
-		char Path[2048];
-		for (int i = 0; i < _current->Directory.size(); i++)
+		char Path[512];
+		for (size_t i = 0; i < _current->Directory.size(); i++)
 			Path[i] = _current->Directory[i];
 		Path[_current->Directory.size()] = '\0';
-		if (ImGui::InputText("Path", Path, 2048, ImGuiInputTextFlags_EnterReturnsTrue))
+		if (ImGui::InputText("Path", Path, 512, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			try
 			{
@@ -182,7 +182,7 @@ void EditorUi::FileExplorer::Draw()
 				index++;
 				ImGui::PopID();
 			}
-			ImGui::EndChild();
+			ImGui::EndChild(); 
 
 		}
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && !rightclick)
@@ -191,8 +191,8 @@ void EditorUi::FileExplorer::Draw()
 			_clicked = nullptr;
 		}
 		RightClickWindow();
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 void EditorUi::FileExplorer::SetOpen(bool value)

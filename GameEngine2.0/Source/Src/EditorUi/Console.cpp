@@ -29,35 +29,36 @@ void EditorUi::Console::Draw()
 
 		ImGui::Separator();
 		const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-		ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar);
-		for (auto& t : _consoleText)
-		{
-			switch (t._type)
+		if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar)) {
+			for (auto& t : _consoleText)
 			{
-			case Debug::LogType::INFO:
-				if (_showInfo)
-					ImGui::TextColored(ImColor(255, 255, 255), t._text.c_str());
-				break;
-			case Debug::LogType::WARNING:
-				if (_showWarning)
-					ImGui::TextColored(ImColor(255, 128, 0), t._text.c_str());
-				break;
-			case Debug::LogType::L_ERROR:
-				if (_showError)
-					ImGui::TextColored(ImColor(255, 0, 0), t._text.c_str());
-				break;
-			default:
-				break;
+				switch (t._type)
+				{
+				case Debug::LogType::INFO:
+					if (_showInfo)
+						ImGui::TextColored(ImColor(255, 255, 255), t._text.c_str());
+					break;
+				case Debug::LogType::WARNING:
+					if (_showWarning)
+						ImGui::TextColored(ImColor(255, 128, 0), t._text.c_str());
+					break;
+				case Debug::LogType::L_ERROR:
+					if (_showError)
+						ImGui::TextColored(ImColor(255, 0, 0), t._text.c_str());
+					break;
+				default:
+					break;
+				}
 			}
+			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+				ImGui::SetScrollHereY(1.0f);
+			ImGui::EndChild();
 		}
-		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-			ImGui::SetScrollHereY(1.0f);
-		ImGui::EndChild();
 		ImGui::Separator();
 		static char input[64];
 		ImGui::InputText("Input", input, 64, ImGuiInputTextFlags_EnterReturnsTrue);
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 void EditorUi::Console::AddLine(Debug::LogType t, std::string s)

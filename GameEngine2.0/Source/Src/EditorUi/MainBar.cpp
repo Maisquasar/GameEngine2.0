@@ -39,6 +39,13 @@ void EditorUi::MainBar::Draw()
 			}
 			ImGui::EndMenu();
 		}
-		ImGui::EndMainMenuBar();
+		if (ImGui::BeginMenu("Window"))
+		{
+			ImGui::Checkbox("Hierarchy", Editor::GetHierarchy()->IsOpen());
+			ImGui::Checkbox("Console", Debug::Log::Console.IsOpen());
+			ImGui::Checkbox("File Explorer", Editor::GetFileExplorer()->IsOpen());
+			ImGui::EndMenu();
+		}
 	}
+	ImGui::EndMainMenuBar();
 }

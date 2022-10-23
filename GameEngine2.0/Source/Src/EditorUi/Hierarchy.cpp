@@ -6,9 +6,11 @@ EditorUi::Hierarchy::~Hierarchy(){}
 
 void EditorUi::Hierarchy::Draw()
 {
-	if (ImGui::Begin("Hierarchy"))
+	if (!_open)
+		return;
+	if (ImGui::Begin("Hierarchy", &_open))
 	{
 
-		ImGui::End();
 	}
+	ImGui::End();
 }
