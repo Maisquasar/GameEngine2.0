@@ -44,6 +44,7 @@ void EditorUi::MainBar::Draw()
 			ImGui::Checkbox("Hierarchy", Editor::GetHierarchy()->IsOpen());
 			ImGui::Checkbox("Console", Debug::Log::Console.IsOpen());
 			ImGui::Checkbox("File Explorer", Editor::GetFileExplorer()->IsOpen());
+			ImGui::Checkbox("Inspector", Editor::GetInspector()->IsOpen());
 			ImGui::EndMenu();
 		}
 	}

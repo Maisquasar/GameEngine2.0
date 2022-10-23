@@ -33,6 +33,7 @@
     <ClCompile Include="Source\Src\EditorUi\Editor.cpp" />
     <ClCompile Include="Source\Src\EditorUi\FileExplorer.cpp" />
     <ClCompile Include="Source\Src\EditorUi\Hierarchy.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\Inspector.cpp" />
     <ClCompile Include="Source\Src\EditorUi\MainBar.cpp" />
     <ClCompile Include="Source\Src\GameEngine2.0.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
@@ -57,6 +58,7 @@
     <ClInclude Include="Source\Include\EditorUi\FileExplorer.h" />
     <ClInclude Include="Source\Include\EditorUi\Hierarchy.h" />
     <ClInclude Include="Source\Include\EditorUi\EditorWindow.h" />
+    <ClInclude Include="Source\Include\EditorUi\Inspector.h" />
     <ClInclude Include="Source\Include\EditorUi\MainBar.h" />
     <ClInclude Include="Source\Include\Resources\IResource.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
