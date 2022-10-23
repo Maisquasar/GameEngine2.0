@@ -1,8 +1,8 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include "Include/Debug/Log.h"
 #include <glad/glad.h>
 #include "IResource.h"
-#include "Include/Debug/Log.h"
 
 namespace Resources {
 	static int TextureData = 0;
