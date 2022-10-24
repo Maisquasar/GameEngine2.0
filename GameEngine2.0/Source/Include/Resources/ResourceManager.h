@@ -27,6 +27,11 @@ namespace Resources {
 		{
 			return dynamic_cast<T*>(_resource[filename]);
 		}
+
+		template<typename T> static void Add(std::string filename, T* res)
+		{
+			_resource[filename] = res;
+		}
 		
 	private:
 		static std::unordered_map<std::string, Resources::IResource*> _resource;

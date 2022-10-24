@@ -12,6 +12,7 @@
 #include "Include/Resources/ResourceManager.h"
 #include "Include/Utils/Input.h"
 #include "Include/Render/CameraEditor.h"
+#include "Include/Render/Framebuffer.h"
 
 class App
 {
@@ -51,6 +52,7 @@ private:
 
 	// Render
 	Render::CameraEditor _cameraEditor;
+	Render::FrameBuffer _framebuffer;
 
 	void InitGlfw();
 	void InitImGui();

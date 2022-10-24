@@ -11,10 +11,10 @@ namespace Render {
 		~FrameBuffer();
 
 		void Initialize();
-		void Draw(Math::Integer2);
+		void Draw();
 
 		Resources::Texture* Tex;
-		ImColor ClearColor;
+		ImColor ClearColor = ImColor(255, 0, 0, 255);
 
 		Resources::Shader* shader;
 		GLuint FBO;

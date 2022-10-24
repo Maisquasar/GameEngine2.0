@@ -1,4 +1,5 @@
 #include "Include/Render/Framebuffer.h"
+#include "Include/Resources/ResourceManager.h"
 
 Render::FrameBuffer::FrameBuffer() {}
 
@@ -12,6 +13,7 @@ Render::FrameBuffer::~FrameBuffer()
 
 void Render::FrameBuffer::Initialize()
 {
+	this->shader = Resources::ResourceManager::Get<Resources::Shader>("DefaultScreenShader");
 	// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
 	float quadVertices[] = {
 		// positions   // texCoords
@@ -42,7 +44,9 @@ void Render::FrameBuffer::Initialize()
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
 	// Create Texture.
+	Tex = new Resources::Texture();
 	Tex->NewTexture("FrameBuffer");
+	Resources::ResourceManager::Add("FrameBuffer", Tex);
 	//res.Resources["FrameBuffer"] = Tex;
 	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, Tex->GetDataPtr());
@@ -68,7 +72,7 @@ void Render::FrameBuffer::Initialize()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Render::FrameBuffer::Draw(Math::Integer2 size)
+void Render::FrameBuffer::Draw()
 {
 	// Force Fill Mode.
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -77,13 +81,19 @@ void Render::FrameBuffer::Draw(Math::Integer2 size)
 	// clear all relevant buffers
 	glClearColor(this->ClearColor.Value.x, this->ClearColor.Value.y, this->ClearColor.Value.z, this->ClearColor.Value.w);
 	glClear(GL_COLOR_BUFFER_BIT);
-
 	glUseProgram(shader->Program);
 	glUniform1i(glGetUniformLocation(shader->Program, "Tex"), Tex->GetIndex());
 	glUniform1f(shader->GetLocation(Resources::Location::L_TIME), (float)glfwGetTime());
 	glBindVertexArray(_VAO);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
+
+	if (ImGui::Begin("Scene"))
+	{
+		auto size = ImGui::GetWindowSize();
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 50));
+	}
+	ImGui::End();
 
 	// Draw The Quad
 	glDrawArrays(GL_TRIANGLES, 0, 6);
