@@ -1,5 +1,6 @@
 #pragma once
-#include "../Math.h"
+#include "Vector2.h"
+#include "../Integer/Integer2.h"
 using namespace Math;
 
 inline Math::Vector2::Vector2(const Integer2& a) : x(a.x), y(a.y){}

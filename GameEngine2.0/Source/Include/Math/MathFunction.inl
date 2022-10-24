@@ -1,5 +1,4 @@
-#pragma once
-#include "Math.h"
+#include "MathFunction.h"
 
 inline float Math::ToRadians(float in)
 {

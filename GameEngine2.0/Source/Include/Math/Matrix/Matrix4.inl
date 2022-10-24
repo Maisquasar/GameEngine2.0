@@ -1,5 +1,9 @@
-#pragma once
-#include "../Math.h"
+#include "../MathFunction.h"
+#include "../Matrix/Matrix4.h"
+#include "../Matrix/Quaternion.h"
+#include "../Vector/Vector4.h"
+#include "../Vector/Vector3.h"
+
 using namespace Math;
 
 inline float& Matrix4::operator[](const size_t in)

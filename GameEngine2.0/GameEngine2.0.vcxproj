@@ -72,6 +72,7 @@
     <ClInclude Include="Source\Include\Math\Integer\Integer2.inl" />
     <ClInclude Include="Source\Include\Math\Integer\Integer3.h" />
     <ClInclude Include="Source\Include\Math\Math.h" />
+    <ClInclude Include="Source\Include\Math\MathFunction.h" />
     <ClInclude Include="Source\Include\Math\Matrix\Matrix4.h" />
     <ClInclude Include="Source\Include\Math\Matrix\Quaternion.h" />
     <ClInclude Include="Source\Include\Math\Vector\Vector2.h" />
@@ -86,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Include\Math\Integer\Integer3.inl" />
-    <None Include="Source\Include\Math\Math.inl" />
+    <None Include="Source\Include\Math\MathFunction.inl" />
     <None Include="Source\Include\Math\Matrix\Matrix4.inl" />
     <None Include="Source\Include\Math\Matrix\Quaternion.inl" />
     <None Include="Source\Include\Math\Vector\Vector2.inl" />

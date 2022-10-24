@@ -1,5 +1,6 @@
 #pragma once
-#include "../Math.h"
+#include "Integer2.h"
+#include "../Vector/Vector2.h"
 
 using namespace Math;
 

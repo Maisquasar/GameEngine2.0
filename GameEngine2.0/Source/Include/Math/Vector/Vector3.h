@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <cmath>
+
 #define VEC_COLLINEAR_PRECISION 0.001f
 #define VEC_HIGH_VALUE 1e20f
 

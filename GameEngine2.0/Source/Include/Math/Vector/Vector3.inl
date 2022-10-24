@@ -1,4 +1,3 @@
-#pragma once
 #include "../Math.h"
 
 using namespace Math;

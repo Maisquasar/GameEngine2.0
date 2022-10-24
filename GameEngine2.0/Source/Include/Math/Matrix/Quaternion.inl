@@ -1,6 +1,7 @@
-#pragma once
-#include "Quaternion.h"
-#include "../Math.h"
+#include "../Vector/Vector3.h"
+#include "../Matrix/Quaternion.h"
+#include "../Matrix/Matrix4.h"
+#include "../MathFunction.h"
 
 using namespace Math;
 
