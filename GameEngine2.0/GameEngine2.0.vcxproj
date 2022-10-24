@@ -36,13 +36,16 @@
     <ClCompile Include="Source\Src\EditorUi\Inspector.cpp" />
     <ClCompile Include="Source\Src\EditorUi\MainBar.cpp" />
     <ClCompile Include="Source\Src\GameEngine2.0.cpp" />
+    <ClCompile Include="Source\Src\Math\Integer\Integer2.cpp" />
     <ClCompile Include="Source\Src\Math\Integer\Integer3.cpp" />
     <ClCompile Include="Source\Src\Math\Math.cpp" />
+    <ClCompile Include="Source\Src\Math\MathFunction.cpp" />
     <ClCompile Include="Source\Src\Math\Matrix\Matrix4.cpp" />
     <ClCompile Include="Source\Src\Math\Matrix\Quaterinon.cpp" />
     <ClCompile Include="Source\Src\Math\Vector\Vector2.cpp" />
     <ClCompile Include="Source\Src\Math\Vector\Vector3.cpp" />
     <ClCompile Include="Source\Src\Math\Vector\Vector4.cpp" />
+    <ClCompile Include="Source\Src\Render\CameraEditor.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Texture.cpp" />
     <ClCompile Include="Source\Src\Utils\Input.cpp" />
@@ -69,7 +72,6 @@
     <ClInclude Include="Source\Include\EditorUi\Inspector.h" />
     <ClInclude Include="Source\Include\EditorUi\MainBar.h" />
     <ClInclude Include="Source\Include\Math\Integer\Integer2.h" />
-    <ClInclude Include="Source\Include\Math\Integer\Integer2.inl" />
     <ClInclude Include="Source\Include\Math\Integer\Integer3.h" />
     <ClInclude Include="Source\Include\Math\Math.h" />
     <ClInclude Include="Source\Include\Math\MathFunction.h" />
@@ -78,19 +80,11 @@
     <ClInclude Include="Source\Include\Math\Vector\Vector2.h" />
     <ClInclude Include="Source\Include\Math\Vector\Vector3.h" />
     <ClInclude Include="Source\Include\Math\Vector\Vector4.h" />
+    <ClInclude Include="Source\Include\Render\CameraEditor.h" />
     <ClInclude Include="Source\Include\Resources\IResource.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Texture.h" />
     <ClInclude Include="Source\Include\Utils\Input.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Source\Include\Math\Integer\Integer3.inl" />
-    <None Include="Source\Include\Math\MathFunction.inl" />
-    <None Include="Source\Include\Math\Matrix\Matrix4.inl" />
-    <None Include="Source\Include\Math\Matrix\Quaternion.inl" />
-    <None Include="Source\Include\Math\Vector\Vector2.inl" />
-    <None Include="Source\Include\Math\Vector\Vector3.inl" />
-    <None Include="Source\Include\Math\Vector\Vector4.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

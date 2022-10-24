@@ -1,4 +1,205 @@
-#include "Include/Math/Vector/Vector3.h"
+#include "Include/Math/Math.h"
+using namespace Math;
+
+Vector3::Vector3(Vector4 a) : x(a.x), y(a.y), z(a.z) {}
+
+float Vector3::LengthSquared() const
+{
+	return (x * x + y * y + z * z);
+}
+
+float Vector3::GetLength() const
+{
+	return sqrtf(LengthSquared());
+}
+
+Vector3 Vector3::operator=(const Vector4& b) const
+{
+	return Vector3(b.x, b.y, b.z);
+}
+Vector3 Vector3::operator=(Vector4 b)
+{
+	return Vector3(b.x, b.y, b.z);
+}
+Vector3 Vector3::operator=(Integer3 b)
+{
+	return Vector3((float)b.x, (float)b.y, (float)b.z);
+}
+
+Vector3 Vector3::operator=(const float b[3])
+{
+	return Vector3(b[0], b[1], b[2]);
+}
+
+Vector3 Vector3::operator+(const Vector3& a) const
+{
+	Vector3 res = Vector3(a.x + this->x, a.y + this->y, a.z + this->z);
+	return res;
+}
+
+void Vector3::operator+=(const Vector3& a)
+{
+	this->x += a.x;
+	this->y += a.y;
+	this->z += a.z;
+}
+
+void Vector3::operator-=(const Vector3& a)
+{
+	this->x -= a.x;
+	this->y -= a.y;
+	this->z -= a.z;
+}
+
+Vector3 Vector3::operator-(const Vector3& a) const
+{
+	Vector3 res = Vector3(this->x - a.x, this->y - a.y, this->z - a.z);
+	return res;
+}
+
+Vector3 Vector3::operator*(const Vector3& a) const
+{
+	Vector3 res = Vector3(this->x * a.x, this->y * a.y, this->z * a.z);
+	return res;
+}
+
+Vector3 Vector3::operator*(const Integer3& a) const
+{
+	Vector3 res = Vector3(this->x * a.x, this->y * a.y, this->z * a.z);
+	return res;
+}
+
+Vector3 Vector3::operator*(const float& a) const
+{
+	Vector3 res = Vector3(this->x * a, this->y * a, this->z * a);
+	return res;
+}
+
+Vector3 Vector3::operator/(const float& a) const
+{
+	if (a == 0.0f)
+		return operator*(VEC_HIGH_VALUE);
+	Vector3 res = operator*(1 / a);
+	return res;
+}
+
+bool Vector3::operator==(const Vector3& b) const
+{
+	return (x == b.x && y == b.y && z == b.z);
+}
+
+bool Vector3::operator>(const Vector3& b) const
+{
+	return (x > b.x || y > b.y || z > b.z);
+}
+
+bool Vector3::operator<(const Vector3& b) const
+{
+	return (x < b.x || y < b.y || z < b.z);
+}
+
+bool Vector3::operator!=(const Vector3& b) const
+{
+	return (x != b.x || y != b.y || z != b.z);
+}
+
+float& Vector3::operator[](const size_t a)
+{
+	return *((&x) + a);
+}
+
+const float& Vector3::operator[](const size_t a) const
+{
+	return *((&x) + a);
+}
+
+float Vector3::DotProduct(Vector3 a)
+{
+	return (a.x * x + a.y * y + a.z * z);
+}
+
+bool Vector3::IsCollinearWith(Vector3 a)
+{
+	float res = this->DotProduct(a);
+	return (res < VEC_COLLINEAR_PRECISION);
+}
+
+float Vector3::GetDistanceBetween(Vector3 a)
+{
+	float i = a.x - x;
+	float j = a.y - y;
+	float h = a.z - z;
+	return sqrt(i * i + j * j + h * h);
+}
+
+
+Vector3 Vector3::CrossProduct(Vector3 a)
+{
+	return Vector3((y * a.z) - (z * a.y), (z * a.x) - (x * a.z), (x * a.y) - (y * a.x));
+}
+
+Vector3 Vector3::UnitVector() const
+{
+	return operator/(GetLength());
+}
+
+Vector3 Vector3::Negate()
+{
+	return operator*(-1);
+}
+
+bool Vector3::IsIntEquivalent(Vector3 a)
+{
+	return ((int)x == (int)a.x && (int)y == a.y && (int)z == (int)a.z);
+}
+
+
+// Convert degree to rad
+Vector3 Vector3::ToRad()
+{
+	return Vector3(ToRadians(x), ToRadians(y), ToRadians(z));
+}
+
+// Convert rad to Degree
+Vector3 Vector3::ToDeegree()
+{
+	return Vector3(ToDegrees(x), ToDegrees(y), ToDegrees(z));
+}
+
+Vector3 Vector3::Clamp(Vector3 min, Vector3 max)
+{
+	Vector3 tmp = *this;
+	if (tmp < min)
+		tmp = min;
+	else if (tmp > max)
+		tmp = max;
+	return tmp;
+}
+
+Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxLength)
+{
+	float sqrmag = vector.LengthSquared();
+	if (sqrmag > maxLength * maxLength)
+	{
+		float mag = (float)sqrtf(sqrmag);
+		float normalized_x = vector.x / mag;
+		float normalized_y = vector.y / mag;
+		float normalized_z = vector.z / mag;
+		return Vector3(normalized_x * maxLength,
+			normalized_y * maxLength,
+			normalized_z * maxLength);
+	}
+	return vector;
+}
+
+Quaternion  Vector3::ToQuaternion()
+{
+	auto q = Quaternion::AngleAxis(x, Vector3(1, 0, 0))
+		* Quaternion::AngleAxis(y, Vector3(0, 1, 0))
+		* Quaternion::AngleAxis(z, Vector3(0, 0, 1));
+
+	return q;
+}
 
 void Math::Vector3::Print() const
 {

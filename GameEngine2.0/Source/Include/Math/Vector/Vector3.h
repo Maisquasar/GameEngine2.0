@@ -18,99 +18,99 @@ namespace Math {
 		float z;
 
 		// Return a new empty Vector3
-		inline Vector3() : x(0), y(0), z(0) {}
+		Vector3() : x(0), y(0), z(0) {}
 
-		inline Vector3(float content) : x(content), y(content), z(content) {}
+		Vector3(float content) : x(content), y(content), z(content) {}
 
-		inline Vector3(Vector4 a);
+		Vector3(Vector4 a);
 
 		// Return a new Vector3 initialised with 'a' and 'b'
-		inline Vector3(float a, float b, float c) : x(a), y(b), z(c) {}
+		Vector3(float a, float b, float c) : x(a), y(b), z(c) {}
 
 		// Return a new Vector3 initialised with 'in'
-		inline Vector3(const Vector3& in) : x(in.x), y(in.y), z(in.z) {}
+		Vector3(const Vector3& in) : x(in.x), y(in.y), z(in.z) {}
 
 		// Print the Vector3
 		void Print() const;
 
 		// Return the length squared of 'in'
-		inline float LengthSquared() const;
+		float LengthSquared() const;
 
 		// Return the lenght of the given Vector
-		inline float GetLength() const;
+		float GetLength() const;
 
-		inline Vector3 operator=(const Vector4& b) const;
+		Vector3 operator=(const Vector4& b) const;
 
-		inline Vector3 operator=(Vector4 b);
+		Vector3 operator=(Vector4 b);
 
-		inline Vector3 operator=(Integer3 b);
+		Vector3 operator=(Integer3 b);
 
-		inline Vector3 operator=(const float b[3]);
+		Vector3 operator=(const float b[3]);
 
 		// Return a new vector wich is the sum of 'a' and 'b'
-		inline Vector3 operator+(const Vector3& a) const;
+		Vector3 operator+(const Vector3& a) const;
 
-		inline void operator+=(const Vector3& a);
+		void operator+=(const Vector3& a);
 
-		inline void operator-=(const Vector3& a);
+		void operator-=(const Vector3& a);
 
 		// Return a new vector wich is the substraction of 'a' and 'b'
-		inline Vector3 operator-(const Vector3& a) const;
+		Vector3 operator-(const Vector3& a) const;
 
 		// Return the result of the aritmetic multiplication of 'a' and 'b'
-		inline Vector3 operator*(const Vector3& a) const;
+		Vector3 operator*(const Vector3& a) const;
 
 		// Return the result of the aritmetic multiplication of 'a' and 'b'
-		inline Vector3 operator*(const Integer3& a) const;
+		Vector3 operator*(const Integer3& a) const;
 
 		// Return the result of the aritmetic multiplication of 'a' and 'b'
-		inline Vector3 operator*(const float& a) const;
+		Vector3 operator*(const float& a) const;
 
 		// Return the result of the aritmetic division of 'a' and 'b', will return 'a' * VEC_HIGH_VALUE if 'b' is equal 0;
-		inline Vector3 operator/(const float& b) const;
+		Vector3 operator/(const float& b) const;
 
-		inline bool operator==(const Vector3& b) const;
+		bool operator==(const Vector3& b) const;
 
-		inline bool operator>(const Vector3& b) const;
+		bool operator>(const Vector3& b) const;
 
-		inline bool operator<(const Vector3& b) const;
+		bool operator<(const Vector3& b) const;
 
-		inline bool operator!=(const Vector3& b) const;
+		bool operator!=(const Vector3& b) const;
 
-		inline const float& operator[](const size_t a) const;
+		const float& operator[](const size_t a) const;
 
-		inline float& operator[](const size_t a);
+		float& operator[](const size_t a);
 
 		// Return tue if 'a' and 'b' are collinears (Precision defined by VEC_COLLINEAR_PRECISION)
-		inline bool IsCollinearWith(Vector3 a);
+		bool IsCollinearWith(Vector3 a);
 
-		inline float GetDistanceBetween(Vector3 a);
+		float GetDistanceBetween(Vector3 a);
 
 		// Return the dot product of 'a' and 'b'
-		inline float DotProduct(Vector3 a);
+		float DotProduct(Vector3 a);
 
 		// Return the z component of the cross product of 'a' and 'b'
-		inline Vector3 CrossProduct(Vector3 a);
+		Vector3 CrossProduct(Vector3 a);
 
 		// Return a vector with the same direction that 'in', but with length 1
-		inline Vector3 UnitVector() const;
+		Vector3 UnitVector() const;
 
 		// Return a vector of length 'in' and with an opposite direction
-		inline Vector3 Negate();
+		Vector3 Negate();
 
 		// return true if 'a' converted to int is equivalent to 'in' converted to int
-		inline bool IsIntEquivalent(Vector3 a);
+		bool IsIntEquivalent(Vector3 a);
 
 		// Convert degree to rad
-		inline Vector3 ToRad();
+		Vector3 ToRad();
 
 		// Convert rad to Degree
-		inline Vector3 ToDeegree();
+		Vector3 ToDeegree();
 
-		inline Vector3 Clamp(Vector3 min, Vector3 max);
+		Vector3 Clamp(Vector3 min, Vector3 max);
 
 		//
-		static inline Vector3 ClampMagnitude(Vector3, float);
+		static Vector3 ClampMagnitude(Vector3, float);
 
 		Vector3 Normalize()
 		{
@@ -124,7 +124,7 @@ namespace Math {
 			return Vector3(x, y, z);
 		}
 
-		inline Quaternion ToQuaternion();
+		Quaternion ToQuaternion();
 
 		std::string ToString();
 	};
