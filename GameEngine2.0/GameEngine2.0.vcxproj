@@ -43,9 +43,9 @@
     <ClCompile Include="Source\Src\Math\Vector\Vector2.cpp" />
     <ClCompile Include="Source\Src\Math\Vector\Vector3.cpp" />
     <ClCompile Include="Source\Src\Math\Vector\Vector4.cpp" />
-    <ClCompile Include="Source\Src\Render\CameraEditor.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Texture.cpp" />
+    <ClCompile Include="Source\Src\Utils\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External_Includes\glad\glad.h" />
@@ -78,12 +78,10 @@
     <ClInclude Include="Source\Include\Math\Vector\Vector2.h" />
     <ClInclude Include="Source\Include\Math\Vector\Vector3.h" />
     <ClInclude Include="Source\Include\Math\Vector\Vector4.h" />
-    <ClInclude Include="Source\Include\Render\CameraEditor.h" />
     <ClInclude Include="Source\Include\Resources\IResource.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Texture.h" />
     <ClInclude Include="Source\Include\Utils\Input.h" />
-    <ClInclude Include="Source\Src\Utils\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Include\Math\Integer\Integer3.inl" />

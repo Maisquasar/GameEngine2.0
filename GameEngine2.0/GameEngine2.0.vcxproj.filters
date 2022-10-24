@@ -93,7 +93,7 @@
     <ClCompile Include="Source\Src\Math\Matrix\Quaterinon.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Src\Render\CameraEditor.cpp">
+    <ClCompile Include="Source\Src\Utils\Input.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -194,13 +194,7 @@
     <ClInclude Include="Source\Include\Math\Matrix\Quaternion.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Include\Render\CameraEditor.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Include\Utils\Input.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Src\Utils\Input.cpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Source\Include\Math\MathFunction.h">

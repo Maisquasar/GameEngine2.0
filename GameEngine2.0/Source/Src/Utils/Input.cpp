@@ -1,5 +1,8 @@
-#pragma once
 #include "Include/Utils/Input.h"
+float Utils::Input::MouseScroll;
+Math::Vector2 Utils::Input::MouseDelta;
+Math::Vector2 Utils::Input::MousePosition;
+
 
 Utils::Input::Input() {}
 
@@ -16,9 +19,10 @@ void Utils::Input::Scroll_Callback(GLFWwindow* window, double xoffset, double yo
 
 void Utils::Input::Update()
 {
-	auto newMouse = ImGui::GetCursorScreenPos();
+	auto newMouse = ImGui::GetMousePos();
 	MouseDelta = Math::Vector2((float)(newMouse.x - MousePosition.x), (float)(newMouse.y - MousePosition.y));
 	MousePosition = Math::Vector2(newMouse.x, newMouse.y);
+	MousePosition.Print();
 }
 
 bool Utils::Input::IsKeyDown(int key)
