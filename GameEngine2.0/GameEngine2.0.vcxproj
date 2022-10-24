@@ -43,6 +43,7 @@
     <ClCompile Include="Source\Src\Math\Vector\Vector2.cpp" />
     <ClCompile Include="Source\Src\Math\Vector\Vector3.cpp" />
     <ClCompile Include="Source\Src\Math\Vector\Vector4.cpp" />
+    <ClCompile Include="Source\Src\Render\CameraEditor.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Texture.cpp" />
   </ItemGroup>
@@ -76,6 +77,7 @@
     <ClInclude Include="Source\Include\Math\Vector\Vector2.h" />
     <ClInclude Include="Source\Include\Math\Vector\Vector3.h" />
     <ClInclude Include="Source\Include\Math\Vector\Vector4.h" />
+    <ClInclude Include="Source\Include\Render\CameraEditor.h" />
     <ClInclude Include="Source\Include\Resources\IResource.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Texture.h" />

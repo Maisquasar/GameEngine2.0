@@ -140,7 +140,7 @@ void App::Update()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		//_editorUi.Draw();
+		_editorUi.Draw();
 		// End Main Update.
 
 		// Rendering.
