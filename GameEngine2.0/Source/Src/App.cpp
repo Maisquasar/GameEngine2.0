@@ -68,6 +68,7 @@ void App::InitGlfw()
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 	_window = glfwCreateWindow(_width, _height, _windowName, NULL, NULL);
+	glfwSetScrollCallback(_window, Utils::Input::Scroll_Callback);
 	if (_window == nullptr)
 	{
 		DebugLog(Debug::LogType::L_ERROR, "Failed to Create Window");
@@ -140,7 +141,11 @@ void App::Update()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		// Begin Main Update
 		_editorUi.Draw();
+
+		_input.Update();
+
 		// End Main Update.
 
 		// Rendering.

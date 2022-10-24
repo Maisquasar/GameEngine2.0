@@ -81,6 +81,8 @@
     <ClInclude Include="Source\Include\Resources\IResource.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Texture.h" />
+    <ClInclude Include="Source\Include\Utils\Input.h" />
+    <ClInclude Include="Source\Src\Utils\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Include\Math\Integer\Integer3.inl" />

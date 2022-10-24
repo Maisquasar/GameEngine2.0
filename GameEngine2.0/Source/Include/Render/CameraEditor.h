@@ -1,5 +1,8 @@
 #pragma once
+#include <ImGui/imgui.h>
 #include "Include/Math/Math.h"
+#include "Include/Utils/Input.h"
+
 namespace Render {
 	class CameraEditor
 	{

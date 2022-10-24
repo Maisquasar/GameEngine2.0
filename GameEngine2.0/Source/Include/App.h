@@ -10,6 +10,7 @@
 #include "Include/Debug/Log.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/Resources/ResourceManager.h"
+#include "Include/Utils/Input.h"
 
 class App
 {
@@ -36,6 +37,9 @@ private:
 
 	// Managers
 	Resources::ResourceManager _resourceManager;
+
+	// Utils
+	Utils::Input _input;
 
 	void InitGlfw();
 	void InitImGui();

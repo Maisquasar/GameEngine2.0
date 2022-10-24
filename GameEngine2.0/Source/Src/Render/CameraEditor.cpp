@@ -1,5 +1,4 @@
 #include "Include/Render/CameraEditor.h"
-#include <ImGui/imgui.h>
 
 Render::CameraEditor::CameraEditor(){}
 
@@ -8,13 +7,13 @@ Render::CameraEditor::~CameraEditor(){}
 void Render::CameraEditor::Update()
 {
 	// Update Distance.
-	Distance = Math::Cut(Distance - input.Scroll / 3, 0.001f, 100.0f);
+	Distance = Math::Cut(Distance - Utils::Input::MouseScroll / 3, 0.001f, 100.0f);
 	// Update Rotation.
-	Rotation = Rotation + Math::Vector2(-input.DeltaX / 10, input.DeltaY / 10);
+	Rotation = Rotation + Math::Vector2(-Utils::Input::MouseDelta.x / 10, Utils::Input::MouseDelta.y / 10);
 	Rotation = Math::Vector2(Math::Mod(Rotation.x, 360), Math::Cut(Rotation.y, -89.99f, 89.99f));
 	// Update FocusPosition.
-	float dSpeed = ImGui::GetIO().DeltaTime * Speed * (input.Shift ? 5.0f : 1.0f);
-	Math::Vector3 delta = Math::Vector3(dSpeed * input.Right - dSpeed * input.Left, dSpeed * input.Up - dSpeed * input.Down, dSpeed * input.Backward - dSpeed * input.Forward) / 20;
+	float dSpeed = ImGui::GetIO().DeltaTime * Speed * (Utils::Input::IsKeyPressed(ImGuiKey_RightShift) ? 5.0f : 1.0f);
+	Math::Vector3 delta = Math::Vector3(dSpeed * Utils::Input::IsKeyPressed(ImGuiKey_D) - dSpeed * Utils::Input::IsKeyPressed(ImGuiKey_A), dSpeed * Utils::Input::IsKeyPressed(ImGuiKey_Space) - dSpeed * Utils::Input::IsKeyPressed(ImGuiKey_F), dSpeed * Utils::Input::IsKeyPressed(ImGuiKey_S) - dSpeed * Utils::Input::IsKeyPressed(ImGuiKey_W) / 20);
 	FocusPosition = FocusPosition + Math::Vector3(cosf(Math::ToRadians(Rotation.x)) * delta.x + sinf(Math::ToRadians(Rotation.x)) * delta.z, delta.y, -sinf(Math::ToRadians(Rotation.x)) * delta.x + cosf(Math::ToRadians(Rotation.x)) * delta.z);
 	// Update Position.
 	Position = FocusPosition + Math::Vector3(sinf(Math::ToRadians(Rotation.x)) * cosf(Math::ToRadians(Rotation.y)), sinf(Math::ToRadians(Rotation.y)), cosf(Math::ToRadians(Rotation.x)) * cosf(Math::ToRadians(Rotation.y))) * (Distance == 0.0f ? 0.001f : Distance);
