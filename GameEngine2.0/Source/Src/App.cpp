@@ -1,4 +1,5 @@
 #include "Include/App.h"
+GLFWwindow* App::_window = nullptr;
 bool App::_shouldClose = false;
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
@@ -123,7 +124,13 @@ void App::InitGlad()
 
 void App::LoadResources()
 {
-	std::string path = "Assets/Default/Textures";
+	// Load Shaders
+	std::string path = "Assets/Default/Shaders";
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		_resourceManager.Create<Resources::Shader>(entry.path().generic_string().data());
+	}
+	// Load Textures
+	path = "Assets/Default/Textures";
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
 		_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
 	}
@@ -145,6 +152,8 @@ void App::Update()
 		_editorUi.Draw();
 
 		_input.Update();
+
+		_cameraEditor.Update();
 
 		// End Main Update.
 

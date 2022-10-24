@@ -11,6 +11,7 @@
 #include "Include/EditorUi/Editor.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/Utils/Input.h"
+#include "Include/Render/CameraEditor.h"
 
 class App
 {
@@ -24,9 +25,16 @@ public:
 	void ClearApp();
 	static void CloseApp();
 
+	static GLFWwindow* GetWindow() { return _window; }
+	static Math::Integer2 GetWindowSize() 
+	{
+		int width, height;
+		glfwGetWindowSize(_window, &width, &height);
+		return Math::Integer2(width, height);
+	}
 private:
 	// Window
-	GLFWwindow* _window = nullptr;
+	static GLFWwindow* _window;
 	int _width = 800;
 	int _height = 600;
 	const char* _windowName;
@@ -40,6 +48,9 @@ private:
 
 	// Utils
 	Utils::Input _input;
+
+	// Render
+	Render::CameraEditor _cameraEditor;
 
 	void InitGlfw();
 	void InitImGui();

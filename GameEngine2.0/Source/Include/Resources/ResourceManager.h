@@ -4,6 +4,7 @@
 
 #include "IResource.h"
 #include "Texture.h"
+#include "Shader.h"
 
 namespace Resources {
 	class ResourceManager

@@ -6,6 +6,13 @@ Resources::Texture::Texture() {}
 
 Resources::Texture::~Texture() {}
 
+void Resources::Texture::NewTexture(std::string filename)
+{
+	_index = TextureData;
+	TextureData++;
+	this->_name = filename;
+}
+
 void Resources::Texture::Load(std::string filename)
 {
 	_index = TextureData;

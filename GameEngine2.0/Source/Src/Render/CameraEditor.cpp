@@ -1,4 +1,5 @@
 #include "Include/Render/CameraEditor.h"
+#include "Include/App.h"
 
 Render::CameraEditor::CameraEditor(){}
 
@@ -6,6 +7,8 @@ Render::CameraEditor::~CameraEditor(){}
 
 void Render::CameraEditor::Update()
 {
+	auto Size = App::GetWindowSize();
+	this->AspectRatio = (float)((float)Size.x / (float)Size.y);
 	// Update Distance.
 	Distance = Math::Cut(Distance - Utils::Input::MouseScroll / 3, 0.001f, 100.0f);
 	// Update Rotation.
