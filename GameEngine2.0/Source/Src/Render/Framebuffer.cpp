@@ -74,10 +74,12 @@ void Render::FrameBuffer::Initialize()
 void Render::FrameBuffer::Draw()
 {
 	// Force Fill Mode.
+	
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 	// clear all relevant buffers
+	
 	glClearColor(this->ClearColor.Value.x, this->ClearColor.Value.y, this->ClearColor.Value.z, this->ClearColor.Value.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shader->Program);
@@ -86,14 +88,18 @@ void Render::FrameBuffer::Draw()
 	glBindVertexArray(_VAO);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
 
 	if (ImGui::Begin("Scene"))
 	{
-		auto size = ImGui::GetWindowSize();
-		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 35));
+		auto size = ImGui::GetWindowSize(); 
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+		//draw_list->AddImage((ImTextureID)Tex->GetData(), { -1, -1 }, { 1, 1 }, ImVec2(0, 0), ImVec2(1, 1));
+		ImGui::Image((ImTextureID)(Tex->GetData()), ImVec2(size.x, size.y - 35), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::ImageButton((ImTextureID)(Tex->GetData()), ImVec2(64, 64));
 	}
 	ImGui::End();
 
 	// Draw The Quad
-	glDrawArrays(GL_TRIANGLES, 0, 6);
 }

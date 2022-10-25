@@ -19,6 +19,7 @@ void Utils::Input::Scroll_Callback(GLFWwindow* window, double xoffset, double yo
 
 void Utils::Input::Update()
 {
+	MouseScroll = 0;
 	auto newMouse = ImGui::GetMousePos();
 	MouseDelta = Math::Vector2((float)(newMouse.x - MousePosition.x), (float)(newMouse.y - MousePosition.y));
 	MousePosition = Math::Vector2(newMouse.x, newMouse.y);
