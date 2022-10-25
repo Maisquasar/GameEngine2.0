@@ -20,7 +20,7 @@ void Render::CameraEditor::Update()
 	FocusPosition = FocusPosition + Math::Vector3(cosf(Math::ToRadians(Rotation.x)) * delta.x + sinf(Math::ToRadians(Rotation.x)) * delta.z, delta.y, -sinf(Math::ToRadians(Rotation.x)) * delta.x + cosf(Math::ToRadians(Rotation.x)) * delta.z);
 	// Update Position.
 	Position = FocusPosition + Math::Vector3(sinf(Math::ToRadians(Rotation.x)) * cosf(Math::ToRadians(Rotation.y)), sinf(Math::ToRadians(Rotation.y)), cosf(Math::ToRadians(Rotation.x)) * cosf(Math::ToRadians(Rotation.y))) * (Distance == 0.0f ? 0.001f : Distance);
-	Position.Print();
+	//Position.Print();
 }
 
 Math::Matrix4 Render::CameraEditor::GetViewMatrix()

@@ -50,4 +50,4 @@ namespace Debug {
 
 #define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 #define DebugLog(t, x, ...) Debug::Log::Print(__FILENAME__, __LINE__, t, x, __VA_ARGS__);
-
+#define Serialize(Variable) (#Variable)

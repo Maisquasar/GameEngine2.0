@@ -28,6 +28,8 @@
     <ClCompile Include="External_Includes\ImGui\imgui_tables.cpp" />
     <ClCompile Include="External_Includes\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
+    <ClCompile Include="Source\Src\Core\Node.cpp" />
+    <ClCompile Include="Source\Src\Core\Transform.cpp" />
     <ClCompile Include="Source\Src\Debug\Log.cpp" />
     <ClCompile Include="Source\Src\EditorUi\Console.cpp" />
     <ClCompile Include="Source\Src\EditorUi\Editor.cpp" />
@@ -65,6 +67,8 @@
     <ClInclude Include="External_Includes\ImGui\imstb_truetype.h" />
     <ClInclude Include="External_Includes\STB_Image\stb_image.h" />
     <ClInclude Include="Source\Include\App.h" />
+    <ClInclude Include="Source\Include\Core\Node.h" />
+    <ClInclude Include="Source\Include\Core\Transform.h" />
     <ClInclude Include="Source\Include\Debug\Log.h" />
     <ClInclude Include="Source\Include\EditorUi\Console.h" />
     <ClInclude Include="Source\Include\EditorUi\Editor.h" />
