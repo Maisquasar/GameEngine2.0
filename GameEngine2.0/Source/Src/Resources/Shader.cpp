@@ -61,7 +61,7 @@ void Resources::Shader::Load(std::string filename)
 {
 	if (SetShader(_path) && SetFragmentShader(_path))
 	{
-		if (Link());
+		if (Link())
 			Loaded = true;
 	}
 }

@@ -47,7 +47,6 @@ void Render::FrameBuffer::Initialize()
 	Tex = new Resources::Texture();
 	Tex->NewTexture("FrameBuffer");
 	Resources::ResourceManager::Add("FrameBuffer", Tex);
-	//res.Resources["FrameBuffer"] = Tex;
 	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, Tex->GetDataPtr());
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
@@ -91,7 +90,7 @@ void Render::FrameBuffer::Draw()
 	if (ImGui::Begin("Scene"))
 	{
 		auto size = ImGui::GetWindowSize();
-		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 50));
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 35));
 	}
 	ImGui::End();
 

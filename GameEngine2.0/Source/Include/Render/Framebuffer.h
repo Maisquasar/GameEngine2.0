@@ -14,7 +14,7 @@ namespace Render {
 		void Draw();
 
 		Resources::Texture* Tex;
-		ImColor ClearColor = ImColor(255, 0, 0, 255);
+		ImColor ClearColor = ImColor(255, 255, 255, 255);
 
 		Resources::Shader* shader;
 		GLuint FBO;

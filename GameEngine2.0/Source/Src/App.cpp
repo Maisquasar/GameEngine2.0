@@ -120,6 +120,11 @@ void App::InitGlad()
 		glDebugMessageCallback(glDebugOutput, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 	}
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glCullFace(GL_BACK);
 }
 
 void App::LoadResources()
@@ -141,6 +146,7 @@ void App::Update()
 	_framebuffer.Initialize();
 	_editorUi.Initialize();
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
 		// Begin Frame
@@ -148,8 +154,15 @@ void App::Update()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
+		glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
+		glEnable(GL_DEPTH_TEST);
+		glfwGetFramebufferSize(_window, &_width, &_height);
+		glViewport(0, 0, _width, _height);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		glClear(GL_DEPTH_BUFFER_BIT);
 		// Begin Main Update
+
 		_editorUi.Draw();
 
 		_input.Update();
@@ -162,11 +175,7 @@ void App::Update()
 
 		// Rendering.
 		ImGui::Render();
-		int display_w, display_h;
-		glfwGetFramebufferSize(_window, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
+
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
