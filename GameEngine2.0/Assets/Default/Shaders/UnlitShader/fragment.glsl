@@ -12,15 +12,6 @@ uniform sampler2D frameBuffer;
 uniform vec3 CameraPos;
 uniform vec2 frameSize;
 
-float cut(float i, float mini, float maxi)
-{
-	if (i < mini)
-		i = mini;
-	if (i > maxi)
-		i = maxi;
-	return i;
-}
-
 void main()
 {
     if (EnableTexture)
