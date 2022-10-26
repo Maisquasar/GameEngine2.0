@@ -17,6 +17,17 @@ namespace Core
 		Node* Parent = nullptr;
 		Node* GameObject = nullptr;
 
+
+		// World Setters
+		void SetWorldPosition(Math::Vector3);
+		void SetWorldRotation(Math::Quaternion);
+		void SetWorldScale(Math::Vector3);
+
+		// World Getters
+		Math::Vector3 GetWorldPosition();
+		Math::Quaternion GetWorldRotation();
+		Math::Vector3 GetWorldScale();
+
 		// Local Setters
 		void SetLocalPosition(Math::Vector3);
 		void SetLocalRotation(Math::Quaternion);
@@ -26,6 +37,8 @@ namespace Core
 		Math::Vector3 GetLocalPosition();
 		Math::Quaternion GetLocalRotation();
 		Math::Vector3 GetLocalScale();
+
+		void RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle);
 
 	private:
 		Math::Matrix4 _modelMatrix = Math::Matrix4::Identity();

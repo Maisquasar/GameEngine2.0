@@ -16,6 +16,27 @@ Quaternion Quaternion::operator*(const Quaternion& a)
 	return Quaternion(w * a.x + x * a.w + y * a.z - z * a.y, w * a.y - x * a.z + y * a.w + z * a.x, w * a.z + x * a.y - y * a.x + z * a.w, w * a.w - x * a.x - y * a.y - z * a.z);
 }
 
+Vector3 Math::Quaternion::operator*(const Vector3& a)
+{
+	Vector3 vector;
+	float num = this->x * 2.f;
+	float num2 = this->y * 2.f;
+	float num3 = this->z * 2.f;
+	float num4 = this->x * num;
+	float num5 = this->y * num2;
+	float num6 = this->z * num3;
+	float num7 = this->x * num2;
+	float num8 = this->x * num3;
+	float num9 = this->y * num3;
+	float num10 = this->w * num;
+	float num11 = this->w * num2;
+	float num12 = this->w * num3;
+	vector.x = (((1.f - (num5 + num6)) * a.x) + ((num7 - num12) * a.y)) + ((num8 + num11) * a.z);
+	vector.y = (((num7 + num12) * a.x) + ((1.f - (num4 + num6)) * a.y)) + ((num9 - num10) * a.z);
+	vector.z = (((num8 - num11) * a.x) + ((num9 + num10) * a.y)) + ((1.f - (num4 + num5)) * a.z);
+	return vector;
+}
+
 Math::Quaternion Math::Quaternion::AngleAxis(float angle, Vector3 axis)
 {
 	Quaternion q;
