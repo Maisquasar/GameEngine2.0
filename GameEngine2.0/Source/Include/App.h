@@ -33,9 +33,16 @@ public:
 		glfwGetWindowSize(_window, &width, &height);
 		return Math::Integer2(width, height);
 	}
+	static const GLFWvidmode* GetMonitorVideoMode() 
+	{
+		if (!_videoMode)
+			_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		return _videoMode; 
+	}
 private:
 	// Window
 	static GLFWwindow* _window;
+	static const GLFWvidmode* _videoMode;
 	int _width = 800;
 	int _height = 600;
 	const char* _windowName = "GameEngine2.0";

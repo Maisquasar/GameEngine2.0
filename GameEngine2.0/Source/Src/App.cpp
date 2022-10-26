@@ -1,6 +1,7 @@
 #include "Include/App.h"
 #include <STB_Image/stb_image.h>
 GLFWwindow* App::_window = nullptr;
+const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
 bool App::_shouldClose = false;
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
@@ -227,8 +228,20 @@ void App::Update()
 
 		_editorUi.Draw();
 
-		if (_framebuffer.UpdateCameraEditor)
+		// Update Editor Camera.
+		if (_framebuffer.UpdateCameraEditor) {
 			_cameraEditor.Update();
+			auto mousePos = ImGui::GetMousePos();
+			// Set Mouse Pos Modulo Monitor Size
+			if (mousePos.x < 1)
+				SetCursorPos(this->GetMonitorVideoMode()->width - 2, (int)mousePos.y);
+			if (mousePos.x >= this->GetMonitorVideoMode()->width - 1)
+				SetCursorPos(2, (int)mousePos.y);
+			if (mousePos.y < 1)
+				SetCursorPos((int)mousePos.x, this->GetMonitorVideoMode()->height - 2);
+			if (mousePos.y >= this->GetMonitorVideoMode()->height - 1)
+				SetCursorPos((int)mousePos.x, 2);
+		}
 
 		_input.Update();
 
@@ -237,9 +250,6 @@ void App::Update()
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
-
-		_cameraEditor.Position.Print();
-		_cameraEditor.Rotation.Print();
 
 		// Rendering.
 		ImGui::Render();

@@ -10,7 +10,7 @@ void Render::CameraEditor::Update()
 	// Update Distance.
 	Distance = Math::Cut(Distance - Utils::Input::MouseScroll / 3, 0.001f, 100.0f);
 	// Update Rotation.
-	Rotation = Rotation + Math::Vector2(-Utils::Input::MouseDelta.x / 10, Utils::Input::MouseDelta.y / 10);
+	Rotation = Rotation + Math::Vector2(-Math::Cut(Utils::Input::MouseDelta.x, -50, 50) / 10, Math::Cut(Utils::Input::MouseDelta.y, -50, 50) / 10);
 	Rotation = Math::Vector2(Math::Mod(Rotation.x, 360), Math::Cut(Rotation.y, -89.99f, 89.99f));
 	// Update FocusPosition.
 	float dSpeed = ImGui::GetIO().DeltaTime * Speed * (Utils::Input::IsKeyDown(ImGuiKey_RightShift) ? 5.0f : 1.0f);
