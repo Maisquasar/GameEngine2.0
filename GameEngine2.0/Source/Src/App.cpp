@@ -1,4 +1,5 @@
 #include "Include/App.h"
+#include <STB_Image/stb_image.h>
 GLFWwindow* App::_window = nullptr;
 bool App::_shouldClose = false;
 
@@ -7,38 +8,50 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
 	// ignore non-significant error/warning codes
 	if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
-	DebugLog(Debug::LogType::WARNING, "---------------");
-	DebugLog(Debug::LogType::WARNING, "Debug message (%d): %s", id, message);
+	LOG(Debug::LogType::WARNING, "---------------");
+	LOG(Debug::LogType::WARNING, "Debug message (%d): %s", id, message);
 
 	switch (source)
 	{
-	case GL_DEBUG_SOURCE_API:             DebugLog(Debug::LogType::WARNING, "Source: API"); break;
-	case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   DebugLog(Debug::LogType::WARNING, "Source: Window System"); break;
-	case GL_DEBUG_SOURCE_SHADER_COMPILER: DebugLog(Debug::LogType::WARNING, "Source: Shader Compiler"); break;
-	case GL_DEBUG_SOURCE_THIRD_PARTY:     DebugLog(Debug::LogType::WARNING, "Source: Third Party"); break;
-	case GL_DEBUG_SOURCE_APPLICATION:     DebugLog(Debug::LogType::WARNING, "Source: Application"); break;
-	case GL_DEBUG_SOURCE_OTHER:           DebugLog(Debug::LogType::WARNING, "Source: Other"); break;
+	case GL_DEBUG_SOURCE_API:             LOG(Debug::LogType::WARNING, "Source: API"); break;
+	case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   LOG(Debug::LogType::WARNING, "Source: Window System"); break;
+	case GL_DEBUG_SOURCE_SHADER_COMPILER: LOG(Debug::LogType::WARNING, "Source: Shader Compiler"); break;
+	case GL_DEBUG_SOURCE_THIRD_PARTY:     LOG(Debug::LogType::WARNING, "Source: Third Party"); break;
+	case GL_DEBUG_SOURCE_APPLICATION:     LOG(Debug::LogType::WARNING, "Source: Application"); break;
+	case GL_DEBUG_SOURCE_OTHER:           LOG(Debug::LogType::WARNING, "Source: Other"); break;
 	}
 
 	switch (type)
 	{
-	case GL_DEBUG_TYPE_ERROR:               DebugLog(Debug::LogType::WARNING, "Type: Error"); break;
-	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: DebugLog(Debug::LogType::WARNING, "Type: Deprecated Behaviour"); break;
-	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  DebugLog(Debug::LogType::WARNING, "Type: Undefined Behaviour"); break;
-	case GL_DEBUG_TYPE_PORTABILITY:         DebugLog(Debug::LogType::WARNING, "Type: Portability"); break;
-	case GL_DEBUG_TYPE_PERFORMANCE:         DebugLog(Debug::LogType::WARNING, "Type: Performance"); break;
-	case GL_DEBUG_TYPE_MARKER:              DebugLog(Debug::LogType::WARNING, "Type: Marker"); break;
-	case GL_DEBUG_TYPE_PUSH_GROUP:          DebugLog(Debug::LogType::WARNING, "Type: Push Group"); break;
-	case GL_DEBUG_TYPE_POP_GROUP:           DebugLog(Debug::LogType::WARNING, "Type: Pop Group"); break;
-	case GL_DEBUG_TYPE_OTHER:               DebugLog(Debug::LogType::WARNING, "Type: Other"); break;
+	case GL_DEBUG_TYPE_ERROR:               LOG(Debug::LogType::WARNING, "Type: Error"); break;
+	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: LOG(Debug::LogType::WARNING, "Type: Deprecated Behaviour"); break;
+	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  LOG(Debug::LogType::WARNING, "Type: Undefined Behaviour"); break;
+	case GL_DEBUG_TYPE_PORTABILITY:         LOG(Debug::LogType::WARNING, "Type: Portability"); break;
+	case GL_DEBUG_TYPE_PERFORMANCE:         LOG(Debug::LogType::WARNING, "Type: Performance"); break;
+	case GL_DEBUG_TYPE_MARKER:              LOG(Debug::LogType::WARNING, "Type: Marker"); break;
+	case GL_DEBUG_TYPE_PUSH_GROUP:          LOG(Debug::LogType::WARNING, "Type: Push Group"); break;
+	case GL_DEBUG_TYPE_POP_GROUP:           LOG(Debug::LogType::WARNING, "Type: Pop Group"); break;
+	case GL_DEBUG_TYPE_OTHER:               LOG(Debug::LogType::WARNING, "Type: Other"); break;
 	}
 
 	switch (severity)
 	{
-	case GL_DEBUG_SEVERITY_HIGH:         DebugLog(Debug::LogType::WARNING, "Severity: high"); break;
-	case GL_DEBUG_SEVERITY_MEDIUM:       DebugLog(Debug::LogType::WARNING, "Severity: medium"); break;
-	case GL_DEBUG_SEVERITY_LOW:          DebugLog(Debug::LogType::WARNING, "Severity: low"); break;
-	case GL_DEBUG_SEVERITY_NOTIFICATION: DebugLog(Debug::LogType::WARNING, "Severity: notification"); break;
+	case GL_DEBUG_SEVERITY_HIGH:         LOG(Debug::LogType::WARNING, "Severity: high"); break;
+	case GL_DEBUG_SEVERITY_MEDIUM:       LOG(Debug::LogType::WARNING, "Severity: medium"); break;
+	case GL_DEBUG_SEVERITY_LOW:          LOG(Debug::LogType::WARNING, "Severity: low"); break;
+	case GL_DEBUG_SEVERITY_NOTIFICATION: LOG(Debug::LogType::WARNING, "Severity: notification"); break;
+	}
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
+	// Resize the FrameBuffer.
+	if (width * height != 0) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	}
 }
 
@@ -61,7 +74,7 @@ void App::InitializeApp()
 void App::InitGlfw()
 {
 	if (!glfwInit())
-		DebugLog(Debug::LogType::L_ERROR, "Error Init GLFW");
+		LOG(Debug::LogType::L_ERROR, "Error Init GLFW");
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -72,10 +85,11 @@ void App::InitGlfw()
 	glfwSetScrollCallback(_window, Utils::Input::Scroll_Callback);
 	if (_window == nullptr)
 	{
-		DebugLog(Debug::LogType::L_ERROR, "Failed to Create Window");
+		LOG(Debug::LogType::L_ERROR, "Failed to Create Window");
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(_window);
+	glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
 	glfwSwapInterval(1); // Enable vsync
 }
 
@@ -110,7 +124,7 @@ void App::InitGlad()
 	GLint flags = 0;
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		DebugLog(Debug::LogType::L_ERROR, "Failed to initialize GLAD")
+		LOG(Debug::LogType::L_ERROR, "Failed to initialize GLAD")
 	}
 	glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 	if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
@@ -125,6 +139,7 @@ void App::InitGlad()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_BACK);
+	stbi_set_flip_vertically_on_load(true);
 }
 
 void App::LoadResources()
@@ -143,7 +158,7 @@ void App::LoadResources()
 
 void App::Update()
 {
-	_framebuffer.Initialize();
+	_framebuffer.Initialize(this->GetWindowSize());
 	//_editorUi.Initialize();
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -172,6 +187,9 @@ void App::Update()
 	glEnableVertexAttribArray(1);
 	// --------- Temporary ---------
 
+	_cameraEditor.Position = Math::Vector3(0, 0, -5);
+	_cameraEditor.Rotation = Math::Vector2(PI/2, 0);
+
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
 		// Begin Frame
@@ -179,17 +197,22 @@ void App::Update()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		glfwGetFramebufferSize(_window, &_width, &_height);
 		glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
 		glEnable(GL_DEPTH_TEST);
-		glfwGetFramebufferSize(_window, &_width, &_height);
-		glViewport(0, 0, _width, _height);
+
+		//glViewport(0, 0, _width, _height);
+
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		// Begin Main Update
-		_framebuffer.Draw();
 
-		/*
+		if (_framebuffer.Window)
+			_cameraEditor.AspectRatio = _framebuffer.Window->Size.x / _framebuffer.Window->Size.y;
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 		// --------- Temporary ---------
 		auto shader = _resourceManager.Get<Resources::Shader>("UnlitShader");
 		glUseProgram(shader->Program);
@@ -201,16 +224,19 @@ void App::Update()
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		// --------- Temporary ---------
-		*/
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		//_editorUi.Draw();
+
+		_editorUi.Draw();
 
 		_cameraEditor.Update();
 
 		_input.Update();
 
 
+		_framebuffer.Draw();
 		// End Main Update.
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
 		// Rendering.
 		ImGui::Render();

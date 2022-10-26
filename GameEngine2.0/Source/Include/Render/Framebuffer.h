@@ -11,13 +11,13 @@ namespace Render {
 		FrameBuffer();
 		~FrameBuffer();
 
-		void Initialize();
+		void Initialize(Math::Integer2);
 		void Draw();
 
 		ImGuiWindow* Window = nullptr;
 
 		Resources::Texture* Tex;
-		ImColor ClearColor = ImColor(255, 255, 255, 255);
+		ImColor ClearColor;
 
 		Resources::Shader* shader;
 		GLuint FBO;

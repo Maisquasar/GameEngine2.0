@@ -11,34 +11,10 @@ Render::FrameBuffer::~FrameBuffer()
 	glDeleteVertexArrays(1, &_VAO);
 }
 
-void Render::FrameBuffer::Initialize()
+void Render::FrameBuffer::Initialize(Math::Integer2 size)
 {
 	this->shader = Resources::ResourceManager::Get<Resources::Shader>("DefaultScreenShader");
 	// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-	float quadVertices[] = {
-		// positions   // texCoords
-		-1.0f,  1.0f, 0.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		 1.0f, -1.0f, 1.0f, 0.0f,
-
-		-1.0f,  1.0f, 0.0f, 1.0f,
-		 1.0f, -1.0f, 1.0f, 0.0f,
-		 1.0f,  1.0f, 1.0f, 1.0f,
-	};
-
-	glGenVertexArrays(1, &_VAO);
-	glGenBuffers(1, &_VBO);
-
-	glBindVertexArray(_VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -51,7 +27,7 @@ void Render::FrameBuffer::Initialize()
 	glGenTextures(1, Tex->GetDataPtr());
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -66,7 +42,7 @@ void Render::FrameBuffer::Initialize()
 
 	glGenRenderbuffers(1, &_RBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, _RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600); // use a single renderbuffer object for both a depth AND stencil buffer.
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y); // use a single renderbuffer object for both a depth AND stencil buffer.
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _RBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -74,10 +50,8 @@ void Render::FrameBuffer::Initialize()
 void Render::FrameBuffer::Draw()
 {
 	// Force Fill Mode.
-	glBindFramebuffer(GL_FRAMEBUFFER, this->FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	glClearColor(this->ClearColor.Value.x, this->ClearColor.Value.y, this->ClearColor.Value.z, this->ClearColor.Value.w);
-
-
 	if (ImGui::Begin("Scene"))
 	{
 		if (!Window)
