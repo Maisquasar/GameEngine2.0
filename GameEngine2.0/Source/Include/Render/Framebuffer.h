@@ -1,5 +1,6 @@
 #pragma once
 #include <glad/glad.h>
+#include <ImGui/imgui_internal.h>
 #include "../Math/Math.h"
 #include "../Resources/ResourceManager.h"
 
@@ -12,6 +13,8 @@ namespace Render {
 
 		void Initialize();
 		void Draw();
+
+		ImGuiWindow* Window = nullptr;
 
 		Resources::Texture* Tex;
 		ImColor ClearColor = ImColor(255, 255, 255, 255);

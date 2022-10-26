@@ -103,7 +103,7 @@ void EditorUi::FileExplorer::Draw()
 			catch (const std::exception& e)
 			{
 				// Case when not found
-				DebugLog(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
+				LOG(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
 			}
 		}
 		ImGui::SameLine();
@@ -116,7 +116,7 @@ void EditorUi::FileExplorer::Draw()
 			}
 			catch (const std::exception& e)
 			{
-				DebugLog(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
+				LOG(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
 				_current = _main;
 			}
 		}
@@ -157,7 +157,7 @@ void EditorUi::FileExplorer::Draw()
 						catch (const std::exception& e)
 						{
 							// Case when not accessible because of rights.
-							DebugLog(Debug::LogType::L_ERROR, "Error opening folder %s : %s", f->Directory.c_str(), e.what());
+							LOG(Debug::LogType::L_ERROR, "Error opening folder %s : %s", f->Directory.c_str(), e.what());
 						}
 					}
 					// Name of the file.
@@ -247,7 +247,7 @@ void EditorUi::FileExplorer::RightClickWindow()
 					}
 					catch (const std::exception& e)
 					{
-						DebugLog(Debug::LogType::L_ERROR, "Error Delete file %s", e.what());
+						LOG(Debug::LogType::L_ERROR, "Error Delete file %s", e.what());
 					}
 					_current->FoundChildren();
 					ImGui::CloseCurrentPopup();

@@ -24,11 +24,11 @@ bool Resources::Shader::SetShader(std::string filename)
 	if (!success)
 	{
 		glGetShaderInfoLog(VertexShader, 512, NULL, infoLog);
-		DebugLog(Debug::LogType::L_ERROR, "ERROR::SHADER::VERTEX::COMPILATION_FAILED %s", infoLog);
+		LOG(Debug::LogType::L_ERROR, "ERROR::SHADER::VERTEX::COMPILATION_FAILED %s", infoLog);
 		return false;
 	}
 	else
-		DebugLog(Debug::LogType::INFO, "Successfully loaded Shader: %s", filename.c_str());
+		LOG(Debug::LogType::INFO, "Successfully loaded Shader: %s", filename.c_str());
 
 	return true;
 }
@@ -48,11 +48,11 @@ bool Resources::Shader::SetFragmentShader(std::string filename)
 	if (!success)
 	{
 		glGetShaderInfoLog(FragmentShader, 512, NULL, infoLog);
-		DebugLog(Debug::LogType::L_ERROR, "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED %s", infoLog);
+		LOG(Debug::LogType::L_ERROR, "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED %s", infoLog);
 		return false;
 	}
 	else
-		DebugLog(Debug::LogType::INFO, "Successfully loaded Shader: %s", filename.c_str());
+		LOG(Debug::LogType::INFO, "Successfully loaded Shader: %s", filename.c_str());
 
 	return true;
 }
@@ -82,11 +82,11 @@ bool Resources::Shader::Link()
 	glGetProgramiv(Program, GL_LINK_STATUS, &success);
 	if (!success) {
 		glGetProgramInfoLog(Program, 512, NULL, infoLog);
-		DebugLog(Debug::LogType::L_ERROR, "ERROR::SHADER::PROGRAM::LINKING_FAILED %s", infoLog);
+		LOG(Debug::LogType::L_ERROR, "ERROR::SHADER::PROGRAM::LINKING_FAILED %s", infoLog);
 		return false;
 	}
 	else {
-		DebugLog(Debug::LogType::INFO, "Successfully link Shader %s", Name.c_str());
+		LOG(Debug::LogType::INFO, "Successfully link Shader %s", Name.c_str());
 		_linked = true;
 	}
 
