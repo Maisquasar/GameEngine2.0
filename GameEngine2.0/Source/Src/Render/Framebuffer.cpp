@@ -7,8 +7,6 @@ Render::FrameBuffer::~FrameBuffer()
 {
 	glDeleteFramebuffers(1, &FBO);
 	glDeleteRenderbuffers(1, &_RBO);
-	glDeleteBuffers(1, &_VBO);
-	glDeleteVertexArrays(1, &_VAO);
 }
 
 void Render::FrameBuffer::Initialize(Math::Integer2 size)
@@ -57,7 +55,11 @@ void Render::FrameBuffer::Draw()
 		if (!Window)
 			Window = ImGui::GetCurrentWindow();
 		auto size = ImGui::GetWindowSize();
-		ImGui::Image((ImTextureID)(Tex->GetData()), ImVec2(size.x, size.y - 35), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 35), ImVec2(0, 1), ImVec2(1, 0));
+		if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
+			UpdateCameraEditor = true;
+		if (UpdateCameraEditor && !ImGui::IsMouseDown(ImGuiMouseButton_Right))
+			UpdateCameraEditor = false;
 	}
 	ImGui::End();
 

@@ -16,17 +16,15 @@ namespace Render {
 
 		ImGuiWindow* Window = nullptr;
 
-		Resources::Texture* Tex;
-		ImColor ClearColor;
+		Resources::Texture* Tex = nullptr;
+		ImColor ClearColor = ImColor(255, 255, 255, 255);
 
-		Resources::Shader* shader;
-		GLuint FBO;
+		Resources::Shader* shader = nullptr;
+		GLuint FBO = 0;
+
+		bool UpdateCameraEditor = false;
 
 	private:
-
-		GLuint _VBO;
-		GLuint _RBO;
-		GLuint _VAO;
-		GLuint _Color;
+		GLuint _RBO = 0;
 	};
 }

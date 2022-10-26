@@ -38,7 +38,7 @@ private:
 	static GLFWwindow* _window;
 	int _width = 800;
 	int _height = 600;
-	const char* _windowName;
+	const char* _windowName = "GameEngine2.0";
 	static bool _shouldClose;
 
 	// Ui

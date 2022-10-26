@@ -219,7 +219,7 @@ void App::Update()
 		auto MVP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix() * Math::Matrix4::CreateTransformMatrix(Math::Vector3(0), Math::Vector3(0), Math::Vector3(1));
 		glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 		glUniform1i(shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-		glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), 1, 0.5, 0.1, 1);
+		glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), 1, 0.5f, 0.1f, 1);
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -227,16 +227,19 @@ void App::Update()
 
 		_editorUi.Draw();
 
-		_cameraEditor.Update();
+		if (_framebuffer.UpdateCameraEditor)
+			_cameraEditor.Update();
 
 		_input.Update();
-
 
 		_framebuffer.Draw();
 		// End Main Update.
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
+
+		_cameraEditor.Position.Print();
+		_cameraEditor.Rotation.Print();
 
 		// Rendering.
 		ImGui::Render();
