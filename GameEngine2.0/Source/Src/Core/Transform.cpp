@@ -7,28 +7,20 @@ Core::Transform::~Transform(){}
 
 void Core::Transform::SetWorldPosition(Math::Vector3 pos)
 {
-	if (this->Parent)
-		SetLocalPosition(pos - Parent->Transform.GetWorldPosition());
-	else
-		SetLocalPosition(pos);
+	_localPosition = pos;
+	_modelMatrix.content[0][3] = pos.x;
+	_modelMatrix.content[1][3] = pos.y;
+	_modelMatrix.content[2][3] = pos.z;
 }
 
 void Core::Transform::SetWorldRotation(Math::Quaternion rot)
 {
-	if (Parent)
-		// Set local rotation in function of parent rotation.
-		SetLocalRotation(rot * Parent->Transform.GetWorldRotation().GetInverse());
-	else
-		SetLocalRotation(rot);
+	_modelMatrix = Math::Matrix4::CreateTransformMatrix(GetWorldPosition(), rot.ToEuler(), GetWorldScale());
 }
 
 void Core::Transform::SetWorldScale(Math::Vector3 sca)
 {
-	if (Parent)
-		// Set local scale in function of parent scale.
-		SetLocalScale(Math::Vector3(sca.x / Parent->Transform.GetWorldScale().x, sca.y / Parent->Transform.GetWorldScale().y, sca.z / Parent->Transform.GetWorldScale().z));
-	else
-		SetLocalScale(sca);
+	_modelMatrix = Math::Matrix4::CreateTransformMatrix(GetWorldPosition(), GetWorldPosition(), sca);
 }
 
 Math::Vector3 Core::Transform::GetWorldPosition()
@@ -44,6 +36,11 @@ Math::Quaternion Core::Transform::GetWorldRotation()
 Math::Vector3 Core::Transform::GetWorldScale()
 {
 	return _modelMatrix.GetScale();
+}
+
+Math::Matrix4 Core::Transform::GetModelMatrix()
+{
+	return _modelMatrix;
 }
 
 void Core::Transform::SetLocalPosition(Math::Vector3 newpos)
@@ -82,8 +79,15 @@ Math::Vector3 Core::Transform::GetLocalScale()
 void Core::Transform::RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle)
 {
 		Math::Quaternion q = Math::Quaternion::AngleAxis(angle, axis);
-		Math::Vector3 dif = this->GetWorldPosition() - point;
+		Math::Vector3 dif = GetWorldPosition() - point;
 		dif = q * dif;
-		this->SetWorldPosition(point + dif);
-		this->SetWorldRotation(this->GetWorldRotation() * this->GetWorldRotation().GetInverse() * q * this->GetWorldRotation());
+		SetWorldPosition(point + dif);
+		SetWorldRotation(this->GetWorldRotation() * this->GetWorldRotation().GetInverse() * q * this->GetWorldRotation());
+}
+
+void Core::Transform::Update()
+{
+	if (!_dirty)
+		return;
+	_modelMatrix = Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation.ToEuler(), _localScale);
 }

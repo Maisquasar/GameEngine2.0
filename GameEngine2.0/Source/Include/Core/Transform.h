@@ -27,6 +27,7 @@ namespace Core
 		Math::Vector3 GetWorldPosition();
 		Math::Quaternion GetWorldRotation();
 		Math::Vector3 GetWorldScale();
+		Math::Matrix4 GetModelMatrix();
 
 		// Local Setters
 		void SetLocalPosition(Math::Vector3);
@@ -39,6 +40,8 @@ namespace Core
 		Math::Vector3 GetLocalScale();
 
 		void RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle);
+
+		void Update();
 
 	private:
 		Math::Matrix4 _modelMatrix = Math::Matrix4::Identity();

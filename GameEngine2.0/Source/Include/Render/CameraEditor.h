@@ -2,6 +2,7 @@
 #include <ImGui/imgui.h>
 #include "Include/Math/Math.h"
 #include "Include/Utils/Input.h"
+#include "Include/Core/Transform.h"
 
 namespace Render {
 	class CameraEditor
@@ -20,6 +21,8 @@ namespace Render {
 		float Far = 1000.f;
 		float AspectRatio = (4.0f / 3.0f);
 		float Speed = 25.f;
+
+		Core::Transform Transform;
 
 		void Update();
 		// Return the Mat4D view matrix from the camera.

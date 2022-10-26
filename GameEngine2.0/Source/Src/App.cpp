@@ -188,8 +188,8 @@ void App::Update()
 	glEnableVertexAttribArray(1);
 	// --------- Temporary ---------
 
-	_cameraEditor.Position = Math::Vector3(0, 0, -5);
-	_cameraEditor.Rotation = Math::Vector2(PI/2, 0);
+	//_cameraEditor.Position = Math::Vector3(0, 0, -5);
+	//_cameraEditor.Rotation = Math::Vector2(PI/2, 0);
 
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
@@ -229,6 +229,7 @@ void App::Update()
 		_editorUi.Draw();
 
 		// Update Editor Camera.
+		_cameraEditor.Transform.Update();
 		if (_framebuffer.UpdateCameraEditor) {
 			_cameraEditor.Update();
 			auto mousePos = ImGui::GetMousePos();
