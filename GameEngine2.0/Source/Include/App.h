@@ -13,6 +13,7 @@
 #include "Include/Utils/Input.h"
 #include "Include/Render/CameraEditor.h"
 #include "Include/Render/Framebuffer.h"
+#include "Include/Core/Node.h"
 
 class App
 {
@@ -27,18 +28,9 @@ public:
 	static void CloseApp();
 
 	static GLFWwindow* GetWindow() { return _window; }
-	static Math::Integer2 GetWindowSize() 
-	{
-		int width, height;
-		glfwGetWindowSize(_window, &width, &height);
-		return Math::Integer2(width, height);
-	}
-	static const GLFWvidmode* GetMonitorVideoMode() 
-	{
-		if (!_videoMode)
-			_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		return _videoMode; 
-	}
+	static Math::Integer2 GetWindowSize();
+	static const GLFWvidmode* GetMonitorVideoMode();
+	static std::shared_ptr<Core::Node> SceneNode;
 private:
 	// Window
 	static GLFWwindow* _window;

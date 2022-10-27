@@ -1,4 +1,5 @@
 #include "Include/EditorUi/Inspector.h"
+std::vector<Core::Node*> EditorUi::Inspector::Selected;
 
 EditorUi::Inspector::Inspector()
 {
@@ -17,4 +18,9 @@ void EditorUi::Inspector::Draw()
 
 	}
 	ImGui::End();
+}
+
+void EditorUi::Inspector::AddSelected(Core::Node* node)
+{
+	Selected.push_back(node);
 }

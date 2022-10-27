@@ -3,6 +3,7 @@
 GLFWwindow* App::_window = nullptr;
 const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
 bool App::_shouldClose = false;
+std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
@@ -140,8 +141,23 @@ void App::InitGlad()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_BACK);
-	stbi_set_flip_vertically_on_load(true);
+	//stbi_set_flip_vertically_on_load(true);
 }
+
+Math::Integer2 App::GetWindowSize()
+{
+	int width, height;
+	glfwGetWindowSize(_window, &width, &height);
+	return Math::Integer2(width, height);
+}
+
+const GLFWvidmode* App::GetMonitorVideoMode()
+{
+	if (!_videoMode)
+		_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	return _videoMode;
+}
+
 
 void App::LoadResources()
 {
@@ -160,7 +176,11 @@ void App::LoadResources()
 void App::Update()
 {
 	_framebuffer.Initialize(this->GetWindowSize());
-	//_editorUi.Initialize();
+	_editorUi.Initialize();
+	SceneNode->AddChildren(new Core::Node());
+	SceneNode->AddChildren(new Core::Node());
+	SceneNode->AddChildren(new Core::Node());
+	SceneNode->Childrens[0]->AddChildren(new Core::Node());
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	// --------- Temporary ---------
@@ -187,9 +207,6 @@ void App::Update()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	// --------- Temporary ---------
-
-	//_cameraEditor.Position = Math::Vector3(0, 0, -5);
-	//_cameraEditor.Rotation = Math::Vector2(PI/2, 0);
 
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{

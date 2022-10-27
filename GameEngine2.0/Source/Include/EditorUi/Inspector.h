@@ -1,5 +1,6 @@
 #pragma once
 #include "../EditorUi/EditorWindow.h"
+#include "Include/Core/Node.h"
 namespace EditorUi
 {
 	class Inspector : public EditorWindow
@@ -9,6 +10,10 @@ namespace EditorUi
 		~Inspector();
 
 		void Draw() override;
+
+		static void AddSelected(Core::Node* node);
+
+		static std::vector<Core::Node*> Selected;
 
 	private:
 

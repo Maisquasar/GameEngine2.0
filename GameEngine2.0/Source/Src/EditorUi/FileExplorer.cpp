@@ -185,7 +185,7 @@ void EditorUi::FileExplorer::Draw()
 			ImGui::EndChild(); 
 
 		}
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && !rightclick)
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && !rightclick)
 		{
 			ImGui::OpenPopup("RightClick");
 			_clicked = nullptr;
