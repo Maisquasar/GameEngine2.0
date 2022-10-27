@@ -76,6 +76,12 @@ Math::Vector3 Math::Quaternion::ToEuler()
 		thetaY = atan2(rotMat.at(1, 0), rotMat.at(0, 0));
 		thetaZ = 0;
 	}
+	if (thetaX == -0)
+		thetaX = 0;
+	if (thetaY == -0)
+		thetaY = 0;
+	if (thetaZ == -0)
+		thetaZ = 0;
 	return Vector3(thetaX, thetaY, thetaZ).ToDeegree();
 }
 

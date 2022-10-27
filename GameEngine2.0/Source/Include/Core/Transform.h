@@ -43,6 +43,8 @@ namespace Core
 
 		void Update();
 
+		void ShowInInspector();
+
 	private:
 		Math::Matrix4 _modelMatrix = Math::Matrix4::Identity();
 		Math::Vector3 _localPosition = Math::Vector3();

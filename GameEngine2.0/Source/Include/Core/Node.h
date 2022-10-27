@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_internal.h>
+#include "Components/Component.h"
 
 namespace Core {
 	class Node
@@ -12,6 +13,7 @@ namespace Core {
 
 		std::shared_ptr<Node> Parent;
 		std::vector<std::shared_ptr<Node>> Childrens;
+		std::vector<std::shared_ptr<Component::Component>> Components;
 		Core::Transform Transform;
 
 		std::string Name = "Node";
