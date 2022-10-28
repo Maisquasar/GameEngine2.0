@@ -65,45 +65,55 @@ std::shared_ptr<EditorUi::File> EditorUi::File::GetParent()
 
 // -------------- File Explorer --------------
 
-EditorUi::FileExplorer::FileExplorer()
+EditorUi::FloatingFileExplorer::FloatingFileExplorer()
 {
+	_windowName = "Floating File Explorer";
+	_limited = false;
 	_open = false;
-	_path = std::filesystem::current_path().string();
+	_path = std::filesystem::current_path().string() + "/Assets";
 	std::replace(_path.begin(), _path.end(), '\\', '/');
 }
 
-EditorUi::FileExplorer::~FileExplorer() {}
+EditorUi::FloatingFileExplorer::~FloatingFileExplorer() {}
 
-void EditorUi::FileExplorer::Draw()
+void EditorUi::FloatingFileExplorer::Draw()
 {
 	if (!_open)
 		return;
 	bool rightclick = false;
-	if (ImGui::Begin("File Explorer", &_open))
+	ImGui::PushID(_windowName.c_str());
+	ImGuiWindowFlags_ flag = ImGuiWindowFlags_None;
+	if (!_limited)
+		flag = ImGuiWindowFlags_NoDocking;
+	if (ImGui::Begin(_windowName.c_str(), &_open, flag))
 	{
 		// ------------- Back Button ------------- //
 		if (ImGui::Button("Back"))
 		{
-			_current = _current->GetParent();
+			auto path = _current->Directory.substr(_current->Directory.find_last_of('/'), _current->Directory.size());
+			if (_limited && path != "/Assets")
+				_current = _current->GetParent();
+			else if (!_limited)
+				_current = _current->GetParent();
 		}
 		ImGui::SameLine();
 		// ------------- Directory Input ------------- //
-		char Path[512];
-		for (size_t i = 0; i < _current->Directory.size(); i++)
-			Path[i] = _current->Directory[i];
-		Path[_current->Directory.size()] = '\0';
+		char Path[513];
+		strcpy_s(Path, 512, _current->Directory.c_str());
 		if (ImGui::InputText("Path", Path, 512, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
-			try
-			{
-				std::shared_ptr<File> tmp = std::make_shared<File>(Path);
-				tmp->FoundChildren();
-				_current = tmp;
-			}
-			catch (const std::exception& e)
-			{
-				// Case when not found
-				LOG(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
+			if (!_limited) {
+				try
+				{
+					std::shared_ptr<File> tmp = std::make_shared<File>(Path);
+					tmp->FoundChildren();
+					_current = tmp;
+				}
+				catch (const std::exception& e)
+				{
+					// Case when not found
+					LOG(Debug::LogType::L_ERROR, "Error opening folder %s : %s", Path, e.what());
+				}
 			}
 		}
 		ImGui::SameLine();
@@ -182,7 +192,7 @@ void EditorUi::FileExplorer::Draw()
 				index++;
 				ImGui::PopID();
 			}
-			ImGui::EndChild(); 
+			ImGui::EndChild();
 
 		}
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && !rightclick)
@@ -193,22 +203,23 @@ void EditorUi::FileExplorer::Draw()
 		RightClickWindow();
 	}
 	ImGui::End();
+	ImGui::PopID();
 }
 
-void EditorUi::FileExplorer::SetOpen(bool value)
+void EditorUi::FloatingFileExplorer::SetOpen(bool value)
 {
 	_open = value;
 	this->Refresh();
 }
 
-void EditorUi::FileExplorer::Refresh()
+void EditorUi::FloatingFileExplorer::Refresh()
 {
 	_main = std::make_shared<File>(_path);
 	_main->FoundChildren();
 	_current = _main;
 }
 
-void EditorUi::FileExplorer::RightClickWindow()
+void EditorUi::FloatingFileExplorer::RightClickWindow()
 {
 	if (ImGui::BeginPopup("RightClick", ImGuiWindowFlags_NoDecoration))
 	{
@@ -262,4 +273,14 @@ void EditorUi::FileExplorer::RightClickWindow()
 		}
 		ImGui::EndPopup();
 	}
+}
+
+EditorUi::FileExplorer::FileExplorer()
+{
+	_windowName = "File Explorer";
+	_limited = true;
+}
+
+EditorUi::FileExplorer::~FileExplorer()
+{
 }

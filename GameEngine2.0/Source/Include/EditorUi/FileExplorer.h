@@ -39,21 +39,30 @@ namespace EditorUi {
 
 	};
 
-	class FileExplorer : public EditorWindow
+	class FloatingFileExplorer : public EditorWindow
 	{
 	public:
-		FileExplorer();
-		~FileExplorer();
+		FloatingFileExplorer();
+		~FloatingFileExplorer();
 
 		void Draw() override;
 		void SetOpen(bool value) override;
 		void Refresh();
-	private:
+	protected:
+		std::string _windowName;
+		bool _limited;
 		std::string _path = "Assets";
 		std::shared_ptr<File> _current = nullptr;
 		std::shared_ptr<File> _main;
 
 		std::shared_ptr<File> _clicked = nullptr;
 		void RightClickWindow();
+	};
+
+	class FileExplorer : public FloatingFileExplorer
+	{
+	public:
+		FileExplorer();
+		~FileExplorer();
 	};
 }

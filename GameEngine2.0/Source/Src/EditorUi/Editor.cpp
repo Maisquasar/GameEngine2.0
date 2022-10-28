@@ -1,5 +1,6 @@
 #include "Include/EditorUi/Editor.h"
 EditorUi::FileExplorer EditorUi::Editor::_fileExplorer;
+EditorUi::FloatingFileExplorer EditorUi::Editor::_floatingFileExplorer;
 EditorUi::Hierarchy EditorUi::Editor::_hierarchy;
 EditorUi::Inspector EditorUi::Editor::_inspector;
 
@@ -19,6 +20,7 @@ void EditorUi::Editor::Draw()
 	_mainBar.Draw();
 	_hierarchy.Draw();
 	_fileExplorer.Draw();
+	_floatingFileExplorer.Draw();
 	_inspector.Draw();
 	Debug::Log::Console.Draw();
 }
