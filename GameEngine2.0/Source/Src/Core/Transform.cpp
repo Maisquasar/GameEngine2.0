@@ -169,7 +169,7 @@ void Core::Transform::ShowInInspector()
 
 		DrawVec3Control("Position", position);
 		DrawVec3Control("Rotation", rotation);
-		DrawVec3Control("Scale", scale);
+		DrawVec3Control("Scale", scale, 1.f);
 
 		if (position != _localPosition || rotation != _localRotation.ToEuler() || scale != _localScale) {
 			_localPosition = position;
