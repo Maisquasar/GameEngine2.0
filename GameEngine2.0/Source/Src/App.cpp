@@ -221,8 +221,6 @@ void App::Update()
 		glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
 		glEnable(GL_DEPTH_TEST);
 
-		//glViewport(0, 0, _width, _height);
-
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
