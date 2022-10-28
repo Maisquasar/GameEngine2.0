@@ -13,9 +13,15 @@ void Core::Node::AddChildren(Node* node)
 	this->Childrens.push_back(std::shared_ptr<Node>(node));
 }
 
+void Core::Node::AddComponent(Core::Components::Component* comp)
+{
+	this->Components.push_back(std::shared_ptr<Core::Components::Component>(comp));
+}
+
 #include "Include/EditorUi/Inspector.h"
 void Core::Node::ShowInHierarchy(int index)
 {
+	ImGui::BeginDisabled(!_active);
 	ImGui::PushID(index);
 	if (Childrens.size() > 0) {
 		if (!_open) {
@@ -61,4 +67,5 @@ void Core::Node::ShowInHierarchy(int index)
 		}
 	}
 	ImGui::PopID();
+	ImGui::EndDisabled();
 }

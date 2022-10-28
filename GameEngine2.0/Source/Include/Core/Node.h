@@ -13,17 +13,20 @@ namespace Core {
 
 		std::shared_ptr<Node> Parent;
 		std::vector<std::shared_ptr<Node>> Childrens;
-		std::vector<std::shared_ptr<Component::Component>> Components;
+		std::vector<std::shared_ptr<Components::Component>> Components;
 		Core::Transform Transform;
 
 		std::string Name = "Node";
 
 		void AddChildren(Node* node);
+		void AddComponent(Core::Components::Component* comp);
 
 		void ShowInHierarchy(int index);
 
+		bool* GetActivePtr() { return &_active; }
 	private:
 		bool _open = false;
+		bool _active = true; // Boolean for inspector active
 		bool _selected = false;
 
 	};

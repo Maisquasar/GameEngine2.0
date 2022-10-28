@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace Core {
 	class Node;
-	namespace Component {
+	namespace Components {
 		class Component
 		{
 		public:
@@ -28,5 +29,16 @@ namespace Core {
 
 		};
 
+		class Data
+		{
+		public:
+			Data();
+			~Data();
+			static std::vector<Component> Components;
+			static void NewComponent(Component comp);
+			void Initialize();
+		private:
+
+		};
 	}
 }

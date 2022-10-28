@@ -10,6 +10,7 @@ Render::CameraEditor::~CameraEditor(){}
 
 void Render::CameraEditor::Update()
 {
+	Transform.Update();
 	// Set Distance
 	Distance -= Utils::Input::MouseScroll * 0.5f;
 	float min = 0.001f;

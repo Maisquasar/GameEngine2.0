@@ -31,6 +31,7 @@ public:
 	static Math::Integer2 GetWindowSize();
 	static const GLFWvidmode* GetMonitorVideoMode();
 	static std::shared_ptr<Core::Node> SceneNode;
+	static Core::Components::Data Components;
 private:
 	// Window
 	static GLFWwindow* _window;
@@ -52,6 +53,7 @@ private:
 	// Render
 	Render::CameraEditor _cameraEditor;
 	Render::FrameBuffer _framebuffer;
+	
 
 	void InitGlfw();
 	void InitImGui();

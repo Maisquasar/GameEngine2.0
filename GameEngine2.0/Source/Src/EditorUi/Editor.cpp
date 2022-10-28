@@ -17,6 +17,7 @@ void EditorUi::Editor::Initialize()
 void EditorUi::Editor::Draw()
 {
 	MainDocking();
+	//ImGui::ShowDemoWindow();
 	_mainBar.Draw();
 	_hierarchy.Draw();
 	_fileExplorer.Draw();

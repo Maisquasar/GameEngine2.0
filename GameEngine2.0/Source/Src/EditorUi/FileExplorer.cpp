@@ -279,6 +279,7 @@ EditorUi::FileExplorer::FileExplorer()
 {
 	_windowName = "File Explorer";
 	_limited = true;
+	_path = "Assets";
 }
 
 EditorUi::FileExplorer::~FileExplorer()

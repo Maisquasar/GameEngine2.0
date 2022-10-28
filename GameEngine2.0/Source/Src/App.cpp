@@ -4,6 +4,7 @@ GLFWwindow* App::_window = nullptr;
 const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
 bool App::_shouldClose = false;
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
+Core::Components::Data App::Components;
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
@@ -175,6 +176,7 @@ void App::LoadResources()
 
 void App::Update()
 {
+	this->Components.Initialize();
 	_framebuffer.Initialize(this->GetWindowSize());
 	_editorUi.Initialize();
 	SceneNode->AddChildren(new Core::Node());
@@ -207,7 +209,7 @@ void App::Update()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	// --------- Temporary ---------
-
+	_cameraEditor.Update();
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
 		// Begin Frame
@@ -246,7 +248,6 @@ void App::Update()
 		_editorUi.Draw();
 
 		// Update Editor Camera.
-		_cameraEditor.Transform.Update();
 		if (_framebuffer.UpdateCameraEditor) {
 			_cameraEditor.Update();
 			auto mousePos = ImGui::GetMousePos();

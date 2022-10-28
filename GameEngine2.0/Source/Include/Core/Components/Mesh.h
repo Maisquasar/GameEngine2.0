@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 
-namespace Core::Component {
+namespace Core::Components {
 	class Mesh : public Component
 	{
 	public:

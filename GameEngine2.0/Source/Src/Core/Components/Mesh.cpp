@@ -1,14 +1,14 @@
 #include "..\..\..\Include\Core\Components\Mesh.h"
 
-Core::Component::Mesh::Mesh()
+Core::Components::Mesh::Mesh()
 {
 	ComponentName = "Mesh Renderer";
 }
 
-Core::Component::Mesh::~Mesh()
+Core::Components::Mesh::~Mesh()
 {
 }
 
-void Core::Component::Mesh::ShowInInspector()
+void Core::Components::Mesh::ShowInInspector()
 {
 }
