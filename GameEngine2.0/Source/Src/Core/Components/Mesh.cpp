@@ -13,6 +13,11 @@ Core::Components::Mesh::~Mesh()
 
 void Core::Components::Mesh::ShowInInspector()
 {
+	if (ImGui::Button("Change Mesh"))
+	{
+		ImGui::OpenPopup("MeshPopup");
+	}
+	Resources::ResourceManager::MeshPopup();
 }
 
 void Core::Components::Mesh::Initialize()

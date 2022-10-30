@@ -12,6 +12,7 @@ namespace Resources {
 		void SetName(std::string name) { _name = name; }
 
 		std::string GetPath() { return _path; }
+		std::string GetName() { return _name; }
 		bool Loaded = false;
 	protected:
 		std::string _path;

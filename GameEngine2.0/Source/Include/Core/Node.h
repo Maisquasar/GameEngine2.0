@@ -21,6 +21,8 @@ namespace Core {
 		void AddChildren(Node* node);
 		void AddComponent(std::shared_ptr<Core::Components::Component> comp);
 
+		void UpdateSelfAndChilds();
+
 		void ShowInHierarchy(int index);
 
 		bool* GetActivePtr() { return &_active; }

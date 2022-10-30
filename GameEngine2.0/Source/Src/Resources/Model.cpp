@@ -34,6 +34,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		if (prefix == "o ")
 		{
 			Meshes.push_back(Core::Components::Mesh());
+			Meshes.back().SetName(Utils::Loader::GetString(currentLine));
 		}
 		else if (prefix == "mt")
 		{
@@ -63,6 +64,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		else if (prefix == "us")
 		{
 			std::string MaterialName = Utils::Loader::GetString(currentLine);
+			MaterialName = MaterialName.substr(0, MaterialName.size() - 1);
 			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(MaterialName.c_str())) {
 				Meshes.back().Materials.push_back(mat);
 			}
@@ -77,7 +79,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	for (auto mesh : Meshes)
 	{
 		auto MeshNode = new Core::Node();
-		MeshNode->AddComponent(std::make_shared<Core::Components::Mesh>(mesh));
+		Resources::ResourceManager::Add(GetName() + "::" + mesh.GetName(), new Core::Components::Mesh(mesh));
 		this->AddChildren(MeshNode);
 	}
 }

@@ -18,6 +18,19 @@ void Core::Node::AddComponent(std::shared_ptr<Core::Components::Component> comp)
 	this->Components.push_back(comp);
 }
 
+void Core::Node::UpdateSelfAndChilds()
+{
+	this->Transform.Update();
+	for (auto component : this->Components)
+	{
+		component->Update();
+	}
+	for (auto child : this->Childrens)
+	{
+		child->UpdateSelfAndChilds();
+	}
+}
+
 #include "Include/EditorUi/Inspector.h"
 void Core::Node::ShowInHierarchy(int index)
 {

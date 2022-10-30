@@ -241,6 +241,7 @@ void App::Update()
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+		SceneNode->UpdateSelfAndChilds();
 		// --------- Temporary ---------
 		auto shader = _resourceManager.Get<Resources::Shader>("UnlitShader");
 		glUseProgram(shader->Program);

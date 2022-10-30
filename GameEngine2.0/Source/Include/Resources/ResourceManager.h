@@ -5,7 +5,10 @@
 #include "IResource.h"
 #include "Texture.h"
 #include "Shader.h"
-
+namespace Core::Components
+{
+	class Mesh;
+}
 namespace Resources {
 	class ResourceManager
 	{
@@ -26,7 +29,7 @@ namespace Resources {
 
 		template<typename T> static T* Get(const char* filename)
 		{
-			return dynamic_cast<T*>(_resource[filename]);
+			return dynamic_cast<T*>(_resource.at(filename));
 		}
 
 		template<typename T> static T* GetWithPath(const char* filename)
@@ -43,6 +46,8 @@ namespace Resources {
 		{
 			_resource[filename] = res;
 		}
+
+		static Core::Components::Mesh* MeshPopup();
 		
 	private:
 		static std::unordered_map<std::string, Resources::IResource*> _resource;
