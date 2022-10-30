@@ -14,6 +14,7 @@
 #include "Include/Render/CameraEditor.h"
 #include "Include/Render/Framebuffer.h"
 #include "Include/Core/Node.h"
+#include "Include/Resources/Model.h"
 
 class App
 {
@@ -32,6 +33,7 @@ public:
 	static const GLFWvidmode* GetMonitorVideoMode();
 	static std::shared_ptr<Core::Node> SceneNode;
 	static Core::Components::Data Components;
+	static Math::Matrix4 GetVPMatrix() { return _VP; }
 private:
 	// Window
 	static GLFWwindow* _window;
@@ -40,6 +42,7 @@ private:
 	int _height = 600;
 	const char* _windowName = "GameEngine2.0";
 	static bool _shouldClose;
+	static Math::Matrix4 _VP;
 
 	// Ui
 	EditorUi::Editor _editorUi;

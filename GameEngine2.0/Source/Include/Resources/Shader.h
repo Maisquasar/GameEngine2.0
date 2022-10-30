@@ -37,7 +37,6 @@ namespace Resources
 		int Program = -1;
 		int VertexShader = 0;
 		int FragmentShader = 0;
-		std::string Name;
 
 		// Set Vertex Shader.S
 		bool SetShader(std::string filename);

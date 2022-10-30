@@ -48,6 +48,8 @@ namespace Math {
 
 		bool operator==(const Vector2& b) const;
 
+		float& operator[](const size_t a);
+
 		// Return tue if 'a' and 'b' are collinears (Precision defined by VEC2D_COLLINEAR_PRECISION)
 		bool IsCollinearWith(Vector2 a);
 

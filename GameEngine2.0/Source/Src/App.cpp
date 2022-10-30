@@ -3,6 +3,7 @@
 GLFWwindow* App::_window = nullptr;
 const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
 bool App::_shouldClose = false;
+Math::Matrix4 App::_VP;
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
 
@@ -172,6 +173,15 @@ void App::LoadResources()
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
 		_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
 	}
+	// Load Material
+	_resourceManager.Add<Resources::Material>("DefaultMaterial", new Resources::Material());
+
+	// Load Models
+	path = "Assets/Default/Models";
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == "obj")
+			_resourceManager.Create<Resources::Model>(entry.path().generic_string().data());
+	}
 }
 
 void App::Update()
@@ -234,6 +244,7 @@ void App::Update()
 		// --------- Temporary ---------
 		auto shader = _resourceManager.Get<Resources::Shader>("UnlitShader");
 		glUseProgram(shader->Program);
+		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
 		auto MVP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix() * Math::Matrix4::CreateTransformMatrix(Math::Vector3(0), Math::Vector3(0), Math::Vector3(1));
 		glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 		glUniform1i(shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);

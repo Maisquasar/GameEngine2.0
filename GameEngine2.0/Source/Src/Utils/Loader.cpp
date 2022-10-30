@@ -9,16 +9,21 @@ void Utils::Loader::SkipLine(const char* data, uint32_t& pos)
 	pos++;
 }
 
-std::string Utils::Loader::GetString(const char* data, uint32_t& pos, int dec)
+std::string Utils::Loader::GetLine(const char* data, uint32_t& pos)
 {
-	pos += dec;
-	std::string value;
-	while (data[pos] != '\n' && data[pos] != '\0' && data[pos] != '\r' && data[pos] != '\t')
+	std::string line;
+	while (data[pos] != '\0' && data[pos] != '\n')
 	{
-		value.push_back(data[pos]);
+		line.push_back(data[pos]);
 		pos++;
 	}
-	return value;
+	line.push_back('\n');
+	return line;
+}
+
+std::string Utils::Loader::GetString(std::string line)
+{
+	return line.substr(line.find_first_of(' ') + 1);
 }
 
 int Utils::Loader::GetInt(const char* data, uint32_t& pos, int dec)
@@ -33,135 +38,88 @@ int Utils::Loader::GetInt(const char* data, uint32_t& pos, int dec)
 	return std::stoi(value);
 }
 
-float Utils::Loader::GetFloat(const char* data, uint32_t& pos, int dec)
+float Utils::Loader::GetFloat(std::string line)
 {
-	pos += dec;
+	float out;
 	std::string value;
-	while (data[pos] != '\n' && data[pos] != '\0' && data[pos] != '\r')
-	{
-		value.push_back(data[pos]);
-		pos++;
-	}
-	return std::stof(value);
+	std::string temp = line.substr(2);
+	temp = temp.substr(temp.find_first_not_of(' '));
+	value = temp.substr(0, temp.find_first_of(' '));
+	out = std::stof(value);
+	return out;
 }
 
-Math::Vector4 Utils::Loader::GetVec4(const char* data, uint32_t& pos, int dec)
+std::vector<Math::Integer3> Utils::Loader::GetIndices(std::string line)
 {
-	Math::Vector4 position;
+	std::vector<Math::Integer3> out;
+	out.resize(3);
 	std::string value;
-	pos += dec;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
+	std::string temp = line.substr(2);
+	std::string temp2;
+	for (size_t j = 0; j < 3; j++)
 	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
+		temp2 = temp.substr(temp.find_first_not_of(' '));
+		temp2 = temp2.substr(0, temp2.find_first_of(' '));
+		for (size_t i = 0; i < 3; i++)
+		{
+			value = temp2.substr(0, temp2.find_first_of('/'));
+			out[j][i] = std::stoi(value);
+			temp2 = temp2.substr(temp2.find_first_of('/') + 1);
+		}
+		temp = temp.substr(temp.find_first_of(' ') + 1);
 	}
-	position.x = std::stof(value);
-	value.clear();
-	pos += 2;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
-	}
-	position.y = std::stof(value);
-	value.clear();
-	pos += 2;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
-	}
-	position.z = std::stof(value);
-	value.clear();
-	pos += 2;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
-	}
-	position.w = std::stof(value);
-	value.clear();
-
-	return position;
+	return out;
 }
 
-Math::Vector3 Utils::Loader::GetVec3(const char* data, uint32_t& pos, int dec)
+Math::Vector4 Utils::Loader::GetVec4(std::string line)
 {
-	Math::Vector3 position;
+	Math::Vector4 out;
 	std::string value;
-	pos += dec;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
+	std::string temp = line.substr(2);
+	temp = temp.substr(temp.find_first_not_of(' '));
+	for (size_t i = 0; i < 4; i++)
 	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
+		value = temp.substr(0, temp.find_first_of(' '));
+		out[i] = std::stof(value);
+		temp = temp.substr(temp.find_first_not_of(' '));
 	}
-	position.x = std::stof(value);
-	value.clear();
-	pos += 2;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
-	}
-	position.y = std::stof(value);
-	value.clear();
-	pos += 2;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
-	}
-	position.z = std::stof(value);
-	value.clear();
-
-	return position;
+	return out;
 }
 
-Math::Vector2 Utils::Loader::GetVec2(const char* data, uint32_t& pos, int dec)
+Math::Vector3 Utils::Loader::GetVec3(std::string line)
 {
-	Math::Vector2 vector;
+	Math::Vector3 out;
 	std::string value;
-	pos += dec;
-
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
+	std::string temp = line.substr(2);
+	temp = temp.substr(temp.find_first_not_of(' '));
+	for (size_t i = 0; i < 3; i++)
 	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
+		value = temp.substr(0, temp.find_first_of(' '));
+		out[i] = std::stof(value);
+		temp = temp.substr(temp.find_first_of(' ') + 1);
 	}
-	vector.x = std::stof(value);
-	value.clear();
-	pos += 2;
+	return out;
+}
 
-	while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
+Math::Vector2 Utils::Loader::GetVec2(std::string line)
+{
+	Math::Vector2 out;
+	std::string value;
+	std::string temp = line.substr(2);
+	temp = temp.substr(temp.find_first_not_of(' '));
+	for (size_t i = 0; i < 2; i++)
 	{
-		if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',')
-			value.push_back(data[pos]);
-		pos++;
+		value = temp.substr(0, temp.find_first_of(' '));
+		out[i] = std::stof(value);
+		temp = temp.substr(temp.find_first_not_of(' '));
 	}
-	vector.y = std::stof(value);
-	value.clear();
-	return vector;
+	return out;
 }
 
 Math::Matrix4 Utils::Loader::GetMat4(const char* data, uint32_t& pos, int dec)
 {
-	pos += dec;
 	Math::Matrix4 mat;
+	pos += dec;
 	std::string value;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {

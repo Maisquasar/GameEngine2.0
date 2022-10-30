@@ -10,7 +10,6 @@ Resources::Shader::~Shader()
 
 bool Resources::Shader::SetShader(std::string filename)
 {
-	Name = filename;
 	filename += "/vertex.glsl";
 	std::string tmp = ReadFile(filename);
 	const char* vertexShaderSources = tmp.c_str();
@@ -86,7 +85,7 @@ bool Resources::Shader::Link()
 		return false;
 	}
 	else {
-		LOG(Debug::LogType::INFO, "Successfully link Shader %s", Name.c_str());
+		LOG(Debug::LogType::INFO, "Successfully link Shader %s", _name.c_str());
 		_linked = true;
 	}
 

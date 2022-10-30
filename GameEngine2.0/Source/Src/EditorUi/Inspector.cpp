@@ -12,7 +12,7 @@ EditorUi::Inspector::~Inspector()
 {
 }
 
-Core::Components::Component* ComponentsPopup()
+std::shared_ptr<Core::Components::Component> ComponentsPopup()
 {
 	if (ImGui::BeginPopup("Components", ImGuiWindowFlags_AlwaysVerticalScrollbar))
 	{
@@ -20,7 +20,7 @@ Core::Components::Component* ComponentsPopup()
 		{
 			if (ImGui::Button(component.ComponentName.c_str())) {
 				ImGui::EndPopup();
-				return new Core::Components::Component(component);
+				return std::shared_ptr<Core::Components::Component>(new Core::Components::Component(component));
 			}
 		}
 		ImGui::EndPopup();

@@ -19,7 +19,7 @@ namespace Core {
 		std::string Name = "Node";
 
 		void AddChildren(Node* node);
-		void AddComponent(Core::Components::Component* comp);
+		void AddComponent(std::shared_ptr<Core::Components::Component> comp);
 
 		void ShowInHierarchy(int index);
 

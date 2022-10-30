@@ -22,7 +22,6 @@ namespace Resources {
 		GLuint GetSampler() { return _sampler; }
 		GLuint* GetSamplerPtr() { return &_sampler; }
 	private:
-		std::string _name;
 		unsigned char* _data;
 		GLuint _textureData = 0;
 		GLuint _sampler;

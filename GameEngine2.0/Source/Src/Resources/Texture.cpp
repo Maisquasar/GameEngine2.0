@@ -17,7 +17,6 @@ void Resources::Texture::Load(std::string filename)
 {
 	_index = TextureData;
 	TextureData++;
-	this->_name = filename;
 	int NrChannels;
 	this->_data = stbi_load(_path.c_str(), &_width, &_height, &NrChannels, 4);
 	if (_data == nullptr) {
