@@ -25,7 +25,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	uint32_t pos = 0;
 	std::string currentLine;
 	std::string prefix;
-	std::vector<Core::Components::Mesh> Meshes;
+	std::vector<Resources::Mesh> Meshes;
 
 	while (pos != size)
 	{
@@ -33,7 +33,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		prefix = currentLine.substr(0, 2);
 		if (prefix == "o ")
 		{
-			Meshes.push_back(Core::Components::Mesh());
+			Meshes.push_back(Resources::Mesh());
 			Meshes.back().SetName(Utils::Loader::GetString(currentLine));
 		}
 		else if (prefix == "mt")
@@ -79,7 +79,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	for (auto mesh : Meshes)
 	{
 		auto MeshNode = new Core::Node();
-		Resources::ResourceManager::Add(GetName() + "::" + mesh.GetName(), new Core::Components::Mesh(mesh));
+		Resources::ResourceManager::Add(GetName() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
 		this->AddChildren(MeshNode);
 	}
 }

@@ -1,5 +1,5 @@
 #include "Include/Resources/ResourceManager.h"
-#include "Include/Core/Components/Mesh.h"
+#include "Include/Resources/Mesh.h"
 std::unordered_map<std::string, Resources::IResource*> Resources::ResourceManager::_resource;
 
 Resources::ResourceManager::ResourceManager() {}
@@ -18,10 +18,10 @@ Core::Components::Mesh* Resources::ResourceManager::MeshPopup()
 	if (ImGui::BeginPopup("MeshPopup")) {
 		for (auto resource : _resource)
 		{
-			if (auto mesh = dynamic_cast<Core::Components::Mesh*>(resource.second))
+			if (auto mesh = dynamic_cast<Resources::Mesh*>(resource.second))
 			{
-				ImGui::Button(mesh->GetName().c_str());
-				ImGui::CloseCurrentPopup();
+				if (ImGui::Button(mesh->GetName().c_str()))
+					ImGui::CloseCurrentPopup();
 			}
 		}
 		ImGui::EndPopup();

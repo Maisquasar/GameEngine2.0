@@ -14,18 +14,19 @@ EditorUi::Inspector::~Inspector()
 
 Core::Components::Component* ComponentsPopup()
 {
+	Core::Components::Component* out = nullptr;
 	if (ImGui::BeginPopup("Components", ImGuiWindowFlags_AlwaysVerticalScrollbar))
 	{
 		for (auto component : App::Components.Components)
 		{
 			if (ImGui::Button(component->ComponentName.c_str())) {
-				ImGui::EndPopup();
-				return component;
+				out = component;
+				ImGui::CloseCurrentPopup();
 			}
 		}
 		ImGui::EndPopup();
 	}
-	return nullptr;
+	return out;
 }
 
 void EditorUi::Inspector::Draw()

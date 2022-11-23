@@ -27,9 +27,10 @@
     <ClCompile Include="External_Includes\ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="External_Includes\ImGui\imgui_tables.cpp" />
     <ClCompile Include="External_Includes\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
-    <ClCompile Include="Source\Src\Core\Components\Mesh.cpp" />
+    <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
     <ClCompile Include="Source\Src\Core\Node.cpp" />
     <ClCompile Include="Source\Src\Core\Transform.cpp" />
     <ClCompile Include="Source\Src\Debug\Log.cpp" />
@@ -73,7 +74,8 @@
     <ClInclude Include="External_Includes\STB_Image\stb_image.h" />
     <ClInclude Include="Source\Include\App.h" />
     <ClInclude Include="Source\Include\Core\Components\Component.h" />
-    <ClInclude Include="Source\Include\Core\Components\Mesh.h" />
+    <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
+    <ClInclude Include="Source\Include\Resources\Mesh.h" />
     <ClInclude Include="Source\Include\Core\Node.h" />
     <ClInclude Include="Source\Include\Core\Transform.h" />
     <ClInclude Include="Source\Include\Debug\Log.h" />

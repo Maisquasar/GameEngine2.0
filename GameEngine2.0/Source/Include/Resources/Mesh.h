@@ -1,5 +1,4 @@
 #pragma once
-#include "Component.h"
 #include "Include/Math/Math.h"
 #include "Include/Resources/Material.h"
 #include "Include/Resources/IResource.h"
@@ -8,18 +7,15 @@
 #define TUV 2
 #define TAN 3
 
-namespace Core::Components {
-	class Mesh : public Component, public Resources::IResource
+namespace Resources {
+	class Mesh : public Resources::IResource
 	{
 	public:
 		Mesh();
 		~Mesh();
 
-		void ShowInInspector() override;
-		void Initialize() override;
+		void Load(std::string filename) override;
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
-
-		void Update() override;
 
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;

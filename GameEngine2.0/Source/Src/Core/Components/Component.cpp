@@ -1,5 +1,5 @@
 #include "Include\Core\Components\Component.h"
-#include "Include/Core/Components/Mesh.h"
+#include "Include/Core/Components/MeshComponent.h"
 std::vector<Core::Components::Component*> Core::Components::Data::Components;
 
 Core::Components::Component::Component()
@@ -35,5 +35,5 @@ void Core::Components::Data::NewComponent(Component* comp)
 
 void Core::Components::Data::Initialize()
 {
-	this->NewComponent(new Core::Components::Mesh());
+	this->NewComponent(new Core::Components::MeshComponent());
 }

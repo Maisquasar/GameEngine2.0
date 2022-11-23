@@ -1,27 +1,16 @@
-#include "..\..\..\Include\Core\Components\Mesh.h"
+#include "..\..\Include\Resources\Mesh.h"
 #include <map>
 #include "Include/App.h"
 
-Core::Components::Mesh::Mesh()
+Resources::Mesh::Mesh()
 {
-	ComponentName = "Mesh Renderer";
 }
 
-Core::Components::Mesh::~Mesh()
+Resources::Mesh::~Mesh()
 {
-	ComponentName.clear();
 }
 
-void Core::Components::Mesh::ShowInInspector()
-{
-	if (ImGui::Button("Change Mesh"))
-	{
-		ImGui::OpenPopup("MeshPopup");
-	}
-	Resources::ResourceManager::MeshPopup();
-}
-
-void Core::Components::Mesh::Initialize()
+void Resources::Mesh::Load(std::string filename)
 {
 	if (Loaded)
 		return;
@@ -64,7 +53,7 @@ void Core::Components::Mesh::Initialize()
 	Loaded = true;
 }
 
-void Core::Components::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices)
+void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices)
 {
 	std::map<int, Math::Vector3> Tangents;
 	for (int k = 0; k < Indices.size(); k += 3)
@@ -108,6 +97,7 @@ void Core::Components::Mesh::VerticesLoop(std::vector<unsigned int>& indices, st
 	}
 }
 
+/*
 void Core::Components::Mesh::Update()
 {
 	if (!Loaded)
@@ -124,3 +114,13 @@ void Core::Components::Mesh::Update()
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Indices.size());
 	}
 }
+
+void Core::Components::Mesh::ShowInInspector()
+{
+	if (ImGui::Button("Change Mesh"))
+	{
+		ImGui::OpenPopup("MeshPopup");
+	}
+	Resources::ResourceManager::MeshPopup();
+}
+*/
