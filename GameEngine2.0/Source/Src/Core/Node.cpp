@@ -6,14 +6,20 @@ Core::Node::Node()
 	this->Transform.GameObject = this;
 }
 
-Core::Node::~Node() {}
+Core::Node::~Node() 
+{
+	for (auto component : Components)
+	{
+		delete component;
+	}
+}
 
 void Core::Node::AddChildren(Node* node)
 {
 	this->Childrens.push_back(std::shared_ptr<Node>(node));
 }
 
-void Core::Node::AddComponent(std::shared_ptr<Core::Components::Component> comp)
+void Core::Node::AddComponent(Core::Components::Component* comp)
 {
 	this->Components.push_back(comp);
 }

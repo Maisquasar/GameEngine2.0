@@ -13,13 +13,13 @@ namespace Core {
 
 		std::shared_ptr<Node> Parent;
 		std::vector<std::shared_ptr<Node>> Childrens;
-		std::vector<std::shared_ptr<Components::Component>> Components;
+		std::vector<Components::Component*> Components;
 		Core::Transform Transform;
 
 		std::string Name = "Node";
 
 		void AddChildren(Node* node);
-		void AddComponent(std::shared_ptr<Core::Components::Component> comp);
+		void AddComponent(Core::Components::Component* comp);
 
 		void UpdateSelfAndChilds();
 

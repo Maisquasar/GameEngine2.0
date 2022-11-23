@@ -9,6 +9,7 @@ Core::Components::Mesh::Mesh()
 
 Core::Components::Mesh::~Mesh()
 {
+	ComponentName.clear();
 }
 
 void Core::Components::Mesh::ShowInInspector()

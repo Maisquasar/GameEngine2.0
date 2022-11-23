@@ -34,8 +34,9 @@ namespace Core {
 		public:
 			Data();
 			~Data();
-			static std::vector<Component> Components;
-			static void NewComponent(Component comp);
+			static void Destroy();
+			static std::vector<Component*> Components;
+			static void NewComponent(Component* comp);
 			void Initialize();
 		private:
 

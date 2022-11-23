@@ -57,7 +57,6 @@ private:
 	Render::CameraEditor _cameraEditor;
 	Render::FrameBuffer _framebuffer;
 	
-
 	void InitGlfw();
 	void InitImGui();
 	void InitGlad();
