@@ -1,6 +1,7 @@
 #pragma once
 #include "ImGui/imgui.h"
 #include "Component.h"
+#include "Include/Resources/Mesh.h"
 
 namespace Core::Components {
 	class MeshComponent : public BaseComponent<MeshComponent>
@@ -11,7 +12,11 @@ namespace Core::Components {
 
 		void ShowInInspector() override;
 
-	private:
+		void Update() override;
 
+		Resources::Mesh* GetMesh() { return _currentMesh; }
+
+	private:
+		Resources::Mesh* _currentMesh;
 	};
 }

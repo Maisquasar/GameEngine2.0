@@ -6,7 +6,10 @@
 #define NML 1
 #define TUV 2
 #define TAN 3
-
+namespace Core::Components
+{
+	class Mesh;
+}
 namespace Resources {
 	class Mesh : public Resources::IResource
 	{
@@ -16,6 +19,8 @@ namespace Resources {
 
 		void Load(std::string filename) override;
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
+		// Call on MeshComponent Update.
+		void Update(Math::Matrix4 MVP);
 
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;
@@ -30,6 +35,6 @@ namespace Resources {
 		std::vector<Resources::Material*> Materials;
 
 	private:
-
+		friend class Core::Components::Mesh;
 	};
 }

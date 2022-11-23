@@ -97,12 +97,10 @@ void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vect
 	}
 }
 
-/*
-void Core::Components::Mesh::Update()
+void Resources::Mesh::Update(Math::Matrix4 MVP)
 {
 	if (!Loaded)
 		return;
-	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	for (auto material : Materials)
 	{
 		glUniformMatrix4fv(material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
@@ -114,13 +112,3 @@ void Core::Components::Mesh::Update()
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Indices.size());
 	}
 }
-
-void Core::Components::Mesh::ShowInInspector()
-{
-	if (ImGui::Button("Change Mesh"))
-	{
-		ImGui::OpenPopup("MeshPopup");
-	}
-	Resources::ResourceManager::MeshPopup();
-}
-*/

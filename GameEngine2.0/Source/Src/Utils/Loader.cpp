@@ -63,7 +63,7 @@ std::vector<Math::Integer3> Utils::Loader::GetIndices(std::string line)
 		for (size_t i = 0; i < 3; i++)
 		{
 			value = temp2.substr(0, temp2.find_first_of('/'));
-			out[j][i] = std::stoi(value);
+			out[j][i] = std::stoi(value) - 1;
 			temp2 = temp2.substr(temp2.find_first_of('/') + 1);
 		}
 		temp = temp.substr(temp.find_first_of(' ') + 1);

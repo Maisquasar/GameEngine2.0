@@ -5,6 +5,8 @@
 #include "IResource.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "Mesh.h"
+
 namespace Core::Components
 {
 	class Mesh;
@@ -47,7 +49,7 @@ namespace Resources {
 			_resource[filename] = res;
 		}
 
-		static Core::Components::Mesh* MeshPopup();
+		static Resources::Mesh* MeshPopup();
 		
 	private:
 		static std::unordered_map<std::string, Resources::IResource*> _resource;

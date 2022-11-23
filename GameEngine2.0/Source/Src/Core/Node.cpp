@@ -22,6 +22,7 @@ void Core::Node::AddChildren(Node* node)
 void Core::Node::AddComponent(Core::Components::Component* comp)
 {
 	this->Components.push_back(comp);
+	comp->GameObject = this;
 }
 
 void Core::Node::UpdateSelfAndChilds()
