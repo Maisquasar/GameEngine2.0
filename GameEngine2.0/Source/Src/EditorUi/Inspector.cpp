@@ -20,7 +20,7 @@ Core::Components::Component* ComponentsPopup()
 		for (auto component : App::Components.Components)
 		{
 			if (ImGui::Button(component->ComponentName.c_str())) {
-				out = component;
+				out = component->Clone();
 				ImGui::CloseCurrentPopup();
 			}
 		}
@@ -41,7 +41,7 @@ void EditorUi::Inspector::Draw()
 			ImGui::SameLine();
 			// Name Input.
 			char name[65];
-			strcpy_s(name, 64,Selected[0]->Name.c_str());
+			strcpy_s(name, 64, Selected[0]->Name.c_str());
 			if (ImGui::InputText("Name", name, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				if (Utils::Input::IsKeyPressed(ImGuiKey_Enter) || Utils::Input::IsKeyPressed(ImGuiKey_KeypadEnter))

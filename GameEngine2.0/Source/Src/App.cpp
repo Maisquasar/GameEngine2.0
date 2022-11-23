@@ -301,6 +301,7 @@ void App::Update()
 void App::ClearApp()
 {
 	// Cleanup
+	Components.Destroy();
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();

@@ -22,11 +22,21 @@ namespace Core {
 
 			virtual void ShowInInspector() {}
 
+			virtual Component* Clone() const = 0;
+
 			Core::Node* GameObject = nullptr;
 			std::string ComponentName = "Empty";
 
 		private:
 
+		};
+
+		template <typename Derived>
+		class BaseComponent : public Component {
+		public:
+			virtual Component* Clone() const {
+				return new Derived(static_cast<Derived const&>(*this));
+			}
 		};
 
 		class Data

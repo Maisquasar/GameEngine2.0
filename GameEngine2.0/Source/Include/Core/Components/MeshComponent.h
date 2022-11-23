@@ -3,7 +3,7 @@
 #include "Component.h"
 
 namespace Core::Components {
-	class MeshComponent : public Components::Component
+	class MeshComponent : public BaseComponent<MeshComponent>
 	{
 	public:
 		MeshComponent();
