@@ -57,7 +57,7 @@ namespace Math {
 
 		Vector3 GetPosition();
 
-		Vector3 GetRotation();
+		Quaternion GetRotation();
 
 		Vector3 GetScale();
 

@@ -11,6 +11,14 @@ Render::CameraEditor::~CameraEditor(){}
 void Render::CameraEditor::Update()
 {
 	Transform.Update();
+	// Camera Update.
+#if 0
+	float dSpeed = ImGui::GetIO().DeltaTime * Speed * (Utils::Input::IsKeyDown(ImGuiKey_RightShift) ? 5.0f : 1.0f);
+	Math::Vector3 delta = Math::Vector3(dSpeed * Utils::Input::IsKeyDown(ImGuiKey_D) - dSpeed * Utils::Input::IsKeyDown(ImGuiKey_A), dSpeed * Utils::Input::IsKeyDown(ImGuiKey_Space) - dSpeed * Utils::Input::IsKeyDown(ImGuiKey_F), dSpeed * Utils::Input::IsKeyDown(ImGuiKey_S) - dSpeed * Utils::Input::IsKeyDown(ImGuiKey_W)) / 20;
+	delta = Transform.GetWorldRotation() * delta;
+	Transform.SetWorldPosition(Transform.GetWorldPosition() + delta);
+	Transform.GetLocalRotation().Print();
+#else
 	// Set Distance
 	Distance -= Utils::Input::MouseScroll * 0.5f;
 	float min = 0.001f;
@@ -28,6 +36,7 @@ void Render::CameraEditor::Update()
 	FocusPosition = (FocusPosition) + (rot * Math::Vector3(0, 0, -1) * delta.z) + (rot * Math::Vector3(-1, 0, 0) * delta.x) + (rot * Math::Vector3(0, 1, 0) * delta.y);
 
 	Transform.SetWorldPosition((FocusPosition + cameraDir.Normalize() * Distance));
+#endif
 }
 
 Math::Matrix4 Render::CameraEditor::GetViewMatrix()

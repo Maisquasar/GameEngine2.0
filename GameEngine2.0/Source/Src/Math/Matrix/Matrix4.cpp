@@ -182,7 +182,7 @@ Vector3 Matrix4::GetPosition()
 	return Vector3(content[0][3], content[1][3], content[2][3]);
 }
 
-Vector3 Matrix4::GetRotation()
+Quaternion Matrix4::GetRotation()
 {
 	Vector3 sca = GetScale();
 	Matrix4 rotMat;
@@ -200,30 +200,7 @@ Vector3 Matrix4::GetRotation()
 	rotMat.at(2, 2) = at(2, 2) / sca.z;
 	rotMat.at(3, 3) = 1;
 
-	// Get Rotation from rotation matrix.
-	float thetaX, thetaY, thetaZ;
-	if (rotMat.at(2, 1) < 1)
-	{
-		if (rotMat.at(2, 1) > -1)
-		{
-			thetaX = asin(-rotMat.at(2, 1));
-			thetaY = atan2(rotMat.at(2, 0), rotMat.at(2, 2));
-			thetaZ = atan2(rotMat.at(0, 1), rotMat.at(1, 1));
-		}
-		else
-		{
-			thetaX = (float)PI / 2;
-			thetaY = -atan2(rotMat.at(1, 0), rotMat.at(0, 0));
-			thetaZ = 0;
-		}
-	}
-	else
-	{
-		thetaX = -PI / 2;
-		thetaY = atan2(rotMat.at(1, 0), rotMat.at(0, 0));
-		thetaZ = 0;
-	}
-	return Vector3(thetaX, thetaY, thetaZ).ToDeegree();
+	return rotMat.ToQuaternion();
 }
 
 Vector3 Matrix4::GetScale()

@@ -112,6 +112,12 @@ namespace Math {
 		//
 		static Vector3 ClampMagnitude(Vector3, float);
 
+		static Vector3 Forward() { return Vector3(0, 0, 1); }
+
+		static Vector3 Right() { return Vector3(1, 0, 0); }
+
+		static Vector3 Up() { return Vector3(0, 1, 0); }
+
 		Vector3 Normalize()
 		{
 			float len = std::sqrt(x * x + y * y + z * z);

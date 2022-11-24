@@ -39,6 +39,10 @@ namespace Core
 		Math::Quaternion GetLocalRotation();
 		Math::Vector3 GetLocalScale();
 
+		Math::Vector3 GetForwardVector();
+		Math::Vector3 GetRightVector();
+		Math::Vector3 GetUpVector();
+
 		void RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle);
 
 		void Update();

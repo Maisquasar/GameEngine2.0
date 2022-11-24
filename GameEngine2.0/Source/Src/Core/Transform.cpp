@@ -30,7 +30,7 @@ Math::Vector3 Core::Transform::GetWorldPosition()
 
 Math::Quaternion Core::Transform::GetWorldRotation()
 {
-	return _modelMatrix.GetRotation().ToQuaternion();
+	return _modelMatrix.GetRotation();
 }
 
 Math::Vector3 Core::Transform::GetWorldScale()
@@ -74,6 +74,21 @@ Math::Quaternion Core::Transform::GetLocalRotation()
 Math::Vector3 Core::Transform::GetLocalScale()
 {
 	return _localScale;
+}
+
+Math::Vector3 Core::Transform::GetForwardVector()
+{
+	return this->GetWorldRotation() * Math::Vector3::Forward();
+}
+
+Math::Vector3 Core::Transform::GetRightVector()
+{
+	return this->GetWorldRotation() * Math::Vector3::Right();
+}
+
+Math::Vector3 Core::Transform::GetUpVector()
+{
+	return this->GetWorldRotation() * Math::Vector3::Up();
 }
 
 void Core::Transform::RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle)
