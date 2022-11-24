@@ -17,6 +17,8 @@ namespace Core
 		Node* Parent = nullptr;
 		Node* GameObject = nullptr;
 
+		void ComputeModelMatrix();
+		void ComputeModelMatrix(Math::Matrix4);
 
 		// World Setters
 		void SetWorldPosition(Math::Vector3);
@@ -38,6 +40,7 @@ namespace Core
 		Math::Vector3 GetLocalPosition();
 		Math::Quaternion GetLocalRotation();
 		Math::Vector3 GetLocalScale();
+		Math::Matrix4 GetLocalModelMatrix();
 
 		Math::Vector3 GetForwardVector();
 		Math::Vector3 GetRightVector();
@@ -46,6 +49,7 @@ namespace Core
 		void RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle);
 
 		void Update();
+		void ForceUpdate();
 
 		void ShowInInspector();
 

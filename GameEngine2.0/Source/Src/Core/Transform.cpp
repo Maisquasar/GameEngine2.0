@@ -5,37 +5,76 @@ Core::Transform::Transform(){}
 
 Core::Transform::~Transform(){}
 
+void Core::Transform::ComputeModelMatrix()
+{
+	_modelMatrix = GetLocalModelMatrix();
+	_dirty = false;
+}
+
+void Core::Transform::ComputeModelMatrix(Math::Matrix4 parent)
+{
+	_modelMatrix = GetLocalModelMatrix()* parent;
+	_dirty = false;
+}
+
 void Core::Transform::SetWorldPosition(Math::Vector3 pos)
 {
-	_localPosition = pos;
-	_modelMatrix.content[0][3] = pos.x;
-	_modelMatrix.content[1][3] = pos.y;
-	_modelMatrix.content[2][3] = pos.z;
+	if (!Parent)
+		_localPosition = pos;
+	else
+		_localPosition = pos - Parent->Transform.GetWorldPosition();
+	_dirty = true;
 }
 
 void Core::Transform::SetWorldRotation(Math::Quaternion rot)
 {
-	_modelMatrix = Math::Matrix4::CreateTransformMatrix(GetWorldPosition(), rot.ToEuler(), GetWorldScale());
+	if (!Parent)
+		_localRotation = rot;
+	else
+		_localRotation = (rot.ToEuler() - Parent->Transform.GetWorldRotation().ToEuler()).ToQuaternion();
+	_dirty = true;
 }
 
 void Core::Transform::SetWorldScale(Math::Vector3 sca)
 {
-	_modelMatrix = Math::Matrix4::CreateTransformMatrix(GetWorldPosition(), GetWorldPosition(), sca);
+	if (!Parent)
+		_localScale = sca;
+	else
+		_localScale = sca * Parent->Transform.GetWorldScale();
+	_dirty = true;
 }
 
 Math::Vector3 Core::Transform::GetWorldPosition()
 {
-	return _modelMatrix.GetPosition();
+	if (Parent)
+	{
+		ForceUpdate();
+		return _modelMatrix.GetPosition();
+	}
+	else
+		return _localPosition;
 }
 
 Math::Quaternion Core::Transform::GetWorldRotation()
 {
-	return _modelMatrix.GetRotation();
+	if (Parent) 
+	{
+		ForceUpdate();
+		return _modelMatrix.GetRotation();
+	}
+	else
+		return _localRotation;
 }
 
 Math::Vector3 Core::Transform::GetWorldScale()
 {
-	return _modelMatrix.GetScale();
+	if (Parent)
+	{
+		ForceUpdate();
+		return _modelMatrix.GetScale();
+	}
+	else
+		return _localScale;
 }
 
 Math::Matrix4 Core::Transform::GetModelMatrix()
@@ -76,6 +115,11 @@ Math::Vector3 Core::Transform::GetLocalScale()
 	return _localScale;
 }
 
+Math::Matrix4 Core::Transform::GetLocalModelMatrix()
+{
+	return Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation.ToEuler(), _localScale);
+}
+
 Math::Vector3 Core::Transform::GetForwardVector()
 {
 	return this->GetWorldRotation() * Math::Vector3::Forward();
@@ -93,24 +137,43 @@ Math::Vector3 Core::Transform::GetUpVector()
 
 void Core::Transform::RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle)
 {
-		Math::Quaternion q = Math::Quaternion::AngleAxis(angle, axis);
-		Math::Vector3 dif = GetWorldPosition() - point;
-		dif = q * dif;
-		SetWorldPosition(point + dif);
-		SetWorldRotation(this->GetWorldRotation() * this->GetWorldRotation().GetInverse() * q * this->GetWorldRotation());
+	Math::Quaternion q = Math::Quaternion::AngleAxis(angle, axis);
+	Math::Vector3 dif = GetWorldPosition() - point;
+	dif = q * dif;
+	SetWorldPosition(point + dif);
+	SetWorldRotation(this->GetWorldRotation() * (this->GetWorldRotation().GetInverse() * q * this->GetWorldRotation()));
 }
 
 void Core::Transform::Update()
 {
 	if (!_dirty)
 		return;
-	_modelMatrix = Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation.ToEuler(), _localScale);
+	ForceUpdate();
+	//_modelMatrix = Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation, _localScale);
 }
 
-void DrawVec3Control(const std::string& label, Math::Vector3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+void Core::Transform::ForceUpdate()
+{
+	if (Parent)
+		ComputeModelMatrix(GameObject->Parent->Transform.GetModelMatrix());
+	else
+		ComputeModelMatrix();
+
+	if (GameObject)
+	{
+		for (auto child : GameObject->Childrens)
+		{
+			child->Transform.ForceUpdate();
+		}
+	}
+	//_modelMatrix = Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation, _localScale);
+}
+
+bool DrawVec3Control(const std::string& label, float* values, float resetValue = 0.0f, float columnWidth = 100.0f)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[0];
+	bool stillEditing = false;
 
 	ImGui::PushID(label.c_str());
 
@@ -130,12 +193,13 @@ void DrawVec3Control(const std::string& label, Math::Vector3& values, float rese
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("X", buttonSize))
-		values.x = resetValue;
+		values[0] = resetValue;
 	ImGui::PopFont();
 	ImGui::PopStyleColor(3);
 
 	ImGui::SameLine();
-	ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+	if (ImGui::DragFloat("##X", &values[0], 0.1f, 0.0f, 0.0f, "%.2f"))
+		stillEditing = true;
 	ImGui::PopItemWidth();
 	ImGui::SameLine();
 
@@ -144,12 +208,13 @@ void DrawVec3Control(const std::string& label, Math::Vector3& values, float rese
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("Y", buttonSize))
-		values.y = resetValue;
+		values[1] = resetValue;
 	ImGui::PopFont();
 	ImGui::PopStyleColor(3);
 
 	ImGui::SameLine();
-	ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+	if (ImGui::DragFloat("##Y", &values[1], 0.1f, 0.0f, 0.0f, "%.2f"))
+		stillEditing = true;
 	ImGui::PopItemWidth();
 	ImGui::SameLine();
 
@@ -158,12 +223,13 @@ void DrawVec3Control(const std::string& label, Math::Vector3& values, float rese
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("Z", buttonSize))
-		values.z = resetValue;
+		values[2] = resetValue;
 	ImGui::PopFont();
 	ImGui::PopStyleColor(3);
 
 	ImGui::SameLine();
-	ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+	if (ImGui::DragFloat("##Z", &values[2], 0.1f, 0.0f, 0.0f, "%.2f"))
+		stillEditing = true;;
 	ImGui::PopItemWidth();
 
 	ImGui::PopStyleVar();
@@ -171,6 +237,7 @@ void DrawVec3Control(const std::string& label, Math::Vector3& values, float rese
 	ImGui::Columns(1);
 
 	ImGui::PopID();
+	return stillEditing;
 }
 
 void Core::Transform::ShowInInspector()
@@ -182,9 +249,9 @@ void Core::Transform::ShowInInspector()
 		Math::Vector3 rotation = _localRotation.ToEuler();
 		Math::Vector3 scale = _localScale;
 
-		DrawVec3Control("Position", position);
-		DrawVec3Control("Rotation", rotation);
-		DrawVec3Control("Scale", scale, 1.f);
+		DrawVec3Control("Position", &position.x);
+		DrawVec3Control("Rotation", &rotation.x);
+		DrawVec3Control("Scale", &scale.x, 1.f);
 
 		if (position != _localPosition || rotation != _localRotation.ToEuler() || scale != _localScale) {
 			_localPosition = position;
@@ -194,4 +261,36 @@ void Core::Transform::ShowInInspector()
 		}
 		ImGui::TreePop();
 	}
+	/*
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		static bool dirty = false;
+		static Math::Vector3 PrevRotation;
+		ImGui::TreePush("##transform");
+		Math::Vector3 position = _localPosition;
+		Math::Vector3 rotation = _localRotation.ToEuler();
+		Math::Vector3 StartRotation = rotation;
+		Math::Vector3 scale = _localScale;
+
+		DrawVec3Control("Position", &position.x);
+		bool actualFlag = DrawVec3Control("Rotation", &rotation.x);
+		if (actualFlag)
+		{
+			PrevRotation = rotation;
+		}
+		else if (!actualFlag && dirty) {
+			_localRotation = PrevRotation.ToQuaternion();
+			_dirty = true;
+		}
+		dirty = actualFlag;
+		DrawVec3Control("Scale", &scale.x, 1.f);
+
+		if (position != _localPosition || rotation != StartRotation || scale != _localScale) {
+			_localPosition = position;
+			_localScale = scale;
+			_dirty = true;
+		}
+		ImGui::TreePop();
+	}
+	*/
 }

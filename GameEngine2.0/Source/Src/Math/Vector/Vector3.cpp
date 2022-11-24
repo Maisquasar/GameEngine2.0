@@ -194,10 +194,7 @@ Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxLength)
 
 Quaternion  Vector3::ToQuaternion()
 {
-	auto q = Quaternion::AngleAxis(x, Vector3(1, 0, 0))
-		* Quaternion::AngleAxis(y, Vector3(0, 1, 0))
-		* Quaternion::AngleAxis(z, Vector3(0, 0, 1));
-
+	auto q = Quaternion::AngleAxis(x, Vector3(1, 0, 0)) * Quaternion::AngleAxis(y, Vector3(0, 1, 0)) * Quaternion::AngleAxis(z, Vector3(0, 0, 1));
 	return q;
 }
 

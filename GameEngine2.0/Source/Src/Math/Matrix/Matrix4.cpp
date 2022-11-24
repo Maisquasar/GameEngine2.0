@@ -177,6 +177,12 @@ Matrix4 Matrix4::CreateTransformMatrix(const Vector3& position, const Vector3& r
 	return CreateTranslationMatrix(position) * CreateYRotationMatrix(rotation.y) * CreateXRotationMatrix(rotation.x) * CreateZRotationMatrix(rotation.z) * CreateScaleMatrix(scale);
 }
 
+Matrix4 Matrix4::CreateTransformMatrix(const Vector3& position, Quaternion rotation, const Vector3& scale)
+{
+	return CreateTranslationMatrix(position) * rotation.ToRotationMatrix() * CreateScaleMatrix(scale);
+}
+
+
 Vector3 Matrix4::GetPosition()
 {
 	return Vector3(content[0][3], content[1][3], content[2][3]);
@@ -201,6 +207,50 @@ Quaternion Matrix4::GetRotation()
 	rotMat.at(3, 3) = 1;
 
 	return rotMat.ToQuaternion();
+}
+
+Vector3 Matrix4::GetEulerRotation()
+{
+	Vector3 sca = GetScale();
+	Matrix4 rotMat;
+	// Get Rotation Matrix.
+	if (sca == Vector3(0))
+		sca = Vector3(0.0001f);
+	rotMat.at(0, 0) = at(0, 0) / sca.x;
+	rotMat.at(0, 1) = at(0, 1) / sca.x;
+	rotMat.at(0, 2) = at(0, 2) / sca.x;
+	rotMat.at(1, 0) = at(1, 0) / sca.y;
+	rotMat.at(1, 1) = at(1, 1) / sca.y;
+	rotMat.at(1, 2) = at(1, 2) / sca.y;
+	rotMat.at(2, 0) = at(2, 0) / sca.z;
+	rotMat.at(2, 1) = at(2, 1) / sca.z;
+	rotMat.at(2, 2) = at(2, 2) / sca.z;
+	rotMat.at(3, 3) = 1;
+
+	// Get Rotation from rotation matrix.
+	float thetaX, thetaY, thetaZ;
+	if (rotMat.at(2, 1) < 1)
+	{
+		if (rotMat.at(2, 1) > -1)
+		{
+			thetaX = asin(-rotMat.at(2, 1));
+			thetaY = atan2(rotMat.at(2, 0), rotMat.at(2, 2));
+			thetaZ = atan2(rotMat.at(0, 1), rotMat.at(1, 1));
+		}
+		else
+		{
+			thetaX = (float)PI / 2;
+			thetaY = -atan2(rotMat.at(1, 0), rotMat.at(0, 0));
+			thetaZ = 0;
+		}
+	}
+	else
+	{
+		thetaX = -PI / 2;
+		thetaY = atan2(rotMat.at(1, 0), rotMat.at(0, 0));
+		thetaZ = 0;
+	}
+	return Vector3(thetaX, thetaY, thetaZ).ToDeegree();
 }
 
 Vector3 Matrix4::GetScale()

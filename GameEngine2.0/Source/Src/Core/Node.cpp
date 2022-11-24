@@ -2,7 +2,6 @@
 
 Core::Node::Node()
 {
-	this->Transform.Parent = this->Parent.get();
 	this->Transform.GameObject = this;
 }
 
@@ -17,6 +16,8 @@ Core::Node::~Node()
 void Core::Node::AddChildren(Node* node)
 {
 	this->Childrens.push_back(std::shared_ptr<Node>(node));
+	node->Parent = this;
+	node->Transform.Parent = this;
 }
 
 void Core::Node::AddComponent(Core::Components::Component* comp)

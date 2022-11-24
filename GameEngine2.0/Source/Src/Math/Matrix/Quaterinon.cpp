@@ -13,7 +13,11 @@ Quaternion Quaternion::operator-(const Quaternion& a)
 
 Quaternion Quaternion::operator*(const Quaternion& a)
 {
-	return Quaternion(w * a.x + x * a.w + y * a.z - z * a.y, w * a.y - x * a.z + y * a.w + z * a.x, w * a.z + x * a.y - y * a.x + z * a.w, w * a.w - x * a.x - y * a.y - z * a.z);
+	return Quaternion(
+		w * a.x + x * a.w + y * a.z - z * a.y,
+		w * a.y + y * a.w + z * a.x - x * a.z,
+		w * a.z + z * a.w + x * a.y - y * a.x,
+		w * a.w - x * a.x - y * a.y - z * a.z);
 }
 
 Vector3 Math::Quaternion::operator*(const Vector3& a)
@@ -123,6 +127,16 @@ Math::Quaternion Math::Quaternion::GetNormalized()
 		return Quaternion(x / mag, y / mag, z / mag, w / mag);
 }
 
+void Math::Quaternion::Conjugate()
+{
+	*this = GetConjugate();
+}
+
+Quaternion Math::Quaternion::GetConjugate()
+{
+	return Quaternion(-x, -y, -z, w);
+}
+
 void Math::Quaternion::Inverse()
 {
 	*this = GetInverse();
@@ -135,6 +149,8 @@ Math::Quaternion Math::Quaternion::GetInverse()
 		return *this;
 	else
 		return Quaternion(-x / d, -y / d, -z / d, w / d);
+
+
 }
 
 void Math::Quaternion::Print() const

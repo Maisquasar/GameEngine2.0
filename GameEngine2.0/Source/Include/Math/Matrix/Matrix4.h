@@ -39,6 +39,8 @@ namespace Math {
 
 		static Matrix4 CreateTransformMatrix(const Vector3& position, const Vector3& rotation, const Vector3& scale);
 
+		static Matrix4 CreateTransformMatrix(const Vector3& position, Quaternion rotation, const Vector3& scale);
+
 		static Matrix4 CreateTranslationMatrix(const Vector3& translation);
 
 		static Matrix4 CreateScaleMatrix(const Vector3& scale);
@@ -58,6 +60,8 @@ namespace Math {
 		Vector3 GetPosition();
 
 		Quaternion GetRotation();
+
+		Vector3 GetEulerRotation();
 
 		Vector3 GetScale();
 

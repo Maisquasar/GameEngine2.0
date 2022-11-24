@@ -35,6 +35,10 @@ namespace Math {
 
 		Quaternion GetNormalized();
 
+		void Conjugate();
+
+		Quaternion GetConjugate();
+
 		float Dot(Quaternion a);
 
 		Vector3 ToEuler();

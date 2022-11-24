@@ -11,7 +11,7 @@ namespace Core {
 		Node();
 		~Node();
 
-		std::shared_ptr<Node> Parent;
+		Node* Parent;
 		std::vector<std::shared_ptr<Node>> Childrens;
 		std::vector<Components::Component*> Components;
 		Core::Transform Transform;
