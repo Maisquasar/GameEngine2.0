@@ -4,18 +4,18 @@ out vec4 FragColor;
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
-in vec4 OurColor;
 
 uniform sampler2D Tex;
 uniform bool EnableTexture;
 uniform sampler2D frameBuffer;
 uniform vec3 CameraPos;
 uniform vec2 frameSize;
+uniform vec4 OurColor;
 
 void main()
 {
     if (EnableTexture)
         FragColor = texture(Tex, TexCoord);
     else
-        FragColor = OurColor;
+        FragColor = vec4(OurColor.x, OurColor.y, OurColor.z, 1);
 }

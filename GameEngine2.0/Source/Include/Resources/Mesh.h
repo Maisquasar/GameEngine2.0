@@ -11,6 +11,12 @@ namespace Core::Components
 	class Mesh;
 }
 namespace Resources {
+	struct SubMesh
+	{
+		Resources::Material* Material;
+		int StartIndex;
+		int Count;
+	};
 	class Mesh : public Resources::IResource
 	{
 	public:
@@ -32,7 +38,7 @@ namespace Resources {
 
 		std::vector<float> Vertices;
 
-		std::vector<Resources::Material*> Materials;
+		std::vector<SubMesh> SubMeshes;
 
 	private:
 		friend class Core::Components::Mesh;

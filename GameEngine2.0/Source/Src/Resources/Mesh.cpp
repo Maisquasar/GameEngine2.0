@@ -101,14 +101,13 @@ void Resources::Mesh::Update(Math::Matrix4 MVP)
 {
 	if (!Loaded)
 		return;
-	for (auto material : Materials)
+	glBindVertexArray(_VAO);
+	for (auto Sub : SubMeshes)
 	{
-		glUniformMatrix4fv(material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-		glUniform1i(material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-		glUniform4f(material->GetShader()->GetLocation(Resources::Location::L_COLOR), 1, 0.5f, 0.1f, 1);
+		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
+		glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
 
-		glBindVertexArray(_VAO);
-		// Temporary.
-		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Indices.size());
+		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
 }

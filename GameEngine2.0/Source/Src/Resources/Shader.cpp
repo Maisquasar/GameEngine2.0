@@ -106,7 +106,7 @@ void Resources::Shader::Initialize()
 	_location[Location::L_DIRECTIONAL] = glGetUniformLocation(Program, "DirLight");
 	_location[Location::L_POINT] = glGetUniformLocation(Program, "PointLight");
 	_location[Location::L_SPOT] = glGetUniformLocation(Program, "SpotLight");
-	_location[Location::L_COLOR] = glGetUniformLocation(Program, "Color");
+	_location[Location::L_COLOR] = glGetUniformLocation(Program, "OurColor");
 }
 
 int Resources::Shader::GetLocation(Location loc)

@@ -4,7 +4,6 @@ layout(location = 1) in vec3 aNormal;
 layout(location = 2) in vec2 aTexCoord;
 
 uniform mat4 MVP;
-uniform vec4 Color;
 
 out vec2 TexCoord;
 out vec3 Normal;
@@ -17,5 +16,4 @@ void main()
 	FragPos = aPos;
 	TexCoord = aTexCoord;
 	Normal = aNormal;
-	OurColor = Color;
 }

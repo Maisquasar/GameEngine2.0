@@ -63,19 +63,26 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		}
 		else if (prefix == "us")
 		{
+			if (Meshes.back().SubMeshes.size() > 0)
+				Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
+			auto subMesh = SubMesh();
+			subMesh.StartIndex = Meshes.back().Indices.size();
 			std::string MaterialName = Utils::Loader::GetString(currentLine);
 			MaterialName = MaterialName.substr(0, MaterialName.size() - 1);
 			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(MaterialName.c_str())) {
-				Meshes.back().Materials.push_back(mat);
+				subMesh.Material = mat;
 			}
 			else
 			{
 				mat = Resources::ResourceManager::Get<Resources::Material>("DefaultMaterial");
-				Meshes.back().Materials.push_back(mat);
+				subMesh.Material = mat;
 			}
+			Meshes.back().SubMeshes.push_back(subMesh);
 		}
 		pos++;
 	}
+	if (Meshes.back().SubMeshes.size() > 0)
+		Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
 	for (auto mesh : Meshes)
 	{
 		auto MeshNode = new Core::Node();
