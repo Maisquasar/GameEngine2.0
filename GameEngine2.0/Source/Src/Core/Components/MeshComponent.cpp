@@ -13,6 +13,7 @@ Core::Components::MeshComponent::~MeshComponent()
 
 void Core::Components::MeshComponent::ShowInInspector()
 {
+	Super::ShowInInspector();
 	if (ImGui::Button("Change Mesh"))
 	{
 		ImGui::OpenPopup("MeshPopup");

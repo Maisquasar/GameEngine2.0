@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "ImGui/imgui.h"
 
 namespace Core {
 	class Node;
@@ -8,32 +9,41 @@ namespace Core {
 		class Component
 		{
 		public:
+			Core::Node* GameObject = nullptr;
+			std::string ComponentName = "Empty";
+
 			Component();
 			~Component();
 
+			// ===== Virtual Functions ===== //
 			virtual void Update() {}
 			virtual void EditorUpdate() {}
 			virtual void GameUpdate() {}
 
-			// Call On Begin Play;
+			// Call On Begin Play.
 			virtual void Start() {}
 			// Call On Creation.
 			virtual void Initialize() {}
 
-			virtual void ShowInInspector() {}
+			virtual void ShowInInspector() { }
 
 			virtual Component* Clone() const = 0;
+			// ===== Other Functions ===== //
+			// Remove Component from GameObject.
+			void RemoveFromParent();
 
-			Core::Node* GameObject = nullptr;
-			std::string ComponentName = "Empty";
-
-		private:
+			// ===== Getters Functions ===== //
+			bool* GetEnable() { return &_enable; }
+			bool IsEnable() { return _enable; }
+		protected:
+			bool _enable = true;
 
 		};
 
 		template <typename Derived>
 		class BaseComponent : public Component {
 		public:
+			typedef Component Super;
 			virtual Component* Clone() const {
 				return new Derived(static_cast<Derived const&>(*this));
 			}

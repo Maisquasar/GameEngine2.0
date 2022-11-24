@@ -7,6 +7,7 @@ namespace Core::Components {
 	class MeshComponent : public BaseComponent<MeshComponent>
 	{
 	public:
+		typedef BaseComponent<MeshComponent> Super;
 		MeshComponent();
 		~MeshComponent();
 

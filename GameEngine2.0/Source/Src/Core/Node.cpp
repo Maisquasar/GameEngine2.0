@@ -25,12 +25,27 @@ void Core::Node::AddComponent(Core::Components::Component* comp)
 	comp->GameObject = this;
 }
 
+void Core::Node::RemoveComponent(Core::Components::Component* comp)
+{
+	int index = 0;
+	for (auto component : Components)
+	{
+		if (component == comp)
+		{
+			Components.erase(Components.begin() + index);
+			delete comp;
+		}
+		index++;
+	}
+}
+
 void Core::Node::UpdateSelfAndChilds()
 {
 	this->Transform.Update();
 	for (auto component : this->Components)
 	{
-		component->Update();
+		if (component->IsEnable())
+			component->Update();
 	}
 	for (auto child : this->Childrens)
 	{

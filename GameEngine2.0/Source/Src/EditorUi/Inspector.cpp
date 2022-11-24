@@ -53,14 +53,25 @@ void EditorUi::Inspector::Draw()
 			ImGui::Separator();
 
 			// Other Components
+			int index = 0;
 			for (auto component : Selected[0]->Components)
 			{
-				if (ImGui::CollapsingHeader(component->ComponentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+				bool destroy = true;
+				ImGui::PushID(index++);
+				ImGui::BeginGroup();
+				ImGui::Checkbox("##", component->GetEnable());
+				ImGui::SameLine();
+				if (ImGui::CollapsingHeader(component->ComponentName.c_str(), &destroy, ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
 					component->ShowInInspector();
 				}
 				ImGui::NewLine();
 				ImGui::Separator();
+				ImGui::EndGroup();
+				ImGui::PopID();
+				if (!destroy)
+					component->RemoveFromParent();
 			}
+			// New Component Button
 			ImGui::NewLine();
 			ImGui::SetCursorPosX(ImGui::GetWindowSize().x / 2 - 100);
 			if (ImGui::Button("New Component", ImVec2(200, 0)))

@@ -1,5 +1,6 @@
 #include "Include\Core\Components\Component.h"
 #include "Include/Core/Components/MeshComponent.h"
+#include "Include/Core/Node.h"
 std::vector<Core::Components::Component*> Core::Components::Data::Components;
 
 Core::Components::Component::Component()
@@ -10,6 +11,14 @@ Core::Components::Component::~Component()
 {
 }
 
+void Core::Components::Component::RemoveFromParent()
+{
+	if (!GameObject)
+		return;
+	GameObject->RemoveComponent(this);
+}
+
+// ============ Data ========== //
 Core::Components::Data::Data()
 {
 }
