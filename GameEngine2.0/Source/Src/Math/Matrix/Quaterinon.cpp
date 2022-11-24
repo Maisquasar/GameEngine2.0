@@ -19,21 +19,21 @@ Quaternion Quaternion::operator*(const Quaternion& a)
 Vector3 Math::Quaternion::operator*(const Vector3& a)
 {
 	Vector3 vector;
-	float num = this->x * 2.f;
-	float num2 = this->y * 2.f;
-	float num3 = this->z * 2.f;
-	float num4 = this->x * num;
-	float num5 = this->y * num2;
-	float num6 = this->z * num3;
-	float num7 = this->x * num2;
-	float num8 = this->x * num3;
-	float num9 = this->y * num3;
-	float num10 = this->w * num;
-	float num11 = this->w * num2;
-	float num12 = this->w * num3;
-	vector.x = (((1.f - (num5 + num6)) * a.x) + ((num7 - num12) * a.y)) + ((num8 + num11) * a.z);
-	vector.y = (((num7 + num12) * a.x) + ((1.f - (num4 + num6)) * a.y)) + ((num9 - num10) * a.z);
-	vector.z = (((num8 - num11) * a.x) + ((num9 + num10) * a.y)) + ((1.f - (num4 + num5)) * a.z);
+	float ax = x * 2.f;
+	float ay = y * 2.f;
+	float az = z * 2.f;
+	float xx = x * ax;
+	float yy = y * ay;
+	float zz = z * az;
+	float xy = x * ay;
+	float xz = x * az;
+	float yz = y * az;
+	float wx = w * ax;
+	float wy = w * ay;
+	float wz = w * az;
+	vector.x = (1.f - (yy + zz)) * a.x + (xy - wz) * a.y + (xz + wy) * a.z;
+	vector.y = (xy + wz) * a.x + (1.f - (xx + zz)) * a.y + (yz - wx) * a.z;
+	vector.z = (xz - wy) * a.x + (yz + wx) * a.y + (1.f - (xx + yy)) * a.z;
 	return vector;
 }
 
@@ -41,6 +41,7 @@ Math::Quaternion Math::Quaternion::AngleAxis(float angle, Vector3 axis)
 {
 	Quaternion q;
 	float rad = Math::ToRadians(angle);
+	axis = axis.Normalize();
 	q.w = cosf(rad / 2);
 	q.x = sinf(rad / 2) * axis.x;
 	q.y = sinf(rad / 2) * axis.y;
