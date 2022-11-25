@@ -57,6 +57,7 @@ namespace Core
 		Math::Matrix4 _modelMatrix = Math::Matrix4::Identity();
 		Math::Vector3 _localPosition = Math::Vector3();
 		Math::Quaternion _localRotation = Math::Quaternion();
+		Math::Vector3 _localEulerRotation = Math::Vector3();
 		Math::Vector3 _localScale = Math::Vector3(1);
 		bool _dirty = true;
 

@@ -91,6 +91,7 @@ void Core::Transform::SetLocalPosition(Math::Vector3 newpos)
 void Core::Transform::SetLocalRotation(Math::Quaternion newrot)
 {
 	_localRotation = newrot;
+	_localEulerRotation = newrot.ToEuler();
 	_dirty = true;
 }
 
@@ -154,6 +155,7 @@ void Core::Transform::Update()
 
 void Core::Transform::ForceUpdate()
 {
+	_localRotation = _localEulerRotation.ToQuaternion();
 	if (Parent)
 		ComputeModelMatrix(GameObject->Parent->Transform.GetModelMatrix());
 	else
@@ -246,51 +248,21 @@ void Core::Transform::ShowInInspector()
 	{
 		ImGui::TreePush("##transform");
 		Math::Vector3 position = _localPosition;
-		Math::Vector3 rotation = _localRotation.ToEuler();
+		Math::Vector3 rotation = _localEulerRotation;
 		Math::Vector3 scale = _localScale;
 
 		DrawVec3Control("Position", &position.x);
 		DrawVec3Control("Rotation", &rotation.x);
 		DrawVec3Control("Scale", &scale.x, 1.f);
 
-		if (position != _localPosition || rotation != _localRotation.ToEuler() || scale != _localScale) {
+		if (position != _localPosition || rotation != _localEulerRotation || scale != _localScale) {
 			_localPosition = position;
-			_localRotation = rotation.ToQuaternion();
+			float mod = 360.f;
+			_localEulerRotation = Math::Vector3(Math::Mod(rotation.x, mod), Math::Mod(rotation.y, mod), Math::Mod(rotation.z, mod));
+			_localRotation.ToEuler().Print();
 			_localScale = scale;
 			_dirty = true;
 		}
 		ImGui::TreePop();
 	}
-	/*
-	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		static bool dirty = false;
-		static Math::Vector3 PrevRotation;
-		ImGui::TreePush("##transform");
-		Math::Vector3 position = _localPosition;
-		Math::Vector3 rotation = _localRotation.ToEuler();
-		Math::Vector3 StartRotation = rotation;
-		Math::Vector3 scale = _localScale;
-
-		DrawVec3Control("Position", &position.x);
-		bool actualFlag = DrawVec3Control("Rotation", &rotation.x);
-		if (actualFlag)
-		{
-			PrevRotation = rotation;
-		}
-		else if (!actualFlag && dirty) {
-			_localRotation = PrevRotation.ToQuaternion();
-			_dirty = true;
-		}
-		dirty = actualFlag;
-		DrawVec3Control("Scale", &scale.x, 1.f);
-
-		if (position != _localPosition || rotation != StartRotation || scale != _localScale) {
-			_localPosition = position;
-			_localScale = scale;
-			_dirty = true;
-		}
-		ImGui::TreePop();
-	}
-	*/
 }
