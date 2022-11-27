@@ -39,7 +39,10 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		else if (prefix == "mt")
 		{
 			std::string path = currentLine;
-			MaterialLoop(path);
+			path = path.substr(path.find_first_of(' ') + 1);
+			path = path.substr(0, path.size() - 1);
+			path = _path.substr(0, _path.find_last_of('/') + 1) + path;
+			Utils::Loader::MtlLoader(path);
 		}
 		else if (prefix == "v ")
 		{
@@ -55,6 +58,12 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		}
 		else if (prefix == "f ")
 		{
+			// If No use material
+			if (Meshes.back().SubMeshes.size() == 0)
+			{
+				Meshes.back().SubMeshes.push_back(SubMesh());
+				Meshes.back().SubMeshes.back().Material = Resources::ResourceManager::Get<Resources::Material>("DefaultMaterial");
+			}
 			auto indices = Utils::Loader::GetIndices(currentLine);
 			for (size_t i = 0; i < 3; i++)
 			{
@@ -63,12 +72,16 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		}
 		else if (prefix == "us")
 		{
+			// Set SubMesh
 			if (Meshes.back().SubMeshes.size() > 0)
 				Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
 			auto subMesh = SubMesh();
 			subMesh.StartIndex = Meshes.back().Indices.size();
+
+			// Set Name
 			std::string MaterialName = Utils::Loader::GetString(currentLine);
 			MaterialName = MaterialName.substr(0, MaterialName.size() - 1);
+			MaterialName = GetPath().substr(0, GetPath().find_last_of('/') + 1) + MaterialName + ".mat";
 			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(MaterialName.c_str())) {
 				subMesh.Material = mat;
 			}
@@ -90,74 +103,4 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		Resources::ResourceManager::Add(GetName() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
 		this->AddChildren(MeshNode);
 	}
-}
-
-void Resources::Model::MaterialLoop(std::string path)
-{
-	// Read File.
-	path = path.substr(path.find_first_of(' ') + 1);
-	path = path.substr(0, path.size() - 1);
-	path = _path.substr(0, _path.find_last_of('/') + 1) + path;
-	bool sucess;
-	uint32_t size = 0;
-	auto data = Utils::Loader::ReadFile(path.c_str(), size, sucess);
-	if (!sucess)
-		return;
-
-
-	std::string currentLine;
-	std::string prefix;
-	uint32_t pos = 0;
-	Resources::Material* currentMaterial = nullptr;;
-	while (pos != size)
-	{
-		currentLine = Utils::Loader::GetLine(data, pos);
-		prefix = currentLine.substr(0, 2);
-		if (prefix == "ne")
-		{
-			currentMaterial = new Resources::Material();
-			auto name = currentLine.substr(currentLine.find_first_of(' ') + 1);
-			name = name.substr(0, name.size() - 1);
-			currentMaterial->SetName(name);
-			ResourceManager::Add(name, currentMaterial);
-		}
-		else if (prefix == "Ka")
-		{
-			currentMaterial->_ambient = Utils::Loader::GetVec3(currentLine);
-		}
-		else if (prefix == "Kd")
-		{
-			currentMaterial->_diffuse = Utils::Loader::GetVec3(currentLine);
-		}
-		else if (prefix == "Ks")
-		{
-			currentMaterial->_specular = Utils::Loader::GetVec3(currentLine);
-		}
-		else if (prefix == "Ns")
-		{
-			currentMaterial->_shininess = Utils::Loader::GetFloat(currentLine);
-		}
-		else if (prefix == "d ")
-		{
-			float transparency = Utils::Loader::GetFloat(currentLine);
-			currentMaterial->_ambient.w = transparency;
-			currentMaterial->_diffuse.w = transparency;
-			currentMaterial->_specular.w = transparency;
-		}
-		else if (prefix == "ma")
-		{
-			std::string texPath = Utils::Loader::GetString(currentLine);
-			if (auto texture = Resources::ResourceManager::GetWithPath<Resources::Texture>(texPath.c_str()))
-			{
-				currentMaterial->_texture = texture;
-			}
-			else
-			{
-				texture = Resources::ResourceManager::Create<Resources::Texture>(texPath);
-				currentMaterial->_texture = texture;
-			}
-		}
-		pos++;
-	}
-	delete[] data;
 }

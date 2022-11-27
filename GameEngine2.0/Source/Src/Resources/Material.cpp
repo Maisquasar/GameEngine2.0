@@ -3,7 +3,7 @@
 
 Resources::Material::Material()
 {
-	_shader = Resources::ResourceManager::Get<Resources::Shader>("UnlitShader");
+	_shader = Resources::ResourceManager::Get<Resources::Shader>("Assets/Default/Shaders/UnlitShader");
 }
 
 Resources::Material::~Material()

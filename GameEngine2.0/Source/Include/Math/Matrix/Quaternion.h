@@ -27,6 +27,8 @@ namespace Math {
 
 		static Quaternion AngleAxis(float angle, Vector3 axis);
 
+		static Quaternion LookRotation(Vector3 forward, Vector3 up);
+
 		void Inverse();
 
 		Quaternion GetInverse();

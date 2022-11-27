@@ -17,6 +17,18 @@ namespace Resources
 		Math::Vector4 GetDiffuse() { return _diffuse; }
 		Math::Vector4 GetSpecular() { return _specular; }
 		float GetShiniess() { return _shininess; }
+
+		void SetShader(Resources::Shader* shader) { _shader = shader; }
+		void SetTexture(Resources::Texture* texture) { _texture = texture; }
+		void SetAmbient(Math::Vector4 ambient) { _ambient = ambient; }
+		void SetDiffuse(Math::Vector4 diffuse) { _diffuse = diffuse; }
+		void SetSpecular(Math::Vector4 specular) { _specular = specular; }
+		void SetShiniess(float shininess) { _shininess = shininess; }
+		void SetTransparency(float transparency) { 
+			_ambient.w = transparency;
+			_diffuse.w = transparency;
+			_specular.w = transparency;
+		}
 	private:
 		Resources::Shader* _shader = nullptr;
 		Resources::Texture* _texture = nullptr;

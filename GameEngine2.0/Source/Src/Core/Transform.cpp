@@ -259,7 +259,6 @@ void Core::Transform::ShowInInspector()
 			_localPosition = position;
 			float mod = 360.f;
 			_localEulerRotation = Math::Vector3(Math::Mod(rotation.x, mod), Math::Mod(rotation.y, mod), Math::Mod(rotation.z, mod));
-			_localRotation.ToEuler().Print();
 			_localScale = scale;
 			_dirty = true;
 		}

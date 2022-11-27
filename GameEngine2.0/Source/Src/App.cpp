@@ -175,6 +175,11 @@ void App::LoadResources()
 	}
 	// Load Material
 	_resourceManager.Add<Resources::Material>("DefaultMaterial", new Resources::Material());
+	path = "Assets/Default/Models";
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == "mat")
+			Utils::Loader::LoadMaterial(entry.path().generic_string().data());
+	}
 
 	// Load Models
 	path = "Assets/Default/Models";
@@ -243,7 +248,7 @@ void App::Update()
 
 		SceneNode->UpdateSelfAndChilds();
 		// --------- Temporary ---------
-		auto shader = _resourceManager.Get<Resources::Shader>("UnlitShader");
+		auto shader = _resourceManager.Get<Resources::Shader>("Assets/Default/Shaders/UnlitShader");
 		glUseProgram(shader->Program);
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
 		auto MVP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix() * Math::Matrix4::CreateTransformMatrix(Math::Vector3(0), Math::Vector3(0), Math::Vector3(1));

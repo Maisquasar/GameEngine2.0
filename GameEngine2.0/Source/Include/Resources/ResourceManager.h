@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "Material.h"
 
 namespace Core::Components
 {
@@ -22,16 +23,19 @@ namespace Resources {
 		{
 			std::string Path = filename;
 			filename = filename.substr(filename.find_last_of("//\\") + 1);
-			_resource[filename] = new T();
-			_resource[filename]->SetPath(Path);
-			_resource[filename]->SetName(filename);
-			_resource[filename]->Load(filename);
-			return dynamic_cast<T*>(_resource[filename]);
+			_resource[Path] = new T();
+			_resource[Path]->SetPath(Path);
+			_resource[Path]->SetName(filename);
+			_resource[Path]->Load(filename);
+			return dynamic_cast<T*>(_resource[Path]);
 		}
 
 		template<typename T> static T* Get(const char* filename)
 		{
-			return dynamic_cast<T*>(_resource.at(filename));
+			if (_resource.count(filename))
+				return dynamic_cast<T*>(_resource.at(filename));
+			else
+				return nullptr;
 		}
 
 		template<typename T> static T* GetWithPath(const char* filename)

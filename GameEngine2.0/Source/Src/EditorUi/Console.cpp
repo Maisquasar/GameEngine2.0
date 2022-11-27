@@ -36,7 +36,7 @@ void EditorUi::Console::Draw()
 				{
 				case Debug::LogType::INFO:
 					if (_showInfo)
-						ImGui::TextColored(ImColor(255, 255, 255), t._text.c_str());
+						ImGui::Text(t._text.c_str());
 					break;
 				case Debug::LogType::WARNING:
 					if (_showWarning)

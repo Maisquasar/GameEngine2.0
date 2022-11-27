@@ -16,19 +16,19 @@ EditorUi::File::File(std::string filename) {
 		}
 		else
 		{
-			this->Icon = Resources::ResourceManager::Get<Resources::Texture>("file_icon.png");
+			this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
 		}
 	}
 	else if (std::filesystem::is_directory(Directory))
 	{
 		this->Type = EditorUi::FileType::Folder;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("folder_icon.png"))
+		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/folder_icon.png"))
 			this->Icon = tex;
 	}
 	else
 	{
 		this->Type = EditorUi::FileType::None;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("file_icon.png"))
+		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png"))
 			this->Icon = tex;
 	}
 }
