@@ -53,7 +53,24 @@ namespace Resources {
 			_resource[filename] = res;
 		}
 
-		static Resources::Mesh* MeshPopup();
+		template<typename T> static T* ResourcesPopup(const char* popupName)
+		{
+			T* out = nullptr;
+			if (ImGui::BeginPopupModal(popupName)) {
+				for (auto resource : _resource)
+				{
+					if (auto res = dynamic_cast<T*>(resource.second))
+					{
+						if (ImGui::Button(res->GetName().c_str())) {
+							out = res;
+							ImGui::CloseCurrentPopup();
+						}
+					}
+				}
+				ImGui::EndPopup();
+			}
+			return out;
+		}
 		
 	private:
 		static std::unordered_map<std::string, Resources::IResource*> _resource;

@@ -58,7 +58,6 @@ void EditorUi::Inspector::Draw()
 			{
 				bool destroy = true;
 				ImGui::PushID(index++);
-				ImGui::BeginGroup();
 				ImGui::Checkbox("##", component->GetEnable());
 				ImGui::SameLine();
 				if (ImGui::CollapsingHeader(component->ComponentName.c_str(), &destroy, ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -66,7 +65,6 @@ void EditorUi::Inspector::Draw()
 				}
 				ImGui::NewLine();
 				ImGui::Separator();
-				ImGui::EndGroup();
 				ImGui::PopID();
 				if (!destroy)
 					component->RemoveFromParent();

@@ -18,8 +18,83 @@ void Core::Components::MeshComponent::ShowInInspector()
 	{
 		ImGui::OpenPopup("MeshPopup");
 	}
-	if (auto Mesh = Resources::ResourceManager::MeshPopup())
+	ImGui::SameLine();
+	if (GetMesh())
+		ImGui::Text(GetMesh()->GetName().c_str());
+	else
+		ImGui::Text("None");
+	if (auto Mesh = Resources::ResourceManager::ResourcesPopup<Resources::Mesh>("MeshPopup"))
 		_currentMesh = Mesh;
+	if (!GetMesh())
+		return;
+
+	// Material List.
+	static Resources::SubMesh* ChangeMat = nullptr;
+	static int SelectedRow = 0;
+	if (ImGui::BeginTable("Materials", 3, ImGuiTableFlags_Borders))
+	{
+		for (int row = 0; row < GetMesh()->SubMeshes.size(); row++)
+		{
+			ImGui::TableNextRow();
+			for (int column = 0; column < 3; column++)
+			{
+				ImGui::TableSetColumnIndex(column);
+				switch (column)
+				{
+				case 0:
+					ImGui::Text("%d", row);
+					break;
+				case 1:
+					ImGui::Text(GetMesh()->SubMeshes[row].Material->GetName().c_str());
+					break;
+				case 2:
+					ImGui::PushID(row);
+					if (ImGui::Button("Change Material"))
+					{
+						ChangeMat = &GetMesh()->SubMeshes[row];
+						SelectedRow = row;
+						ImGui::OpenPopup("MaterialPopup");
+					}
+					ImGui::PopID();
+					break;
+				}
+			}
+		}
+		ImGui::PushID(SelectedRow);
+		if (auto mat = Resources::ResourceManager::ResourcesPopup<Resources::Material>("MaterialPopup"))
+			ChangeMat->Material = mat;
+		ImGui::PopID();
+		ImGui::EndTable();
+	}
+
+	// Material Comnponents List.
+	int index = 0;
+	for (auto Sub : GetMesh()->SubMeshes)
+	{
+		ImGui::PushID(index++);
+		ImGui::Separator();
+		ImGui::BeginDisabled(!Sub.Material->IsEditable());
+		if (ImGui::CollapsingHeader(Sub.Material->GetName().c_str())) {
+
+			ImGui::Button("Shader");
+			ImGui::SameLine();
+			ImGui::Text("%s", Sub.Material->GetShader()->GetName().c_str());
+
+			ImGui::Button("Texture");
+			ImGui::SameLine();
+			if (Sub.Material->GetTexture())
+			{
+				ImGui::Text(Sub.Material->GetTexture()->GetName().c_str());
+			}
+			else
+				ImGui::Text("None");
+			ImGui::ColorEdit4("Ambient", &(*Sub.Material->GetPtrAmbient())[0]);
+			ImGui::ColorEdit4("Diffuse", &(*Sub.Material->GetPtrDiffuse())[0]);
+			ImGui::ColorEdit4("Specular", &(*Sub.Material->GetPtrSpecular())[0]);
+		}
+		ImGui::EndDisabled();
+		ImGui::PopID();
+	}
 }
 
 void Core::Components::MeshComponent::Update()

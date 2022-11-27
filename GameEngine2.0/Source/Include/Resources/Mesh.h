@@ -14,8 +14,8 @@ namespace Resources {
 	struct SubMesh
 	{
 		Resources::Material* Material;
-		int StartIndex;
-		int Count;
+		size_t StartIndex;
+		size_t Count;
 	};
 	class Mesh : public Resources::IResource
 	{
