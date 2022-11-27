@@ -27,6 +27,8 @@ std::string Utils::Loader::GetString(std::string line)
 	line = line.substr(line.find_first_of(' '));
 	line = line.substr(line.find_first_of(':') + 2);
 	line = line.substr(0, line.find_first_of('\r'));
+	if (line.find_first_of('\n'))
+		line = line.substr(0, line.find_first_of('\n'));
 	return line;
 }
 
@@ -234,12 +236,12 @@ void Utils::Loader::MtlLoader(std::string path)
 		else if (prefix == "ma")
 		{
 			std::string texPath = Utils::Loader::GetString(currentLine);
-			if (auto texture = Resources::ResourceManager::GetWithPath<Resources::Texture>(texPath.c_str()))
+			if (auto texture = Resources::ResourceManager::Get<Resources::Texture>(texPath.c_str()))
 			{
 				currentMaterial->SetTexture(texture);
 			}
 			else
-			{
+			{ 
 				texture = Resources::ResourceManager::Create<Resources::Texture>(texPath);
 				currentMaterial->SetTexture(texture);
 			}

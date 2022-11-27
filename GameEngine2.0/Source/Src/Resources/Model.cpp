@@ -80,7 +80,6 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 
 			// Set Name
 			std::string MaterialName = Utils::Loader::GetString(currentLine);
-			MaterialName = MaterialName.substr(0, MaterialName.size() - 1);
 			MaterialName = GetPath().substr(0, GetPath().find_last_of('/') + 1) + MaterialName + ".mat";
 			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(MaterialName.c_str())) {
 				subMesh.Material = mat;

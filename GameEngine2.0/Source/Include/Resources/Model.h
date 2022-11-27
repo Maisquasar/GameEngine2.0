@@ -13,7 +13,6 @@ namespace Resources
 
 		void Load(std::string filename) override;
 		void ModelLoop(const char* data, const int32_t& size);
-		void MaterialLoop(std::string path);
 
 	private:
 

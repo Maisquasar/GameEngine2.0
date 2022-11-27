@@ -1,4 +1,5 @@
 #include "Include/EditorUi/Console.h"
+#include "Include/Utils/Loader.h"
 
 EditorUi::Console::Console()
 {
@@ -6,6 +7,7 @@ EditorUi::Console::Console()
 
 EditorUi::Console::~Console()
 {
+
 }
 
 void EditorUi::Console::Draw()
@@ -15,17 +17,16 @@ void EditorUi::Console::Draw()
 	if (ImGui::Begin("Console", &_open))
 	{
 		// ----------- LogType Buttons ----------- //
-		char info[64];
-		sprintf_s(info, "%d Info", GetNumberOfLogType(Debug::LogType::INFO));
-		ImGui::Checkbox(info, &_showInfo);
+		std::string info = Utils::Loader::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::INFO));
+		ImGui::Checkbox(info.c_str(), &_showInfo);
 		ImGui::SameLine();
-		char warning[64];
-		sprintf_s(warning, "%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
-		ImGui::Checkbox(warning, &_showWarning);
+
+		std::string warning = Utils::Loader::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::WARNING));
+		ImGui::Checkbox(warning.c_str(), &_showWarning);
 		ImGui::SameLine();
-		char error[64];
-		sprintf_s(error, "%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));	
-		ImGui::Checkbox(error, &_showError);
+
+		std::string error = Utils::Loader::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
+		ImGui::Checkbox(error.c_str(), &_showError);
 
 		ImGui::Separator();
 		const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
@@ -70,7 +71,7 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 int EditorUi::Console::GetNumberOfLogType(Debug::LogType t)
 {
 	int n = 0;
-	for (auto i : this->_consoleText)
+	for (auto i : _consoleText)
 	{
 		if (i._type == t)
 			n++;

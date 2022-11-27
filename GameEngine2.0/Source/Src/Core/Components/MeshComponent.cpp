@@ -25,8 +25,10 @@ void Core::Components::MeshComponent::ShowInInspector()
 		ImGui::Text(GetMesh()->GetName().c_str());
 	else
 		ImGui::Text("None");
-	if (auto Mesh = Resources::ResourceManager::ResourcesPopup<Resources::Mesh>("MeshPopup"))
+	if (auto Mesh = Resources::ResourceManager::ResourcesPopup<Resources::Mesh>("MeshPopup")) {
+		delete _currentMesh;
 		_currentMesh = Mesh->Clone();
+	}
 	if (!GetMesh())
 		return;
 
@@ -74,18 +76,29 @@ void Core::Components::MeshComponent::ShowInInspector()
 	int index = 0;
 	for (auto Sub : GetMesh()->SubMeshes)
 	{
-		if (!Sub.Material)
-			continue;
 		ImGui::PushID(index++);
 		ImGui::Separator();
 		if (ImGui::CollapsingHeader(Sub.Material->GetName().c_str())) {
 
 			ImGui::BeginDisabled(!Sub.Material->IsEditable());
-			ImGui::Button("Shader");
+
+			// Shader
+			if (ImGui::Button("Shader"))
+			{
+				ImGui::OpenPopup("ShaderPopup");
+			}
+			if (auto sha = Resources::ResourceManager::ResourcesPopup<Resources::Shader>("ShaderPopup"))
+				Sub.Material->SetShader(sha);
 			ImGui::SameLine();
 			ImGui::Text("%s", Sub.Material->GetShader()->GetName().c_str());
 
-			ImGui::Button("Texture");
+			// Texture
+			if (ImGui::Button("Change Texture"))
+			{
+				ImGui::OpenPopup("TexturePopup");
+			}
+			if (auto tex = Resources::ResourceManager::ResourcesPopup<Resources::Texture>("TexturePopup"))
+				Sub.Material->SetTexture(tex);
 			ImGui::SameLine();
 			if (Sub.Material->GetTexture())
 			{
@@ -93,6 +106,13 @@ void Core::Components::MeshComponent::ShowInInspector()
 			}
 			else
 				ImGui::Text("None");
+			ImGui::SameLine();
+			if (ImGui::Button("Reset"))
+			{
+				Sub.Material->SetTexture(nullptr);
+			}
+
+			// Parameters
 			ImGui::ColorEdit4("Ambient", &(*Sub.Material->GetPtrAmbient())[0]);
 			ImGui::ColorEdit4("Diffuse", &(*Sub.Material->GetPtrDiffuse())[0]);
 			ImGui::ColorEdit4("Specular", &(*Sub.Material->GetPtrSpecular())[0]);

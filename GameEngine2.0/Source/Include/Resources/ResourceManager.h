@@ -56,7 +56,7 @@ namespace Resources {
 		template<typename T> static T* ResourcesPopup(const char* popupName)
 		{
 			T* out = nullptr;
-			if (ImGui::BeginPopupModal(popupName)) {
+			if (ImGui::BeginPopupModal(popupName, (bool*)0, ImGuiWindowFlags_AlwaysAutoResize)) {
 				for (auto resource : _resource)
 				{
 					if (auto res = dynamic_cast<T*>(resource.second))
@@ -66,6 +66,10 @@ namespace Resources {
 							ImGui::CloseCurrentPopup();
 						}
 					}
+				}
+				if (ImGui::Button("Close"))
+				{
+					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
 			}
