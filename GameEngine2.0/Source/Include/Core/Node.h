@@ -27,6 +27,9 @@ namespace Core {
 		void ShowInHierarchy(int index);
 
 		bool* GetActivePtr() { return &_active; }
+
+		void Save(std::string space, std::string& content);
+		void Load(const char* data, uint32_t& pos);
 	private:
 		bool _open = false;
 		bool _active = true; // Boolean for inspector active

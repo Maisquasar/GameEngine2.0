@@ -1,0 +1,45 @@
+#BeginNode
+Name : DefaultScene
+IsActive : 1
+Position : 0.000000 0.000000 0.000000
+Rotation : 0.000000 0.000000 0.000000 1.000000
+Scale : 1.000000 1.000000 1.000000
+	#BeginNode
+	Name : Node
+	IsActive : 1
+	Position : 0.000000 0.000000 0.000000
+	Rotation : 0.000000 0.000000 0.000000 1.000000
+	Scale : 1.000000 1.000000 1.000000
+		#BeginNode
+		Name : Node
+		IsActive : 1
+		Position : 0.000000 0.000000 0.000000
+		Rotation : 0.000000 0.000000 0.000000 1.000000
+		Scale : 1.000000 1.000000 1.000000
+		#BeginComponent MeshComponent
+		Mesh : rubix1x1.obj::Rubix
+		SubMesh[0] : Assets/Default/Models/Border.mat
+		SubMesh[1] : Assets/Default/Models/White.mat
+		SubMesh[2] : Assets/Default/Models/Red.mat
+		SubMesh[3] : Assets/Default/Models/Blue.mat
+		SubMesh[4] : Assets/Default/Models/Yellow.mat
+		SubMesh[5] : Assets/Default/Models/Orange.mat
+		SubMesh[6] : Assets/Default/Models/Lime.mat
+		#EndComponent MeshComponent
+		#EndNode
+	#EndNode
+	#BeginNode
+	Name : Node
+	IsActive : 1
+	Position : 0.000000 0.000000 0.000000
+	Rotation : 0.000000 0.000000 0.000000 1.000000
+	Scale : 1.000000 1.000000 1.000000
+	#EndNode
+	#BeginNode
+	Name : Node
+	IsActive : 1
+	Position : 0.000000 0.000000 0.000000
+	Rotation : 0.000000 0.000000 0.000000 1.000000
+	Scale : 1.000000 1.000000 1.000000
+	#EndNode
+#EndNode

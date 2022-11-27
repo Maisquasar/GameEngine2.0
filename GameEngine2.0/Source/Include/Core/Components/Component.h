@@ -27,6 +27,9 @@ namespace Core {
 
 			virtual void ShowInInspector() { }
 
+			virtual void Save(std::string space, std::string& content) {}
+			virtual void Load(const char* data, uint32_t& pos) { }
+
 			virtual Component* Clone() const = 0;
 			// ===== Other Functions ===== //
 			// Remove Component from GameObject.

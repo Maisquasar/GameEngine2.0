@@ -1,6 +1,7 @@
 #pragma once
 namespace Math {
 	class Vector3;
+	class Vector4;
 	class Matrix4;
 	class Quaternion
 	{
@@ -13,6 +14,7 @@ namespace Math {
 		Quaternion() : x(0), y(0), z(0), w(1) {}
 		Quaternion(float a) : x(a), y(a), z(a), w(a) {}
 		Quaternion(float a, float b, float c, float d = 1) : x(a), y(b), z(c), w(d) {}
+		Quaternion(Vector4 a) : x(a.x), y(a.y), z(a.z), w(a.w) {}
 		~Quaternion() {}
 
 		Quaternion operator+(const Quaternion& a);
@@ -48,5 +50,7 @@ namespace Math {
 		Matrix4 ToRotationMatrix();
 
 		void Print() const;
+
+		std::string ToString();
 	};
 }

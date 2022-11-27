@@ -28,6 +28,9 @@ public:
 	void ClearApp();
 	static void CloseApp();
 
+	static void LoadScene(std::string Path);
+	static void SaveScene(std::string Path);
+
 	static GLFWwindow* GetWindow() { return _window; }
 	static Math::Integer2 GetWindowSize();
 	static const GLFWvidmode* GetMonitorVideoMode();
@@ -62,3 +65,6 @@ private:
 	void InitGlad();
 	void LoadResources();
 };
+
+//TODO: Fix TextureUVs
+//TODO: ImGui Save/Loading Scene

@@ -17,6 +17,8 @@ namespace Core::Components {
 
 		Resources::Mesh* GetMesh() { return dynamic_cast<Resources::Mesh*>(_currentMesh); }
 
+		void Save(std::string space, std::string& content) override;
+		void Load(const char* data, uint32_t& pos) override;
 	private:
 		Resources::IResource* _currentMesh;
 	};

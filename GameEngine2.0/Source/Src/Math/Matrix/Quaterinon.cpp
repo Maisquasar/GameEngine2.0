@@ -216,3 +216,8 @@ void Math::Quaternion::Print() const
 {
 	printf("Quaternion { %f, %f, %f, %f}\n", x, y, z, w);
 }
+
+std::string Math::Quaternion::ToString()
+{
+	return std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(z) + " " + std::to_string(w);
+}

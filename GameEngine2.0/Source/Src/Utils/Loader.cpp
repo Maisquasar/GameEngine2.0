@@ -18,7 +18,8 @@ std::string Utils::Loader::GetLine(const char* data, uint32_t& pos)
 		line.push_back(data[pos]);
 		pos++;
 	}
-	line.push_back('\n');
+	if (line[0] == '\t')
+		line = line.substr(line.find_first_not_of('\t'));
 	return line;
 }
 
@@ -27,21 +28,21 @@ std::string Utils::Loader::GetString(std::string line)
 	line = line.substr(line.find_first_of(' '));
 	line = line.substr(line.find_first_of(':') + 2);
 	line = line.substr(0, line.find_first_of('\r'));
-	if (line.find_first_of('\n'))
-		line = line.substr(0, line.find_first_of('\n'));
+	line = line.substr(0, line.find_first_of('\n'));
 	return line;
 }
 
-int Utils::Loader::GetInt(const char* data, uint32_t& pos, int dec)
+int Utils::Loader::GetInt(std::string line)
 {
-	pos += dec;
+	float out;
 	std::string value;
-	while (data[pos] != '\n' && data[pos] != '\0' && data[pos] != '\r')
-	{
-		value.push_back(data[pos]);
-		pos++;
-	}
-	return std::stoi(value);
+	std::string temp = line;
+	temp = temp.substr(temp.find_first_of(' '));
+	temp = temp.substr(temp.find_first_of(':') + 2);
+	value = temp.substr(0, temp.find_first_of('\n'));
+	value = value.substr(0, value.find_first_of('\r'));
+	out = std::stoi(value);
+	return out;
 }
 
 float Utils::Loader::GetFloat(std::string line)
@@ -85,6 +86,20 @@ Math::Vector4 Utils::Loader::GetVec4(std::string line)
 	std::string value;
 	std::string temp = line.substr(line.find_first_of(':') + 2);
 	for (size_t i = 0; i < 4; i++)
+	{
+		value = temp.substr(0, temp.find_first_of(' '));
+		out[i] = std::stof(value);
+		temp = temp.substr(temp.find_first_of(' ') + 1);
+	}
+	return out;
+}
+
+Math::Vector3 Utils::Loader::GetVector3(std::string line)
+{
+	Math::Vector3 out;
+	std::string value;
+	std::string temp = line.substr(line.find_first_of(':') + 2);
+	for (size_t i = 0; i < 3; i++)
 	{
 		value = temp.substr(0, temp.find_first_of(' '));
 		out[i] = std::stof(value);
@@ -191,13 +206,11 @@ void Utils::Loader::MtlLoader(std::string path)
 		if (prefix == "ne")
 		{
 			auto name = currentLine.substr(currentLine.find_first_of(' ') + 1);
-			name = name.substr(0, name.size() - 1);
 			path = path.substr(0, path.find_last_of('/')) + '/' + name + ".mat";
 
 			if (auto mat = Resources::ResourceManager::Get<Resources::Material>((path).c_str()))
 			{
-				LOG(Debug::LogType::INFO, "Already Loaded Material %s !", mat->GetPath().c_str())
-					continue;
+				continue;
 			}
 			if (currentMaterial)
 				WriteMaterial(currentMaterial);
@@ -210,7 +223,7 @@ void Utils::Loader::MtlLoader(std::string path)
 		}
 		else if (!currentMaterial)
 		{
-			
+
 		}
 		else if (prefix == "Ka")
 		{
@@ -241,7 +254,7 @@ void Utils::Loader::MtlLoader(std::string path)
 				currentMaterial->SetTexture(texture);
 			}
 			else
-			{ 
+			{
 				texture = Resources::ResourceManager::Create<Resources::Texture>(texPath);
 				currentMaterial->SetTexture(texture);
 			}

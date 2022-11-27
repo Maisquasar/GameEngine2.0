@@ -7,7 +7,7 @@ Core::Components::MeshComponent::MeshComponent()
 	ComponentName = "MeshComponent";
 }
 
-Core::Components::MeshComponent::~MeshComponent() 
+Core::Components::MeshComponent::~MeshComponent()
 {
 	delete _currentMesh;
 }
@@ -128,4 +128,36 @@ void Core::Components::MeshComponent::Update()
 		return;
 	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	GetMesh()->Update(MVP);
+}
+
+void Core::Components::MeshComponent::Save(std::string space, std::string& content)
+{
+	content += space + Utils::Loader::StringFormat("Mesh : %s\n", GetMesh()->GetPath().c_str());
+	int index = 0;
+	for (auto Sub : GetMesh()->SubMeshes)
+	{
+		content += space + Utils::Loader::StringFormat("SubMesh[%d] : %s\n", index++, Sub.Material->GetPath().c_str());
+	}
+}
+void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
+{
+	std::string currentLine;
+	int SubMeshIndex = 0;
+	while (currentLine.substr(0, 13) != "#EndComponent")
+	{
+		currentLine = Utils::Loader::GetLine(data, pos);
+		if (currentLine.substr(0, 4) == "Mesh")
+		{
+			auto MeshPath = Utils::Loader::GetString(currentLine);
+			if (auto mesh = Resources::ResourceManager::Get<Resources::Mesh>(MeshPath.c_str()))
+				this->_currentMesh = mesh->Clone();
+		}
+		else if (currentLine.substr(0, 7) == "SubMesh")
+		{
+			auto SubMeshMaterialPath = Utils::Loader::GetString(currentLine);
+			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(SubMeshMaterialPath.c_str()))
+				this->GetMesh()->SubMeshes[SubMeshIndex++].Material = mat;
+		}
+		pos++;
+	}
 }

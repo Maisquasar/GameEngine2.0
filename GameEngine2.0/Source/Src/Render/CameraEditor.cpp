@@ -19,9 +19,24 @@ Render::CameraEditor::CameraEditor()
 
 Render::CameraEditor::~CameraEditor() {}
 
-void Render::CameraEditor::Update()
+void Render::CameraEditor::Update(bool firstUpdate)
 {
 	Transform.Update();
+
+	if (!firstUpdate)
+	{
+		auto mousePos = ImGui::GetMousePos();
+		// Set Mouse Pos Modulo Monitor Size
+		if (mousePos.x < 1)
+			SetCursorPos(App::GetMonitorVideoMode()->width - 2, (int)mousePos.y);
+		if (mousePos.x >= App::GetMonitorVideoMode()->width - 1)
+			SetCursorPos(2, (int)mousePos.y);
+		if (mousePos.y < 1)
+			SetCursorPos((int)mousePos.x, App::GetMonitorVideoMode()->height - 2);
+		if (mousePos.y >= App::GetMonitorVideoMode()->height - 1)
+			SetCursorPos((int)mousePos.x, 2);
+	}
+
 	// Camera Update.
 	// Set Distance
 	Distance -= Utils::Input::MouseScroll * 0.5f;

@@ -26,7 +26,7 @@ void EditorUi::MainBar::Draw()
 			}
 			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 			{
-				//TODO: Save Scene + shortcut.
+				App::SaveScene("DefaultScene");
 			}
 			if (ImGui::MenuItem("Save as Scene", "Ctrl+Shift+S"))
 			{

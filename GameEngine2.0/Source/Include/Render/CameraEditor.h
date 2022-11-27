@@ -24,7 +24,7 @@ namespace Render {
 
 		Core::Transform Transform;
 
-		void Update();
+		void Update(bool firstUpdate = false);
 		// Return the Mat4D view matrix from the camera.
 		Math::Matrix4 GetViewMatrix();
 		// Return the Mat4D projection matrix from the camera.

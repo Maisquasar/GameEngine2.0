@@ -201,37 +201,17 @@ void App::Update()
 	this->Components.Initialize();
 	_framebuffer.Initialize(this->GetWindowSize());
 	_editorUi.Initialize();
+#if 1
+	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
+#else
 	SceneNode->AddChildren(new Core::Node());
 	SceneNode->AddChildren(new Core::Node());
 	SceneNode->AddChildren(new Core::Node());
 	SceneNode->Childrens[0]->AddChildren(new Core::Node());
+#endif
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	_cameraEditor.Update(true);
 
-	// --------- Temporary ---------
-	float vertices[] = {
-		// positions         // colors
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
-	};
-
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	// --------- Temporary ---------
-	_cameraEditor.Update();
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
 		// Begin Frame
@@ -246,42 +226,23 @@ void App::Update()
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		// Begin Main Update
 
+		// Begin Main Update
+		// Update Camera AspectRatio.
 		if (_framebuffer.Window)
 			_cameraEditor.AspectRatio = _framebuffer.Window->Size.x / _framebuffer.Window->Size.y;
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		SceneNode->UpdateSelfAndChilds();
-		// --------- Temporary ---------
-		auto shader = _resourceManager.Get<Resources::Shader>("Assets/Default/Shaders/UnlitShader");
-		glUseProgram(shader->Program);
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
-		auto MVP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix() * Math::Matrix4::CreateTransformMatrix(Math::Vector3(0), Math::Vector3(0), Math::Vector3(1));
-		glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-		glUniform1i(shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-		glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), 1, 0.5f, 0.1f, 1);
-		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		// --------- Temporary ---------
+
+		SceneNode->UpdateSelfAndChilds();
 
 		_editorUi.Draw();
 
 		// Update Editor Camera.
 		if (_framebuffer.UpdateCameraEditor) {
 			_cameraEditor.Update();
-			auto mousePos = ImGui::GetMousePos();
-			// Set Mouse Pos Modulo Monitor Size
-			if (mousePos.x < 1)
-				SetCursorPos(this->GetMonitorVideoMode()->width - 2, (int)mousePos.y);
-			if (mousePos.x >= this->GetMonitorVideoMode()->width - 1)
-				SetCursorPos(2, (int)mousePos.y);
-			if (mousePos.y < 1)
-				SetCursorPos((int)mousePos.x, this->GetMonitorVideoMode()->height - 2);
-			if (mousePos.y >= this->GetMonitorVideoMode()->height - 1)
-				SetCursorPos((int)mousePos.x, 2);
 		}
 
 		_input.Update();
@@ -324,3 +285,28 @@ void App::ClearApp()
 }
 
 void App::CloseApp() { App::_shouldClose = true; }
+
+void App::LoadScene(std::string Path)
+{
+	uint32_t size = 0;
+	bool sucess;
+	auto data = Utils::Loader::ReadFile(Path.c_str(), size, sucess);
+	if (!sucess)
+		return;
+	uint32_t pos = 0;
+	// Skip First Line.
+	Utils::Loader::SkipLine(data, pos);
+
+	SceneNode->Load(data, pos);
+	delete[] data;
+}
+
+void App::SaveScene(std::string Name)
+{
+	std::ofstream _file;
+	std::string filepath = ("Assets/Default/Scenes/" + Name + ".scene");
+	_file.open(filepath);
+	std::string content;
+	SceneNode->Save("", content);
+	_file.write(content.c_str(), content.size());
+}

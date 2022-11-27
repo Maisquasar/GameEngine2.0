@@ -40,7 +40,6 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		{
 			std::string path = currentLine;
 			path = path.substr(path.find_first_of(' ') + 1);
-			path = path.substr(0, path.size() - 1);
 			path = _path.substr(0, _path.find_last_of('/') + 1) + path;
 			Utils::Loader::MtlLoader(path);
 		}
@@ -99,6 +98,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	{
 		auto MeshNode = new Core::Node();
 		mesh.Load("");
+		mesh.SetPath(GetName() + "::" + mesh.GetName());
 		Resources::ResourceManager::Add(GetName() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
 		this->AddChildren(MeshNode);
 	}

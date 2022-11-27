@@ -1,7 +1,11 @@
 #include "Include/Core/Transform.h"
 #include "Include/Core/Node.h"
+#include "Include/Utils/Loader.h"
 
-Core::Transform::Transform(){}
+Core::Transform::Transform()
+{
+	ComponentName = "Transform";
+}
 
 Core::Transform::~Transform(){}
 
@@ -264,4 +268,11 @@ void Core::Transform::ShowInInspector()
 		}
 		ImGui::TreePop();
 	}
+}
+
+void Core::Transform::Save(std::string space, std::string& content)
+{
+	content += space + Utils::Loader::StringFormat("Position : %s\n", _localPosition.ToString().c_str());
+	content += space + Utils::Loader::StringFormat("Rotation : %s\n", _localRotation.ToString().c_str());
+	content += space + Utils::Loader::StringFormat("Scale : %s\n", _localScale.ToString().c_str());
 }

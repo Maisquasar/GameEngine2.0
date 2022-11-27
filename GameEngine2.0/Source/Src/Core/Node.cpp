@@ -1,4 +1,6 @@
 #include "Include/Core/Node.h"
+#include "Include/Utils/Loader.h"
+#include "Include/App.h"
 
 Core::Node::Node()
 {
@@ -109,4 +111,80 @@ void Core::Node::ShowInHierarchy(int index)
 	}
 	ImGui::PopID();
 	ImGui::EndDisabled();
+}
+
+void Core::Node::Save(std::string space, std::string& content)
+{
+	// Node Save.
+	content += space + "#BeginNode\n";
+	content += space + Utils::Loader::StringFormat("Name : %s\n", Name.c_str());
+	content += space + Utils::Loader::StringFormat("IsActive : %d\n", _active);
+
+	// Components Save.
+	Transform.Save(space, content);
+	for (auto component : Components)
+	{
+		content += space + Utils::Loader::StringFormat("#BeginComponent %s\n", component->ComponentName.c_str());
+		component->Save(space, content);
+		content += space + Utils::Loader::StringFormat("#EndComponent %s\n", component->ComponentName.c_str());
+	}
+
+	// Children Save.
+	for (auto children : Childrens)
+	{
+		children->Save(space + '\t', content);
+	}
+	content += space + "#EndNode\n";
+}
+
+void Core::Node::Load(const char* data, uint32_t& pos)
+{
+	std::string currentLine;
+	while (currentLine.substr(0, 8) != "#EndNode")
+	{
+		currentLine = Utils::Loader::GetLine(data, pos);
+		if (currentLine.substr(0, 4) == "Name")
+		{
+			this->Name = Utils::Loader::GetString(currentLine);
+		}
+		else if (currentLine.substr(0, 8) == "IsActive")
+		{
+			this->_active = Utils::Loader::GetInt(currentLine);
+		}
+		else if (currentLine.substr(0, 8) == "Position")
+		{
+			this->Transform.SetLocalPosition(Utils::Loader::GetVector3(currentLine));
+		}
+		else if (currentLine.substr(0, 8) == "Rotation")
+		{
+			this->Transform.SetLocalRotation(Utils::Loader::GetVec4(currentLine));
+		}
+		else if (currentLine.substr(0, 5) == "Scale")
+		{
+			this->Transform.SetLocalScale(Utils::Loader::GetVector3(currentLine));
+		}
+		else if (currentLine.substr(0, 10) == "#BeginNode")
+		{
+			this->AddChildren(new Node());
+			this->Childrens.back()->Load(data, pos);
+		}
+		else if (currentLine.substr(0, 15) == "#BeginComponent")
+		{
+			auto Type = Utils::Loader::GetString(currentLine);
+			for (auto component : App::Components.Components)
+			{
+				if (Type == component->ComponentName)
+				{
+					auto newComponent = component->Clone();
+					newComponent->Load(data, pos);
+					this->AddComponent(newComponent);
+				}
+			}
+		}
+		else if (currentLine.substr(0, 8) == "#EndNode")
+		{
+			break;
+		}
+		pos++;
+	}
 }

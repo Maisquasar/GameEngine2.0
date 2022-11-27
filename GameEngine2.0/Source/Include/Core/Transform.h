@@ -3,11 +3,12 @@
 #include <vector>
 #include <filesystem>
 #include "Include/Math/Math.h"
+#include "Include/Core/Components/Component.h"
 
 namespace Core
 {
 	class Node;
-	class Transform
+	class Transform : public Components::BaseComponent<Transform>
 	{
 	public:
 		Transform();
@@ -15,7 +16,6 @@ namespace Core
 
 		// Nodes
 		Node* Parent = nullptr;
-		Node* GameObject = nullptr;
 
 		void ComputeModelMatrix();
 		void ComputeModelMatrix(Math::Matrix4);
@@ -52,6 +52,8 @@ namespace Core
 		void ForceUpdate();
 
 		void ShowInInspector();
+
+		void Save(std::string space, std::string& content) override;
 
 	private:
 		Math::Matrix4 _modelMatrix = Math::Matrix4::Identity();
