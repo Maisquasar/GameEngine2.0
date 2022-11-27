@@ -15,9 +15,9 @@ namespace Core::Components {
 
 		void Update() override;
 
-		Resources::Mesh* GetMesh() { return _currentMesh; }
+		Resources::Mesh* GetMesh() { return dynamic_cast<Resources::Mesh*>(_currentMesh); }
 
 	private:
-		Resources::Mesh* _currentMesh;
+		Resources::IResource* _currentMesh;
 	};
 }

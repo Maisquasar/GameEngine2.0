@@ -17,7 +17,7 @@ namespace Resources {
 		size_t StartIndex;
 		size_t Count;
 	};
-	class Mesh : public Resources::IResource
+	class Mesh : public BaseResource<Mesh>
 	{
 	public:
 		Mesh();

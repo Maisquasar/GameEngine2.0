@@ -13,7 +13,7 @@ namespace Core {
 			std::string ComponentName = "Empty";
 
 			Component();
-			~Component();
+			virtual ~Component() = default;
 
 			// ===== Virtual Functions ===== //
 			virtual void Update() {}

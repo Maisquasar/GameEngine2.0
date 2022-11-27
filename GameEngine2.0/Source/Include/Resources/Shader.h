@@ -29,7 +29,7 @@ namespace Resources
 		L_COLOR,
 	};
 
-	class Shader : public IResource
+	class Shader : public BaseResource<Shader>
 	{
 	public:
 		Shader();

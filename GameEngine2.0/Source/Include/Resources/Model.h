@@ -5,7 +5,7 @@
 #include "Include/Resources/Mesh.h"
 namespace Resources
 {
-	class Model : public IResource, public Core::Node
+	class Model : public BaseResource<Model>, public Core::Node
 	{
 	public:
 		Model();

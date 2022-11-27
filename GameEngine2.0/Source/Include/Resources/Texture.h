@@ -6,7 +6,7 @@
 
 namespace Resources {
 	static int TextureData = 0;
-	class Texture : public Resources::IResource
+	class Texture : public BaseResource<Texture>
 	{
 	public:
 		Texture();

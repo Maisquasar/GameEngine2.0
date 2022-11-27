@@ -7,9 +7,11 @@ Core::Components::MeshComponent::MeshComponent()
 	ComponentName = "MeshComponent";
 }
 
-Core::Components::MeshComponent::~MeshComponent()
+Core::Components::MeshComponent::~MeshComponent() 
 {
+	delete _currentMesh;
 }
+
 
 void Core::Components::MeshComponent::ShowInInspector()
 {
@@ -24,7 +26,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 	else
 		ImGui::Text("None");
 	if (auto Mesh = Resources::ResourceManager::ResourcesPopup<Resources::Mesh>("MeshPopup"))
-		_currentMesh = Mesh;
+		_currentMesh = Mesh->Clone();
 	if (!GetMesh())
 		return;
 
@@ -61,8 +63,9 @@ void Core::Components::MeshComponent::ShowInInspector()
 			}
 		}
 		ImGui::PushID(SelectedRow);
-		if (auto mat = Resources::ResourceManager::ResourcesPopup<Resources::Material>("MaterialPopup"))
+		if (auto mat = Resources::ResourceManager::ResourcesPopup<Resources::Material>("MaterialPopup")) {
 			ChangeMat->Material = mat;
+		}
 		ImGui::PopID();
 		ImGui::EndTable();
 	}
@@ -71,11 +74,13 @@ void Core::Components::MeshComponent::ShowInInspector()
 	int index = 0;
 	for (auto Sub : GetMesh()->SubMeshes)
 	{
+		if (!Sub.Material)
+			continue;
 		ImGui::PushID(index++);
 		ImGui::Separator();
-		ImGui::BeginDisabled(!Sub.Material->IsEditable());
 		if (ImGui::CollapsingHeader(Sub.Material->GetName().c_str())) {
 
+			ImGui::BeginDisabled(!Sub.Material->IsEditable());
 			ImGui::Button("Shader");
 			ImGui::SameLine();
 			ImGui::Text("%s", Sub.Material->GetShader()->GetName().c_str());
@@ -91,8 +96,8 @@ void Core::Components::MeshComponent::ShowInInspector()
 			ImGui::ColorEdit4("Ambient", &(*Sub.Material->GetPtrAmbient())[0]);
 			ImGui::ColorEdit4("Diffuse", &(*Sub.Material->GetPtrDiffuse())[0]);
 			ImGui::ColorEdit4("Specular", &(*Sub.Material->GetPtrSpecular())[0]);
+			ImGui::EndDisabled();
 		}
-		ImGui::EndDisabled();
 		ImGui::PopID();
 	}
 }
@@ -102,5 +107,5 @@ void Core::Components::MeshComponent::Update()
 	if (!_currentMesh)
 		return;
 	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
-	_currentMesh->Update(MVP);
+	GetMesh()->Update(MVP);
 }

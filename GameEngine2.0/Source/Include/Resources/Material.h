@@ -4,7 +4,7 @@
 namespace Resources
 {
 	class Shader;
-	class Material : public IResource
+	class Material : public BaseResource<Material>
 	{
 	public:
 		Material();
