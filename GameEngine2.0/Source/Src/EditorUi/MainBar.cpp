@@ -1,6 +1,7 @@
 #include "Include/EditorUi/MainBar.h"
 #include "Include/App.h"
 #include "Include/EditorUi/Editor.h"
+#include "Include/Core/Node.h"
 
 EditorUi::MainBar::MainBar()
 {
@@ -12,6 +13,7 @@ EditorUi::MainBar::~MainBar()
 
 void EditorUi::MainBar::Draw()
 {
+	static std::string content;
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu("File"))
 		{
@@ -33,6 +35,9 @@ void EditorUi::MainBar::Draw()
 			{
 				//TODO: Save Scene via Explorer + shortcut.
 				EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(true);
+				EditorUi::Editor::GetFloatingFileExplorer()->SetState(EditorUi::FileExplorerState::Write);
+				EditorUi::Editor::GetFloatingFileExplorer()->SetTargetExtension(".scene");
+				App::SceneNode->Save("", content);
 			}
 			if (ImGui::MenuItem("Exit", "Alt+F4"))
 			{
@@ -54,5 +59,9 @@ void EditorUi::MainBar::Draw()
 	{
 		App::LoadScene(file->Directory);
 		EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(false);
+	}
+	if (EditorUi::Editor::GetFloatingFileExplorer()->GetState() == EditorUi::FileExplorerState::Write) 
+	{
+		EditorUi::Editor::GetFloatingFileExplorer()->DrawAndSave(content);
 	}
 }

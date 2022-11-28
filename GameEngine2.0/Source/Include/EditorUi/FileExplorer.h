@@ -52,7 +52,7 @@ namespace EditorUi {
 		~FloatingFileExplorer();
 
 		std::shared_ptr<File> DrawAndRead();
-		void DrawAndSave(const char* data);
+		void DrawAndSave(std::string data);
 		void Refresh();
 
 		void SetOpen(bool value) override;

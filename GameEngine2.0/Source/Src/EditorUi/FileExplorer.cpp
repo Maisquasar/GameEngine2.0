@@ -85,6 +85,7 @@ std::shared_ptr<EditorUi::File> EditorUi::FloatingFileExplorer::DrawAndRead()
 	ImGuiWindowFlags_ flag = ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 	if (ImGui::Begin(_windowName.c_str(), &_open, flag))
 	{
+		ImGui::SetWindowFocus();
 		// ------------- Back Button ------------- //
 		if (ImGui::Button("Back"))
 		{
@@ -204,16 +205,16 @@ std::shared_ptr<EditorUi::File> EditorUi::FloatingFileExplorer::DrawAndRead()
 	return FileReturn;
 }
 
-void EditorUi::FloatingFileExplorer::DrawAndSave(const char* data)
+void EditorUi::FloatingFileExplorer::DrawAndSave(std::string data)
 {
 	if (!_open || GetState() == EditorUi::FileExplorerState::Read)
 		return;
-	std::shared_ptr<File> FileReturn = nullptr;
 	bool rightclick = false;
 	ImGui::PushID(_windowName.c_str());
 	ImGuiWindowFlags_ flag = ImGuiWindowFlags_::ImGuiWindowFlags_NoDocking;
 	if (ImGui::Begin(_windowName.c_str(), &_open, flag))
 	{
+		ImGui::SetWindowFocus();
 		// ------------- Back Button ------------- //
 		if (ImGui::Button("Back"))
 		{
@@ -285,10 +286,6 @@ void EditorUi::FloatingFileExplorer::DrawAndSave(const char* data)
 								ImGui::PopID();
 								break;
 							}
-							else
-							{
-								FileReturn = f;
-							}
 						}
 						catch (const std::exception& e)
 						{
@@ -318,7 +315,22 @@ void EditorUi::FloatingFileExplorer::DrawAndSave(const char* data)
 				index++;
 				ImGui::PopID();
 			}
-			ImGui::EndChild();
+			ImGui::EndChild(); 
+			ImGui::Separator();
+			static char FileName[513];
+			ImGui::InputText("File Name", FileName, 513);
+			ImGui::SameLine();
+			if (ImGui::Button("Save"))
+			{
+				std::ofstream _file;
+				auto dir = _current->Directory + "/" + FileName + _targetExtension;
+				_file.open(dir);
+				LOG(Debug::LogType::INFO, "Saving Scene into %s", dir.c_str());
+				this->SetOpen(false);
+				this->SetTargetExtension("");
+				_file.write(data.c_str(), data.size());
+
+			}
 
 		}
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && !rightclick)
@@ -327,6 +339,7 @@ void EditorUi::FloatingFileExplorer::DrawAndSave(const char* data)
 			_rightClicked = nullptr;
 		}
 		RightClickWindow();
+		
 	}
 	ImGui::End();
 	ImGui::PopID();
@@ -415,6 +428,8 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 		ImGui::EndPopup();
 	}
 }
+
+// ================================ File Explorer ================================ //
 
 EditorUi::FileExplorer::FileExplorer()
 {
