@@ -23,6 +23,7 @@ void EditorUi::MainBar::Draw()
 			{
 				//TODO: Open Scene via Explorer + shortcut.
 				EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(true);
+				EditorUi::Editor::GetFloatingFileExplorer()->SetState(EditorUi::FileExplorerState::Read);
 			}
 			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 			{
@@ -49,4 +50,9 @@ void EditorUi::MainBar::Draw()
 		}
 	}
 	ImGui::EndMainMenuBar();
+	if (auto file = EditorUi::Editor::GetFloatingFileExplorer()->DrawAndRead())
+	{
+		App::LoadScene(file->Directory);
+		EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(false);
+	}
 }

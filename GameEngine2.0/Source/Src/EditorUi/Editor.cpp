@@ -21,7 +21,6 @@ void EditorUi::Editor::Draw()
 	_mainBar.Draw();
 	_hierarchy.Draw();
 	_fileExplorer.Draw();
-	_floatingFileExplorer.Draw();
 	_inspector.Draw();
 	Debug::Log::Console.Draw();
 }

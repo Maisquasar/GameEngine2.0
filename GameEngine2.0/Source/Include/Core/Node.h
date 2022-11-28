@@ -21,6 +21,7 @@ namespace Core {
 		void AddChildren(Node* node);
 		void AddComponent(Core::Components::Component* comp);
 		void RemoveComponent(Core::Components::Component* comp);
+		void RemoveAllChildrens();
 
 		void UpdateSelfAndChilds();
 

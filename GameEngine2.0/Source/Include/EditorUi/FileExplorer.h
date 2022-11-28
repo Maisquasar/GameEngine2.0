@@ -17,6 +17,12 @@ namespace EditorUi {
 		Img
 	};
 
+	enum class FileExplorerState
+	{
+		Read,
+		Write
+	};
+
 	class File
 	{
 	public:
@@ -45,17 +51,24 @@ namespace EditorUi {
 		FloatingFileExplorer();
 		~FloatingFileExplorer();
 
-		void Draw() override;
-		void SetOpen(bool value) override;
+		std::shared_ptr<File> DrawAndRead();
+		void DrawAndSave(const char* data);
 		void Refresh();
+
+		void SetOpen(bool value) override;
+		void SetTargetExtension(std::string ext);
+		void SetState(FileExplorerState state);
+
+		FileExplorerState GetState();
 	protected:
 		std::string _windowName;
-		bool _limited;
 		std::string _path = "Assets";
+		std::string _targetExtension = "";
 		std::shared_ptr<File> _current = nullptr;
 		std::shared_ptr<File> _main;
+		std::shared_ptr<File> _rightClicked = nullptr;
 
-		std::shared_ptr<File> _clicked = nullptr;
+		FileExplorerState _state;
 		void RightClickWindow();
 	};
 
@@ -64,5 +77,7 @@ namespace EditorUi {
 	public:
 		FileExplorer();
 		~FileExplorer();
+
+		void Draw() override;
 	};
 }

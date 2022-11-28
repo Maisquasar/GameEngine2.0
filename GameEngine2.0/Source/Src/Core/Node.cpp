@@ -47,6 +47,15 @@ void Core::Node::RemoveComponent(Core::Components::Component* comp)
 	}
 }
 
+void Core::Node::RemoveAllChildrens()
+{
+	for (auto child : Childrens)
+	{
+		child->RemoveAllChildrens();
+	}
+	Childrens.clear();
+}
+
 void Core::Node::UpdateSelfAndChilds()
 {
 	this->Transform.Update();

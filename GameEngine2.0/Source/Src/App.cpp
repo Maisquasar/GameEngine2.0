@@ -296,6 +296,7 @@ void App::LoadScene(std::string Path)
 	uint32_t pos = 0;
 	// Skip First Line.
 	Utils::Loader::SkipLine(data, pos);
+	SceneNode->RemoveAllChildrens();
 
 	SceneNode->Load(data, pos);
 	delete[] data;
