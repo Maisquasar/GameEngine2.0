@@ -66,5 +66,6 @@ private:
 	void LoadResources();
 };
 
-//TODO: Fix TextureUVs
-//TODO: ImGui Save/Loading Scene
+//TODO: Multi-Thread Resource Loading
+//TODO: Lights
+//TODO: Add New Material on File Explorer

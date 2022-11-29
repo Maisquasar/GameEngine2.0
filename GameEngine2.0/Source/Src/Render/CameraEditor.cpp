@@ -14,7 +14,7 @@ void GetRotateAround(Math::Vector3 point, Math::Vector3 axis, float angle, Math:
 
 Render::CameraEditor::CameraEditor()
 {
-	this->Transform.SetWorldPosition(Math::Vector3(0, 0, -10));
+	this->Transform.SetWorldPosition(Math::Vector3(0, 0, 10));
 }
 
 Render::CameraEditor::~CameraEditor() {}
