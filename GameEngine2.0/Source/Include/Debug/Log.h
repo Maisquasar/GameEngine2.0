@@ -50,4 +50,6 @@ namespace Debug {
 
 #define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 #define LOG(t, x, ...) Debug::Log::Print(__FILENAME__, __LINE__, t, x, __VA_ARGS__);
+#define PrintLog(x, ...) LOG(Debug::LogType::INFO, x, ...)
 #define Serialize(Variable) (#Variable)
+#define Cast(T,x) dynamic_cast<T*>(x)

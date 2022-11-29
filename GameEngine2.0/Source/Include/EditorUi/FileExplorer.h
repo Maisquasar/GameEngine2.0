@@ -5,7 +5,12 @@
 
 #include "ImGui/imgui.h"
 #include "EditorWindow.h"
-#include "Include/Resources/ResourceManager.h"
+
+namespace Resources
+{
+	class Texture;
+	class IResource;
+}
 
 namespace EditorUi {
 
@@ -14,7 +19,10 @@ namespace EditorUi {
 		Folder,
 		None,
 		Txt,
-		Img
+		Img,
+		Mat,
+		Mtl,
+		Obj,
 	};
 
 	enum class FileExplorerState
@@ -40,6 +48,8 @@ namespace EditorUi {
 
 		void FoundChildren();
 		std::shared_ptr<File> GetParent();
+
+		void ShowInInspector();
 
 	private:
 

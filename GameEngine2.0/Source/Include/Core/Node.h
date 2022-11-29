@@ -28,6 +28,7 @@ namespace Core {
 		void ShowInHierarchy(int index);
 
 		bool* GetActivePtr() { return &_active; }
+		void SetSelected(bool value) { _selected = value; }
 
 		void Save(std::string space, std::string& content);
 		void Load(const char* data, uint32_t& pos);

@@ -2,7 +2,8 @@
 #include "Include/Utils/Input.h"
 #include "Include/App.h"
 
-std::vector<Core::Node*> EditorUi::Inspector::Selected;
+std::vector<Core::Node*> EditorUi::Inspector::NodesSelected;
+EditorUi::File* EditorUi::Inspector::FileSelected;
 
 EditorUi::Inspector::Inspector()
 {
@@ -35,26 +36,26 @@ void EditorUi::Inspector::Draw()
 		return;
 	if (ImGui::Begin("Inspector", &_open))
 	{
-		if (Selected.size() == 1)
+		if (NodesSelected.size() == 1)
 		{
-			ImGui::Checkbox("##active", Selected[0]->GetActivePtr());
+			ImGui::Checkbox("##active", NodesSelected[0]->GetActivePtr());
 			ImGui::SameLine();
 			// Name Input.
 			char name[65];
-			strcpy_s(name, 64, Selected[0]->Name.c_str());
+			strcpy_s(name, 64, NodesSelected[0]->Name.c_str());
 			if (ImGui::InputText("Name", name, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				if (Utils::Input::IsKeyPressed(ImGuiKey_Enter) || Utils::Input::IsKeyPressed(ImGuiKey_KeypadEnter))
-					Selected[0]->Name = name;
+					NodesSelected[0]->Name = name;
 			}
 			// Transform
-			Selected[0]->Transform.ShowInInspector();
+			NodesSelected[0]->Transform.ShowInInspector();
 			ImGui::NewLine();
 			ImGui::Separator();
 
 			// Other Components
 			int index = 0;
-			for (auto component : Selected[0]->Components)
+			for (auto component : NodesSelected[0]->Components)
 			{
 				bool destroy = true;
 				ImGui::PushID(index++);
@@ -78,14 +79,27 @@ void EditorUi::Inspector::Draw()
 			}
 			if (auto comp = ComponentsPopup())
 			{
-				Selected[0]->AddComponent(comp);
+				NodesSelected[0]->AddComponent(comp);
 			}
+		}
+		else if (FileSelected)
+		{
+			FileSelected->ShowInInspector();
 		}
 	}
 	ImGui::End();
 }
 
-void EditorUi::Inspector::AddSelected(Core::Node* node)
+void EditorUi::Inspector::AddNodeSelected(Core::Node* node)
 {
-	Selected.push_back(node);
+	NodesSelected.push_back(node);
+	node->SetSelected(true);
+	FileSelected = nullptr;
+}
+
+void EditorUi::Inspector::SetFileSelected(EditorUi::File* file)
+{
+	FileSelected = file;
+	for (auto node : NodesSelected) node->SetSelected(false);
+	NodesSelected.clear();
 }

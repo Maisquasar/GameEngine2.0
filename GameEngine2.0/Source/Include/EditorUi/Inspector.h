@@ -11,9 +11,11 @@ namespace EditorUi
 
 		void Draw() override;
 
-		static void AddSelected(Core::Node* node);
+		static void AddNodeSelected(Core::Node* node);
+		static void SetFileSelected(class File* file);
 
-		static std::vector<Core::Node*> Selected;
+		static std::vector<Core::Node*> NodesSelected;
+		static class File* FileSelected;
 
 	private:
 

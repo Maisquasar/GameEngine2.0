@@ -8,6 +8,7 @@ namespace Resources {
 		virtual ~IResource() {}
 		virtual void Load(std::string filename) {}
 		virtual IResource* Clone() const = 0;
+		virtual void ShowInInspector() {}
 
 		void SetPath(std::string path) { _path = path; }
 		void SetName(std::string name) { _name = name; }

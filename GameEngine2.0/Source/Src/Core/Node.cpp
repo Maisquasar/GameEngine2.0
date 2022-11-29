@@ -100,12 +100,11 @@ void Core::Node::ShowInHierarchy(int index)
 	{
 		if (!ImGui::GetIO().KeyCtrl)
 		{
-			for (auto i : EditorUi::Inspector::Selected)
+			for (auto i : EditorUi::Inspector::NodesSelected)
 				i->_selected = false;
-			EditorUi::Inspector::Selected.clear();
+			EditorUi::Inspector::NodesSelected.clear();
 		}
-		EditorUi::Inspector::AddSelected(this);
-		_selected = true;
+		EditorUi::Inspector::AddNodeSelected(this);
 	}
 
 	if (_open)

@@ -1,36 +1,53 @@
 #include "Include/EditorUi/FileExplorer.h"
+#include "Include/Resources/ResourceManager.h"
+#include "Include/EditorUi/Editor.h"
 
+#pragma region Files
 // -------------- File --------------
 EditorUi::File::File() {}
 
 EditorUi::File::File(std::string filename) {
 	Directory = filename;
 	this->Name = filename.substr(filename.find_last_of("//\\") + 1);
-
-	if (this->Name.substr(this->Name.find_last_of(".") + 1) == "png")
+	std::string extension = this->Name.substr(this->Name.find_last_of(".") + 1);
+	if (std::filesystem::is_directory(Directory))
+	{
+		this->Type = EditorUi::FileType::Folder;
+		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/folder_icon.png");
+	}
+	else if (extension == "png")
 	{
 		this->Type = EditorUi::FileType::Img;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>(this->Name.c_str())) {
+		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>(this->Directory.c_str())) {
 			this->Icon = tex;
 			this->ResourceLink = tex;
 		}
-		else
-		{
-			this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
+	}
+	else if (extension == "mat")
+	{
+		this->Type = EditorUi::FileType::Mat;
+		if (auto mat = Resources::ResourceManager::Get<Resources::Material>(this->Directory.c_str())) {
+			this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/material_icon.png");
+			this->ResourceLink = mat;
 		}
 	}
-	else if (std::filesystem::is_directory(Directory))
+	else if (extension == "mtl")
 	{
-		this->Type = EditorUi::FileType::Folder;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/folder_icon.png"))
-			this->Icon = tex;
+		this->Type = EditorUi::FileType::Mtl;
+		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/mtl_icon.png");
+	}
+	else if (extension == "obj")
+	{
+		this->Type = EditorUi::FileType::Obj;
+		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/obj_icon.png");
 	}
 	else
 	{
 		this->Type = EditorUi::FileType::None;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png"))
-			this->Icon = tex;
+		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
 	}
+	if (!Icon)
+		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
 }
 
 
@@ -61,10 +78,15 @@ std::shared_ptr<EditorUi::File> EditorUi::File::GetParent()
 	par->FoundChildren();
 	return par;
 }
+void EditorUi::File::ShowInInspector()
+{
+	if (ResourceLink)
+		ResourceLink->ShowInInspector();
+}
+#pragma endregion
 
-
-// -------------- File Explorer --------------
-
+#pragma region Floating File Explorer
+// -------------- Floating File Explorer --------------
 EditorUi::FloatingFileExplorer::FloatingFileExplorer()
 {
 	_windowName = "Floating File Explorer";
@@ -385,6 +407,10 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 			std::filesystem::create_directory(_current->Directory + "/NewFolder");
 			_current->FoundChildren();
 		}
+		if (ImGui::Button("New Material"))
+		{
+			//TODO : this.
+		}
 		if (_rightClicked != nullptr)
 		{
 			// ------------- Rename ------------- //
@@ -431,7 +457,9 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 		ImGui::EndPopup();
 	}
 }
+#pragma endregion
 
+#pragma region File Explorer
 // ================================ File Explorer ================================ //
 
 EditorUi::FileExplorer::FileExplorer()
@@ -448,7 +476,6 @@ void EditorUi::FileExplorer::Draw()
 {
 	if (!_open)
 		return;
-	std::shared_ptr<File> FileReturn = nullptr;
 	bool rightclick = false;
 	ImGui::PushID(_windowName.c_str());
 	ImGuiWindowFlags_ flag = ImGuiWindowFlags_::ImGuiWindowFlags_None;
@@ -492,6 +519,7 @@ void EditorUi::FileExplorer::Draw()
 		ImGui::Separator();
 		if (ImGui::BeginChild("Child")) {
 			int index = 0;
+			int numberOfItemsPassingFilter = 0;
 			for (auto& f : _current->Children) {
 				items.push_back(f->Name);
 				ImGui::PushID(index);
@@ -516,16 +544,16 @@ void EditorUi::FileExplorer::Draw()
 								ImGui::PopID();
 								break;
 							}
-							else
-							{
-								FileReturn = f;
-							}
 						}
 						catch (const std::exception& e)
 						{
 							// Case when not accessible because of rights.
 							LOG(Debug::LogType::L_ERROR, "Error opening folder %s : %s", f->Directory.c_str(), e.what());
 						}
+					}
+					else if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && f->Type != FileType::Folder)
+					{
+						EditorUi::Editor::GetInspector()->SetFileSelected(f.get());
 					}
 					// Name of the file.
 					if (ImGui::IsItemHovered())
@@ -535,9 +563,9 @@ void EditorUi::FileExplorer::Draw()
 						ImGui::EndTooltip();
 					}
 					ImGui::TextUnformatted(f->Name.substr(0, 10).c_str());
+					numberOfItemsPassingFilter++;
 				}
 				ImGui::EndGroup();
-
 				auto windowSize = ImGui::GetWindowSize();
 				int rounded = (int)round(windowSize.x / 105);
 				if (rounded > 0) {
@@ -562,3 +590,4 @@ void EditorUi::FileExplorer::Draw()
 	ImGui::End();
 	ImGui::PopID();
 }
+#pragma endregion
