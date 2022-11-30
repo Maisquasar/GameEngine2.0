@@ -34,7 +34,7 @@ std::string Utils::Loader::GetString(std::string line)
 
 int Utils::Loader::GetInt(std::string line)
 {
-	float out;
+	int out;
 	std::string value;
 	std::string temp = line;
 	temp = temp.substr(temp.find_first_of(' '));

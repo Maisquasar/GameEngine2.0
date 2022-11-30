@@ -1,4 +1,5 @@
 #include "Include/EditorUi/FileExplorer.h"
+#include "Include/Utils/Loader.h"
 
 // -------------- File --------------
 EditorUi::File::File() {}
@@ -384,17 +385,32 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 		{
 			std::filesystem::create_directory(_current->Directory + "/NewFolder");
 			_current->FoundChildren();
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("New Material"))
+		{
+			//printf(_current->Directory.c_str());
+			auto mat = new Resources::Material();
+			mat->SetPath(_current->Directory + "/NewMaterial.mat");
+			Resources::ResourceManager::Add(mat->GetPath().c_str(), mat);
+			Utils::Loader::WriteMaterial(mat);
 		}
 		if (_rightClicked != nullptr)
 		{
 			// ------------- Rename ------------- //
 			char Name[64];
-			for (int i = 0; i < _rightClicked->Name.size(); i++)
-				Name[i] = _rightClicked->Name[i];
-			Name[_rightClicked->Name.size()] = '\0';
+			strcpy_s(Name, 64, _rightClicked->Name.c_str());
 			if (ImGui::InputText("Rename", Name, 64, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
-				std::filesystem::rename(_rightClicked->Directory, _rightClicked->Directory.substr(0, _rightClicked->Directory.find_last_of('/') + 1) + Name);
+				auto NewPath = _rightClicked->Directory.substr(0, _rightClicked->Directory.find_last_of('/') + 1) + Name;
+				std::filesystem::rename(_rightClicked->Directory, NewPath);
+				// Change Resource Linked key to the new Path.
+				if (_rightClicked->ResourceLink)
+				{
+					_rightClicked->ResourceLink->SetName(Name);
+					_rightClicked->ResourceLink->SetPath(NewPath);
+					Resources::ResourceManager::ChangeKey(_rightClicked->ResourceLink->GetPath(), NewPath, _rightClicked->ResourceLink);
+				}
 				_current->FoundChildren();
 				ImGui::OpenPopup("Rename");
 				ImGui::CloseCurrentPopup();
@@ -412,6 +428,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 					try
 					{
 						std::filesystem::remove_all(_rightClicked->Directory.c_str());
+						_rightClicked = nullptr;
 					}
 					catch (const std::exception& e)
 					{
@@ -498,13 +515,6 @@ void EditorUi::FileExplorer::Draw()
 				ImGui::BeginGroup();
 				if (filter.PassFilter(items[index].c_str())) {
 					ImGui::ImageButton((ImTextureID)static_cast<uintptr_t>(f->Icon->GetData()), ImVec2(86, 86));
-					if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
-					{
-						ImGui::OpenPopup("RightClick");
-						_rightClicked = f;
-						rightclick = true;
-					}
-					RightClickWindow();
 					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 					{
 						try
@@ -537,6 +547,14 @@ void EditorUi::FileExplorer::Draw()
 					ImGui::TextUnformatted(f->Name.substr(0, 10).c_str());
 				}
 				ImGui::EndGroup();
+				// At The End Because if file deleted : crash.
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsItemHovered())
+				{
+					ImGui::OpenPopup("RightClick");
+					_rightClicked = f;
+					rightclick = true;
+				}
+				RightClickWindow();
 
 				auto windowSize = ImGui::GetWindowSize();
 				int rounded = (int)round(windowSize.x / 105);

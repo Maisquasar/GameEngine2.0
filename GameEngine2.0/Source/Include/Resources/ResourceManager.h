@@ -48,9 +48,16 @@ namespace Resources {
 			return nullptr;
 		}
 
+		// Basicaly _resource[filename] = res;
 		template<typename T> static void Add(std::string filename, T* res)
 		{
 			_resource[filename] = res;
+		}
+
+		template<typename T> static void ChangeKey(std::string lastName, std::string newName, T* res)
+		{
+			_resource.erase(lastName);
+			_resource[newName] = res;
 		}
 
 		template<typename T> static T* ResourcesPopup(const char* popupName)
