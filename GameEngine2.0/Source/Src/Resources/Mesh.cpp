@@ -38,19 +38,19 @@ void Resources::Mesh::Load(std::string filename)
 		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * _indices.size(), _indices.data(), GL_STATIC_DRAW);
 
 		// position attribute
-		glVertexAttribPointer(POS, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(POS);
+		glVertexAttribPointer(0U, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0U);
 		// normal attribute
-		glVertexAttribPointer(NML, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[3])));
-		glEnableVertexAttribArray(NML);
+		glVertexAttribPointer(1U, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[3])));
+		glEnableVertexAttribArray(1U);
 		// texture coord attribute
-		glVertexAttribPointer(TUV, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[6])));
-		glEnableVertexAttribArray(TUV);
+		glVertexAttribPointer(2U, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[6])));
+		glEnableVertexAttribArray(2U);
 
-		glVertexAttribPointer(TAN, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[8])));
-		glEnableVertexAttribArray(TAN);
+		glVertexAttribPointer(3U, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[8])));
+		glEnableVertexAttribArray(3U);
+		Loaded = true;
 	}
-	Loaded = true;
 }
 
 void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices)
@@ -104,6 +104,8 @@ void Resources::Mesh::Update(Math::Matrix4 MVP)
 	glBindVertexArray(_VAO);
 	for (auto Sub : SubMeshes)
 	{
+		if (!Sub.Material)
+			continue;
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
 		if (Sub.Material->GetTexture())

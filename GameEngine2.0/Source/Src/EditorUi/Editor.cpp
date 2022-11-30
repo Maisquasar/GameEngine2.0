@@ -1,4 +1,6 @@
 #include "Include/EditorUi/Editor.h"
+#include "Include/Debug/Log.h"
+
 EditorUi::FileExplorer EditorUi::Editor::_fileExplorer;
 EditorUi::FloatingFileExplorer EditorUi::Editor::_floatingFileExplorer;
 EditorUi::Hierarchy EditorUi::Editor::_hierarchy;

@@ -133,8 +133,9 @@ Math::Vector2 Utils::Loader::GetVec2(std::string line)
 	{
 		value = temp.substr(0, temp.find_first_of(' '));
 		out[i] = std::stof(value);
-		temp = temp.substr(temp.find_first_not_of(' '));
+		temp = temp.substr(temp.find_first_of(' ') + 1);
 	}
+	out = Math::Vector2(out.x, 1 - out.y);
 	return out;
 }
 
@@ -181,7 +182,7 @@ const char* Utils::Loader::ReadFile(const char* filename, uint32_t& size, bool& 
 	else
 	{
 		success = false;
-		LOG(Debug::LogType::L_ERROR, "File %s cannot be found", filename);
+		LOG(Debug::LogType::WARNING, "File %s cannot be found", filename);
 		return 0;
 	}
 }
@@ -270,6 +271,7 @@ void Utils::Loader::WriteMaterial(Resources::Material* material)
 {
 	std::string output;
 	output = StringFormat("Name : %s\n", material->GetName().c_str());
+	output += StringFormat("Editable : %d\n", material->IsEditable());
 	if (material->GetShader())
 		output += StringFormat("Shader : %s\n", material->GetShader()->GetPath().c_str());
 	if (material->GetTexture())
@@ -310,6 +312,11 @@ void Utils::Loader::LoadMaterial(std::string path)
 		if (prefix == "Nam")
 		{
 			material->SetName(Utils::Loader::GetString(currentLine));
+		}
+		else if (prefix == "Edi")
+		{
+			bool editable = Utils::Loader::GetInt(currentLine);
+			material->SetEditable(editable);
 		}
 		else if (prefix == "Sha")
 		{

@@ -23,7 +23,6 @@ void EditorUi::MainBar::Draw()
 			}
 			if (ImGui::MenuItem("Open Scene", "Ctrl+O"))
 			{
-				//TODO: Open Scene via Explorer + shortcut.
 				EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(true);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetState(EditorUi::FileExplorerState::Read);
 			}
@@ -33,7 +32,6 @@ void EditorUi::MainBar::Draw()
 			}
 			if (ImGui::MenuItem("Save as Scene", "Ctrl+Shift+S"))
 			{
-				//TODO: Save Scene via Explorer + shortcut.
 				EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(true);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetState(EditorUi::FileExplorerState::Write);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetTargetExtension(".scene");

@@ -9,8 +9,8 @@ namespace Resources
 	public:
 		Material();
 		~Material();
-		friend class Model;
-		friend class Mesh;
+
+		void ShowInInspector() override;
 
 		// Ptrs Getters
 		Math::Vector4* GetPtrAmbient() { return &_ambient; }
@@ -41,6 +41,9 @@ namespace Resources
 		}
 		void SetEditable(bool editable) { _editable = editable; }
 	private:
+		friend class Mesh;
+		friend class Model;
+
 		Resources::Shader* _shader = nullptr;
 		Resources::Texture* _texture = nullptr;
 		Math::Vector4 _ambient = Math::Vector4(0);

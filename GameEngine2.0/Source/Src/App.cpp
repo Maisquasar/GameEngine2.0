@@ -288,6 +288,9 @@ void App::CloseApp() { App::_shouldClose = true; }
 
 void App::LoadScene(std::string Path)
 {
+	if (EditorUi::Inspector().NodesSelected.size() > 0)
+		EditorUi::Inspector().NodesSelected.clear();
+	SceneNode->RemoveAllChildrens();
 	uint32_t size = 0;
 	bool sucess;
 	auto data = Utils::Loader::ReadFile(Path.c_str(), size, sucess);
@@ -296,7 +299,6 @@ void App::LoadScene(std::string Path)
 	uint32_t pos = 0;
 	// Skip First Line.
 	Utils::Loader::SkipLine(data, pos);
-	SceneNode->RemoveAllChildrens();
 	SceneNode->Load(data, pos);
 	delete[] data;
 }

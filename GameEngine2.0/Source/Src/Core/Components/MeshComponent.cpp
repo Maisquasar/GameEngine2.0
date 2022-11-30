@@ -49,7 +49,10 @@ void Core::Components::MeshComponent::ShowInInspector()
 					ImGui::Text("%d", row);
 					break;
 				case 1:
-					ImGui::Text(GetMesh()->SubMeshes[row].Material->GetName().c_str());
+					if (GetMesh()->SubMeshes[row].Material)
+						ImGui::Text(GetMesh()->SubMeshes[row].Material->GetName().c_str());
+					else
+						ImGui::Text("Missing Material");
 					break;
 				case 2:
 					ImGui::PushID(row);
