@@ -11,6 +11,8 @@ namespace Resources
 		~Material();
 
 		void ShowInInspector() override;
+		void Load(std::string filename) override;
+		void MultiThreadLoad(std::string filename);
 
 		// Ptrs Getters
 		Math::Vector4* GetPtrAmbient() { return &_ambient; }

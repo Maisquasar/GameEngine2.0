@@ -1,5 +1,6 @@
 #include "Include/EditorUi/Console.h"
 #include "Include/Utils/Loader.h"
+#include "Include/App.h"
 
 EditorUi::Console::Console()
 {
@@ -64,8 +65,10 @@ void EditorUi::Console::Draw()
 
 void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 {
+	App::ThreadManager.Lock();
 	auto Text = ConsoleText{ t, s };
 	_consoleText.push_back(Text);
+	App::ThreadManager.Unlock();
 }
 
 int EditorUi::Console::GetNumberOfLogType(Debug::LogType t)

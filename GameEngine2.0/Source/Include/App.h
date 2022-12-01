@@ -68,6 +68,21 @@ private:
 	void InitImGui();
 	void InitGlad();
 	void LoadResources();
+
+	template <typename T> void FilesLoad(std::string path, std::string ext)
+	{
+		for (const auto& entry : std::filesystem::directory_iterator(path)) {
+			if (entry.is_directory())
+			{
+				FilesLoad<T>(entry.path().string(), ext);
+			}
+			else if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == ext)
+			{
+				_resourceManager.Create<T>(entry.path().generic_string().data());
+			}
+		}
+	}
+
 	void MultiThreadLoad();
 };
 

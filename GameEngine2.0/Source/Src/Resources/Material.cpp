@@ -1,6 +1,7 @@
 #include "..\..\Include\Resources\Material.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/Utils/Loader.h"
+#include "Include/App.h"
 
 Resources::Material::Material()
 {
@@ -64,4 +65,68 @@ void Resources::Material::ShowInInspector()
 	{
 		Utils::Loader::WriteMaterial(this);
 	}
+}
+
+void Resources::Material::Load(std::string filename)
+{
+	App::ThreadManager.QueueJob(&Material::MultiThreadLoad, this, filename);
+}
+
+void Resources::Material::MultiThreadLoad(std::string filename)
+{
+	uint32_t size = 0;
+	bool sucess = false;
+	auto data = Utils::Loader::ReadFile(_path.c_str(), size, sucess);
+	if (!sucess)
+		return;
+	uint32_t pos = 0;
+	while (pos != size)
+	{
+		auto currentLine = Utils::Loader::GetLine(data, pos);
+		auto prefix = currentLine.substr(0, 3);
+		if (prefix == "Nam")
+		{
+			SetName(Utils::Loader::GetString(currentLine));
+		}
+		else if (prefix == "Edi")
+		{
+			bool editable = Utils::Loader::GetInt(currentLine);
+			SetEditable(editable);
+		}
+		else if (prefix == "Sha")
+		{
+			auto shaderPath = Utils::Loader::GetString(currentLine);
+			SetShader(Resources::ResourceManager::Get<Resources::Shader>(shaderPath.c_str()));
+		}
+		else if (prefix == "Tex")
+		{
+			auto texturePath = Utils::Loader::GetString(currentLine);
+			SetTexture(Resources::ResourceManager::Get<Resources::Texture>(texturePath.c_str()));
+		}
+		else if (prefix == "Amb")
+		{
+			auto amb = Utils::Loader::GetVec4(currentLine);
+			SetAmbient(amb);
+		}
+		else if (prefix == "Dif")
+		{
+			auto dif = Utils::Loader::GetVec4(currentLine);
+			SetDiffuse(dif);
+		}
+		else if (prefix == "Spe")
+		{
+			auto spe = Utils::Loader::GetVec4(currentLine);
+			SetSpecular(spe);
+		}
+		else if (prefix == "Shi")
+		{
+			auto shi = Utils::Loader::GetFloat(currentLine);
+			SetShiniess(shi);
+			break;
+		}
+		pos++;
+	}
+	SetInitialized();
+	LOG(Debug::LogType::INFO, "Successfully loaded Material : %s", _path.c_str());
+	delete[] data;
 }

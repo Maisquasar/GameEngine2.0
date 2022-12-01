@@ -193,19 +193,25 @@ void App::LoadResources()
 	defaultMat->SetName("DefaultMaterial");
 	_resourceManager.Add<Resources::Material>("DefaultMaterial", defaultMat);
 
+	/*
 	// Load Material
 	path = "Assets/Default/Models";
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
 		if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == "mat")
 			Utils::Loader::LoadMaterial(entry.path().generic_string().data());
 	}
+	*/
 
+	FilesLoad<Resources::Material>("Assets", "mat");
+	FilesLoad<Resources::Model>("Assets", "obj");
+	/*
 	// Load Models
 	path = "Assets/Default/Models";
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
 		if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == "obj")
 			_resourceManager.Create<Resources::Model>(entry.path().generic_string().data());
 	}
+	*/
 }
 
 void App::MultiThreadLoad()
