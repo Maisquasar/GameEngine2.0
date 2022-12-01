@@ -187,13 +187,7 @@ void App::LoadResources()
 	defaultMat->SetName("DefaultMaterial");
 	_resourceManager.Add<Resources::Material>("DefaultMaterial", defaultMat);
 
-	// Load Textures
-	/*
-	path = "Assets/Default/Textures";
-	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
-	}
-	*/
+	// Load Textures - Materials - Models.
 	FilesLoad("Assets");
 }
 
@@ -201,8 +195,7 @@ void App::MultiThreadLoad()
 {
 	if (_everythingIsLoaded)
 		return;
-	size_t loaded = 0;
-	size_t total = 0;
+	size_t loaded = 0, total = 0;
 	for (auto res : _resourceManager.GetAllResources())
 	{
 		if (auto Texture = Cast(Resources::Texture, res.second))
@@ -288,6 +281,12 @@ void App::Update()
 			_cameraEditor.AspectRatio = _framebuffer.Window->Size.x / _framebuffer.Window->Size.y;
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		if (this->_input.IsKeyPressed(ImGuiKey_F4))
+		{
+			PrintLog("Recompiling Shaders");
+			_resourceManager.RecompileShaders();
+		}
 
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
 

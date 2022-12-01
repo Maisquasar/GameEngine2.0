@@ -84,11 +84,7 @@ void Resources::Material::MultiThreadLoad(std::string filename)
 	{
 		auto currentLine = Utils::Loader::GetLine(data, pos);
 		auto prefix = currentLine.substr(0, 3);
-		if (prefix == "Nam")
-		{
-			SetName(Utils::Loader::GetString(currentLine));
-		}
-		else if (prefix == "Edi")
+		if (prefix == "Edi")
 		{
 			bool editable = Utils::Loader::GetInt(currentLine);
 			SetEditable(editable);

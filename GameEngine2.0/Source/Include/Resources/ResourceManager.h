@@ -60,6 +60,8 @@ namespace Resources {
 			_resource[newName] = res;
 		}
 
+		void RecompileShaders();
+
 		template<typename T> static T* ResourcesPopup(const char* popupName)
 		{
 			T* out = nullptr;

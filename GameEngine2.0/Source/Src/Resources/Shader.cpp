@@ -6,6 +6,7 @@ Resources::Shader::~Shader()
 {
 	glDeleteShader(VertexShader);
 	glDeleteShader(FragmentShader);
+	glDeleteProgram(Program);
 }
 
 bool Resources::Shader::SetShader(std::string filename)
@@ -27,8 +28,7 @@ bool Resources::Shader::SetShader(std::string filename)
 		return false;
 	}
 	else
-		LOG(Debug::LogType::INFO, "Successfully loaded Shader: %s", filename.c_str());
-
+		LOG(Debug::LogType::INFO, "Successfully Compiling Shader: %s", filename.c_str());
 	return true;
 }
 bool Resources::Shader::SetFragmentShader(std::string filename)
@@ -51,7 +51,7 @@ bool Resources::Shader::SetFragmentShader(std::string filename)
 		return false;
 	}
 	else
-		LOG(Debug::LogType::INFO, "Successfully loaded Shader: %s", filename.c_str());
+		LOG(Debug::LogType::INFO, "Successfully Compiling Shader: %s", filename.c_str());
 
 	return true;
 }
@@ -65,11 +65,16 @@ void Resources::Shader::Load(std::string filename)
 	}
 }
 
+void Resources::Shader::Recompile()
+{
+	SetShader(this->GetPath());
+	SetFragmentShader(this->GetPath());
+	Link();
+}
+
 
 bool Resources::Shader::Link()
 {
-	if (_linked)
-		return false;
 	// link shaders
 	Program = glCreateProgram();
 	glAttachShader(Program, VertexShader);

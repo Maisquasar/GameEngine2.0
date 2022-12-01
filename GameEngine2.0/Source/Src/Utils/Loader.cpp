@@ -270,7 +270,6 @@ void Utils::Loader::MtlLoader(std::string path)
 void Utils::Loader::WriteMaterial(Resources::Material* material)
 {
 	std::string output;
-	output = StringFormat("Name : %s\n", material->GetName().c_str());
 	output += StringFormat("Editable : %d\n", material->IsEditable());
 	if (material->GetShader())
 		output += StringFormat("Shader : %s\n", material->GetShader()->GetPath().c_str());
@@ -309,11 +308,7 @@ void Utils::Loader::LoadMaterial(std::string path)
 	{
 		auto currentLine = Utils::Loader::GetLine(data, pos);
 		auto prefix = currentLine.substr(0, 3);
-		if (prefix == "Nam")
-		{
-			material->SetName(Utils::Loader::GetString(currentLine));
-		}
-		else if (prefix == "Edi")
+		if (prefix == "Edi")
 		{
 			bool editable = Utils::Loader::GetInt(currentLine);
 			material->SetEditable(editable);

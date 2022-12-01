@@ -45,6 +45,8 @@ namespace Resources
 
 		void Load(std::string filename) override;
 
+		void Recompile();
+
 		// Link shader and set if is a screenShader.
 		bool Link();
 		// Initialize the Shader

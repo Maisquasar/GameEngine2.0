@@ -14,3 +14,15 @@ Resources::ResourceManager::~ResourceManager()
 	_resource.clear();
 }
 
+void Resources::ResourceManager::RecompileShaders()
+{
+	for (auto resources : _resource)
+	{
+		if (auto Shader = dynamic_cast<Resources::Shader*>(resources.second))
+		{
+			PrintLog("Recompiling Shader %s", Shader->GetPath().c_str());
+			Shader->Load("");
+		}
+	}
+}
+
