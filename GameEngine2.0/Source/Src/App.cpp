@@ -181,37 +181,20 @@ void App::LoadResources()
 		_resourceManager.Create<Resources::Shader>(entry.path().generic_string().data());
 	}
 
-	// Load Textures
-	path = "Assets/Default/Textures";
-	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
-	}
-
 	// Set-Up Default Material.
 	auto defaultMat = new Resources::Material();
 	defaultMat->SetEditable(false);
 	defaultMat->SetName("DefaultMaterial");
 	_resourceManager.Add<Resources::Material>("DefaultMaterial", defaultMat);
 
+	// Load Textures
 	/*
-	// Load Material
-	path = "Assets/Default/Models";
+	path = "Assets/Default/Textures";
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == "mat")
-			Utils::Loader::LoadMaterial(entry.path().generic_string().data());
+		_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
 	}
 	*/
-
-	FilesLoad<Resources::Material>("Assets", "mat");
-	FilesLoad<Resources::Model>("Assets", "obj");
-	/*
-	// Load Models
-	path = "Assets/Default/Models";
-	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == "obj")
-			_resourceManager.Create<Resources::Model>(entry.path().generic_string().data());
-	}
-	*/
+	FilesLoad("Assets");
 }
 
 void App::MultiThreadLoad()

@@ -4,6 +4,7 @@
 #include <vector>
 #include <Windows.h>
 #include <string>
+#include <mutex>
 #include "Include/EditorUi/Console.h"
 
 namespace Debug {
@@ -36,8 +37,7 @@ namespace Debug {
 				break;
 			}
 			Console.AddLine(type, buf);
-			printf(buf);
-			printf("\n");
+			printf(((std::string)buf + "\n").c_str());
 			SetConsoleTextAttribute(hConsole, 15);
 		}
 		static EditorUi::Console Console;

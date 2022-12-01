@@ -69,16 +69,25 @@ private:
 	void InitGlad();
 	void LoadResources();
 
-	template <typename T> void FilesLoad(std::string path, std::string ext)
+	void FilesLoad(std::string path)
 	{
 		for (const auto& entry : std::filesystem::directory_iterator(path)) {
+			auto ext = entry.path().string().substr(entry.path().string().find_last_of('.') + 1);
 			if (entry.is_directory())
 			{
-				FilesLoad<T>(entry.path().string(), ext);
+				FilesLoad(entry.path().string());
 			}
-			else if (entry.path().string().substr(entry.path().string().find_last_of('.') + 1) == ext)
+			else if (ext == "obj")
 			{
-				_resourceManager.Create<T>(entry.path().generic_string().data());
+				_resourceManager.Create<Resources::Model>(entry.path().generic_string().data());
+			}
+			else if (ext == "mat")
+			{
+				_resourceManager.Create<Resources::Material>(entry.path().generic_string().data());
+			}
+			else if (ext == "png" || ext == "jpg" || ext == "jpeg")
+			{
+				_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
 			}
 		}
 	}
