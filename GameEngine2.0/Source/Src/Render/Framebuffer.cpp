@@ -21,7 +21,7 @@ void Render::FrameBuffer::Initialize(Math::Integer2 size)
 	Tex = new Resources::Texture();
 	Tex->NewTexture("FrameBuffer");
 	Resources::ResourceManager::Add("FrameBuffer", Tex);
-	glActiveTexture(GL_TEXTURE0 + Tex->GetIndex());
+	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, Tex->GetDataPtr());
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
 

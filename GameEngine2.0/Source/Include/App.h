@@ -39,7 +39,7 @@ public:
 	static Math::Matrix4 GetVPMatrix() { return _VP; }
 
 	static Utils::ThreadManager ThreadManager;
-	static std::vector<Resources::Mesh*> MultiThreadMeshes;
+	static std::vector<Resources::IResource**> MultiThreadMeshes;
 private:
 	// Window
 	static GLFWwindow* _window;
@@ -49,6 +49,7 @@ private:
 	const char* _windowName = "GameEngine2.0";
 	static bool _shouldClose;
 	static Math::Matrix4 _VP;
+	bool _everythingIsLoaded = false;
 
 	// Ui
 	EditorUi::Editor _editorUi;

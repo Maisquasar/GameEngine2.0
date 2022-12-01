@@ -107,6 +107,7 @@ void Resources::Shader::Initialize()
 	_location[Location::L_POINT] = glGetUniformLocation(Program, "PointLight");
 	_location[Location::L_SPOT] = glGetUniformLocation(Program, "SpotLight");
 	_location[Location::L_COLOR] = glGetUniformLocation(Program, "OurColor");
+	_initialized = true;
 }
 
 int Resources::Shader::GetLocation(Location loc)

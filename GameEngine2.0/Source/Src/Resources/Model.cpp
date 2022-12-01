@@ -1,6 +1,7 @@
 #include "..\..\Include\Resources\Model.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
+#include "Include/Core/Components/MeshComponent.h"
 
 Resources::Model::Model()
 {
@@ -24,6 +25,21 @@ void Resources::Model::MultiThreadLoad(std::string filename)
 		ModelLoop(data, size);
 	LOG(Debug::LogType::INFO, "Successfully loaded Model : %s", _path.c_str());
 	delete[] data;
+}
+
+bool Resources::Model::IsInitialized()
+{
+	/*
+	for (auto child : Childrens)
+	{
+		if (auto mesh = dynamic_cast<Core::Components::MeshComponent*>(child->Components[0])->GetMesh())
+		{
+			if (!mesh->IsInitialized())
+				return false;
+		}
+	}
+	*/
+	return _initialized;
 }
 
 
@@ -107,6 +123,10 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		mesh.Load("");
 		mesh.SetPath(GetName() + "::" + mesh.GetName());
 		Resources::ResourceManager::Add(GetName() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
+		auto meshComp = new Core::Components::MeshComponent();
+		meshComp->SetMesh(mesh.Clone());
+		MeshNode->AddComponent(meshComp);
 		this->AddChildren(MeshNode);
+		_initialized = true;
 	}
 }

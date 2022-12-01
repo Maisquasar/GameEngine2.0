@@ -351,6 +351,7 @@ void Utils::Loader::LoadMaterial(std::string path)
 		}
 		pos++;
 	}
+	material->SetInitialized();
 	Resources::ResourceManager::Add(material->GetPath(), material);
 	LOG(Debug::LogType::INFO, "Successfully loaded Material : %s", path.c_str());
 	delete[] data;

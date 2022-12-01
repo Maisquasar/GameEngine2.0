@@ -16,7 +16,9 @@ namespace Resources {
 
 		std::string GetPath() { return _path; }
 		std::string GetName() { return _name; }
-		bool IsInitialized() { return _initialized; }
+		virtual bool IsInitialized() { return _initialized; }
+
+		void SetInitialized() { _initialized = true; }
 
 		bool Loaded = false;
 	protected:

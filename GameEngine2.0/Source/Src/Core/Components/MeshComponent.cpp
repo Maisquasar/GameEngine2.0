@@ -160,17 +160,17 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 			{
 				_currentMesh = new Resources::Mesh();
 				_currentMesh->SetPath(MeshPath);
-				App::MultiThreadMeshes.push_back(GetMesh());
+				App::MultiThreadMeshes.push_back(&_currentMesh);
 			}
 		}
 		else if (currentLine.substr(0, 7) == "SubMesh")
 		{
 			auto SubMeshMaterialPath = Utils::Loader::GetString(currentLine);
 			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(SubMeshMaterialPath.c_str())) {
-				if (this->GetMesh()->SubMeshes.size() <= SubMeshIndex) {
-					this->GetMesh()->SubMeshes.push_back(Resources::SubMesh());
+				if (GetMesh()->SubMeshes.size() <= SubMeshIndex) {
+					GetMesh()->SubMeshes.push_back(Resources::SubMesh());
 				}
-				this->GetMesh()->SubMeshes[SubMeshIndex].Material = mat;
+				GetMesh()->SubMeshes[SubMeshIndex].Material = mat;
 				SubMeshIndex++;
 			}
 		}

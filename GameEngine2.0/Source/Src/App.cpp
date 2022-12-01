@@ -1,6 +1,7 @@
 #include "Include/App.h"
 #include <STB_Image/stb_image.h>
 
+#pragma region Static Variables
 // Static Variables.
 GLFWwindow* App::_window = nullptr;
 const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
@@ -9,9 +10,10 @@ Math::Matrix4 App::_VP;
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
 Utils::ThreadManager App::ThreadManager = Utils::ThreadManager();	
-std::vector<Resources::Mesh*> App::MultiThreadMeshes;
+std::vector<Resources::IResource**> App::MultiThreadMeshes;
+#pragma endregion
 
-
+#pragma region Callbacks
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
 	// ignore non-significant error/warning codes
@@ -59,10 +61,14 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 	// Resize the FrameBuffer.
 	if (width * height != 0) {
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+		glActiveTexture(GL_TEXTURE0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	}
 }
+#pragma endregion
+
+#pragma region Initalisation
 
 App::App() {}
 App::App(const char* Name, int width, int height)
@@ -165,7 +171,6 @@ const GLFWvidmode* App::GetMonitorVideoMode()
 	return _videoMode;
 }
 
-
 void App::LoadResources()
 {
 	_framebuffer.Initialize(this->GetWindowSize());
@@ -205,6 +210,10 @@ void App::LoadResources()
 
 void App::MultiThreadLoad()
 {
+	if (_everythingIsLoaded)
+		return;
+	size_t loaded = 0;
+	size_t total = 0;
 	for (auto res : _resourceManager.GetAllResources())
 	{
 		if (auto Texture = Cast(Resources::Texture, res.second))
@@ -219,26 +228,39 @@ void App::MultiThreadLoad()
 			if (!Mesh->IsInitialized() && Mesh->Loaded)
 			{
 				Mesh->Initialize();
-				for (auto mesh : this->MultiThreadMeshes)
+				int ResIndex = 0;
+				for (auto res : this->MultiThreadMeshes)
 				{
-					if (mesh->GetPath() == Mesh->GetPath())
+					if ((*res)->GetPath() == Mesh->GetPath())
 					{
-						auto waitingMesh = Cast(Resources::Mesh, mesh);
-						Resources::Mesh* tmp = Cast(Resources::Mesh, Mesh->Clone());
+						// Clone Mesh That was not loaded on scene loading.
+						auto tmp = Cast(Resources::Mesh, Mesh->Clone());
+						auto resMesh = Cast(Resources::Mesh, *res);
 						int index = 0;
 						for (auto Sub : tmp->SubMeshes)
 						{
-							Sub = waitingMesh->SubMeshes[index];
+							Sub = resMesh->SubMeshes[index];
 							index++;
 						}
-						*waitingMesh = *tmp;
+						delete (*res);
+						(*res) = tmp;
+						loaded++;
+						MultiThreadMeshes.erase(MultiThreadMeshes.begin() + ResIndex);
 					}
+					ResIndex++;
 				}
 			}
 		}
+		if (res.second->IsInitialized())
+			loaded++;
+		total++;
 	}
+	total += this->MultiThreadMeshes.size();
+	if (loaded == total)
+		_everythingIsLoaded = true;
 
 }
+#pragma endregion
 
 void App::Update()
 {

@@ -16,6 +16,7 @@ namespace Core::Components {
 		void Update() override;
 
 		Resources::Mesh* GetMesh() { return dynamic_cast<Resources::Mesh*>(_currentMesh); }
+		void SetMesh(Resources::IResource* mesh) { _currentMesh = mesh; }
 
 		void Save(std::string space, std::string& content) override;
 		void Load(const char* data, uint32_t& pos) override;
