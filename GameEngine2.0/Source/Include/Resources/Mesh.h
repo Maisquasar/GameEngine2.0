@@ -8,7 +8,7 @@
 #define TAN 3
 namespace Core::Components
 {
-	class Mesh;
+	class MeshComponent;
 }
 namespace Resources {
 	struct SubMesh
@@ -24,6 +24,9 @@ namespace Resources {
 		~Mesh();
 
 		void Load(std::string filename) override;
+		void MultiThreadLoading(std::string filename);
+		void Initialize() override;
+		
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
 		// Call on MeshComponent Update.
 		void Update(Math::Matrix4 MVP);
@@ -41,6 +44,6 @@ namespace Resources {
 		std::vector<SubMesh> SubMeshes;
 
 	private:
-		friend class Core::Components::Mesh;
+		friend class Core::Components::MeshComponent;
 	};
 }

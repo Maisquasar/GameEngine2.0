@@ -1,0 +1,8 @@
+Name : NewMaterial
+Editable : 1
+Shader : Assets/Default/Shaders/UnlitShader
+Texture : Assets/Default/Textures/Mario.png
+Ambient : 0.000000 0.000000 0.000000 0.000000
+Diffuse : 1.000000 1.000000 1.000000 1.000000
+Specular : 0.000000 0.000000 0.000000 0.000000
+Shininess : 32.000000

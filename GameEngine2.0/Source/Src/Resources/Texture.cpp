@@ -1,4 +1,5 @@
 #include "Include/Resources/Texture.h"
+#include "Include/App.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <STB_Image/stb_image.h>
 
@@ -8,15 +9,21 @@ Resources::Texture::~Texture() {}
 
 void Resources::Texture::NewTexture(std::string filename)
 {
-	_index = TextureData;
-	TextureData++;
+	_index = Resources::ResourceManager::TextureIndex;
+	Resources::ResourceManager::TextureIndex++;
 	this->_name = filename;
+	this->_initialized = true;
 }
 
 void Resources::Texture::Load(std::string filename)
 {
-	_index = TextureData;
-	TextureData++;
+	App::ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename);
+}
+
+void Resources::Texture::MultiThreadLoading(std::string filename)
+{
+	_index = Resources::ResourceManager::TextureIndex;
+	Resources::ResourceManager::TextureIndex++;
 	int NrChannels;
 	this->_data = stbi_load(_path.c_str(), &_width, &_height, &NrChannels, 4);
 	if (_data == nullptr) {
@@ -24,8 +31,11 @@ void Resources::Texture::Load(std::string filename)
 		LOG(Debug::LogType::L_ERROR, "Can't load Texture: \"%s\" : %s", _path.c_str(), fail);
 		return;
 	}
-	this->Loaded = true;
+	Loaded = true;
+}
 
+void Resources::Texture::Initialize()
+{
 	glActiveTexture(GL_TEXTURE0 + _index);
 	glGenTextures(1, &_textureData);
 	glBindTexture(GL_TEXTURE_2D, _textureData);
@@ -33,4 +43,5 @@ void Resources::Texture::Load(std::string filename)
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(_data);
 	LOG(Debug::LogType::INFO, "Successfully loaded Texture: %s With Id : %d", _path.c_str(), _index);
+	_initialized = true;
 }

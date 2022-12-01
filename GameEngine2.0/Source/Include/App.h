@@ -15,7 +15,7 @@
 #include "Include/Render/Framebuffer.h"
 #include "Include/Core/Node.h"
 #include "Include/Resources/Model.h"
-
+#include "Include/Utils/ThreadManager.h"
 class App
 {
 public:
@@ -37,6 +37,9 @@ public:
 	static std::shared_ptr<Core::Node> SceneNode;
 	static Core::Components::Data Components;
 	static Math::Matrix4 GetVPMatrix() { return _VP; }
+
+	static Utils::ThreadManager ThreadManager;
+	static std::vector<Resources::Mesh*> MultiThreadMeshes;
 private:
 	// Window
 	static GLFWwindow* _window;
@@ -64,6 +67,7 @@ private:
 	void InitImGui();
 	void InitGlad();
 	void LoadResources();
+	void MultiThreadLoad();
 };
 
 //TODO: Multi-Thread Resource Loading

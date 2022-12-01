@@ -1,5 +1,6 @@
 #include "..\..\Include\Resources\Model.h"
 #include "Include/Resources/ResourceManager.h"
+#include "Include/App.h"
 
 Resources::Model::Model()
 {
@@ -11,6 +12,11 @@ Resources::Model::~Model()
 
 void Resources::Model::Load(std::string filename)
 {
+	App::ThreadManager.QueueJob(&Model::MultiThreadLoad, this, filename);
+}
+
+void Resources::Model::MultiThreadLoad(std::string filename)
+{
 	uint32_t size = 0;
 	bool sucess = false;
 	auto data = Utils::Loader::ReadFile(_path.c_str(), size, sucess);
@@ -19,6 +25,7 @@ void Resources::Model::Load(std::string filename)
 	LOG(Debug::LogType::INFO, "Successfully loaded Model : %s", _path.c_str());
 	delete[] data;
 }
+
 
 void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 {

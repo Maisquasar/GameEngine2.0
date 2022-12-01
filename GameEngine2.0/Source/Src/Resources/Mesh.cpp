@@ -22,7 +22,11 @@ void Resources::Mesh::Load(std::string filename)
 
 		this->Vertices = _vertices;
 	}
+	Loaded = true;
+}
 
+void Resources::Mesh::Initialize()
+{
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
 	//glGenBuffers(1, &EBO);
@@ -49,8 +53,8 @@ void Resources::Mesh::Load(std::string filename)
 
 		glVertexAttribPointer(3U, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[8])));
 		glEnableVertexAttribArray(3U);
-		Loaded = true;
 	}
+	_initialized = true;
 }
 
 void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices)

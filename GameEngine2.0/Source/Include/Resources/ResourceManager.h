@@ -82,7 +82,9 @@ namespace Resources {
 			}
 			return out;
 		}
-		
+		static std::unordered_map<std::string, Resources::IResource*> GetAllResources() { return _resource; }
+		static int TextureIndex;
+
 	private:
 		static std::unordered_map<std::string, Resources::IResource*> _resource;
 

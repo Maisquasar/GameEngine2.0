@@ -9,16 +9,20 @@ namespace Resources {
 		virtual void Load(std::string filename) {}
 		virtual IResource* Clone() const = 0;
 		virtual void ShowInInspector() {}
+		virtual void Initialize() {}
 
 		void SetPath(std::string path) { _path = path; }
 		void SetName(std::string name) { _name = name; }
 
 		std::string GetPath() { return _path; }
 		std::string GetName() { return _name; }
+		bool IsInitialized() { return _initialized; }
+
 		bool Loaded = false;
 	protected:
 		std::string _path;
 		std::string _name;
+		bool _initialized = false;
 	};
 
 	template <typename Derived>

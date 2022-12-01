@@ -1,11 +1,16 @@
 #include "Include/App.h"
 #include <STB_Image/stb_image.h>
+
+// Static Variables.
 GLFWwindow* App::_window = nullptr;
 const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
 bool App::_shouldClose = false;
 Math::Matrix4 App::_VP;
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
+Utils::ThreadManager App::ThreadManager = Utils::ThreadManager();	
+std::vector<Resources::Mesh*> App::MultiThreadMeshes;
+
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
@@ -54,7 +59,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 	// Resize the FrameBuffer.
 	if (width * height != 0) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	}
 }
@@ -163,6 +168,8 @@ const GLFWvidmode* App::GetMonitorVideoMode()
 
 void App::LoadResources()
 {
+	_framebuffer.Initialize(this->GetWindowSize());
+
 	// Load Shaders
 	std::string path = "Assets/Default/Shaders";
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
@@ -196,10 +203,46 @@ void App::LoadResources()
 	}
 }
 
+void App::MultiThreadLoad()
+{
+	for (auto res : _resourceManager.GetAllResources())
+	{
+		if (auto Texture = Cast(Resources::Texture, res.second))
+		{
+			if (!Texture->IsInitialized() && Texture->Loaded)
+			{
+				Texture->Initialize();
+			}
+		}
+		else if (auto Mesh = Cast(Resources::Mesh, res.second))
+		{
+			if (!Mesh->IsInitialized() && Mesh->Loaded)
+			{
+				Mesh->Initialize();
+				for (auto mesh : this->MultiThreadMeshes)
+				{
+					if (mesh->GetPath() == Mesh->GetPath())
+					{
+						auto waitingMesh = Cast(Resources::Mesh, mesh);
+						Resources::Mesh* tmp = Cast(Resources::Mesh, Mesh->Clone());
+						int index = 0;
+						for (auto Sub : tmp->SubMeshes)
+						{
+							Sub = waitingMesh->SubMeshes[index];
+							index++;
+						}
+						*waitingMesh = *tmp;
+					}
+				}
+			}
+		}
+	}
+
+}
+
 void App::Update()
 {
 	this->Components.Initialize();
-	_framebuffer.Initialize(this->GetWindowSize());
 	_editorUi.Initialize();
 #if 1
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
@@ -214,6 +257,7 @@ void App::Update()
 
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
+		MultiThreadLoad();
 		// Begin Frame
 		glfwPollEvents();
 		ImGui_ImplOpenGL3_NewFrame();
@@ -276,6 +320,7 @@ void App::ClearApp()
 	// Cleanup
 	Components.Destroy();
 
+	App::ThreadManager.Terminate();
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

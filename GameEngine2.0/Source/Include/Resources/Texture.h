@@ -5,7 +5,6 @@
 #include "IResource.h"
 
 namespace Resources {
-	static int TextureData = 0;
 	class Texture : public BaseResource<Texture>
 	{
 	public:
@@ -15,6 +14,10 @@ namespace Resources {
 		void NewTexture(std::string filename);
 
 		void Load(std::string filename) override;
+
+		void MultiThreadLoading(std::string filename);
+
+		void Initialize() override;
 
 		int GetIndex() { return _index; }
 		GLuint GetData() { return _textureData; }
