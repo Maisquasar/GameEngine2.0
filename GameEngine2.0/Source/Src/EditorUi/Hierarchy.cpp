@@ -54,8 +54,9 @@ void EditorUi::Hierarchy::Draw()
 			for (auto Node : Inspector::NodesSelected)
 			{
 				Node->RemoveFromParent();
-				Node = nullptr;
+				//Node = nullptr;
 			}
+			Inspector::NodesSelected.clear();
 		}
 		ImGui::EndChild();
 	}
