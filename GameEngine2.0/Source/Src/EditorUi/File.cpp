@@ -86,7 +86,6 @@ void EditorUi::File::ShowInInspector()
 		return;
 	try
 	{
-
 		ResourceLink->ShowInInspector();
 	}
 	catch (const std::exception&)

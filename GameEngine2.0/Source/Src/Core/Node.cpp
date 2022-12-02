@@ -7,7 +7,7 @@ Core::Node::Node()
 	this->Transform.GameObject = this;
 }
 
-Core::Node::~Node() 
+Core::Node::~Node()
 {
 	for (auto component : Components)
 	{
@@ -62,7 +62,20 @@ void Core::Node::UpdateSelfAndChilds()
 	for (auto component : this->Components)
 	{
 		if (component->IsEnable())
+		{
+			switch (App::GetGameState())
+			{
+			case GameState::Play:
+				component->GameUpdate();
+				break;
+			case GameState::Editor:
+				component->EditorUpdate();
+				break;
+			default:
+				break;
+			}
 			component->Update();
+		}
 	}
 	for (auto child : this->Childrens)
 	{

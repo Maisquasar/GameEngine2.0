@@ -31,6 +31,7 @@ namespace EditorUi {
 
 		void Draw() override;
 		void AddLine(Debug::LogType, std::string);
+		void Clear();
 	private:
 		std::vector<ConsoleText> _consoleText;
 		bool _showInfo = true;

@@ -163,10 +163,10 @@ void EditorUi::FloatingFileExplorer::DrawAndSave(std::string data)
 			std::ofstream _file;
 			auto dir = _current->Directory + "/" + FileName + _targetExtension;
 			_file.open(dir);
-			LOG(Debug::LogType::INFO, "Saving Scene into %s", dir.c_str());
 			this->SetOpen(false);
 			this->SetTargetExtension("");
 			_file.write(data.c_str(), data.size());
+			LOG(Debug::LogType::INFO, "Saving File into %s", dir.c_str());
 
 		}
 	}
@@ -384,6 +384,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 							delete _rightClicked->ResourceLink;
 						_rightClicked->ResourceLink = nullptr;
 						_rightClicked = nullptr;
+						EditorUi::Inspector::SetFileSelected(nullptr);
 					}
 					catch (const std::exception& e)
 					{

@@ -71,6 +71,11 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 	App::ThreadManager.Unlock();
 }
 
+void EditorUi::Console::Clear()
+{
+	_consoleText.clear();
+}
+
 int EditorUi::Console::GetNumberOfLogType(Debug::LogType t)
 {
 	int n = 0;

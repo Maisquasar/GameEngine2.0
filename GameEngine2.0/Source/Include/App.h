@@ -16,6 +16,13 @@
 #include "Include/Core/Node.h"
 #include "Include/Resources/Model.h"
 #include "Include/Utils/ThreadManager.h"
+
+enum class GameState
+{
+	Play,
+	Editor,
+};
+
 class App
 {
 public:
@@ -29,27 +36,36 @@ public:
 	static void CloseApp();
 
 	static void LoadScene(std::string Path);
-	static void SaveScene(std::string Path);
+	static void LoadTemporaryScene();
+	static void SaveScene();
+
+	static void BeginPlay();
+	static void EndPlay();
 
 	static GLFWwindow* GetWindow() { return _window; }
 	static Math::Integer2 GetWindowSize();
 	static const GLFWvidmode* GetMonitorVideoMode();
-	static std::shared_ptr<Core::Node> SceneNode;
-	static Core::Components::Data Components;
 	static Math::Matrix4 GetVPMatrix() { return _VP; }
+	static GameState GetGameState() { return _gameState; }
+	static std::string GetCurrentScenePath() { _currentScenePath; }
 
+		static std::shared_ptr<Core::Node> SceneNode;
+	static Core::Components::Data Components;
 	static Utils::ThreadManager ThreadManager;
 	static std::vector<Resources::IResource**> MultiThreadMeshes;
 private:
 	// Window
 	static GLFWwindow* _window;
 	static const GLFWvidmode* _videoMode;
-	int _width = 800;
-	int _height = 600;
-	const char* _windowName = "GameEngine2.0";
 	static bool _shouldClose;
 	static Math::Matrix4 _VP;
+	static GameState _gameState;
+	static std::string _currentScenePath;
+
+	const char* _windowName = "GameEngine2.0";
 	bool _everythingIsLoaded = false;
+	int _width = 800;
+	int _height = 600;
 
 	// Ui
 	EditorUi::Editor _editorUi;
@@ -63,34 +79,13 @@ private:
 	// Render
 	Render::CameraEditor _cameraEditor;
 	Render::FrameBuffer _framebuffer;
-	
+
 	void InitGlfw();
 	void InitImGui();
 	void InitGlad();
 	void LoadResources();
 
-	void FilesLoad(std::string path)
-	{
-		for (const auto& entry : std::filesystem::directory_iterator(path)) {
-			auto ext = entry.path().string().substr(entry.path().string().find_last_of('.') + 1);
-			if (entry.is_directory())
-			{
-				FilesLoad(entry.path().string());
-			}
-			else if (ext == "obj")
-			{
-				_resourceManager.Create<Resources::Model>(entry.path().generic_string().data());
-			}
-			else if (ext == "mat")
-			{
-				_resourceManager.Create<Resources::Material>(entry.path().generic_string().data());
-			}
-			else if (ext == "png" || ext == "jpg" || ext == "jpeg")
-			{
-				_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
-			}
-		}
-	}
+	void FilesLoad(std::string path);
 
 	void MultiThreadLoad();
 };

@@ -23,6 +23,7 @@ namespace EditorUi {
 		static FloatingFileExplorer* GetFloatingFileExplorer() { return &_floatingFileExplorer; }
 		static Hierarchy* GetHierarchy() { return &_hierarchy; }
 		static Inspector* GetInspector() { return &_inspector; }
+		static Console* GetConsole() { return &Debug::Log::Console; }
 	private:
 		MainBar _mainBar;
 		static Hierarchy _hierarchy;

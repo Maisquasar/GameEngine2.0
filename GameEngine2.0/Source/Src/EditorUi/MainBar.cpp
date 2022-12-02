@@ -28,7 +28,7 @@ void EditorUi::MainBar::Draw()
 			}
 			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 			{
-				App::SaveScene("DefaultScene");
+				App::SaveScene();
 			}
 			if (ImGui::MenuItem("Save as Scene", "Ctrl+Shift+S"))
 			{
@@ -50,6 +50,22 @@ void EditorUi::MainBar::Draw()
 			ImGui::Checkbox("File Explorer", Editor::GetFileExplorer()->IsOpen());
 			ImGui::Checkbox("Inspector", Editor::GetInspector()->IsOpen());
 			ImGui::EndMenu();
+		}
+		ImGui::SetCursorPosX((App::GetWindowSize().x / 2) - 25);
+		if (ImGui::MenuItem("I>"))
+		{
+			if (App::GetGameState() != GameState::Play)
+			{
+				App::BeginPlay();
+				EditorUi::Editor::GetConsole()->Clear();
+			}
+		}
+		if (ImGui::MenuItem("||"))
+		{
+			if (App::GetGameState() != GameState::Editor)
+			{
+				App::EndPlay();
+			}
 		}
 	}
 	ImGui::EndMainMenuBar();

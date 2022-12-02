@@ -7,6 +7,8 @@ GLFWwindow* App::_window = nullptr;
 const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
 bool App::_shouldClose = false;
 Math::Matrix4 App::_VP;
+GameState App::_gameState = GameState::Editor;
+std::string App::_currentScenePath;
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
 Utils::ThreadManager App::ThreadManager = Utils::ThreadManager();	
@@ -191,6 +193,49 @@ void App::LoadResources()
 	FilesLoad("Assets");
 }
 
+void App::FilesLoad(std::string path)
+{
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		auto ext = entry.path().string().substr(entry.path().string().find_last_of('.') + 1);
+		if (entry.is_directory())
+		{
+			FilesLoad(entry.path().string());
+		}
+		else if (ext == "obj")
+		{
+			_resourceManager.Create<Resources::Model>(entry.path().generic_string().data());
+		}
+		else if (ext == "mat")
+		{
+			_resourceManager.Create<Resources::Material>(entry.path().generic_string().data());
+		}
+		else if (ext == "png" || ext == "jpg" || ext == "jpeg")
+		{
+			_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
+		}
+	}
+}
+
+void App::BeginPlay()
+{
+	_gameState = GameState::Play;
+	// Save Scene To Temporary Scene.
+	std::ofstream _file;
+	std::string filepath = "Assets/Default/Scenes/TemporaryScene.scene";
+	_file.open(filepath);
+	std::string content;
+	SceneNode->Save("", content);
+	_file.write(content.c_str(), content.size());
+	_file.close();
+}
+
+void App::EndPlay()
+{
+	_gameState = GameState::Editor;
+	LoadTemporaryScene();
+	std::filesystem::remove_all("Assets/Default/Scenes/TemporaryScene.scene");
+}
+
 void App::MultiThreadLoad()
 {
 	if (_everythingIsLoaded)
@@ -354,16 +399,37 @@ void App::LoadScene(std::string Path)
 	uint32_t pos = 0;
 	// Skip First Line.
 	Utils::Loader::SkipLine(data, pos);
+	_currentScenePath = Path;
 	SceneNode->Load(data, pos);
 	delete[] data;
 }
 
-void App::SaveScene(std::string Name)
+void App::LoadTemporaryScene()
+{
+	std::string Path = "Assets/Default/Scenes/TemporaryScene.scene";
+	if (EditorUi::Inspector().NodesSelected.size() > 0)
+		EditorUi::Inspector().NodesSelected.clear();
+	SceneNode->RemoveAllChildrens();
+	uint32_t size = 0;
+	bool sucess;
+	auto data = Utils::Loader::ReadFile(Path.c_str(), size, sucess);
+	if (!sucess)
+		return;
+	uint32_t pos = 0;
+	// Skip First Line.
+	Utils::Loader::SkipLine(data, pos);
+	SceneNode->Load(data, pos);
+	delete[] data;
+}
+
+void App::SaveScene()
 {
 	std::ofstream _file;
-	std::string filepath = ("Assets/Default/Scenes/" + Name + ".scene");
+	std::string filepath = _currentScenePath;
 	_file.open(filepath);
 	std::string content;
 	SceneNode->Save("", content);
 	_file.write(content.c_str(), content.size());
+	_file.close();
+	PrintLog("Scene Saved at %s", filepath.c_str());
 }
