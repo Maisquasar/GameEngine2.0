@@ -235,8 +235,9 @@ void App::BeginPlay()
 void App::EndPlay()
 {
 	_gameState = GameState::Editor;
-	LoadTemporaryScene();
-	std::filesystem::remove_all("Assets/Default/Scenes/TemporaryScene.scene");
+	auto file = "Assets/Default/Scenes/TemporaryScene.scene";
+	LoadTemporaryScene(file);
+	std::filesystem::remove_all(file);
 }
 
 void App::MultiThreadLoad()
@@ -387,50 +388,56 @@ void App::ClearApp()
 
 void App::CloseApp() { App::_shouldClose = true; }
 
+#pragma region Load/Save
+
 void App::LoadScene(std::string Path)
 {
 	if (EditorUi::Inspector().NodesSelected.size() > 0)
 		EditorUi::Inspector().NodesSelected.clear();
 	SceneNode->RemoveAllChildrens();
+	_currentScenePath = Path;
+	SceneNode = std::shared_ptr<Core::Node>(LoadNode(Path));
+}
+
+Core::Node* App::LoadNode(std::string Path)
+{
+	auto node = new Core::Node();
 	uint32_t size = 0;
 	bool sucess;
 	auto data = Utils::Loader::ReadFile(Path.c_str(), size, sucess);
 	if (!sucess)
-		return;
+		nullptr;
 	uint32_t pos = 0;
 	// Skip First Line.
 	Utils::Loader::SkipLine(data, pos);
-	_currentScenePath = Path;
-	SceneNode->Load(data, pos);
+	node->Load(data, pos);
 	delete[] data;
+	return node;
 }
 
-void App::LoadTemporaryScene()
+void App::LoadTemporaryScene(std::string Path)
 {
-	std::string Path = "Assets/Default/Scenes/TemporaryScene.scene";
 	if (EditorUi::Inspector().NodesSelected.size() > 0)
 		EditorUi::Inspector().NodesSelected.clear();
 	SceneNode->RemoveAllChildrens();
-	uint32_t size = 0;
-	bool sucess;
-	auto data = Utils::Loader::ReadFile(Path.c_str(), size, sucess);
-	if (!sucess)
-		return;
-	uint32_t pos = 0;
-	// Skip First Line.
-	Utils::Loader::SkipLine(data, pos);
-	SceneNode->Load(data, pos);
-	delete[] data;
+	SceneNode = std::shared_ptr<Core::Node>(LoadNode(Path));
 }
 
 void App::SaveScene()
 {
-	std::ofstream _file;
-	std::string filepath = _currentScenePath;
-	_file.open(filepath);
-	std::string content;
-	SceneNode->Save("", content);
-	_file.write(content.c_str(), content.size());
-	_file.close();
-	PrintLog("Scene Saved at %s", filepath.c_str());
+	SaveNode(_currentScenePath, SceneNode.get());
+	PrintLog("Scene Saved at %s", _currentScenePath.c_str());
 }
+void App::SaveNode(std::string Path, Core::Node* node)
+{
+	// Save Scene To Temporary Scene.
+	std::ofstream _file;
+	_file.open(Path);
+	if (_file) {
+		std::string content;
+		node->Save("", content);
+		_file.write(content.c_str(), content.size());
+		_file.close();
+	}
+}
+#pragma endregion

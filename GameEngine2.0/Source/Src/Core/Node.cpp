@@ -28,6 +28,26 @@ void Core::Node::AddComponent(Core::Components::Component* comp)
 	comp->GameObject = this;
 }
 
+void Core::Node::RemoveChildren(Node* node)
+{
+	int index = 0;
+	for (auto child : Childrens)
+	{
+		if (node == child.get())
+		{
+			Childrens.erase(Childrens.begin() + index);
+		}
+		index++;
+	}
+}
+
+void Core::Node::RemoveFromParent()
+{
+	if (!Parent)
+		return;
+	Parent->RemoveChildren(this);
+}
+
 void Core::Node::RemoveComponent(Core::Components::Component* comp)
 {
 	int index = 0;
@@ -199,8 +219,10 @@ void Core::Node::Load(const char* data, uint32_t& pos)
 					auto newComponent = component->Clone();
 					newComponent->Load(data, pos);
 					this->AddComponent(newComponent);
+					break;
 				}
 			}
+			continue;
 		}
 		else if (currentLine.substr(0, 8) == "#EndNode")
 		{

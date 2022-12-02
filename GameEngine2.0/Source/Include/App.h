@@ -36,8 +36,10 @@ public:
 	static void CloseApp();
 
 	static void LoadScene(std::string Path);
-	static void LoadTemporaryScene();
+	static Core::Node* LoadNode(std::string Path);
+	static void LoadTemporaryScene(std::string Path);
 	static void SaveScene();
+	static void SaveNode(std::string Path, Core::Node* node);
 
 	static void BeginPlay();
 	static void EndPlay();
