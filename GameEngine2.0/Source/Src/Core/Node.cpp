@@ -46,6 +46,15 @@ void Core::Node::RemoveFromParent()
 	if (!Parent)
 		return;
 	Parent->RemoveChildren(this);
+	int index = 0;
+	for (auto node : EditorUi::Editor::GetInspector()->NodesSelected)
+	{
+		if (node == this)
+		{
+			EditorUi::Editor::GetInspector()->NodesSelected.erase(EditorUi::Editor::GetInspector()->NodesSelected.begin() + index);
+		}
+		index++;
+	}
 }
 
 void Core::Node::RemoveComponent(Core::Components::Component* comp)
@@ -138,6 +147,10 @@ void Core::Node::ShowInHierarchy(int index)
 			EditorUi::Inspector::NodesSelected.clear();
 		}
 		EditorUi::Inspector::AddNodeSelected(this);
+	}
+	if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+	{
+		EditorUi::Editor::GetHierarchy()->SetRightClicked(this);
 	}
 
 	if (_open)

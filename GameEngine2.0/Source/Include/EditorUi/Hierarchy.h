@@ -14,8 +14,12 @@ namespace EditorUi {
 		~Hierarchy();
 
 		void Draw() override;
+		void RightClickWindow();
+		void SetRightClicked(Core::Node* node);
 
 	private:
+		Core::Node* _rightClicked = nullptr;
+		bool _openRightClick;
 
 	};
 }
