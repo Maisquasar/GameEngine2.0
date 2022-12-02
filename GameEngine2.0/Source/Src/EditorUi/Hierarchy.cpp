@@ -20,12 +20,6 @@ void EditorUi::Hierarchy::Draw()
 		{
 			_openRightClick = false;
 			ImGui::OpenPopup("RightClick");
-			if (EditorUi::Editor::GetInspector()->IsSelected(_rightClicked[0]))
-			{
-				_rightClicked.clear();
-				for (auto selected : EditorUi::Editor::GetInspector()->NodesSelected)
-					_rightClicked.push_back(selected);
-			}
 		}
 		RightClickWindow();
 		// Copy
@@ -49,14 +43,10 @@ void EditorUi::Hierarchy::Draw()
 			PrintLog("Paste");
 		}
 		// Delete
-		else if (Inspector::NodesSelected.size() >= 1 && (Utils::Input::IsKeyPressed(ImGuiKey_Delete)))
+		else if (Inspector::NodesSelected.size() == 1 && (Utils::Input::IsKeyPressed(ImGuiKey_Delete)))
 		{
-			for (auto Node : Inspector::NodesSelected)
-			{
-				Node->RemoveFromParent();
-				//Node = nullptr;
-			}
-			Inspector::NodesSelected.clear();
+			Inspector::NodesSelected[0]->RemoveFromParent();
+			Inspector::NodesSelected.erase(Inspector::NodesSelected.begin());
 		}
 		ImGui::EndChild();
 	}
@@ -76,10 +66,7 @@ void EditorUi::Hierarchy::RightClickWindow()
 		}
 		if (ImGui::Button("Delete"))
 		{
-			for (auto node : _rightClicked) {
-				node->RemoveFromParent();
-				node = nullptr;
-			}
+			_rightClicked[0]->RemoveFromParent();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
