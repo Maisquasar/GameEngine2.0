@@ -130,9 +130,8 @@ void EditorUi::FileExplorer::Draw()
 				index++;
 				ImGui::PopID();
 			}
-			ImGui::EndChild();
-
 		}
+		ImGui::EndChild();
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && !rightclick)
 		{
 			ImGui::OpenPopup("RightClick");

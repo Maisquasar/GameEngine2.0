@@ -51,7 +51,7 @@ void EditorUi::MainBar::Draw()
 			ImGui::Checkbox("Inspector", Editor::GetInspector()->IsOpen());
 			ImGui::EndMenu();
 		}
-		ImGui::SetCursorPosX((App::GetWindowSize().x / 2) - 25);
+		ImGui::SetCursorPosX((float)(App::GetWindowSize().x / 2) - 25.f);
 		if (ImGui::MenuItem("I>"))
 		{
 			if (App::GetGameState() != GameState::Play)

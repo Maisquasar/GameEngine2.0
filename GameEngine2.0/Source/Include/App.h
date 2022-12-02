@@ -48,8 +48,9 @@ public:
 	static Math::Matrix4 GetVPMatrix() { return _VP; }
 	static GameState GetGameState() { return _gameState; }
 	static std::string GetCurrentScenePath() { _currentScenePath; }
+	static float GetDeltaTime() { return (float)_deltaTime; }
 
-		static std::shared_ptr<Core::Node> SceneNode;
+	static std::shared_ptr<Core::Node> SceneNode;
 	static Core::Components::Data Components;
 	static Utils::ThreadManager ThreadManager;
 	static std::vector<Resources::IResource**> MultiThreadMeshes;
@@ -61,6 +62,8 @@ private:
 	static Math::Matrix4 _VP;
 	static GameState _gameState;
 	static std::string _currentScenePath;
+	double _lastFrame = 0;
+	static double _deltaTime;
 
 	const char* _windowName = "GameEngine2.0";
 	bool _everythingIsLoaded = false;

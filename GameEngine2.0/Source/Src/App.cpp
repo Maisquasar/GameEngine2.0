@@ -9,10 +9,13 @@ bool App::_shouldClose = false;
 Math::Matrix4 App::_VP;
 GameState App::_gameState = GameState::Editor;
 std::string App::_currentScenePath;
+double App::_deltaTime;
+
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
-Utils::ThreadManager App::ThreadManager = Utils::ThreadManager();	
+Utils::ThreadManager App::ThreadManager = Utils::ThreadManager();
 std::vector<Resources::IResource**> App::MultiThreadMeshes;
+
 #pragma endregion
 
 #pragma region Callbacks
@@ -291,16 +294,10 @@ void App::MultiThreadLoad()
 
 void App::Update()
 {
+	_lastFrame = 0;
 	this->Components.Initialize();
 	_editorUi.Initialize();
-#if 1
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
-#else
-	SceneNode->AddChildren(new Core::Node());
-	SceneNode->AddChildren(new Core::Node());
-	SceneNode->AddChildren(new Core::Node());
-	SceneNode->Childrens[0]->AddChildren(new Core::Node());
-#endif
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	_cameraEditor.Update(true);
 
@@ -366,6 +363,10 @@ void App::Update()
 		}
 
 		glfwSwapBuffers(_window);
+
+		double currentFrame = glfwGetTime();
+		_deltaTime = currentFrame - _lastFrame;
+		_lastFrame = currentFrame;
 		// End Frame.
 	}
 }

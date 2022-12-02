@@ -22,12 +22,16 @@ void EditorUi::Console::Draw()
 		ImGui::Checkbox(info.c_str(), &_showInfo);
 		ImGui::SameLine();
 
+		ImGui::PushStyleColor(0, ImVec4(1, 0.5, 0, 1));
 		std::string warning = Utils::Loader::StringFormat("%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
 		ImGui::Checkbox(warning.c_str(), &_showWarning);
+		ImGui::PopStyleColor();
 		ImGui::SameLine();
 
+		ImGui::PushStyleColor(0, ImVec4(1, 0, 0, 1));
 		std::string error = Utils::Loader::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
 		ImGui::Checkbox(error.c_str(), &_showError);
+		ImGui::PopStyleColor();
 
 		ImGui::Separator();
 		const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
@@ -54,8 +58,8 @@ void EditorUi::Console::Draw()
 			}
 			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
 				ImGui::SetScrollHereY(1.0f);
-			ImGui::EndChild();
 		}
+		ImGui::EndChild();
 		ImGui::Separator();
 		static char input[64];
 		ImGui::InputText("Input", input, 64, ImGuiInputTextFlags_EnterReturnsTrue);
@@ -67,6 +71,19 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 {
 	App::ThreadManager.Lock();
 	auto Text = ConsoleText{ t, s };
+
+	switch (t)
+	{
+	case Debug::LogType::INFO:
+		_numberOfInfo++;
+		break;
+	case Debug::LogType::WARNING:
+		_numberOfWarn++;
+		break;
+	case Debug::LogType::L_ERROR:
+		_numberOfErro++;
+		break;
+	}
 	_consoleText.push_back(Text);
 	App::ThreadManager.Unlock();
 }
@@ -74,15 +91,22 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 void EditorUi::Console::Clear()
 {
 	_consoleText.clear();
+	_numberOfInfo = 0;
+	_numberOfWarn = 0;
+	_numberOfErro = 0;
 }
 
 int EditorUi::Console::GetNumberOfLogType(Debug::LogType t)
 {
-	int n = 0;
-	for (auto i : _consoleText)
+	switch (t)
 	{
-		if (i._type == t)
-			n++;
+	case Debug::LogType::INFO:
+		return _numberOfInfo;
+	case Debug::LogType::WARNING:
+		return _numberOfWarn;
+	case Debug::LogType::L_ERROR:
+		return _numberOfErro;
+	default:
+		return _numberOfInfo;
 	}
-	return n;
 }

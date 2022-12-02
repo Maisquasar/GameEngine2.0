@@ -1,5 +1,6 @@
 #include "Include/Render/Framebuffer.h"
 #include "Include/Resources/ResourceManager.h"
+#include "Include/App.h"
 
 Render::FrameBuffer::FrameBuffer() {}
 
@@ -50,12 +51,30 @@ void Render::FrameBuffer::Draw()
 	// Force Fill Mode.
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	glClearColor(this->ClearColor.Value.x, this->ClearColor.Value.y, this->ClearColor.Value.z, this->ClearColor.Value.w);
-	if (ImGui::Begin("Scene"))
+	if (ImGui::Begin("Scene", (bool*)true, ImGuiWindowFlags_MenuBar))
 	{
 		if (!Window)
 			Window = ImGui::GetCurrentWindow();
+
+
+		if (ImGui::BeginMenuBar()) {
+			static float lastRecord = 0;
+			static char fpsText[64];
+			if (lastRecord <= 0) {
+				lastRecord = 1;
+				sprintf_s(fpsText, 64, "%f Fps", (1 / App::GetDeltaTime()));
+			}
+			else
+			{
+				lastRecord -= App::GetDeltaTime();
+			}
+			ImGui::MenuItem(fpsText);
+			ImGui::EndMenuBar();
+		}
+
+
 		auto size = ImGui::GetWindowSize();
-		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 35), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 60), ImVec2(0, 1), ImVec2(1, 0));
 		if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
 			UpdateCameraEditor = true;
 		if (UpdateCameraEditor && !ImGui::IsMouseDown(ImGuiMouseButton_Right))

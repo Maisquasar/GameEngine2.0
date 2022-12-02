@@ -130,9 +130,8 @@ std::shared_ptr<EditorUi::File> EditorUi::FloatingFileExplorer::DrawAndRead()
 				index++;
 				ImGui::PopID();
 			}
-			ImGui::EndChild();
-
 		}
+		ImGui::EndChild();
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && !rightclick)
 		{
 			ImGui::OpenPopup("RightClick");
@@ -278,7 +277,6 @@ void EditorUi::FloatingFileExplorer::Draw()
 		index++;
 		ImGui::PopID();
 	}
-
 	ImGui::EndChild();
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && !rightclick)
 	{
@@ -366,6 +364,18 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 				{
 					App::LoadScene(_rightClicked->Directory);
 				}
+			}
+			// ------------- Show in Explorer ------------- //
+			if (ImGui::Button("Show in Explorer"))
+			{
+
+				auto dir = _rightClicked->Directory;
+				dir = dir.substr(0, dir.find_last_of('/'));
+				if (_rightClicked->Directory.substr(0, _rightClicked->Directory.find_first_of('/')) == "Assets")
+				{
+					dir = std::filesystem::current_path().string() + '/' + dir;
+				}
+				ShellExecuteA(NULL, "open", dir.c_str(), NULL, NULL, SW_SHOWDEFAULT);
 			}
 			// ------------- Delete ------------- //
 			if (ImGui::Button("Delete"))

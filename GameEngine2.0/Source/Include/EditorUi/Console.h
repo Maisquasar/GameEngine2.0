@@ -34,6 +34,9 @@ namespace EditorUi {
 		void Clear();
 	private:
 		std::vector<ConsoleText> _consoleText;
+		int _numberOfInfo = 0;
+		int _numberOfWarn = 0;
+		int _numberOfErro = 0;
 		bool _showInfo = true;
 		bool _showWarning = true;
 		bool _showError = true;
