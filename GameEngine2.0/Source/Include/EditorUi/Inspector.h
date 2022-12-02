@@ -13,6 +13,7 @@ namespace EditorUi
 
 		static void AddNodeSelected(Core::Node* node);
 		static void SetFileSelected(class File* file);
+		bool IsSelected(Core::Node* node);
 
 		static std::vector<Core::Node*> NodesSelected;
 		static class File* FileSelected;

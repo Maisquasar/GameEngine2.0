@@ -20,6 +20,12 @@ void EditorUi::Hierarchy::Draw()
 		{
 			_openRightClick = false;
 			ImGui::OpenPopup("RightClick");
+			if (EditorUi::Editor::GetInspector()->IsSelected(_rightClicked[0]))
+			{
+				_rightClicked.clear();
+				for (auto selected : EditorUi::Editor::GetInspector()->NodesSelected)
+					_rightClicked.push_back(selected);
+			}
 		}
 		RightClickWindow();
 		// Copy
@@ -28,6 +34,13 @@ void EditorUi::Hierarchy::Draw()
 			// Save Scene To Temporary Scene.
 			App::SaveNode("Assets/Default/Scenes/Clipboard.scene", Inspector::NodesSelected[0]);
 			PrintLog("Copy");
+		}
+		// Cut
+		else if (Inspector::NodesSelected.size() == 1 && (Utils::Input::IsKeyDown(ImGuiKey_LeftCtrl) && Utils::Input::IsKeyPressed(ImGuiKey_X)))
+		{
+			App::SaveNode("Assets/Default/Scenes/Clipboard.scene", Inspector::NodesSelected[0]);
+			Inspector::NodesSelected[0]->RemoveFromParent();
+			PrintLog("Cut");
 		}
 		// Paste
 		else if (Inspector::NodesSelected.size() == 1 && (Utils::Input::IsKeyDown(ImGuiKey_LeftCtrl) && Utils::Input::IsKeyPressed(ImGuiKey_V)))
@@ -41,6 +54,7 @@ void EditorUi::Hierarchy::Draw()
 			for (auto Node : Inspector::NodesSelected)
 			{
 				Node->RemoveFromParent();
+				Node = nullptr;
 			}
 		}
 		ImGui::EndChild();
@@ -54,12 +68,17 @@ void EditorUi::Hierarchy::RightClickWindow()
 	{
 		if (ImGui::Button("New Node"))
 		{
-			_rightClicked->AddChildren(new Core::Node());
+			for (auto node : _rightClicked) {
+				node->AddChildren(new Core::Node());
+			}
 			ImGui::CloseCurrentPopup();
 		}
 		if (ImGui::Button("Delete"))
 		{
-			_rightClicked->RemoveFromParent();
+			for (auto node : _rightClicked) {
+				node->RemoveFromParent();
+				node = nullptr;
+			}
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -69,5 +88,8 @@ void EditorUi::Hierarchy::RightClickWindow()
 void EditorUi::Hierarchy::SetRightClicked(Core::Node* node)
 {
 	_openRightClick = true;
-	_rightClicked = node;
+	if (_rightClicked.size() == 0)
+		_rightClicked.push_back(node);
+	else
+		_rightClicked[0] = node;
 }

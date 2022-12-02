@@ -103,3 +103,13 @@ void EditorUi::Inspector::SetFileSelected(EditorUi::File* file)
 	for (auto node : NodesSelected) node->SetSelected(false);
 	NodesSelected.clear();
 }
+
+bool EditorUi::Inspector::IsSelected(Core::Node* node)
+{
+	for (auto SelectedNode : NodesSelected)
+	{
+		if (SelectedNode == node)
+			return true;
+	}
+	return false;
+}

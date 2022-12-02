@@ -1,5 +1,6 @@
 #pragma once
 #include <ImGui/imgui.h>
+#include <vector>
 #include "EditorWindow.h"
 
 namespace Core {
@@ -18,8 +19,8 @@ namespace EditorUi {
 		void SetRightClicked(Core::Node* node);
 
 	private:
-		Core::Node* _rightClicked = nullptr;
-		bool _openRightClick;
+		std::vector<Core::Node*> _rightClicked;
+		bool _openRightClick = false;
 
 	};
 }
