@@ -1,6 +1,7 @@
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Utils/Input.h"
 #include "Include/App.h"
+#include "Include/Core/Components/MeshComponent.h"
 
 std::vector<Core::Node*> EditorUi::Inspector::NodesSelected;
 EditorUi::File* EditorUi::Inspector::FileSelected;
@@ -36,6 +37,7 @@ void EditorUi::Inspector::Draw()
 		return;
 	if (ImGui::Begin("Inspector", &_open))
 	{
+
 		if (NodesSelected.size() == 1)
 		{
 			ImGui::Checkbox("##active", NodesSelected[0]->GetActivePtr());
@@ -88,6 +90,20 @@ void EditorUi::Inspector::Draw()
 		}
 	}
 	ImGui::End();
+}
+
+void EditorUi::Inspector::DrawOutlineMeshes()
+{
+	for (auto node : NodesSelected)
+	{
+		if (auto meshComp = node->GetComponent<Core::Components::MeshComponent>())
+		{
+			if (auto mesh = meshComp->GetMesh())
+			{
+				mesh->Outline(App::GetVPMatrix() * meshComp->GameObject->Transform.GetModelMatrix());
+			}
+		}
+	}
 }
 
 void EditorUi::Inspector::AddNodeSelected(Core::Node* node)

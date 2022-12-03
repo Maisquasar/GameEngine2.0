@@ -130,7 +130,7 @@ void Core::Components::MeshComponent::Update()
 	if (!_currentMesh)
 		return;
 	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
-	if (_currentMesh)
+	if (_currentMesh && !EditorUi::Editor::GetInspector()->IsSelected(GameObject))
 		GetMesh()->Update(MVP);
 }
 

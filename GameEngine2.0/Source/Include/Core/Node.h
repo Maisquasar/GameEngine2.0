@@ -32,7 +32,9 @@ namespace Core {
 
 		void ShowInHierarchy(int index);
 
+		template<typename T> T* GetComponent();
 		bool* GetActivePtr() { return &_active; }
+
 		void SetSelected(bool value) { _selected = value; }
 
 		void Save(std::string space, std::string& content);
@@ -43,4 +45,16 @@ namespace Core {
 		bool _selected = false;
 
 	};
+	template<typename T>
+	inline T* Node::GetComponent()
+	{
+		for (auto comp : Components)
+		{
+			if (auto value = dynamic_cast<T*>(comp))
+			{
+				return value;
+			}
+		}
+		return nullptr;
+	}
 }

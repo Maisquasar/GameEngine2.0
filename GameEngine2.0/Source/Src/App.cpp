@@ -333,6 +333,8 @@ void App::Update()
 
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
 
+		_editorUi.GetInspector()->DrawOutlineMeshes();
+
 		SceneNode->UpdateSelfAndChilds();
 
 		_editorUi.Draw();

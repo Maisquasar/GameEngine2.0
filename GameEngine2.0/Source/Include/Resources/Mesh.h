@@ -10,6 +10,7 @@ namespace Core::Components
 {
 	class MeshComponent;
 }
+
 namespace Resources {
 	struct SubMesh
 	{
@@ -24,12 +25,13 @@ namespace Resources {
 		~Mesh();
 
 		void Load(std::string filename) override;
-		void MultiThreadLoading(std::string filename);
 		void Initialize() override;
 		
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
+
+		void Outline(Math::Matrix4 MVP);
 		// Call on MeshComponent Update.
-		void Update(Math::Matrix4 MVP);
+		void Update(Math::Matrix4 MVP, bool outline = false);
 
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;
