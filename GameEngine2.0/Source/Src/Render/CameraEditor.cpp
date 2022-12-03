@@ -21,7 +21,7 @@ Render::CameraEditor::~CameraEditor() {}
 
 void Render::CameraEditor::Update(bool firstUpdate)
 {
-	Transform.Update();
+	//Transform.Update();
 
 	if (!firstUpdate)
 	{
@@ -45,21 +45,41 @@ void Render::CameraEditor::Update(bool firstUpdate)
 	Transform.RotateAround(FocusPosition, Transform.GetUpVector(), -Utils::Input::MouseDelta.x / 2);
 	Transform.RotateAround(FocusPosition, Transform.GetRightVector(), Utils::Input::MouseDelta.y / 2);
 
-	Math::Vector3 cameraDir = Transform.GetWorldPosition() - FocusPosition;
+	float movementSpeed = 5.f;
+	if (Utils::Input::IsKeyDown(ImGuiKey_D))
+	{
+		FocusPosition = (FocusPosition + (Transform.GetRightVector().Negate() * movementSpeed * ImGui::GetIO().DeltaTime));
+	}
+	if (Utils::Input::IsKeyDown(ImGuiKey_A))
+	{
+		FocusPosition = (FocusPosition + (Transform.GetRightVector() * movementSpeed * ImGui::GetIO().DeltaTime));
+	}
+	if (Utils::Input::IsKeyDown(ImGuiKey_S))
+	{
+		FocusPosition = (FocusPosition + (Transform.GetForwardVector().Negate() * movementSpeed * ImGui::GetIO().DeltaTime));
+	}
+	if (Utils::Input::IsKeyDown(ImGuiKey_W))
+	{
+		FocusPosition = (FocusPosition + (Transform.GetForwardVector() * movementSpeed * ImGui::GetIO().DeltaTime));
+	}
+	if (Utils::Input::IsKeyDown(ImGuiKey_F))
+	{
+		FocusPosition = (FocusPosition + (Transform.GetUpVector().Negate() * movementSpeed * ImGui::GetIO().DeltaTime));
+	}
+	if (Utils::Input::IsKeyDown(ImGuiKey_Space))
+	{
+		FocusPosition = (FocusPosition + (Transform.GetUpVector() * movementSpeed * ImGui::GetIO().DeltaTime));
+	}
 
-	float dSpeed = ImGui::GetIO().DeltaTime * Speed * (Utils::Input::IsKeyDown(ImGuiKey_RightShift) ? 5.0f : 1.0f);
-	Math::Vector3 delta = Math::Vector3(dSpeed * Utils::Input::IsKeyDown(ImGuiKey_D) - dSpeed * Utils::Input::IsKeyDown(ImGuiKey_A), dSpeed * Utils::Input::IsKeyDown(ImGuiKey_Space) - dSpeed * Utils::Input::IsKeyDown(ImGuiKey_F), dSpeed * Utils::Input::IsKeyDown(ImGuiKey_S) - dSpeed * Utils::Input::IsKeyDown(ImGuiKey_W)) / 20;
-	//FocusPosition = (FocusPosition)+Transform.GetForwardVector() * (rot * Math::Vector3(0, 0, -1) * delta.z) + (rot * Math::Vector3(-1, 0, 0) * delta.x) + (rot * Math::Vector3(0, 1, 0) * delta.y);
-	FocusPosition = FocusPosition + (Math::Vector3(-1 * delta.x, 1 * delta.y, -1 * delta.z));
-	//FocusPosition.Print();
-
-	Transform.SetWorldPosition((FocusPosition + cameraDir.Normalize() * Distance));
+	Transform.SetLocalPosition(FocusPosition - Transform.GetForwardVector() * Distance);
+	Transform.SetLocalRotation(Math::Quaternion::LookRotation(FocusPosition - Transform.GetLocalPosition(), Math::Vector3::Up()));
 }
 
 Math::Matrix4 Render::CameraEditor::GetViewMatrix()
 {
 	Math::Matrix4 temp;
-	Math::Vector3 z = (this->Transform.GetWorldPosition() - FocusPosition).UnitVector();
+#if 1
+	Math::Vector3 z = (Transform.GetWorldPosition() - FocusPosition).UnitVector();
 	Math::Vector3 x = UpVector.CrossProduct(z).UnitVector();
 	Math::Vector3 y = z.CrossProduct(x);
 	Math::Vector3 delta = Math::Vector3(-x.DotProduct(this->Transform.GetWorldPosition()), -y.DotProduct(this->Transform.GetWorldPosition()), -z.DotProduct(this->Transform.GetWorldPosition()));
@@ -71,6 +91,20 @@ Math::Matrix4 Render::CameraEditor::GetViewMatrix()
 		temp.at(3, i) = delta[i];
 	}
 	temp.at(3, 3) = 1;
+#else
+	Math::Vector3 right = Transform.GetRightVector();
+	Math::Vector3 up = Transform.GetUpVector();
+	Math::Vector3 forward = Transform.GetForwardVector();
+	Math::Vector3 position = Transform.GetWorldPosition();
+	for (int i = 0; i < 3; i++)
+	{
+		temp.at(i, 0) = right[i];
+		temp.at(i, 1) = up[i];
+		temp.at(i, 2) = forward[i];
+		temp.at(i, 3) = position[i];
+	}
+	temp = temp.TransposeMatrix();
+#endif
 	return temp;
 }
 
