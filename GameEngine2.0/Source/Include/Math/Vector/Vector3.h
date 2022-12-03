@@ -69,6 +69,8 @@ namespace Math {
 		// Return the result of the aritmetic division of 'a' and 'b', will return 'a' * VEC_HIGH_VALUE if 'b' is equal 0;
 		Vector3 operator/(const float& b) const;
 
+		Vector3 operator/(const Vector3& other) const;
+
 		bool operator==(const Vector3& b) const;
 
 		bool operator>(const Vector3& b) const;

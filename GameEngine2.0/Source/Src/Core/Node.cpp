@@ -28,6 +28,27 @@ void Core::Node::AddComponent(Core::Components::Component* comp)
 	comp->GameObject = this;
 }
 
+void Core::Node::SetParent(Node* node)
+{
+	// Remove this transform from the current parent's children list
+	if (Parent)
+	{
+		auto it = std::find(Parent->Childrens.begin(), Parent->Childrens.end(), std::shared_ptr<Core::Node>(this));
+		if (it != Parent->Childrens.end())
+		{
+			Parent->Childrens.erase(it);
+		}
+	}
+
+	// Set the new parent and add this transform to the new parent's children list
+	Parent = node;
+	node->Transform.Parent = Parent;
+	if (Parent)
+	{
+		Parent->AddChildren(this);
+	}
+}
+
 void Core::Node::RemoveChildren(Node* node)
 {
 	int index = 0;

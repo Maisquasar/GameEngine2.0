@@ -25,10 +25,6 @@ float getDistance(Math::Vector3 point1, Math::Vector3 point2, Math::Vector3 axis
 void Core::Components::MeshComponent::ShowInInspector()
 {
 	Super::ShowInInspector();
-	if (ImGui::Button("Dist"))
-	{
-		printf("%f Distance", getDistance(GameObject->Transform.GetWorldPosition(), App::GetEditorCamera()->Transform.GetLocalPosition(), Math::Vector3::Up()));
-	}
 	if (ImGui::Button("Change Mesh"))
 	{
 		ImGui::OpenPopup("MeshPopup");

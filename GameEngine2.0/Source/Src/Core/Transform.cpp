@@ -26,7 +26,7 @@ void Core::Transform::SetWorldPosition(Math::Vector3 pos)
 	if (!Parent)
 		_localPosition = pos;
 	else
-		_localPosition = pos - Parent->Transform.GetWorldPosition();
+		_localPosition = (_localPosition - Parent->Transform.GetWorldPosition()) / Parent->Transform.GetWorldScale();
 	_dirty = true;
 }
 
@@ -35,7 +35,7 @@ void Core::Transform::SetWorldRotation(Math::Quaternion rot)
 	if (!Parent)
 		_localRotation = rot;
 	else
-		_localRotation = (rot.ToEuler() - Parent->Transform.GetWorldRotation().ToEuler()).ToQuaternion();
+		_localRotation = rot * Parent->Transform.GetWorldRotation();
 	_dirty = true;
 }
 
@@ -44,7 +44,7 @@ void Core::Transform::SetWorldScale(Math::Vector3 sca)
 	if (!Parent)
 		_localScale = sca;
 	else
-		_localScale = sca * Parent->Transform.GetWorldScale();
+		_localScale = _localScale / Parent->Transform.GetWorldScale();
 	_dirty = true;
 }
 
@@ -52,8 +52,7 @@ Math::Vector3 Core::Transform::GetWorldPosition()
 {
 	if (Parent)
 	{
-		ForceUpdate();
-		return _modelMatrix.GetPosition();
+		return Parent->Transform.GetModelMatrix() * _localPosition;
 	}
 	else
 		return _localPosition;
@@ -63,8 +62,7 @@ Math::Quaternion Core::Transform::GetWorldRotation()
 {
 	if (Parent) 
 	{
-		ForceUpdate();
-		return _modelMatrix.GetRotation();
+		return Parent->Transform.GetWorldRotation() * _localRotation;
 	}
 	else
 		return _localRotation;
@@ -74,8 +72,7 @@ Math::Vector3 Core::Transform::GetWorldScale()
 {
 	if (Parent)
 	{
-		ForceUpdate();
-		return _modelMatrix.GetScale();
+		return Parent->Transform.GetWorldScale() * _localScale;
 	}
 	else
 		return _localScale;

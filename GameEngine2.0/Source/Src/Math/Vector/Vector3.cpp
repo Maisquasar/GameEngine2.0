@@ -83,6 +83,11 @@ Vector3 Vector3::operator/(const float& a) const
 	return res;
 }
 
+Vector3 Math::Vector3::operator/(const Vector3& other) const
+{
+	return Vector3(x / other.x, y / other.y, z / other.z);
+}
+
 bool Vector3::operator==(const Vector3& b) const
 {
 	return (x == b.x && y == b.y && z == b.z);
