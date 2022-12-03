@@ -62,6 +62,8 @@ namespace Resources {
 
 		void RecompileShaders();
 
+		static Shader* GetDefaultShader();
+
 		template<typename T> static T* ResourcesPopup(const char* popupName)
 		{
 			T* out = nullptr;

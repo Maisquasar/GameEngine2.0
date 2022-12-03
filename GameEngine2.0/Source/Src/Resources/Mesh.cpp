@@ -105,6 +105,8 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 {
 	if (!Loaded)
 		return;
+	if (!_initialized)
+		Initialize();
 	glBindVertexArray(_VAO);
 	glClearStencil(0);
 	glClear(GL_STENCIL_BUFFER_BIT);

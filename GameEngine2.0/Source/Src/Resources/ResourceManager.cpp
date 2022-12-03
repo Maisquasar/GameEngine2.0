@@ -26,3 +26,8 @@ void Resources::ResourceManager::RecompileShaders()
 	}
 }
 
+Resources::Shader* Resources::ResourceManager::GetDefaultShader()
+{
+	return Get<Resources::Shader>("Assets/Default/Shaders/UnlitShader");
+}
+

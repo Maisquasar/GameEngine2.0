@@ -5,7 +5,7 @@
 
 Resources::Material::Material()
 {
-	_shader = Resources::ResourceManager::Get<Resources::Shader>("Assets/Default/Shaders/UnlitShader");
+	_shader = Resources::ResourceManager::GetDefaultShader();
 	_initialized = true;
 }
 
