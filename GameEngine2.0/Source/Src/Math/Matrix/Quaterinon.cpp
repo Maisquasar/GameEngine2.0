@@ -41,6 +41,11 @@ Vector3 Math::Quaternion::operator*(const Vector3& a)
 	return vector;
 }
 
+float& Math::Quaternion::operator[](int index)
+{
+	return *((&x) + index);
+}
+
 Math::Quaternion Math::Quaternion::AngleAxis(float angle, Vector3 axis)
 {
 	Quaternion q;

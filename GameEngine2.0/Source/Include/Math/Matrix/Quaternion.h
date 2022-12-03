@@ -25,6 +25,8 @@ namespace Math {
 
 		Vector3 operator*(const Vector3& a);
 
+		float& operator[](int index);
+
 		static Quaternion Identity() { return Quaternion(0, 0, 0, 1); }
 
 		static Quaternion AngleAxis(float angle, Vector3 axis);

@@ -24,7 +24,10 @@ namespace Utils
 		return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
 	}
 
-	void SortByDistanceFromCamera(std::vector<Core::Node*>& list, Math::Vector3 CameraPosition);
+	// Return the distance between the two points with the axis given.
+	float GetDistanceAxis(Math::Vector3 point1, Math::Vector3 point2, Math::Vector3 axis);
+
+	void SortByDistanceFromCamera(std::vector<Core::Node*>& list, Math::Vector3 CameraPosition, Math::Vector3 Forward);
 
 	std::vector<std::pair<Core::Node*, float> > BubbleSort(std::map<Core::Node*, float>& list);
 }

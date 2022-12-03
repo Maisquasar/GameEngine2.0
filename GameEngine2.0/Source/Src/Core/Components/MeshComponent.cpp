@@ -12,10 +12,23 @@ Core::Components::MeshComponent::~MeshComponent()
 	delete _currentMesh;
 }
 
+float getDistance(Math::Vector3 point1, Math::Vector3 point2, Math::Vector3 axis)
+{
+	// Project the points onto the custom axis
+	float dot1 = point1.DotProduct(axis);
+	float dot2 = point2.DotProduct(axis);
+
+	// Calculate the distance between the projected points
+	return abs(dot1 - dot2);
+}
 
 void Core::Components::MeshComponent::ShowInInspector()
 {
 	Super::ShowInInspector();
+	if (ImGui::Button("Dist"))
+	{
+		printf("%f Distance", getDistance(GameObject->Transform.GetWorldPosition(), App::GetEditorCamera()->Transform.GetLocalPosition(), Math::Vector3::Up()));
+	}
 	if (ImGui::Button("Change Mesh"))
 	{
 		ImGui::OpenPopup("MeshPopup");

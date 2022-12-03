@@ -10,6 +10,7 @@ Math::Matrix4 App::_VP;
 GameState App::_gameState = GameState::Editor;
 std::string App::_currentScenePath;
 double App::_deltaTime;
+Render::CameraEditor App::_cameraEditor;
 
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
@@ -334,7 +335,7 @@ void App::Update()
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
 		
 		auto ChildList = SceneNode->GetAllChildrens();
-		Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition());
+		Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition(), _cameraEditor.Transform.GetForwardVector());
 		for (auto child : ChildList)
 		{
 			child->DrawSelf();

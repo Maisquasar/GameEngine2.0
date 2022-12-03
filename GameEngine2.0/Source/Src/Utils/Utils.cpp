@@ -1,12 +1,22 @@
 #include "Include/Utils/Utils.h"
 #include "Include/Core/Node.h"
 
-void Utils::SortByDistanceFromCamera(std::vector<Core::Node*>& list, Math::Vector3 CameraPosition)
+float Utils::GetDistanceAxis(Math::Vector3 point1, Math::Vector3 point2, Math::Vector3 axis)
+{
+	// Project the points onto the custom axis
+	float dot1 = point1.DotProduct(axis);
+	float dot2 = point2.DotProduct(axis);
+
+	// Calculate the distance between the projected points
+	return abs(dot1 - dot2);
+}
+
+void Utils::SortByDistanceFromCamera(std::vector<Core::Node*>& list, Math::Vector3 CameraPosition, Math::Vector3 Forward)
 {
 	std::map<Core::Node*, float> distances;
 	for (auto element : list)
 	{
-		distances[element] = (element->Transform.GetWorldPosition().GetDistanceBetween(CameraPosition));
+		distances[element] = GetDistanceAxis(element->Transform.GetWorldPosition(), CameraPosition, Forward);
 	}
 	auto pairList = BubbleSort(distances);
 	list.clear();

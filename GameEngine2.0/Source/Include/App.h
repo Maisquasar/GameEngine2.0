@@ -51,6 +51,7 @@ public:
 	static GameState GetGameState() { return _gameState; }
 	static std::string GetCurrentScenePath() { _currentScenePath; }
 	static float GetDeltaTime() { return (float)_deltaTime; }
+	static Render::CameraEditor* GetEditorCamera() { return &_cameraEditor; }
 
 	static std::shared_ptr<Core::Node> SceneNode;
 	static Core::Components::Data Components;
@@ -82,7 +83,7 @@ private:
 	Utils::Input _input;
 
 	// Render
-	Render::CameraEditor _cameraEditor;
+	static Render::CameraEditor _cameraEditor;
 	Render::FrameBuffer _framebuffer;
 
 	void InitGlfw();
