@@ -272,7 +272,7 @@ void Core::Transform::ShowInInspector()
 
 void Core::Transform::Save(std::string space, std::string& content)
 {
-	content += space + Utils::Loader::StringFormat("Position : %s\n", _localPosition.ToString().c_str());
-	content += space + Utils::Loader::StringFormat("Rotation : %s\n", _localRotation.ToString().c_str());
-	content += space + Utils::Loader::StringFormat("Scale : %s\n", _localScale.ToString().c_str());
+	content += space + Utils::StringFormat("Position : %s\n", _localPosition.ToString().c_str());
+	content += space + Utils::StringFormat("Rotation : %s\n", _localRotation.ToString().c_str());
+	content += space + Utils::StringFormat("Scale : %s\n", _localScale.ToString().c_str());
 }

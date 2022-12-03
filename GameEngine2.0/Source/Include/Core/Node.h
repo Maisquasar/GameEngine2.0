@@ -29,10 +29,12 @@ namespace Core {
 		bool IsAParent(Node* node);
 
 		void UpdateSelfAndChilds();
+		void DrawSelf();
 
 		void ShowInHierarchy(int index);
 
 		template<typename T> T* GetComponent();
+		std::vector<Core::Node*> GetAllChildrens();
 		bool* GetActivePtr() { return &_active; }
 
 		void SetSelected(bool value) { _selected = value; }

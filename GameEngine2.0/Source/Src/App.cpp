@@ -332,6 +332,13 @@ void App::Update()
 		}
 
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
+		
+		auto ChildList = SceneNode->GetAllChildrens();
+		Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition());
+		for (auto child : ChildList)
+		{
+			child->DrawSelf();
+		}
 
 		SceneNode->UpdateSelfAndChilds();
 

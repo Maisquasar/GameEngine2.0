@@ -62,6 +62,7 @@
     <ClCompile Include="Source\Src\Utils\Input.cpp" />
     <ClCompile Include="Source\Src\Utils\Loader.cpp" />
     <ClCompile Include="Source\Src\Utils\ThreadManager.cpp" />
+    <ClCompile Include="Source\Src\Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External_Includes\glad\glad.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Source\Include\Utils\Input.h" />
     <ClInclude Include="Source\Include\Utils\Loader.h" />
     <ClInclude Include="Source\Include\Utils\ThreadManager.h" />
+    <ClInclude Include="Source\Include\Utils\Utils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -136,11 +136,11 @@ void Core::Components::MeshComponent::Update()
 
 void Core::Components::MeshComponent::Save(std::string space, std::string& content)
 {
-	content += space + Utils::Loader::StringFormat("Mesh : %s\n", GetMesh()->GetPath().c_str());
+	content += space + Utils::StringFormat("Mesh : %s\n", GetMesh()->GetPath().c_str());
 	int index = 0;
 	for (auto Sub : GetMesh()->SubMeshes)
 	{
-		content += space + Utils::Loader::StringFormat("SubMesh[%d] : %s\n", index++, Sub.Material->GetPath().c_str());
+		content += space + Utils::StringFormat("SubMesh[%d] : %s\n", index++, Sub.Material->GetPath().c_str());
 	}
 }
 void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)

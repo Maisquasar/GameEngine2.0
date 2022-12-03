@@ -106,13 +106,20 @@ void Core::Node::UpdateSelfAndChilds()
 			default:
 				break;
 			}
-			component->Update();
+			//component->Update();
 		}
 	}
 	for (auto child : this->Childrens)
 	{
 		child->UpdateSelfAndChilds();
 	}
+}
+#include "Include/Core/Components/MeshComponent.h"
+
+void Core::Node::DrawSelf()
+{
+	if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
+		meshComp->Update();
 }
 
 #include "Include/EditorUi/Inspector.h"
@@ -170,20 +177,35 @@ void Core::Node::ShowInHierarchy(int index)
 	ImGui::EndDisabled();
 }
 
+std::vector<Core::Node*> Core::Node::GetAllChildrens()
+{
+	std::vector<Core::Node*> node;
+	for (auto child : Childrens)
+	{
+		auto cc = child->GetAllChildrens();
+		for (auto&& c : cc)
+		{
+			node.push_back(c);
+		}
+		node.push_back(child.get());
+	}
+	return node;
+}
+
 void Core::Node::Save(std::string space, std::string& content)
 {
 	// Node Save.
 	content += space + "#BeginNode\n";
-	content += space + Utils::Loader::StringFormat("Name : %s\n", Name.c_str());
-	content += space + Utils::Loader::StringFormat("IsActive : %d\n", _active);
+	content += space + Utils::StringFormat("Name : %s\n", Name.c_str());
+	content += space + Utils::StringFormat("IsActive : %d\n", _active);
 
 	// Components Save.
 	Transform.Save(space, content);
 	for (auto component : Components)
 	{
-		content += space + Utils::Loader::StringFormat("#BeginComponent %s\n", component->ComponentName.c_str());
+		content += space + Utils::StringFormat("#BeginComponent %s\n", component->ComponentName.c_str());
 		component->Save(space, content);
-		content += space + Utils::Loader::StringFormat("#EndComponent %s\n", component->ComponentName.c_str());
+		content += space + Utils::StringFormat("#EndComponent %s\n", component->ComponentName.c_str());
 	}
 
 	// Children Save.

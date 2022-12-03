@@ -18,18 +18,18 @@ void EditorUi::Console::Draw()
 	if (ImGui::Begin("Console", &_open))
 	{
 		// ----------- LogType Buttons ----------- //
-		std::string info = Utils::Loader::StringFormat("%d Info", GetNumberOfLogType(Debug::LogType::INFO));
+		std::string info = Utils::StringFormat("%d Info", GetNumberOfLogType(Debug::LogType::INFO));
 		ImGui::Checkbox(info.c_str(), &_showInfo);
 		ImGui::SameLine();
 
 		ImGui::PushStyleColor(0, ImVec4(1, 0.5, 0, 1));
-		std::string warning = Utils::Loader::StringFormat("%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
+		std::string warning = Utils::StringFormat("%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
 		ImGui::Checkbox(warning.c_str(), &_showWarning);
 		ImGui::PopStyleColor();
 		ImGui::SameLine();
 
 		ImGui::PushStyleColor(0, ImVec4(1, 0, 0, 1));
-		std::string error = Utils::Loader::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
+		std::string error = Utils::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
 		ImGui::Checkbox(error.c_str(), &_showError);
 		ImGui::PopStyleColor();
 
