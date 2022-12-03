@@ -64,6 +64,15 @@ void EditorUi::Hierarchy::RightClickWindow()
 			}
 			ImGui::CloseCurrentPopup();
 		}
+		if (ImGui::Button("New Parent Node"))
+		{
+			for (auto node : _rightClicked) {
+				auto parent = new Core::Node();
+				node->Parent->AddChildren(parent);
+				node->SetParent(parent);
+			}
+			ImGui::CloseCurrentPopup();
+		}
 		if (ImGui::Button("Delete"))
 		{
 			_rightClicked[0]->RemoveFromParent();

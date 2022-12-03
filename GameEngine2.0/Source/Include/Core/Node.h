@@ -12,7 +12,7 @@ namespace Core {
 		~Node();
 
 		Node* Parent = nullptr;
-		std::vector<std::shared_ptr<Node>> Childrens;
+		std::vector<Node*> Childrens;
 		std::vector<Components::Component*> Components;
 		Core::Transform Transform;
 

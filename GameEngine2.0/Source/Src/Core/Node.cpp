@@ -9,6 +9,10 @@ Core::Node::Node()
 
 Core::Node::~Node()
 {
+	for (auto child : Childrens)
+	{
+		delete child;
+	}
 	for (auto component : Components)
 	{
 		delete component;
@@ -17,7 +21,7 @@ Core::Node::~Node()
 
 void Core::Node::AddChildren(Node* node)
 {
-	this->Childrens.push_back(std::shared_ptr<Node>(node));
+	this->Childrens.push_back(node);
 	node->Parent = this;
 	node->Transform.Parent = this;
 }
@@ -31,13 +35,10 @@ void Core::Node::AddComponent(Core::Components::Component* comp)
 void Core::Node::SetParent(Node* node)
 {
 	// Remove this transform from the current parent's children list
-	if (Parent)
+	auto it = std::find(Parent->Childrens.begin(), Parent->Childrens.end(), this);
+	if (it != Parent->Childrens.end())
 	{
-		auto it = std::find(Parent->Childrens.begin(), Parent->Childrens.end(), std::shared_ptr<Core::Node>(this));
-		if (it != Parent->Childrens.end())
-		{
-			Parent->Childrens.erase(it);
-		}
+		Parent->Childrens.erase(it);
 	}
 
 	// Set the new parent and add this transform to the new parent's children list
@@ -51,15 +52,12 @@ void Core::Node::SetParent(Node* node)
 
 void Core::Node::RemoveChildren(Node* node)
 {
-	int index = 0;
-	for (auto child : Childrens)
+	auto it = std::find(Childrens.begin(), Childrens.end(), node);
+	if (it != Childrens.end())
 	{
-		if (node == child.get())
-		{
-			Childrens.erase(Childrens.begin() + index);
-			break;
-		}
-		index++;
+		delete node;;
+		// Remove the child from the list of children
+		Childrens.erase(it);
 	}
 }
 
@@ -208,7 +206,7 @@ std::vector<Core::Node*> Core::Node::GetAllChildrens()
 		{
 			node.push_back(c);
 		}
-		node.push_back(child.get());
+		node.push_back(child);
 	}
 	return node;
 }
