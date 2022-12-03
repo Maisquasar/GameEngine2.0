@@ -78,10 +78,9 @@ void Render::CameraEditor::Update(bool firstUpdate)
 Math::Matrix4 Render::CameraEditor::GetViewMatrix()
 {
 	Math::Matrix4 temp;
-#if 1
-	Math::Vector3 z = (Transform.GetWorldPosition() - FocusPosition).UnitVector();
-	Math::Vector3 x = UpVector.CrossProduct(z).UnitVector();
-	Math::Vector3 y = z.CrossProduct(x);
+	Math::Vector3 z = Transform.GetForwardVector().Negate();
+	Math::Vector3 x = Transform.GetRightVector().Negate();
+	Math::Vector3 y = Transform.GetUpVector();
 	Math::Vector3 delta = Math::Vector3(-x.DotProduct(this->Transform.GetWorldPosition()), -y.DotProduct(this->Transform.GetWorldPosition()), -z.DotProduct(this->Transform.GetWorldPosition()));
 	for (int i = 0; i < 3; i++)
 	{
@@ -91,20 +90,6 @@ Math::Matrix4 Render::CameraEditor::GetViewMatrix()
 		temp.at(3, i) = delta[i];
 	}
 	temp.at(3, 3) = 1;
-#else
-	Math::Vector3 right = Transform.GetRightVector();
-	Math::Vector3 up = Transform.GetUpVector();
-	Math::Vector3 forward = Transform.GetForwardVector();
-	Math::Vector3 position = Transform.GetWorldPosition();
-	for (int i = 0; i < 3; i++)
-	{
-		temp.at(i, 0) = right[i];
-		temp.at(i, 1) = up[i];
-		temp.at(i, 2) = forward[i];
-		temp.at(i, 3) = position[i];
-	}
-	temp = temp.TransposeMatrix();
-#endif
 	return temp;
 }
 

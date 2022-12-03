@@ -151,7 +151,6 @@ void Core::Transform::Update()
 	if (!_dirty)
 		return;
 	ForceUpdate();
-	//_modelMatrix = Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation, _localScale);
 }
 
 void Core::Transform::ForceUpdate()
@@ -169,7 +168,6 @@ void Core::Transform::ForceUpdate()
 			child->Transform.ForceUpdate();
 		}
 	}
-	//_modelMatrix = Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation, _localScale);
 }
 
 bool DrawVec3Control(const std::string& label, float* values, float resetValue = 0.0f, float columnWidth = 100.0f)
@@ -257,10 +255,10 @@ void Core::Transform::ShowInInspector()
 		DrawVec3Control("Scale", &scale.x, 1.f);
 
 		if (position != _localPosition || rotation != _localEulerRotation || scale != _localScale) {
-			_localPosition = position;
+			SetLocalPosition(position);
 			float mod = 360.f;
 			_localEulerRotation = Math::Vector3(Math::Mod(rotation.x, mod), Math::Mod(rotation.y, mod), Math::Mod(rotation.z, mod));
-			_localScale = scale;
+			SetLocalScale(scale);
 			_dirty = true;
 		}
 		ImGui::TreePop();
