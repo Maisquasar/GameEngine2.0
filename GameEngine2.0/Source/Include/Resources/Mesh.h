@@ -29,7 +29,6 @@ namespace Resources {
 		
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
 
-		void Outline(Math::Matrix4 MVP);
 		// Call on MeshComponent Update.
 		void Update(Math::Matrix4 MVP, bool outline = false);
 

@@ -130,8 +130,8 @@ void Core::Components::MeshComponent::Update()
 	if (!_currentMesh)
 		return;
 	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
-	if (_currentMesh && !EditorUi::Editor::GetInspector()->IsSelected(GameObject))
-		GetMesh()->Update(MVP);
+	if (_currentMesh)
+		GetMesh()->Update(MVP, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 }
 
 void Core::Components::MeshComponent::Save(std::string space, std::string& content)

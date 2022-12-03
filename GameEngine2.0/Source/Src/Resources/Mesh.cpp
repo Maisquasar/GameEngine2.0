@@ -101,8 +101,11 @@ void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vect
 	}
 }
 
-void Resources::Mesh::Outline(Math::Matrix4 MVP)
+void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 {
+	if (!Loaded)
+		return;
+	glBindVertexArray(_VAO);
 	glClearStencil(0);
 	glClear(GL_STENCIL_BUFFER_BIT);
 	// Render the mesh into the stencil buffer.
@@ -112,49 +115,43 @@ void Resources::Mesh::Outline(Math::Matrix4 MVP)
 	glStencilFunc(GL_ALWAYS, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	Update(MVP);
-
-	// Render the thick wireframe version.
-
-	glStencilFunc(GL_NOTEQUAL, 1, -1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-	glLineWidth(10);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glDepthRange(0, 0.01);
-
-	Update(MVP, true);
-
-	glDisable(GL_STENCIL_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glLineWidth(1);
-}
-
-void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
-{
-	if (!Loaded)
-		return;
-	glBindVertexArray(_VAO);
 	for (auto Sub : SubMeshes)
 	{
 		if (!Sub.Material)
 			continue;
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-		if (outline)
-		{
-			glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), 0.8f, 0.5f, 0, 1);
-		}
+		glDepthRange(0.01, 1.0);
+		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
+		if (Sub.Material->GetTexture())
+			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());
 		else
-		{
-			glDepthRange(0.01, 1.0);
-			glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
-			if (Sub.Material->GetTexture())
-				glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());
-			else
-				glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
-		}
+			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
 
 		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+	}
+	if (outline)
+	{
+
+		// Render the thick wireframe version.
+		glStencilFunc(GL_NOTEQUAL, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+		glLineWidth(10);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDepthRange(0, 0.01);
+
+		for (auto Sub : SubMeshes)
+		{
+			if (!Sub.Material)
+				continue;
+			glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
+			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), 0.8f, 0.5f, 0, 1);
+			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		}
+
+
+		glDisable(GL_STENCIL_TEST);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glLineWidth(1);
 	}
 }

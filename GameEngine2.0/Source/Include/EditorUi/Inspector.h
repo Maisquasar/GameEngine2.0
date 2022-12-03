@@ -10,7 +10,6 @@ namespace EditorUi
 		~Inspector();
 
 		void Draw() override;
-		void DrawOutlineMeshes();
 
 		static void AddNodeSelected(Core::Node* node);
 		static void SetFileSelected(class File* file);

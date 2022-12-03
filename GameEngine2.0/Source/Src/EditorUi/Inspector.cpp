@@ -92,20 +92,6 @@ void EditorUi::Inspector::Draw()
 	ImGui::End();
 }
 
-void EditorUi::Inspector::DrawOutlineMeshes()
-{
-	for (auto node : NodesSelected)
-	{
-		if (auto meshComp = node->GetComponent<Core::Components::MeshComponent>())
-		{
-			if (auto mesh = meshComp->GetMesh())
-			{
-				mesh->Outline(App::GetVPMatrix() * meshComp->GameObject->Transform.GetModelMatrix());
-			}
-		}
-	}
-}
-
 void EditorUi::Inspector::AddNodeSelected(Core::Node* node)
 {
 	NodesSelected.push_back(node);
