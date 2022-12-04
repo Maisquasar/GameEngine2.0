@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "Include/Math/Math.h"
 #include "ImGui/imgui.h"
 
 namespace Core {

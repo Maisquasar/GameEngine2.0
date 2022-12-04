@@ -35,6 +35,8 @@ namespace Core {
 		void ShowInHierarchy(int index);
 
 		template<typename T> T* GetComponent();
+		template<typename T> std::vector<T*> GetComponents();
+		template<typename T> std::vector<T*> GetChildrensComponents();
 		std::vector<Core::Node*> GetAllChildrens();
 		bool* GetActivePtr() { return &_active; }
 
@@ -59,5 +61,36 @@ namespace Core {
 			}
 		}
 		return nullptr;
+	}
+
+	template<typename T>
+	inline std::vector<T*> Node::GetComponents()
+	{
+		std::vector<T*> OutComponents;
+		for (auto component : Components)
+		{
+			if (auto type = dynamic_cast<T*>(component))
+			{
+				OutComponents.push_back(type);
+			}
+		}
+		return OutComponents;
+	}
+
+	template<typename T>
+	inline std::vector<T*> Node::GetChildrensComponents()
+	{
+		std::vector<T*> components;
+		auto nodeComp = GetComponents<T>();
+		components.insert(components.end(), nodeComp.begin(), nodeComp.end());
+
+		// Recursively search the children of the node
+		for (auto child : Childrens)
+		{
+			std::vector<T*> childComponents = child->GetChildrensComponents<T>();
+			components.insert(components.end(), childComponents.begin(), childComponents.end());
+		}
+
+		return components;
 	}
 }

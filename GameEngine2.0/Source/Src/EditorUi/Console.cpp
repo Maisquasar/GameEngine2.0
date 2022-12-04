@@ -32,8 +32,14 @@ void EditorUi::Console::Draw()
 		std::string error = Utils::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
 		ImGui::Checkbox(error.c_str(), &_showError);
 		ImGui::PopStyleColor();
+		ImGui::SameLine();
 
+		if (ImGui::Button("Clear"))
+		{
+			Clear();
+		}
 		ImGui::Separator();
+
 		const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 		if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar)) {
 			for (auto& t : _consoleText)

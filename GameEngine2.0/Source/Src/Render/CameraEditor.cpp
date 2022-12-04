@@ -45,7 +45,7 @@ void Render::CameraEditor::Update(bool firstUpdate)
 	Transform.RotateAround(FocusPosition, Transform.GetUpVector(), -Utils::Input::MouseDelta.x / 2);
 	Transform.RotateAround(FocusPosition, Transform.GetRightVector(), Utils::Input::MouseDelta.y / 2);
 
-	float movementSpeed = 5.f;
+	float movementSpeed = Utils::Input::IsKeyDown(ImGuiKey_LeftShift) ? 15.f : 5.f;
 	if (Utils::Input::IsKeyDown(ImGuiKey_D))
 	{
 		FocusPosition = (FocusPosition + (Transform.GetRightVector().Negate() * movementSpeed * ImGui::GetIO().DeltaTime));

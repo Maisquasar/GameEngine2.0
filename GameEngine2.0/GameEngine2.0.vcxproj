@@ -32,6 +32,7 @@
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
     <ClCompile Include="Source\Src\EditorUi\File.cpp" />
     <ClCompile Include="Source\Src\EditorUi\FloatingFileExplorer.cpp" />
+    <ClCompile Include="Source\Src\Render\EditorGrid.cpp" />
     <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
     <ClCompile Include="Source\Src\Core\Node.cpp" />
     <ClCompile Include="Source\Src\Core\Transform.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
     <ClInclude Include="Source\Include\EditorUi\File.h" />
     <ClInclude Include="Source\Include\EditorUi\FloatingFileExplorer.h" />
+    <ClInclude Include="Source\Include\Render\EditorGrid.h" />
     <ClInclude Include="Source\Include\Resources\Mesh.h" />
     <ClInclude Include="Source\Include\Core\Node.h" />
     <ClInclude Include="Source\Include\Core\Transform.h" />

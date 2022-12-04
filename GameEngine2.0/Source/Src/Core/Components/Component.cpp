@@ -7,13 +7,6 @@ Core::Components::Component::Component()
 {
 }
 
-/*
-Core::Components::Component::~Component()
-{
-	Delete();
-}
-*/
-
 void Core::Components::Component::RemoveFromParent()
 {
 	if (!GameObject)

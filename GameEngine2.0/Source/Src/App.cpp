@@ -1,5 +1,6 @@
 #include "Include/App.h"
 #include <STB_Image/stb_image.h>
+#include "Include/Render/EditorGrid.h"
 
 #pragma region Static Variables
 // Static Variables.
@@ -297,6 +298,8 @@ void App::MultiThreadLoad()
 void App::Update()
 {
 	_lastFrame = 0;
+	Render::EditorGrid Grid;
+	Grid.Initialize();
 	this->Components.Initialize();
 	_editorUi.Initialize();
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
@@ -340,6 +343,8 @@ void App::Update()
 		{
 			child->DrawSelf();
 		}
+
+		Grid.Draw();
 
 		SceneNode->UpdateSelfAndChilds();
 
