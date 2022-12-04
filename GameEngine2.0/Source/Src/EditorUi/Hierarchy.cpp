@@ -68,6 +68,8 @@ void EditorUi::Hierarchy::RightClickWindow()
 		if (ImGui::Button("New Parent Node"))
 		{
 			for (auto node : _rightClicked) {
+				if (!node->Parent)
+					break;
 				auto parent = new Core::Node();
 				node->Parent->AddChildren(parent);
 				node->SetParent(parent);

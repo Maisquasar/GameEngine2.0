@@ -120,7 +120,7 @@ namespace Math {
 
 		static Vector3 Up() { return Vector3(0, 1, 0); }
 
-		Vector3 Normalize()
+		Vector3 Normalize() const
 		{
 			float len = std::sqrt(x * x + y * y + z * z);
 

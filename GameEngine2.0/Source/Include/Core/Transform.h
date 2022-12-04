@@ -55,6 +55,8 @@ namespace Core
 
 		void Save(std::string space, std::string& content) override;
 
+		bool IsDirty() { return _dirty; }
+
 	private:
 		Math::Matrix4 _modelMatrix = Math::Matrix4::Identity();
 		Math::Vector3 _localPosition = Math::Vector3();

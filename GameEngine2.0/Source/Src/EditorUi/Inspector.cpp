@@ -37,8 +37,7 @@ void EditorUi::Inspector::Draw()
 		return;
 	if (ImGui::Begin("Inspector", &_open))
 	{
-
-		if (NodesSelected.size() == 1)
+		if (NodesSelected.size() == 1 && NodesSelected[0]->Parent)
 		{
 			ImGui::Checkbox("##active", NodesSelected[0]->GetActivePtr());
 			ImGui::SameLine();
