@@ -17,7 +17,7 @@ Scale : 1.000000 1.000000 1.000000
 		Rotation : 0.000000 0.000000 0.000000 1.000000
 		Scale : 1.000000 1.000000 1.000000
 		#BeginComponent MeshComponent
-		Mesh : rubix1x1.obj::Rubix
+		Mesh : Assets/Default/Models/rubix1x1.obj::Rubix
 		SubMesh[0] : Assets/Default/Models/Border.mat
 		SubMesh[1] : Assets/Default/Models/White.mat
 		SubMesh[2] : Assets/Default/Models/Red.mat
@@ -42,7 +42,7 @@ Scale : 1.000000 1.000000 1.000000
 	Rotation : 0.000000 0.000000 0.000000 1.000000
 	Scale : 5.100000 1.000000 5.900000
 	#BeginComponent MeshComponent
-	Mesh : Cube.obj::Cube
+	Mesh : Assets/Default/Models/Cube.obj::Cube
 	SubMesh[0] : Assets/Default/Models/Material.001.mat
 	#EndComponent MeshComponent
 	#EndNode

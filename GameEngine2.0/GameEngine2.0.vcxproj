@@ -36,6 +36,7 @@
     <ClCompile Include="Source\Src\EditorUi\ResourcesWindow.cpp" />
     <ClCompile Include="Source\Src\Physic\Physic.cpp" />
     <ClCompile Include="Source\Src\Render\EditorGrid.cpp" />
+    <ClCompile Include="Source\Src\Render\Gizmo.cpp" />
     <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
     <ClCompile Include="Source\Src\Core\Node.cpp" />
     <ClCompile Include="Source\Src\Core\Transform.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="Source\Include\EditorUi\ResourcesWindow.h" />
     <ClInclude Include="Source\Include\Physic\Physic.h" />
     <ClInclude Include="Source\Include\Render\EditorGrid.h" />
+    <ClInclude Include="Source\Include\Render\Gizmo.h" />
     <ClInclude Include="Source\Include\Resources\Mesh.h" />
     <ClInclude Include="Source\Include\Core\Node.h" />
     <ClInclude Include="Source\Include\Core\Transform.h" />

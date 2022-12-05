@@ -13,6 +13,7 @@ GameState App::_gameState = GameState::Editor;
 std::string App::_currentScenePath;
 double App::_deltaTime;
 Render::CameraEditor App::_cameraEditor;
+Render::Gizmo App::_gizmo;
 
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
@@ -348,6 +349,8 @@ void App::Update()
 		}
 
 		Grid.Draw();
+
+		_gizmo.Draw();
 
 		SceneNode->UpdateSelfAndChilds();
 

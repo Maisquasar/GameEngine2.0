@@ -121,8 +121,8 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	{
 		auto MeshNode = new Core::Node();
 		mesh.Load("");
-		mesh.SetPath(GetName() + "::" + mesh.GetName());
-		Resources::ResourceManager::Add(GetName() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
+		mesh.SetPath(GetPath() + "::" + mesh.GetName());
+		Resources::ResourceManager::Add(GetPath() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
 		auto meshComp = new Core::Components::MeshComponent();
 		meshComp->SetMesh(mesh.Clone());
 		MeshNode->AddComponent(meshComp);

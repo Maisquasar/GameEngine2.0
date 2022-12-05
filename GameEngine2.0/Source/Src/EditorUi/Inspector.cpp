@@ -96,6 +96,7 @@ void EditorUi::Inspector::Draw()
 void EditorUi::Inspector::AddNodeSelected(Core::Node* node)
 {
 	NodesSelected.push_back(node);
+	App::GetGizmo()->NodeTransform = &node->Transform;
 	node->SetSelected(true);
 	FileSelected = nullptr;
 }
@@ -105,6 +106,7 @@ void EditorUi::Inspector::SetFileSelected(EditorUi::File* file)
 	FileSelected = file;
 	for (auto node : NodesSelected) node->SetSelected(false);
 	NodesSelected.clear();
+	App::GetGizmo()->NodeTransform = nullptr;
 }
 
 bool EditorUi::Inspector::IsSelected(Core::Node* node)

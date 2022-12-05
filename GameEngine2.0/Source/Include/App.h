@@ -16,6 +16,7 @@
 #include "Include/Core/Node.h"
 #include "Include/Resources/Model.h"
 #include "Include/Utils/ThreadManager.h"
+#include "Include/Render/Gizmo.h"
 
 enum class GameState
 {
@@ -52,6 +53,7 @@ public:
 	static std::string GetCurrentScenePath() { _currentScenePath; }
 	static float GetDeltaTime() { return (float)_deltaTime; }
 	static Render::CameraEditor* GetEditorCamera() { return &_cameraEditor; }
+	static Render::Gizmo* GetGizmo() { return &_gizmo; }
 
 	static std::shared_ptr<Core::Node> SceneNode;
 	static Core::Components::Data Components;
@@ -85,6 +87,7 @@ private:
 	// Render
 	static Render::CameraEditor _cameraEditor;
 	Render::FrameBuffer _framebuffer;
+	static Render::Gizmo _gizmo;
 
 	void InitGlfw();
 	void InitImGui();
