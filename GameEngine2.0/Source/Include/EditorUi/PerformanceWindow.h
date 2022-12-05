@@ -12,5 +12,6 @@ namespace EditorUi {
 		void Draw() override;
 	private:
 		std::vector<float> _fps;
+		float _currentTime = 0;
 	};
 }

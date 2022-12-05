@@ -1,4 +1,5 @@
 #pragma once
+#include "../Debug/Log.h"
 #include <map>
 #include <glad/glad.h>
 #include <iostream>
@@ -10,7 +11,6 @@
 #include <string>
 
 #include "IResource.h"
-#include "../Debug/Log.h"
 
 namespace Resources
 {

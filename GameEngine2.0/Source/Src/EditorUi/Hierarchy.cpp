@@ -1,7 +1,9 @@
 #include "Include/EditorUi/Hierarchy.h"
+#include "Include/EditorUi/Inspector.h"
 #include "Include/App.h"
 #include "Include/Utils/Input.h"
 #include "Include/Core/Node.h"
+
 
 EditorUi::Hierarchy::Hierarchy() {}
 

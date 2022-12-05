@@ -1,6 +1,7 @@
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
+#include "Include/EditorUi/Inspector.h"
 
 Core::Components::MeshComponent::MeshComponent()
 {

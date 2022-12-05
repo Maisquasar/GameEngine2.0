@@ -2,6 +2,15 @@
 #include "Include/App.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/Core/Node.h"
+#include "Include/EditorUi/Editor.h"
+#include "Include/EditorUi/Hierarchy.h"
+#include "Include/EditorUi/MainBar.h"
+#include "Include/EditorUi/FileExplorer.h"
+#include "Include/EditorUi/Console.h"
+#include "Include/EditorUi/Inspector.h"
+#include "Include/EditorUi/ResourcesWindow.h"
+#include "Include/EditorUi/PerformanceWindow.h"
+
 
 EditorUi::MainBar::MainBar()
 {

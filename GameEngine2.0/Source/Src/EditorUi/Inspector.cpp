@@ -2,6 +2,8 @@
 #include "Include/Utils/Input.h"
 #include "Include/App.h"
 #include "Include/Core/Components/MeshComponent.h"
+#include "Include/EditorUi/FileExplorer.h"
+#include "Include/EditorUi/File.h"
 
 std::vector<Core::Node*> EditorUi::Inspector::NodesSelected;
 EditorUi::File* EditorUi::Inspector::FileSelected;

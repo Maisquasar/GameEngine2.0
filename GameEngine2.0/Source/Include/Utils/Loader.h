@@ -1,9 +1,9 @@
 #pragma once
+#include "Include/Debug/Log.h"
 #include <string>
 #include <iostream>
 #include <fstream>
 #include "Include/Math/Math.h"
-#include "Include/Debug/Log.h"
 #include "Utils.h"
 
 namespace Resources

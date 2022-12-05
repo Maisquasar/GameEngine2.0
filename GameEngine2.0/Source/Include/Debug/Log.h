@@ -1,8 +1,9 @@
 #pragma once
+#include <Windows.h>
+#include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <Windows.h>
 #include <string>
 #include <mutex>
 #include "Include/EditorUi/Console.h"

@@ -1,6 +1,7 @@
 #include "Include/Core/Node.h"
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"
+#include "Include/EditorUi/Hierarchy.h"
 
 Core::Node::Node()
 {

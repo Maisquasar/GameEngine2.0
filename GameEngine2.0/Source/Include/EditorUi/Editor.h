@@ -1,14 +1,16 @@
 #pragma once
 #include <ImGui/imgui.h>
-#include "Include/EditorUi/Hierarchy.h"
-#include "Include/EditorUi/MainBar.h"
-#include "Include/EditorUi/FileExplorer.h"
-#include "Include/EditorUi/Console.h"
-#include "Include/EditorUi/Inspector.h"
-#include "Include/EditorUi/ResourcesWindow.h"
-#include "Include/EditorUi/PerformanceWindow.h"
 
 namespace EditorUi {
+	class MainBar;
+	class FileExplorer;
+	class FloatingFileExplorer;
+	class Hierarchy;
+	class Inspector;
+	class ResourcesWindow;
+	class PerformanceWindow;
+	class Console;
+
 	void ApplyStyle();
 	class Editor
 	{
@@ -29,7 +31,7 @@ namespace EditorUi {
 		static PerformanceWindow* GetPerformanceWindow() { return &_performanceWindow; }
 		static Console* GetConsole() { return &Debug::Log::Console; }
 	private:
-		MainBar _mainBar;
+		static MainBar _mainBar;
 		static Hierarchy _hierarchy;
 		static FileExplorer _fileExplorer;
 		static FloatingFileExplorer _floatingFileExplorer;

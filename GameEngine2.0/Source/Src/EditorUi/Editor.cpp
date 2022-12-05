@@ -1,6 +1,14 @@
-#include "Include/EditorUi/Editor.h"
 #include "Include/Debug/Log.h"
+#include "Include/EditorUi/Editor.h"
+#include "Include/EditorUi/Hierarchy.h"
+#include "Include/EditorUi/MainBar.h"
+#include "Include/EditorUi/FileExplorer.h"
+#include "Include/EditorUi/Console.h"
+#include "Include/EditorUi/Inspector.h"
+#include "Include/EditorUi/ResourcesWindow.h"
+#include "Include/EditorUi/PerformanceWindow.h"
 
+EditorUi::MainBar EditorUi::Editor::_mainBar;
 EditorUi::FileExplorer EditorUi::Editor::_fileExplorer;
 EditorUi::FloatingFileExplorer EditorUi::Editor::_floatingFileExplorer;
 EditorUi::Hierarchy EditorUi::Editor::_hierarchy;

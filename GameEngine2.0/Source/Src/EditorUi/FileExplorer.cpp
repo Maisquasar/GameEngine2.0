@@ -3,6 +3,7 @@
 #include "Include/EditorUi/Editor.h"
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"
+#include "Include/EditorUi/Inspector.h"
 
 #pragma region Files
 #pragma endregion

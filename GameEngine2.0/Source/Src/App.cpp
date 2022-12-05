@@ -2,6 +2,7 @@
 #include <STB_Image/stb_image.h>
 #include "Include/Render/EditorGrid.h"
 #include "Include/Physic/Physic.h"
+#include "Include/EditorUi/Inspector.h"
 
 #pragma region Static Variables
 // Static Variables.
@@ -347,7 +348,6 @@ void App::Update()
 		{
 			child->DrawSelf();
 		}
-
 
 		_gizmo.Draw();
 
