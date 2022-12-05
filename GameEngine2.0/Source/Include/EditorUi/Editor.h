@@ -5,6 +5,7 @@
 #include "Include/EditorUi/FileExplorer.h"
 #include "Include/EditorUi/Console.h"
 #include "Include/EditorUi/Inspector.h"
+#include "Include/EditorUi/ResourcesWindow.h"
 
 namespace EditorUi {
 	void ApplyStyle();
@@ -23,6 +24,7 @@ namespace EditorUi {
 		static FloatingFileExplorer* GetFloatingFileExplorer() { return &_floatingFileExplorer; }
 		static Hierarchy* GetHierarchy() { return &_hierarchy; }
 		static Inspector* GetInspector() { return &_inspector; }
+		static ResourcesWindow* GetResourcesWindow() { return &_resourcesWindow; }
 		static Console* GetConsole() { return &Debug::Log::Console; }
 	private:
 		MainBar _mainBar;
@@ -30,6 +32,6 @@ namespace EditorUi {
 		static FileExplorer _fileExplorer;
 		static FloatingFileExplorer _floatingFileExplorer;
 		static Inspector _inspector;
-
+		static ResourcesWindow _resourcesWindow;
 	};
 }
