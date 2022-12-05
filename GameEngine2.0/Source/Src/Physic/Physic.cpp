@@ -1,59 +1,124 @@
 #include "Include/Physic/Physic.h"
 #include "Include/Physic/Ray.h"
-#include "Include/Physic/BoxCollider.h"
-/*
-bool Physic::RayBoxIntersection(const Ray& ray, const Box& box)
+#include "Include/Core/Transform.h"
+#include "Include/Core/Components/BoxCollider.h"
+
+bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vector3& intersectionPoint)
 {
-    
-    // Transform the ray into the box's local space
-    Math::Vector3 localOrigin = ray.origin - box.position;
-    Math::Vector3 localDirection = ray.direction;
+	// Transform the ray into the local space of the box.
+	Math::Vector3 localRayOrigin = box->Transform.GetWorldRotation().GetInverse() * (ray->GetOrigin() - box->Transform.GetWorldPosition());
+	Math::Vector3 localRayDirection = box->Transform.GetWorldRotation().GetInverse() * ray->GetDirection();
 
-    // Check for intersection with each of the box's sides
-    float tmin = (box.min.x - localOrigin.x) / localDirection.x;
-    float tmax = (box.max.x - localOrigin.x) / localDirection.x;
+	// Compute the minimum and maximum t values for the ray.
+	float tMin = -INFINITY;
+	float tMax = INFINITY;
 
-    if (tmin > tmax)
-    {
-        std::swap(tmin, tmax);
-    }
+	// Check intersection with the x-aligned planes of the box.
+	if (std::abs(localRayDirection.x) > 1e-6)
+	{
+		float t1 = (box->Transform.GetWorldScale().x - localRayOrigin.x) / localRayDirection.x;
+		float t2 = (-box->Transform.GetWorldScale().x - localRayOrigin.x) / localRayDirection.x;
+		tMin = std::max(tMin, std::min(t1, t2));
+		tMax = std::min(tMax, std::max(t1, t2));
+	}
 
-    float tymin = (box.min.y - localOrigin.y) / localDirection.y;
-    float tymax = (box.max.y - localOrigin.y) / localDirection.y;
+	// Check intersection with the y-aligned planes of the box.
+	if (std::abs(localRayDirection.y) > 1e-6)
+	{
+		float t1 = (box->Transform.GetWorldScale().y - localRayOrigin.y) / localRayDirection.y;
+		float t2 = (-box->Transform.GetWorldScale().y - localRayOrigin.y) / localRayDirection.y;
+		tMin = std::max(tMin, std::min(t1, t2));
+		tMax = std::min(tMax, std::max(t1, t2));
+	}
 
-    if (tymin > tymax)
-    {
-        std::swap(tymin, tymax);
-    }
+	// Check intersection with the z-aligned planes of the box.
+	if (std::abs(localRayDirection.z) > 1e-6)
+	{
+		float t1 = (box->Transform.GetWorldScale().z - localRayOrigin.z) / localRayDirection.z;
+		float t2 = (-box->Transform.GetWorldScale().z - localRayOrigin.z) / localRayDirection.z;
+		tMin = std::max(tMin, std::min(t1, t2));
+		tMax = std::min(tMax, std::max(t1, t2));
+	}
 
-    if ((tmin > tymax) || (tymin > tmax))
-    {
-        return false;
-    }
+	// Check if there is an intersection.
+	if (tMin > tMax)
+		return false;
 
-    if (tymin > tmin)
-    {
-        tmin = tymin;
-    }
+	// Compute the intersection point.
+	intersectionPoint = ray->GetOrigin() + ray->GetDirection() * tMin;
 
-    if (tymax < tmax)
-    {
-        tmax = tymax;
-    }
-
-    float tzmin = (box.min.z - localOrigin.z) / localDirection.z;
-    float tzmax = (box.max.z - localOrigin.z) / localDirection.z;
-
-    if (tzmin > tzmax)
-    {
-        std::swap(tzmin, tzmax);
-    }
-
-    if ((tmin > tzmax) || (tzmin > tmax))
-    {
-        return false;
-    }
-
-    return true;
+	return true;
 }
-*/
+
+
+std::vector<float> Physic::GetCubeVertices()
+{
+	std::vector<float> vOut;
+	std::vector<Math::Vector3> v;
+	std::vector<Math::Vector3> n;
+	v = {
+		{ 1.000000, 1.000000, -1.000000},
+		{ 1.000000, -1.000000, -1.000000},
+		{ 1.000000, 1.000000, 1.000000},
+		{ 1.000000, -1.000000, 1.000000},
+		{ -1.000000, 1.000000, -1.000000},
+		{ -1.000000, -1.000000, -1.000000},
+		{ -1.000000, 1.000000, 1.000000},
+		{ -1.000000, -1.000000, 1.000000},
+	};
+	n = {
+		{0.0000, 1.0000, 0.0000},
+		{0.0000, 0.0000, 1.0000},
+		{-1.0000, 0.0000, 0.0000},
+		{0.0000, -1.0000, 0.0000},
+		{1.0000, 0.0000, 0.0000},
+		{0.0000, 0.0000, -1.0000},
+	};
+
+	std::vector<int> indices{
+	5, 1, 3, 1, 1 ,1,
+	3, 2, 8, 2, 4 ,2,
+	7, 3, 6, 3, 8 ,3,
+	2, 4, 8, 4, 6 ,4,
+	1, 5, 4, 5, 2 ,5,
+	5, 6, 2, 6, 6 ,6,
+	5, 1, 7, 1, 3 ,1,
+	3, 2, 7, 2, 8 ,2,
+	7, 3, 5, 3, 6 ,3,
+	2, 4, 4, 4, 8 ,4,
+	1, 5, 3, 5, 4 ,5,
+	5, 6, 1, 6, 2 ,6,
+	};
+
+	for (int k = 0; k < indices.size(); k += 2)
+	{
+		indices[k] -= 1;
+		indices[k + 1ll] -= 1;
+		vOut.push_back(v[indices[k]].x);
+		vOut.push_back(v[indices[k]].y);
+		vOut.push_back(v[indices[k]].z);
+
+		vOut.push_back(n[indices[k + 1ll]].x);
+		vOut.push_back(n[indices[k + 1ll]].y);
+		vOut.push_back(n[indices[k + 1ll]].z);
+	}
+
+	return vOut;
+}
+
+Math::Vector3 Physic::ConvertMouseToWorld(Math::Vector2 mousePos, Math::Vector2 screenSize, Math::Vector3 cameraPos)
+{
+	if (mousePos.x < 0 || mousePos.y < 0 || screenSize.x < mousePos.x || screenSize.y < mousePos.y)
+		return Math::Vector3(-1);
+	// Calculate the direction vector of the mouse cursor on the screen
+	Math::Vector3 direction = Math::Vector3(mousePos) - cameraPos;
+
+	// Normalize the direction vector
+	direction.Normalize();
+
+	// Calculate the world position of the mouse cursor
+	Math::Vector3 worldPos = cameraPos + direction;
+
+	return worldPos;
+
+}

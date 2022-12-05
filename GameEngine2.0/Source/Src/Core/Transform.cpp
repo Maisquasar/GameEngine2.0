@@ -7,7 +7,7 @@ Core::Transform::Transform()
 	ComponentName = "Transform";
 }
 
-Core::Transform::~Transform(){}
+Core::Transform::~Transform() {}
 
 void Core::Transform::ComputeModelMatrix()
 {
@@ -17,7 +17,7 @@ void Core::Transform::ComputeModelMatrix()
 
 void Core::Transform::ComputeModelMatrix(Math::Matrix4 parent)
 {
-	_modelMatrix = GetLocalModelMatrix()* parent;
+	_modelMatrix = GetLocalModelMatrix() * parent;
 	_dirty = false;
 }
 
@@ -60,7 +60,7 @@ Math::Vector3 Core::Transform::GetWorldPosition()
 
 Math::Quaternion Core::Transform::GetWorldRotation()
 {
-	if (Parent) 
+	if (Parent)
 	{
 		return Parent->Transform.GetWorldRotation() * _localRotation;
 	}
@@ -157,7 +157,7 @@ void Core::Transform::ForceUpdate()
 {
 	_localRotation = _localEulerRotation.ToQuaternion();
 	if (Parent)
-		ComputeModelMatrix(GameObject->Parent->Transform.GetModelMatrix());
+		ComputeModelMatrix(Parent->Transform.GetModelMatrix());
 	else
 		ComputeModelMatrix();
 
@@ -243,26 +243,23 @@ bool DrawVec3Control(const std::string& label, float* values, float resetValue =
 
 void Core::Transform::ShowInInspector()
 {
-	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		ImGui::TreePush("##transform");
-		Math::Vector3 position = _localPosition;
-		Math::Vector3 rotation = _localEulerRotation;
-		Math::Vector3 scale = _localScale;
+	ImGui::TreePush("##transform");
+	Math::Vector3 position = _localPosition;
+	Math::Vector3 rotation = _localEulerRotation;
+	Math::Vector3 scale = _localScale;
 
-		DrawVec3Control("Position", &position.x);
-		DrawVec3Control("Rotation", &rotation.x);
-		DrawVec3Control("Scale", &scale.x, 1.f);
+	DrawVec3Control("Position", &position.x);
+	DrawVec3Control("Rotation", &rotation.x);
+	DrawVec3Control("Scale", &scale.x, 1.f);
 
-		if (position != _localPosition || rotation != _localEulerRotation || scale != _localScale) {
-			SetLocalPosition(position);
-			float mod = 360.f;
-			_localEulerRotation = Math::Vector3(Math::Mod(rotation.x, mod), Math::Mod(rotation.y, mod), Math::Mod(rotation.z, mod));
-			SetLocalScale(scale);
-			_dirty = true;
-		}
-		ImGui::TreePop();
+	if (position != _localPosition || rotation != _localEulerRotation || scale != _localScale) {
+		SetLocalPosition(position);
+		float mod = 360.f;
+		_localEulerRotation = Math::Vector3(Math::Mod(rotation.x, mod), Math::Mod(rotation.y, mod), Math::Mod(rotation.z, mod));
+		SetLocalScale(scale);
+		_dirty = true;
 	}
+	ImGui::TreePop();
 }
 
 void Core::Transform::Save(std::string space, std::string& content)

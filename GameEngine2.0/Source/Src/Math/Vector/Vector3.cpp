@@ -1,6 +1,8 @@
 #include "Include/Math/Math.h"
 using namespace Math;
 
+Vector3::Vector3(Vector2 a) : x(a.x), y(a.y) {}
+
 Vector3::Vector3(Vector4 a) : x(a.x), y(a.y), z(a.z) {}
 
 float Vector3::LengthSquared() const

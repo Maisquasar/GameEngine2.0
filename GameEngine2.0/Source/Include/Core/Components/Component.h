@@ -28,6 +28,8 @@ namespace Core {
 
 			virtual void ShowInInspector() { }
 
+			virtual void SetGameobject(Core::Node* node);
+
 			virtual void Save(std::string space, std::string& content) {}
 			virtual void Load(const char* data, uint32_t& pos) { }
 

@@ -44,13 +44,15 @@ void EditorUi::Inspector::Draw()
 			// Name Input.
 			char name[65];
 			strcpy_s(name, 64, NodesSelected[0]->Name.c_str());
-			if (ImGui::InputText("Name", name, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::InputText("Name", name, 64, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
-				if (Utils::Input::IsKeyPressed(ImGuiKey_Enter) || Utils::Input::IsKeyPressed(ImGuiKey_KeypadEnter))
-					NodesSelected[0]->Name = name;
+				NodesSelected[0]->Name = name;
 			}
 			// Transform
-			NodesSelected[0]->Transform.ShowInInspector();
+			if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				NodesSelected[0]->Transform.ShowInInspector();
+			}
 			ImGui::NewLine();
 			ImGui::Separator();
 

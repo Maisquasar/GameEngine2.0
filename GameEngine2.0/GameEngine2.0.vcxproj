@@ -32,7 +32,7 @@
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
     <ClCompile Include="Source\Src\EditorUi\File.cpp" />
     <ClCompile Include="Source\Src\EditorUi\FloatingFileExplorer.cpp" />
-    <ClCompile Include="Source\Src\Physic\BoxCollider.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\BoxCollider.cpp" />
     <ClCompile Include="Source\Src\Physic\Physic.cpp" />
     <ClCompile Include="Source\Src\Render\EditorGrid.cpp" />
     <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
@@ -84,7 +84,7 @@
     <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
     <ClInclude Include="Source\Include\EditorUi\File.h" />
     <ClInclude Include="Source\Include\EditorUi\FloatingFileExplorer.h" />
-    <ClInclude Include="Source\Include\Physic\BoxCollider.h" />
+    <ClInclude Include="Source\Include\Core\Components\BoxCollider.h" />
     <ClInclude Include="Source\Include\Physic\Physic.h" />
     <ClInclude Include="Source\Include\Render\EditorGrid.h" />
     <ClInclude Include="Source\Include\Resources\Mesh.h" />

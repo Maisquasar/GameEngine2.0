@@ -153,10 +153,7 @@
     <ClCompile Include="Source\Src\Physic\Physic.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Include\Physic\Box.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Physic\Box.cpp">
+    <ClCompile Include="Source\Src\Core\Components\BoxCollider.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -314,7 +311,7 @@
     <ClInclude Include="Source\Include\Physic\Physic.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Include\Physic\Box.h">
+    <ClInclude Include="Source\Include\Core\Components\BoxCollider.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

@@ -31,3 +31,9 @@ Resources::Shader* Resources::ResourceManager::GetDefaultShader()
 	return Get<Resources::Shader>("Assets/Default/Shaders/UnlitShader");
 }
 
+Resources::Mesh* Resources::ResourceManager::GetDefaultCube()
+{
+	return Get<Resources::Mesh>("Cube.obj::Cube");
+}
+
+

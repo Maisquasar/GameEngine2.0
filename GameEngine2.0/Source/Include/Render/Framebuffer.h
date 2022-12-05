@@ -14,6 +14,9 @@ namespace Render {
 		void Initialize(Math::Integer2);
 		void Draw();
 
+		Math::Vector2 GetSize();
+		Math::Vector2 GetPos();
+
 		ImGuiWindow* Window = nullptr;
 
 		Resources::Texture* Tex = nullptr;
@@ -26,5 +29,7 @@ namespace Render {
 
 	private:
 		GLuint _RBO = 0;
+		Math::Vector2 _size;
+		Math::Vector2 _pos;
 	};
 }

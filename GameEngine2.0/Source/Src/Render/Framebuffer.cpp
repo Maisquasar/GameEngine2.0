@@ -74,7 +74,8 @@ void Render::FrameBuffer::Draw()
 
 
 		auto size = ImGui::GetWindowSize();
-		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x, size.y - 60), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x - 16, size.y - 60), ImVec2(0, 1), ImVec2(1, 0));
+		_size = Math::Vector2(size.x - 16, size.y - 60);
 		if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
 			UpdateCameraEditor = true;
 		if (UpdateCameraEditor && !ImGui::IsMouseDown(ImGuiMouseButton_Right))
@@ -84,4 +85,16 @@ void Render::FrameBuffer::Draw()
 
 	// Draw The Quad
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+Math::Vector2 Render::FrameBuffer::GetSize()
+{
+	return _size;
+}
+
+Math::Vector2 Render::FrameBuffer::GetPos()
+{
+	if (Window)
+		return  Math::Vector2(Window->Pos.x + 7, Window->Pos.y + 46);
+	return  Math::Vector2(0, 0);
 }

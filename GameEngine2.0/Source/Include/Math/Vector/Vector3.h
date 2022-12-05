@@ -7,6 +7,7 @@
 
 
 namespace Math {
+	class Vector2;
 	class Vector4;
 	class Integer3;
 	class Quaternion;
@@ -21,6 +22,8 @@ namespace Math {
 		Vector3() : x(0), y(0), z(0) {}
 
 		Vector3(float content) : x(content), y(content), z(content) {}
+
+		Vector3(Vector2 a);
 
 		Vector3(Vector4 a);
 
