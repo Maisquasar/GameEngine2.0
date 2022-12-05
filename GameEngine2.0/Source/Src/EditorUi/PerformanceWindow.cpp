@@ -1,4 +1,5 @@
 #include "..\..\Include\EditorUi\PerformanceWindow.h"
+#include <glad/glad.h>
 #include <algorithm>
 
 EditorUi::PerformanceWindow::PerformanceWindow()
@@ -9,7 +10,7 @@ EditorUi::PerformanceWindow::~PerformanceWindow()
 {
 }
 
-const float Time = 0.1f;
+const float Time = 0.005f;
 
 void EditorUi::PerformanceWindow::Draw()
 {
@@ -32,11 +33,25 @@ void EditorUi::PerformanceWindow::Draw()
 		{
 			_currentTime -= ImGui::GetIO().DeltaTime;
 		}
-		ImGui::PlotLines("##", &_fps[0], (int)_fps.size(), 0, NULL, 0.0f, FLT_MAX, ImVec2(0, 40));
+		ImGui::PlotHistogram("##", &_fps[0], (int)_fps.size(), 0, NULL, 0.0f, FLT_MAX, ImVec2(ImGui::GetWindowSize().x, 50));
 		ImGui::BeginGroup();
 		ImGui::Text("Fps Min : %.2f", *std::min_element(std::begin(_fps), std::end(_fps)));
 		ImGui::Text("Fps Max : %.2f", *std::max_element(std::begin(_fps), std::end(_fps)));
 		ImGui::EndGroup();
+
+		if (ImGui::TreeNode("Other Informations "))
+		{
+			char txt[32];
+			snprintf(txt, 32, "OpenGL Version : %s", glGetString(GL_VERSION));
+			ImGui::Text(txt);
+
+			snprintf(txt, 32, "Vendor : %s", glGetString(GL_VENDOR));
+			ImGui::Text(txt);
+
+			snprintf(txt, 32, "GPU : %s", glGetString(GL_RENDERER));
+			ImGui::Text(txt);
+			ImGui::TreePop();
+		}
 	}
 	ImGui::End();
 }
