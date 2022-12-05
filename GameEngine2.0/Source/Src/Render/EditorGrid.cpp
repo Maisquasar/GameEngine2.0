@@ -29,7 +29,7 @@ void Render::EditorGrid::Draw()
 	}
 	else
 	{
-		if (auto mesh = Resources::ResourceManager::Get<Resources::Mesh>("Grid.obj::Grid"))
+		if (auto mesh = Resources::ResourceManager::Get<Resources::Mesh>("Assets/Default/Models/Grid.obj::Grid"))
 		{
 			if (!mesh->Loaded)
 				return;

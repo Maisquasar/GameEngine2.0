@@ -348,9 +348,10 @@ void App::Update()
 			child->DrawSelf();
 		}
 
-		Grid.Draw();
 
 		_gizmo.Draw();
+
+		Grid.Draw();
 
 		SceneNode->UpdateSelfAndChilds();
 
