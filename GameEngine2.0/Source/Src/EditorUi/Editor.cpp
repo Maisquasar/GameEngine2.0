@@ -6,6 +6,7 @@ EditorUi::FloatingFileExplorer EditorUi::Editor::_floatingFileExplorer;
 EditorUi::Hierarchy EditorUi::Editor::_hierarchy;
 EditorUi::Inspector EditorUi::Editor::_inspector;
 EditorUi::ResourcesWindow EditorUi::Editor::_resourcesWindow;
+EditorUi::PerformanceWindow EditorUi::Editor::_performanceWindow;
 
 EditorUi::Editor::Editor(){}
 
@@ -26,6 +27,7 @@ void EditorUi::Editor::Draw()
 	_fileExplorer.Draw();
 	_inspector.Draw();
 	_resourcesWindow.Draw();
+	_performanceWindow.Draw();
 	Debug::Log::Console.Draw();
 }
 

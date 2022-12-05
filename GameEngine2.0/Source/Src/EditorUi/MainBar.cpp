@@ -50,6 +50,7 @@ void EditorUi::MainBar::Draw()
 			ImGui::Checkbox("File Explorer", Editor::GetFileExplorer()->IsOpen());
 			ImGui::Checkbox("Inspector", Editor::GetInspector()->IsOpen());
 			ImGui::Checkbox("Resources", Editor::GetResourcesWindow()->IsOpen());
+			ImGui::Checkbox("Performance", Editor::GetPerformanceWindow()->IsOpen());
 			ImGui::EndMenu();
 		}
 		ImGui::SetCursorPosX((float)(App::GetWindowSize().x / 2) - 25.f);
