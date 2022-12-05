@@ -13,7 +13,7 @@ namespace Core::Components {
 
 		void ShowInInspector() override;
 
-		void Update() override;
+		void Draw();
 
 		Resources::Mesh* GetMesh() { return dynamic_cast<Resources::Mesh*>(_currentMesh); }
 		void SetMesh(Resources::IResource* mesh) { _currentMesh = mesh; }

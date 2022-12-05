@@ -125,7 +125,7 @@ void Core::Node::UpdateSelfAndChilds()
 			default:
 				break;
 			}
-			//component->Update();
+			component->Update();
 		}
 	}
 	for (auto child : this->Childrens)
@@ -138,7 +138,7 @@ void Core::Node::UpdateSelfAndChilds()
 void Core::Node::DrawSelf()
 {
 	if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
-		meshComp->Update();
+		meshComp->Draw();
 }
 
 #include "Include/EditorUi/Inspector.h"

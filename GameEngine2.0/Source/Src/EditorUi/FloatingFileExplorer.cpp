@@ -168,6 +168,8 @@ void EditorUi::FloatingFileExplorer::DrawAndSave(std::string data)
 			LOG(Debug::LogType::INFO, "Saving File into %s", dir.c_str());
 
 		}
+		ImGui::SameLine();
+		ImGui::Text(_targetExtension.c_str());
 	}
 	ImGui::End();
 	ImGui::PopID();

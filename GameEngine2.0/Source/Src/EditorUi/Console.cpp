@@ -90,6 +90,30 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 		_numberOfErro++;
 		break;
 	}
+	if (_consoleText.size() >= _maxLog)
+	{
+		auto it = _consoleText.begin() + (_consoleText.size() + 1 - _maxLog);
+		std::vector<EditorUi::ConsoleText> destroyedText(_consoleText.begin(), it);
+		for (auto text : destroyedText)
+		{
+			switch (text._type)
+			{
+			case Debug::LogType::INFO:
+				--_numberOfInfo;
+				break;
+			case Debug::LogType::WARNING:
+				--_numberOfWarn;
+				break;
+			case Debug::LogType::L_ERROR:
+				--_numberOfErro;
+				break;
+			default:
+				--_numberOfInfo;
+				break;
+			}
+		}
+		_consoleText.erase(_consoleText.begin(), it);
+	}
 	_consoleText.push_back(Text);
 	App::ThreadManager.Unlock();
 }
