@@ -82,8 +82,8 @@ void Core::Components::BoxCollider::Update()
 	//App::GetEditorCamera()->UnProject(App::GetFramebuffer()->GetMousePosition()).Print();
 	Physic::Ray ray;
 	ray.Set(App::GetEditorCamera()->Transform.GetLocalPosition(), App::GetEditorCamera()->Transform.GetForwardVector() * 10000);
-	//if (RayIntersection(ray))
-		//printf("Colision");
+	if (RayIntersection(ray))
+		printf("Colision");
 
 }
 
@@ -94,8 +94,10 @@ void Core::Components::BoxCollider::ShowInInspector()
 
 bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
 {
-	auto min = Math::Vector3(Transform.GetWorldScale().Negate());
-	auto max = Math::Vector3(Transform.GetWorldScale());
+	//Math::Vector3 local_origin = glm::vec3(glm::inverse(box_transform) * glm::vec4(origin, 1));
+	//Math::Vector3 local_direction = glm::vec3(glm::inverse(box_transform) * glm::vec4(direction, 0));
+	auto min = Transform.GetWorldRotation() * Math::Vector3(Transform.GetWorldScale().Negate());
+	auto max = Transform.GetWorldRotation() * Math::Vector3(Transform.GetWorldScale());
 	float tmin = (min.x - ray.GetOrigin().x) / ray.GetDirection().x;
 	float tmax = (max.x - ray.GetOrigin().x) / ray.GetDirection().x;
 
