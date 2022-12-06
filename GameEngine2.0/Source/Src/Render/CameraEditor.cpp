@@ -112,3 +112,10 @@ Math::Matrix4 Render::CameraEditor::GetModelMatrix()
 {
 	return Transform.GetModelMatrix();
 }
+
+Math::Vector3 Render::CameraEditor::UnProject(Math::Vector3 point)
+{
+	//gluUnProject
+	return 0;
+}
+

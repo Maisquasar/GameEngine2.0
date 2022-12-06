@@ -30,6 +30,7 @@
     <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
+    <ClCompile Include="Source\Src\Debug\Line.cpp" />
     <ClCompile Include="Source\Src\EditorUi\File.cpp" />
     <ClCompile Include="Source\Src\EditorUi\FloatingFileExplorer.cpp" />
     <ClCompile Include="Source\Src\Core\Components\BoxCollider.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="Source\Include\App.h" />
     <ClInclude Include="Source\Include\Core\Components\Component.h" />
     <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
+    <ClInclude Include="Source\Include\Debug\Line.h" />
     <ClInclude Include="Source\Include\EditorUi\File.h" />
     <ClInclude Include="Source\Include\EditorUi\FloatingFileExplorer.h" />
     <ClInclude Include="Source\Include\Core\Components\BoxCollider.h" />

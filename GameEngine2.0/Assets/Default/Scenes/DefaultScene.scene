@@ -26,6 +26,8 @@ Scale : 1.000000 1.000000 1.000000
 		SubMesh[5] : Assets/Default/Models/Orange.mat
 		SubMesh[6] : Assets/Default/Models/Lime.mat
 		#EndComponent MeshComponent
+		#BeginComponent BoxCollider
+		#EndComponent BoxCollider
 		#EndNode
 	#EndNode
 	#BeginNode

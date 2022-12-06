@@ -17,6 +17,8 @@ namespace Render {
 		Math::Vector2 GetSize();
 		Math::Vector2 GetPos();
 
+		Math::Vector2 GetMousePosition();
+
 		ImGuiWindow* Window = nullptr;
 
 		Resources::Texture* Tex = nullptr;

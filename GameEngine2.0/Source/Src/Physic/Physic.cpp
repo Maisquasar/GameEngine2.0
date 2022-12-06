@@ -2,6 +2,7 @@
 #include "Include/Physic/Ray.h"
 #include "Include/Core/Transform.h"
 #include "Include/Core/Components/BoxCollider.h"
+#include "Include/Render/CameraEditor.h"
 
 bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vector3& intersectionPoint)
 {
@@ -106,19 +107,10 @@ std::vector<float> Physic::GetCubeVertices()
 	return vOut;
 }
 
-Math::Vector3 Physic::ConvertMouseToWorld(Math::Vector2 mousePos, Math::Vector2 screenSize, Math::Vector3 cameraPos)
+Math::Vector3 Physic::ConvertMouseToWorld(Math::Vector2 mousePos, Math::Vector2 screenSize, Render::CameraEditor cameraPos)
 {
 	if (mousePos.x < 0 || mousePos.y < 0 || screenSize.x < mousePos.x || screenSize.y < mousePos.y)
-		return Math::Vector3(-1);
-	// Calculate the direction vector of the mouse cursor on the screen
-	Math::Vector3 direction = Math::Vector3(mousePos) - cameraPos;
-
-	// Normalize the direction vector
-	direction.Normalize();
-
-	// Calculate the world position of the mouse cursor
-	Math::Vector3 worldPos = cameraPos + direction;
-
-	return worldPos;
-
+		return Math::Vector3(INFINITY);
+	auto position = cameraPos.GetViewMatrix() * Math::Vector3(mousePos.x, mousePos.y, 0);
+	return position;
 }

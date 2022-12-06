@@ -8,6 +8,11 @@ namespace Resources
 	class Shader;
 }
 
+namespace Physic
+{
+	class Ray;
+}
+
 namespace Core::Components {
 	class BoxCollider : public Core::Components::BaseComponent<BoxCollider>
 	{
@@ -22,6 +27,8 @@ namespace Core::Components {
 		void Initialize() override;
 		void Update() override;
 		void ShowInInspector() override;
+
+		bool RayIntersection(Physic::Ray ray);
 
 		Core::Transform Transform;
 	private:

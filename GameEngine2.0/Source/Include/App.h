@@ -53,6 +53,7 @@ public:
 	static float GetDeltaTime() { return (float)_deltaTime; }
 	static Render::CameraEditor* GetEditorCamera() { return &_cameraEditor; }
 	static Render::Gizmo* GetGizmo() { return &_gizmo; }
+	static Render::FrameBuffer* GetFramebuffer() { return &_framebuffer; }
 
 	static std::shared_ptr<Core::Node> SceneNode;
 	static Core::Components::Data Components;
@@ -85,7 +86,7 @@ private:
 
 	// Render
 	static Render::CameraEditor _cameraEditor;
-	Render::FrameBuffer _framebuffer;
+	static Render::FrameBuffer _framebuffer;
 	static Render::Gizmo _gizmo;
 
 	void InitGlfw();

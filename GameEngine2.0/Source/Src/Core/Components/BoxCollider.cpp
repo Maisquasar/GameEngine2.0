@@ -5,6 +5,9 @@
 #include "Include/Physic/Physic.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
+#include "Include/Physic/Ray.h"
+#include "Include/Debug/Line.h"
+
 
 Core::Components::BoxCollider::BoxCollider()
 {
@@ -62,7 +65,7 @@ void Core::Components::BoxCollider::Update()
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 	glUniform4f(_shader->GetLocation(Resources::Location::L_COLOR), 0, 1, 0, 1);
 	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-	
+
 	int polygonMode;
 	// Enable Wireframe.
 	glDisable(GL_CULL_FACE);
@@ -80,6 +83,46 @@ void Core::Components::BoxCollider::Update()
 void Core::Components::BoxCollider::ShowInInspector()
 {
 	Transform.ShowInInspector();
+}
+
+bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
+{
+	/*
+	float tmin = (min.x - r.orig.x) / r.dir.x;
+	float tmax = (max.x - r.orig.x) / r.dir.x;
+
+	if (tmin > tmax) swap(tmin, tmax);
+
+	float tymin = (min.y - r.orig.y) / r.dir.y;
+	float tymax = (max.y - r.orig.y) / r.dir.y;
+
+	if (tymin > tymax) swap(tymin, tymax);
+
+	if ((tmin > tymax) || (tymin > tmax))
+		return false;
+
+	if (tymin > tmin)
+		tmin = tymin;
+
+	if (tymax < tmax)
+		tmax = tymax;
+
+	float tzmin = (min.z - r.orig.z) / r.dir.z;
+	float tzmax = (max.z - r.orig.z) / r.dir.z;
+
+	if (tzmin > tzmax) swap(tzmin, tzmax);
+
+	if ((tmin > tzmax) || (tzmin > tmax))
+		return false;
+
+	if (tzmin > tmin)
+		tmin = tzmin;
+
+	if (tzmax < tmax)
+		tmax = tzmax;
+		*/
+	return true;
+
 }
 
 

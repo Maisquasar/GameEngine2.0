@@ -98,3 +98,9 @@ Math::Vector2 Render::FrameBuffer::GetPos()
 		return  Math::Vector2(Window->Pos.x + 7, Window->Pos.y + 46);
 	return  Math::Vector2(0, 0);
 }
+
+Math::Vector2 Render::FrameBuffer::GetMousePosition()
+{
+	auto mouse = ImGui::GetMousePos();
+	return Math::Vector2(mouse.x, mouse.y) - GetPos();
+}
