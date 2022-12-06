@@ -15,7 +15,11 @@ uniform vec4 OurColor;
 void main()
 {
     if (EnableTexture)
-        FragColor = texture(Tex, TexCoord);
+    {
+        vec4 color = texture(Tex, TexCoord);
+        if (color.a < 0.5) discard;
+        FragColor = color;
+    }
     else
         FragColor = vec4(OurColor.x, OurColor.y, OurColor.z, 1);
 }
