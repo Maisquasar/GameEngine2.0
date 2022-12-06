@@ -113,9 +113,25 @@ Math::Matrix4 Render::CameraEditor::GetModelMatrix()
 	return Transform.GetModelMatrix();
 }
 
-Math::Vector3 Render::CameraEditor::UnProject(Math::Vector3 point)
+Math::Vector3 Render::CameraEditor::UnProject(Math::Vector2 point)
 {
-	//gluUnProject
-	return 0;
+	// Convert screen point to normalized device coordinates (NDC)
+	auto screenSize = App::GetFramebuffer()->GetSize();
+	Math::Vector2 ndc;
+	ndc.x = 2 * point.x / screenSize.x - 1;
+	ndc.y = 2 * point.y / screenSize.y - 1;
+
+	// Apply inverse projection matrix to NDC point
+	Math::Vector4 clip = GetProjection().CreateInverseMatrix() * Math::Vector4(ndc.x, ndc.y, 1, 1);
+
+	// Apply inverse view matrix to clip space point
+	Math::Vector4 world = GetViewMatrix().CreateInverseMatrix() * clip;
+
+	// Convert world space point to 3D space
+	Math::Vector3 world_point;
+	world_point.x = world.x / world.w;
+	world_point.y = world.y / world.w;
+	world_point.z = world.z / world.w;
+	return world_point;
 }
 

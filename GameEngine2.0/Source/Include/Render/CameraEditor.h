@@ -32,7 +32,7 @@ namespace Render {
 		// Return the Mat4D model matrix.
 		Math::Matrix4 GetModelMatrix();
 
-		Math::Vector3 UnProject(Math::Vector3 point);
+		Math::Vector3 UnProject(Math::Vector2 point);
 	private:
 
 	};

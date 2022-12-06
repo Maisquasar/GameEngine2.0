@@ -78,6 +78,13 @@ void Core::Components::BoxCollider::Update()
 	// Disable Wireframe.
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+
+	//App::GetEditorCamera()->UnProject(App::GetFramebuffer()->GetMousePosition()).Print();
+	Physic::Ray ray;
+	ray.Set(App::GetEditorCamera()->Transform.GetLocalPosition(), App::GetEditorCamera()->Transform.GetForwardVector() * 10000);
+	//if (RayIntersection(ray))
+		//printf("Colision");
+
 }
 
 void Core::Components::BoxCollider::ShowInInspector()
@@ -87,16 +94,17 @@ void Core::Components::BoxCollider::ShowInInspector()
 
 bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
 {
-	/*
-	float tmin = (min.x - r.orig.x) / r.dir.x;
-	float tmax = (max.x - r.orig.x) / r.dir.x;
+	auto min = Math::Vector3(Transform.GetWorldScale().Negate());
+	auto max = Math::Vector3(Transform.GetWorldScale());
+	float tmin = (min.x - ray.GetOrigin().x) / ray.GetDirection().x;
+	float tmax = (max.x - ray.GetOrigin().x) / ray.GetDirection().x;
 
-	if (tmin > tmax) swap(tmin, tmax);
+	if (tmin > tmax) std::swap(tmin, tmax);
 
-	float tymin = (min.y - r.orig.y) / r.dir.y;
-	float tymax = (max.y - r.orig.y) / r.dir.y;
+	float tymin = (min.y - ray.GetOrigin().y) / ray.GetDirection().y;
+	float tymax = (max.y - ray.GetOrigin().y) / ray.GetDirection().y;
 
-	if (tymin > tymax) swap(tymin, tymax);
+	if (tymin > tymax) std::swap(tymin, tymax);
 
 	if ((tmin > tymax) || (tymin > tmax))
 		return false;
@@ -107,10 +115,10 @@ bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
 	if (tymax < tmax)
 		tmax = tymax;
 
-	float tzmin = (min.z - r.orig.z) / r.dir.z;
-	float tzmax = (max.z - r.orig.z) / r.dir.z;
+	float tzmin = (min.z - ray.GetOrigin().z) / ray.GetDirection().z;
+	float tzmax = (max.z - ray.GetOrigin().z) / ray.GetDirection().z;
 
-	if (tzmin > tzmax) swap(tzmin, tzmax);
+	if (tzmin > tzmax) std::swap(tzmin, tzmax);
 
 	if ((tmin > tzmax) || (tzmin > tmax))
 		return false;
@@ -120,9 +128,8 @@ bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
 
 	if (tzmax < tmax)
 		tmax = tzmax;
-		*/
 	return true;
-
+	
 }
 
 
