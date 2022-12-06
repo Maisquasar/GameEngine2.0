@@ -52,7 +52,7 @@ Math::Vector3 Core::Transform::GetWorldPosition()
 {
 	if (Parent)
 	{
-		return Parent->Transform.GetModelMatrix() * _localPosition;
+		return Parent->Transform.GetModelMatrix() * (_localRotation *_localPosition);
 	}
 	else
 		return _localPosition;
@@ -85,7 +85,14 @@ Math::Matrix4 Core::Transform::GetModelMatrix()
 
 void Core::Transform::SetLocalPosition(Math::Vector3 newpos)
 {
-	_localPosition = newpos;
+	if (Parent)
+	{
+		_localPosition = Parent->Transform.TranformPoint(newpos);
+	}
+	else
+	{
+		_localPosition = newpos;
+	}
 	_dirty = true;
 }
 
@@ -119,7 +126,7 @@ Math::Vector3 Core::Transform::GetLocalScale()
 
 Math::Matrix4 Core::Transform::GetLocalModelMatrix()
 {
-	return Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation.ToEuler(), _localScale);
+	return Math::Matrix4::CreateTransformMatrix(_localRotation * _localPosition, _localRotation.ToEuler(), _localScale);
 }
 
 Math::Vector3 Core::Transform::GetForwardVector()
@@ -135,6 +142,11 @@ Math::Vector3 Core::Transform::GetRightVector()
 Math::Vector3 Core::Transform::GetUpVector()
 {
 	return this->GetWorldRotation() * Math::Vector3::Up();
+}
+
+Math::Vector3 Core::Transform::TranformPoint(Math::Vector3 p)
+{
+	return GetWorldRotation() * p;
 }
 
 void Core::Transform::RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle)

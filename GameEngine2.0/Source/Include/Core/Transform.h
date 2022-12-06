@@ -46,6 +46,8 @@ namespace Core
 		Math::Vector3 GetRightVector();
 		Math::Vector3 GetUpVector();
 
+		Math::Vector3 TranformPoint(Math::Vector3);
+
 		void RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle);
 
 		void Update();

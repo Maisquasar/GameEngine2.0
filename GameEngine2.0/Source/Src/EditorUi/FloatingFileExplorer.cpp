@@ -1,4 +1,5 @@
 #include "Include/EditorUi/FloatingFileExplorer.h"
+#include "Include/EditorUi/Inspector.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/Utils/Loader.h"

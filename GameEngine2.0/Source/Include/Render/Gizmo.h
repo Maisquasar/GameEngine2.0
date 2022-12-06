@@ -11,8 +11,8 @@ namespace Render
 		~Gizmo();
 
 		void Draw();
-		Core::Transform* NodeTransform;
+		Core::Transform* NodeTransform = nullptr;
 	private:
-		Resources::Mesh* _mesh;
+		Resources::Mesh* _mesh = nullptr;
 	};
 }

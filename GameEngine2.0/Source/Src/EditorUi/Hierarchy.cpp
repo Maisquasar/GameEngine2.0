@@ -37,6 +37,7 @@ void EditorUi::Hierarchy::Draw()
 			App::SaveNode("Assets/Default/Scenes/Clipboard.scene", Inspector::NodesSelected[0]);
 			Inspector::NodesSelected[0]->RemoveFromParent();
 			Inspector::NodesSelected.erase(Inspector::NodesSelected.begin());
+			App::GetGizmo()->NodeTransform = nullptr;
 			PrintLog("Cut");
 		}
 		// Paste
@@ -50,6 +51,7 @@ void EditorUi::Hierarchy::Draw()
 		{
 			Inspector::NodesSelected[0]->RemoveFromParent();
 			Inspector::NodesSelected.erase(Inspector::NodesSelected.begin());
+			App::GetGizmo()->NodeTransform = nullptr;
 		}
 		ImGui::EndChild();
 	}
