@@ -75,6 +75,8 @@ private:
 	int _width = 800;
 	int _height = 600;
 
+	Math::Vector4 _clearColor = {0.45f, 0.55f, 0.60f, 1.00f};
+	
 	// Ui
 	EditorUi::Editor _editorUi;
 
@@ -97,6 +99,7 @@ private:
 	void FilesLoad(std::string path);
 
 	void MultiThreadLoad();
+	void PickingUpdate(std::vector<Core::Node*> nodes);
 };
 
 //TODO: Multi-Thread Resource Loading

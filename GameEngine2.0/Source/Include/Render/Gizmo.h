@@ -2,6 +2,11 @@
 #include "Include/Resources/Mesh.h"
 #include "Include/Core/Transform.h"
 
+namespace Core
+{
+	class Node;
+}
+
 namespace Render
 {
 	class Gizmo
@@ -11,8 +16,15 @@ namespace Render
 		~Gizmo();
 
 		void Draw();
+		void DrawPicking(int id);
+
 		Core::Transform* NodeTransform = nullptr;
+		Core::Node** GetNodes() { return _axis; }
+
+		float ForwardDistance = 0;
 	private:
-		Resources::Mesh* _mesh = nullptr;
+		Core::Node* _axis[4];
+		bool _foundMesh[4] = {false};
+		bool _initialized = false;
 	};
 }

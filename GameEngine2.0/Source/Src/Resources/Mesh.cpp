@@ -168,18 +168,15 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 		Initialize();
 	glBindVertexArray(_VAO);
 	glUseProgram(Resources::ResourceManager::GetPickingShader()->Program);
-	float r = (id & 0x000000FF) >> 0;
-	float g = (id & 0x0000FF00) >> 8;
-	float b = (id & 0x00FF0000) >> 16;
-	r /= 255.f;
-	g /= 255.f;
-	b /= 255.f;
-	for (auto Sub : SubMeshes)
+	int r = (id & 0x000000FF) >> 0;
+	int g = (id & 0x0000FF00) >> 8;
+	int b = (id & 0x00FF0000) >> 16;
+	for (auto Sub : this->SubMeshes)
 	{
 		if (!Sub.Material)
 			continue;
 		glUniformMatrix4fv(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-		glUniform4f(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r, g, b, 1.f);
+		glUniform4f(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r/255.f, g/255.f, b/255.f, 1.f);
 
 		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}

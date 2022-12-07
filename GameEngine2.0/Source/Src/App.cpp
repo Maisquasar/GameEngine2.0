@@ -299,6 +299,83 @@ void App::MultiThreadLoad()
 		_everythingIsLoaded = true;
 
 }
+void App::PickingUpdate(std::vector<Core::Node*> nodes)
+{
+	static bool IsDown = false;
+	static size_t ArrowClicked = -1;
+	static Math::Vector2 mousePosition;
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && GetFramebuffer()->IsHovered) {
+		IsDown = true;
+		int id = 0;
+		size_t previousSize = nodes.size();
+
+		for (auto child : nodes)
+		{
+			child->DrawPicking(id);
+			id++;
+		}
+		_gizmo.DrawPicking(id);
+
+		glFlush();
+		glFinish();
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		unsigned char data[4];
+		Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
+		mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
+		mouse.y = this->GetWindowSize().y - mouse.y;
+		glReadPixels((GLint)mouse.x, (GLint)mouse.y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		int pickedID = data[0] + data[1] * 256 + data[2] * 256 * 256;
+
+		if ((pickedID == 0x00ffffff || pickedID >= nodes.size() + 4 || pickedID < 0) && pickedID) {
+			EditorUi::Inspector::ClearSelected();
+		}
+		else if (pickedID < nodes.size())
+		{
+			if (!ImGui::GetIO().KeyCtrl)
+			{
+				EditorUi::Inspector::ClearSelected();
+			}
+			EditorUi::Inspector::AddNodeSelected(nodes[pickedID]);
+		}
+		else
+		{
+			ArrowClicked = pickedID - nodes.size();
+			Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
+			mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
+			mousePosition = mouse;
+		}
+		glClearColor(_clearColor.x* _clearColor.w, _clearColor.y* _clearColor.w, _clearColor.z* _clearColor.w, _clearColor.w);
+		// Re-clear the screen for real rendering
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+	else if (IsDown && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+	{
+		IsDown = false;
+		ArrowClicked = -1;
+	}
+	if (IsDown)
+	{
+		if (ArrowClicked >= 0)
+		{
+			if (ArrowClicked < 3)
+			{
+				Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
+				mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
+				auto currentMousePos = mouse;
+				auto node = EditorUi::Editor::GetInspector()->NodesSelected[0];
+				float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (_gizmo.ForwardDistance * 5), 20);
+				Math::Vector3 NewPosition;
+				NewPosition[ArrowClicked] = difValue;
+				node->Transform.SetLocalPosition(node->Transform.GetLocalPosition() + NewPosition);
+				mousePosition = currentMousePos;
+			}
+
+		}
+	}
+}
 #pragma endregion
 
 void App::Update()
@@ -310,7 +387,6 @@ void App::Update()
 	this->Components.Initialize();
 	_editorUi.Initialize();
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	_cameraEditor.Update(true);
 
 	// Main loop
@@ -327,7 +403,7 @@ void App::Update()
 		glEnable(GL_DEPTH_TEST);
 
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		// Begin Main Update
@@ -348,44 +424,7 @@ void App::Update()
 		auto ChildList = SceneNode->GetAllChildrens();
 		Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition(), _cameraEditor.Transform.GetForwardVector());
 		// Draw Meshs with picking Shader.
-		{
-			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && GetFramebuffer()->IsHovered) {
-				int id = 0;
-				for (auto child : ChildList)
-				{
-					child->DrawPicking(id);
-					id++;
-				}
-
-				glFlush();
-				glFinish();
-
-				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-				unsigned char data[4];
-				Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
-				mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
-				mouse.y = this->GetWindowSize().y - mouse.y;
-				glReadPixels((GLint)mouse.x, (GLint)mouse.y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-				int pickedID = data[0] + data[1] * 256 + data[2] * 256 * 256;
-
-				if (pickedID == 0x00ffffff || pickedID >= ChildList.size() || pickedID < 0) {
-					EditorUi::Inspector::ClearSelected();
-				}
-				else
-				{
-					if (!ImGui::GetIO().KeyCtrl)
-					{
-						EditorUi::Inspector::ClearSelected();
-					}
-					EditorUi::Inspector::AddNodeSelected(ChildList[pickedID]);
-				}
-			}
-		}
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		// Re-clear the screen for real rendering
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		PickingUpdate(ChildList);
 
 		for (auto child : ChildList)
 		{
@@ -416,7 +455,7 @@ void App::Update()
 		_framebuffer.Draw();
 		// End Main Update.
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		// Rendering.
