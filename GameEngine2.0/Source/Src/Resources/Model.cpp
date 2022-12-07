@@ -20,6 +20,7 @@ void Resources::Model::MultiThreadLoad(std::string filename)
 {
 	uint32_t size = 0;
 	bool sucess = false;
+	LOG(Debug::LogType::INFO, "Loading Model : %s", _path.c_str());
 	auto data = Utils::Loader::ReadFile(_path.c_str(), size, sucess);
 	if (sucess)
 		ModelLoop(data, size);
@@ -49,6 +50,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	std::string currentLine;
 	std::string prefix;
 	std::vector<Resources::Mesh> Meshes;
+	Math::Vector3 lastSize;
 
 	while (pos != size)
 	{
@@ -56,6 +58,12 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		prefix = currentLine.substr(0, 2);
 		if (prefix == "o ")
 		{
+			if (Meshes.size() > 0) {
+				lastSize = lastSize + Math::Vector3((float)Meshes.back().Positions.size(), (float)Meshes.back().TextureUVs.size(), (float)Meshes.back().Normals.size());
+
+				if (Meshes.back().SubMeshes.size() > 0)
+					Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
+			}
 			Meshes.push_back(Resources::Mesh());
 			Meshes.back().SetName(Utils::Loader::GetString(currentLine));
 		}
@@ -89,6 +97,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 			auto indices = Utils::Loader::GetIndices(currentLine);
 			for (size_t i = 0; i < 3; i++)
 			{
+				indices[i] = indices[i] - lastSize;
 				Meshes.back().Indices.push_back(indices[i]);
 			}
 		}

@@ -13,6 +13,7 @@ Render::Gizmo::~Gizmo()
 
 void Render::Gizmo::Draw()
 {
+	/*
 	if (_mesh && NodeTransform)
 	{
 		if (!_mesh->IsInitialized())
@@ -45,4 +46,5 @@ void Render::Gizmo::Draw()
 			}
 		}
 	}
+	*/
 }
