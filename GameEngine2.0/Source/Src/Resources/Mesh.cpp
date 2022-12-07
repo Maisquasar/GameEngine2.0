@@ -1,6 +1,7 @@
 #include "..\..\Include\Resources\Mesh.h"
 #include <map>
 #include "Include/App.h"
+#include "Include/Resources/ResourceManager.h"
 
 Resources::Mesh::Mesh()
 {
@@ -156,5 +157,30 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 		glDisable(GL_STENCIL_TEST);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glLineWidth(1);
+	}
+}
+
+void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
+{
+	if (!Loaded)
+		return;
+	if (!_initialized)
+		Initialize();
+	glBindVertexArray(_VAO);
+	glUseProgram(Resources::ResourceManager::GetPickingShader()->Program);
+	float r = (id & 0x000000FF) >> 0;
+	float g = (id & 0x0000FF00) >> 8;
+	float b = (id & 0x00FF0000) >> 16;
+	r /= 255.f;
+	g /= 255.f;
+	b /= 255.f;
+	for (auto Sub : SubMeshes)
+	{
+		if (!Sub.Material)
+			continue;
+		glUniformMatrix4fv(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+		glUniform4f(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r, g, b, 1.f);
+
+		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
 }

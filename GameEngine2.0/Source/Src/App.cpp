@@ -4,6 +4,7 @@
 #include "Include/Physic/Physic.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Debug/Line.h"
+#include "Include/Core/Components/MeshComponent.h"
 
 #pragma region Static Variables
 // Static Variables.
@@ -343,15 +344,57 @@ void App::Update()
 		}
 
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
-		
+
 		auto ChildList = SceneNode->GetAllChildrens();
 		Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition(), _cameraEditor.Transform.GetForwardVector());
+		// Draw Meshs with picking Shader.
+		{
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && GetFramebuffer()->IsHovered) {
+				int id = 0;
+				for (auto child : ChildList)
+				{
+					child->DrawPicking(id);
+					id++;
+				}
+
+				glFlush();
+				glFinish();
+
+				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+				unsigned char data[4];
+				Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
+				mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
+				mouse.y = this->GetWindowSize().y - mouse.y;
+				glReadPixels((GLint)mouse.x, (GLint)mouse.y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+				int pickedID = data[0] + data[1] * 256 + data[2] * 256 * 256;
+
+				if (pickedID == 0x00ffffff || pickedID >= ChildList.size() || pickedID < 0) {
+					EditorUi::Inspector::ClearSelected();
+				}
+				else
+				{
+					if (!ImGui::GetIO().KeyCtrl)
+					{
+						EditorUi::Inspector::ClearSelected();
+					}
+					EditorUi::Inspector::AddNodeSelected(ChildList[pickedID]);
+				}
+			}
+		}
+		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		// Re-clear the screen for real rendering
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		for (auto child : ChildList)
 		{
 			child->DrawSelf();
 		}
 
 		_gizmo.Draw();
+
+		_cameraEditor.UnProject(GetFramebuffer()->GetMousePosition());
 
 		Grid.Draw();
 
@@ -367,7 +410,6 @@ void App::Update()
 		//TODO: this.
 		auto mouse = ImGui::GetMousePos();
 		auto vecMouse = Math::Vector2(mouse.x, mouse.y) - _framebuffer.GetPos();
-
 
 		_input.Update();
 

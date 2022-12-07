@@ -14,6 +14,7 @@ namespace Core::Components {
 		void ShowInInspector() override;
 
 		void Draw();
+		void DrawPicking(int id);
 
 		Resources::Mesh* GetMesh() { return dynamic_cast<Resources::Mesh*>(_currentMesh); }
 		void SetMesh(Resources::IResource* mesh) { _currentMesh = mesh; }

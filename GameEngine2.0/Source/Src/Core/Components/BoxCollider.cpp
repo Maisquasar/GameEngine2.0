@@ -80,10 +80,10 @@ void Core::Components::BoxCollider::Update()
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
 
 	//App::GetEditorCamera()->UnProject(App::GetFramebuffer()->GetMousePosition()).Print();
-	Physic::Ray ray;
-	ray.Set(App::GetEditorCamera()->Transform.GetLocalPosition(), App::GetEditorCamera()->Transform.GetForwardVector() * 10000);
-	if (RayIntersection(ray))
-		printf("Colision");
+	//Physic::Ray ray;
+	//ray.Set(App::GetEditorCamera()->Transform.GetLocalPosition(), App::GetEditorCamera()->Transform.GetForwardVector() * 10000);
+	//if (RayIntersection(ray))
+		//printf("Colision");
 
 }
 

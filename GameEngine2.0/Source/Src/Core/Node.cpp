@@ -142,6 +142,12 @@ void Core::Node::DrawSelf()
 		meshComp->Draw();
 }
 
+void Core::Node::DrawPicking(int id)
+{
+	if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
+		meshComp->DrawPicking(id);
+}
+
 #include "Include/EditorUi/Inspector.h"
 void Core::Node::ShowInHierarchy(int index)
 {

@@ -63,6 +63,7 @@ namespace Resources {
 		void RecompileShaders();
 
 		static Shader* GetDefaultShader();
+		static Shader* GetPickingShader();
 		static Mesh* GetDefaultCube();
 
 		template<typename T> static T* ResourcesPopup(const char* popupName)

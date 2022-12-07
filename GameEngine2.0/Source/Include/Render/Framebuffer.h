@@ -28,6 +28,7 @@ namespace Render {
 		GLuint FBO = 0;
 
 		bool UpdateCameraEditor = false;
+		bool IsHovered = false;
 
 	private:
 		GLuint _RBO = 0;

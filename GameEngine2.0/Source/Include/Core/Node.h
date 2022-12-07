@@ -31,6 +31,7 @@ namespace Core {
 
 		void UpdateSelfAndChilds();
 		void DrawSelf();
+		void DrawPicking(int id);
 
 		void ShowInHierarchy(int index);
 

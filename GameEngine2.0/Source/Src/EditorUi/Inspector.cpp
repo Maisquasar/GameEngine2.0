@@ -103,6 +103,14 @@ void EditorUi::Inspector::AddNodeSelected(Core::Node* node)
 	FileSelected = nullptr;
 }
 
+void EditorUi::Inspector::ClearSelected()
+{
+	for (auto node : NodesSelected) node->SetSelected(false);
+	NodesSelected.clear();
+	FileSelected = nullptr;
+	App::GetGizmo()->NodeTransform = nullptr;
+}
+
 void EditorUi::Inspector::SetFileSelected(EditorUi::File* file)
 {
 	FileSelected = file;

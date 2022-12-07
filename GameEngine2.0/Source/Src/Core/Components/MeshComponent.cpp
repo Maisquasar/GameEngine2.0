@@ -144,6 +144,15 @@ void Core::Components::MeshComponent::Draw()
 		GetMesh()->Update(MVP, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 }
 
+void Core::Components::MeshComponent::DrawPicking(int id)
+{
+	if (!_currentMesh || !_enable)
+		return;
+	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
+	if (_currentMesh)
+		GetMesh()->DrawPicking(MVP, id);
+}
+
 void Core::Components::MeshComponent::Save(std::string space, std::string& content)
 {
 	content += space + Utils::StringFormat("Mesh : %s\n", GetMesh()->GetPath().c_str());

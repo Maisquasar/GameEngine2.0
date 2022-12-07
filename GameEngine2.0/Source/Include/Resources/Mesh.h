@@ -31,6 +31,7 @@ namespace Resources {
 
 		// Call on MeshComponent Update.
 		void Update(Math::Matrix4 MVP, bool outline = false);
+		void DrawPicking(Math::Matrix4 MVP, int id);
 
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;

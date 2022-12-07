@@ -76,6 +76,8 @@ void Render::FrameBuffer::Draw()
 		auto size = ImGui::GetWindowSize();
 		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x - 16, size.y - 60), ImVec2(0, 1), ImVec2(1, 0));
 		_size = Math::Vector2(size.x - 16, size.y - 60);
+		IsHovered = ImGui::IsItemHovered();
+
 		if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
 			UpdateCameraEditor = true;
 		if (UpdateCameraEditor && !ImGui::IsMouseDown(ImGuiMouseButton_Right))

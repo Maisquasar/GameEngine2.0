@@ -114,24 +114,24 @@ Math::Matrix4 Render::CameraEditor::GetModelMatrix()
 }
 
 Math::Vector3 Render::CameraEditor::UnProject(Math::Vector2 point)
-{
-	// Convert screen point to normalized device coordinates (NDC)
-	auto screenSize = App::GetFramebuffer()->GetSize();
-	Math::Vector2 ndc;
-	ndc.x = 2 * point.x / screenSize.x - 1;
-	ndc.y = 2 * point.y / screenSize.y - 1;
+{    
+	// Convert the screen position to normalized device coordinates
+	Math::Vector3 ndc;
+	ndc.x = (point.x / App::GetFramebuffer()->GetSize().x) * 2 - 1;
+	ndc.y = ((App::GetFramebuffer()->GetSize().y - point.y) / App::GetFramebuffer()->GetSize().y) * 2 - 1;
+	ndc.z = 10;
 
-	// Apply inverse projection matrix to NDC point
-	Math::Vector4 clip = GetProjection().CreateInverseMatrix() * Math::Vector4(ndc.x, ndc.y, 1, 1);
+	// Use the inverse of the projection matrix to convert from NDC to world space
+	auto invProjectionMatrix = GetProjection().CreateInverseMatrix();
+	Math::Vector4 worldPos = invProjectionMatrix * ndc;
 
-	// Apply inverse view matrix to clip space point
-	Math::Vector4 world = GetViewMatrix().CreateInverseMatrix() * clip;
+	// Divide by the w-coordinate to get the final world position
+	worldPos = worldPos.Homogenize();
 
-	// Convert world space point to 3D space
-	Math::Vector3 world_point;
-	world_point.x = world.x / world.w;
-	world_point.y = world.y / world.w;
-	world_point.z = world.z / world.w;
-	return world_point;
+	// Use the inverse of the view matrix to transform the world position into the correct space
+	auto invViewMatrix = GetViewMatrix().CreateInverseMatrix();
+	worldPos = invViewMatrix * worldPos;
+
+	return Math::Vector3(worldPos);
 }
 
