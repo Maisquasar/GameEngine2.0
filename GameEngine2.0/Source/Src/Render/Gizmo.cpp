@@ -39,8 +39,10 @@ void Render::Gizmo::Draw()
 			float dot2 = App::GetEditorCamera()->Transform.GetLocalPosition().DotProduct(axis);
 			ForwardDistance = abs(dot1 - dot2);
 			// Calculate the distance between the projected points
-			auto MVP = App::GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(NodeTransform->GetWorldPosition(), NodeTransform->GetWorldRotation(), Math::Vector3(ForwardDistance / 10));
-			printf("%f\n", ForwardDistance / 10);
+
+			auto M = *NodeTransform;
+			M.SetLocalScale(ForwardDistance / 10);
+			auto MVP = App::GetVPMatrix() * M.GetLocalModelMatrix();
 			glDepthRange(0, 0.01);
 			for (auto Sub : mesh->SubMeshes)
 			{

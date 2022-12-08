@@ -368,7 +368,8 @@ void App::PickingUpdate(std::vector<Core::Node*> nodes)
 				auto node = EditorUi::Editor::GetInspector()->NodesSelected[0];
 				float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (_gizmo.ForwardDistance * 5), 20);
 				Math::Vector3 NewPosition;
-				NewPosition[ArrowClicked] = difValue;
+				NewPosition[ArrowClicked] = ArrowClicked == 2 ? -difValue : difValue;
+				NewPosition = _gizmo.NodeTransform->GetWorldRotation() * NewPosition;
 				node->Transform.SetLocalPosition(node->Transform.GetLocalPosition() + NewPosition);
 				mousePosition = currentMousePos;
 			}

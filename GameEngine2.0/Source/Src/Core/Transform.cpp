@@ -52,7 +52,7 @@ Math::Vector3 Core::Transform::GetWorldPosition()
 {
 	if (Parent)
 	{
-		return Parent->Transform.GetModelMatrix() * (_localRotation *_localPosition);
+		return Parent->Transform.GetModelMatrix() * (_localPosition);
 	}
 	else
 		return _localPosition;
@@ -126,7 +126,7 @@ Math::Vector3 Core::Transform::GetLocalScale()
 
 Math::Matrix4 Core::Transform::GetLocalModelMatrix()
 {
-	return Math::Matrix4::CreateTransformMatrix(_localRotation * _localPosition, _localRotation.ToEuler(), _localScale);
+	return Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation.ToEuler(), _localScale);
 }
 
 Math::Vector3 Core::Transform::GetForwardVector()
