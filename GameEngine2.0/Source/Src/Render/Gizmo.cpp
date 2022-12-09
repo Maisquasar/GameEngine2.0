@@ -33,16 +33,8 @@ void Render::Gizmo::Draw()
 			if (!mesh->IsInitialized())
 				mesh->Initialize();
 			glBindVertexArray(mesh->_VAO);
-			// Project the points onto the custom axis
-			auto axis = App::GetEditorCamera()->Transform.GetForwardVector();
-			float dot1 = NodeTransform->GetWorldPosition().DotProduct(axis);
-			float dot2 = App::GetEditorCamera()->Transform.GetLocalPosition().DotProduct(axis);
-			ForwardDistance = abs(dot1 - dot2);
-			// Calculate the distance between the projected points
 
-			auto M = *NodeTransform;
-			M.SetLocalScale(ForwardDistance / 10);
-			auto MVP = App::GetVPMatrix() * M.GetLocalModelMatrix();
+			auto MVP = GetMVP();
 			glDepthRange(0, 0.01);
 			for (auto Sub : mesh->SubMeshes)
 			{
@@ -108,9 +100,8 @@ void Render::Gizmo::DrawPicking(int id)
 		int g = (id & 0x0000FF00) >> 8;
 		int b = (id & 0x00FF0000) >> 16;
 
-		float distance = App::GetEditorCamera()->Transform.GetLocalPosition().GetDistanceBetween(NodeTransform->GetWorldPosition());
-		auto MVP = App::GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(NodeTransform->GetWorldPosition(), NodeTransform->GetWorldRotation(), Math::Vector3(distance / 10));
 
+		auto MVP = GetMVP();
 		glDepthRange(0, 0.01);
 		for (const auto& Sub : mesh->SubMeshes)
 		{
@@ -123,5 +114,27 @@ void Render::Gizmo::DrawPicking(int id)
 		}
 		glDepthRange(0.01, 1);
 		id++;
+	}
+}
+
+Math::Matrix4 Render::Gizmo::GetMVP()
+{
+	// Project the points onto the custom axis
+	auto axis = App::GetEditorCamera()->Transform.GetForwardVector();
+	float dot1 = NodeTransform->GetWorldPosition().DotProduct(axis);
+	float dot2 = App::GetEditorCamera()->Transform.GetLocalPosition().DotProduct(axis);
+	ForwardDistance = abs(dot1 - dot2);
+	// Calculate the distance between the projected points
+
+	if (App::GetSettings()->LocalTransform)
+	{
+		auto M = *NodeTransform;
+		M.SetLocalScale(ForwardDistance / 10);
+		return App::GetVPMatrix() * M.GetLocalModelMatrix();
+	}
+	else
+	{
+		auto M = *NodeTransform;
+		return App::GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(M.GetWorldPosition(), Math::Vector3(), ForwardDistance / 10);
 	}
 }

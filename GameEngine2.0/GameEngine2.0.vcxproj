@@ -66,6 +66,7 @@
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Shader.cpp" />
     <ClCompile Include="Source\Src\Resources\Texture.cpp" />
+    <ClCompile Include="Source\Src\Utils\AppSettings.cpp" />
     <ClCompile Include="Source\Src\Utils\Input.cpp" />
     <ClCompile Include="Source\Src\Utils\Loader.cpp" />
     <ClCompile Include="Source\Src\Utils\ThreadManager.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Shader.h" />
     <ClInclude Include="Source\Include\Resources\Texture.h" />
+    <ClInclude Include="Source\Include\Utils\AppSettings.h" />
     <ClInclude Include="Source\Include\Utils\Input.h" />
     <ClInclude Include="Source\Include\Utils\Loader.h" />
     <ClInclude Include="Source\Include\Physic\Ray.h" />

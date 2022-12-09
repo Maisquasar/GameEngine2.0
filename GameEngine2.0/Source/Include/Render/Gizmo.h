@@ -20,6 +20,7 @@ namespace Render
 
 		Core::Transform* NodeTransform = nullptr;
 		Core::Node** GetNodes() { return _axis; }
+		Math::Matrix4 GetMVP();
 
 		float ForwardDistance = 0;
 	private:

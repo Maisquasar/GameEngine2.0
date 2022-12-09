@@ -7,15 +7,16 @@
 #include <ImGui/imgui_impl_opengl3.h>
 #include <filesystem>
 
+#include "Include/Core/Node.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/Resources/ResourceManager.h"
-#include "Include/Utils/Input.h"
+#include "Include/Resources/Model.h"
 #include "Include/Render/CameraEditor.h"
 #include "Include/Render/Framebuffer.h"
-#include "Include/Core/Node.h"
-#include "Include/Resources/Model.h"
-#include "Include/Utils/ThreadManager.h"
 #include "Include/Render/Gizmo.h"
+#include "Include/Utils/Input.h"
+#include "Include/Utils/ThreadManager.h"
+#include "Include/Utils/AppSettings.h"
 
 enum class GameState
 {
@@ -54,6 +55,7 @@ public:
 	static Render::CameraEditor* GetEditorCamera() { return &_cameraEditor; }
 	static Render::Gizmo* GetGizmo() { return &_gizmo; }
 	static Render::FrameBuffer* GetFramebuffer() { return &_framebuffer; }
+	static Utils::AppSettings* GetSettings() { return &_settings; }
 
 	static std::shared_ptr<Core::Node> SceneNode;
 	static Core::Components::Data Components;
@@ -85,6 +87,7 @@ private:
 
 	// Utils
 	Utils::Input _input;
+	static Utils::AppSettings _settings;
 
 	// Render
 	static Render::CameraEditor _cameraEditor;
@@ -102,6 +105,4 @@ private:
 	void PickingUpdate(std::vector<Core::Node*> nodes);
 };
 
-//TODO: Multi-Thread Resource Loading
 //TODO: Lights
-//TODO: Add New Material on File Explorer

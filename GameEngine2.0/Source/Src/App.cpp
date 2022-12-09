@@ -15,9 +15,12 @@ Math::Matrix4 App::_VP;
 GameState App::_gameState = GameState::Editor;
 std::string App::_currentScenePath;
 double App::_deltaTime;
+
 Render::CameraEditor App::_cameraEditor;
 Render::Gizmo App::_gizmo;
 Render::FrameBuffer App::_framebuffer;
+
+Utils::AppSettings App::_settings;
 
 std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
 Core::Components::Data App::Components;
@@ -369,7 +372,8 @@ void App::PickingUpdate(std::vector<Core::Node*> nodes)
 				float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (_gizmo.ForwardDistance * 5), 20);
 				Math::Vector3 NewPosition;
 				NewPosition[ArrowClicked] = ArrowClicked == 2 ? -difValue : difValue;
-				NewPosition = _gizmo.NodeTransform->GetWorldRotation() * NewPosition;
+				if (_settings.LocalTransform)
+					NewPosition = _gizmo.NodeTransform->GetWorldRotation() * NewPosition;
 				node->Transform.SetLocalPosition(node->Transform.GetLocalPosition() + NewPosition);
 				mousePosition = currentMousePos;
 			}

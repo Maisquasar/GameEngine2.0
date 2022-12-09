@@ -58,17 +58,10 @@ void Render::FrameBuffer::Draw()
 
 
 		if (ImGui::BeginMenuBar()) {
-			static float lastRecord = 0;
-			static char fpsText[64];
-			if (lastRecord <= 0) {
-				lastRecord = 1;
-				sprintf_s(fpsText, 64, "%f Fps", (1 / App::GetDeltaTime()));
+			if (ImGui::BeginMenu("Transform")) {
+				ImGui::Checkbox("Local", &App::GetSettings()->LocalTransform);
+				ImGui::EndMenu();
 			}
-			else
-			{
-				lastRecord -= App::GetDeltaTime();
-			}
-			ImGui::MenuItem(fpsText);
 			ImGui::EndMenuBar();
 		}
 
