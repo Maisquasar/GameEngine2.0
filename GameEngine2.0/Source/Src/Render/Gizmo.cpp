@@ -3,12 +3,19 @@
 #include "Include/App.h"
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Core/Node.h"
+#include "Include/EditorUi/Editor.h"
+#include "Include/EditorUi/Inspector.h"
 
-const char* MeshesName[] = {
-	"Assets/Default/Models/Gizmo.obj::XAxisArrow",
-	"Assets/Default/Models/Gizmo.obj::YAxisArrow",
-	"Assets/Default/Models/Gizmo.obj::ZAxisArrow",
-	"Assets/Default/Models/Gizmo.obj::Center",
+std::string MeshesName[] = {
+	"::XAxisArrow",
+	"::YAxisArrow",
+	"::ZAxisArrow",
+	"::Center",
+};
+std::string ModelsName[] = {
+	"Assets/Default/Models/TranslateGizmo.obj",
+	"",
+	"Assets/Default/Models/ScaleGizmo.obj",
 };
 
 Render::Gizmo::Gizmo()
@@ -27,7 +34,7 @@ void Render::Gizmo::Draw()
 {
 	if (_initialized && NodeTransform)
 	{
-		for (auto axis : _axis) 
+		for (auto axis : _axis)
 		{
 			auto mesh = dynamic_cast<Resources::Mesh*>(axis->GetComponent<Core::Components::MeshComponent>()->GetMesh());
 			if (!mesh->IsInitialized())
@@ -49,7 +56,7 @@ void Render::Gizmo::Draw()
 			}
 			glDepthRange(0.01, 1);
 		}
-		
+
 	}
 	else if (!_initialized)
 	{
@@ -58,10 +65,18 @@ void Render::Gizmo::Draw()
 		{
 			if (!_foundMesh[i])
 			{
-				if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>(MeshesName[i]))
+				if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>((ModelsName[(int)Mode] + MeshesName[i]).c_str()))
 				{
-					auto MeshComp = new Core::Components::MeshComponent();
-					_axis[i]->AddComponent(MeshComp);
+					Core::Components::MeshComponent* MeshComp;
+					if (MeshComp = _axis[i]->GetComponent<Core::Components::MeshComponent>()) 
+					{
+						delete MeshComp->GetMesh();
+					}
+					else
+					{
+						MeshComp = new Core::Components::MeshComponent();
+						_axis[i]->AddComponent(MeshComp);
+					}
 					auto clonedMesh = dynamic_cast<Resources::Mesh*>(mesh->Clone());
 					MeshComp->SetMesh(clonedMesh);
 					for (auto Sub : clonedMesh->SubMeshes)
@@ -78,6 +93,26 @@ void Render::Gizmo::Draw()
 		}
 		if (initializedNumber == 4)
 			_initialized = true;
+	}
+	if (Application.GetFramebuffer()->IsHovered && !Application.GetFramebuffer()->UpdateCameraEditor) {
+		if (Utils::Input::IsKeyPressed(ImGuiKey_W) && Mode != GizmoMode::Translate)
+		{
+			Mode = GizmoMode::Translate;
+			_initialized = false;
+			for (int i = 0; i < 4; i++) { _foundMesh[i] = false; }
+		}
+		else if (Utils::Input::IsKeyPressed(ImGuiKey_E) && Mode != GizmoMode::Rotate)
+		{
+			Mode = GizmoMode::Rotate;
+			_initialized = false;
+			for (int i = 0; i < 4; i++) { _foundMesh[i] = false; }
+		}
+		else if (Utils::Input::IsKeyPressed(ImGuiKey_R) && Mode != GizmoMode::Scale)
+		{
+			Mode = GizmoMode::Scale;
+			_initialized = false;
+			for (int i = 0; i < 4; i++) { _foundMesh[i] = false; }
+		}
 	}
 }
 
@@ -114,6 +149,40 @@ void Render::Gizmo::DrawPicking(int id)
 		}
 		glDepthRange(0.01, 1);
 		id++;
+	}
+}
+
+void Render::Gizmo::Update(size_t ArrowClicked, Math::Vector2& mousePosition)
+{
+	if (ArrowClicked >= 0)
+	{
+		if (ArrowClicked < 3)
+		{
+			Math::Vector2 mouse = Application.GetFramebuffer()->GetMousePosition();
+			mouse = mouse * Math::Vector2(Application.GetWindowSize().x / Application.GetFramebuffer()->GetSize().x, Application.GetWindowSize().y / Application.GetFramebuffer()->GetSize().y);
+			auto currentMousePos = mouse;
+			auto node = EditorUi::Editor::GetInspector()->NodesSelected[0];
+			float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (this->ForwardDistance * 5), 20);
+			Math::Vector3 NewPosition;
+			NewPosition[ArrowClicked] = ArrowClicked == 2 ? -difValue : difValue;
+			mousePosition = currentMousePos;
+			switch (Mode)
+			{
+			case Render::GizmoMode::Translate:
+				if (Application.GetSettings()->S_Transform == Utils::Settings::Transform::Local)
+					NewPosition = this->NodeTransform->GetWorldRotation() * NewPosition;
+				node->Transform.SetLocalPosition(node->Transform.GetLocalPosition() + NewPosition);
+				break;
+			case Render::GizmoMode::Rotate:
+				break;
+			case Render::GizmoMode::Scale:
+				node->Transform.SetLocalScale(node->Transform.GetLocalScale() + NewPosition);
+				break;
+			default:
+				break;
+			}
+		}
+
 	}
 }
 

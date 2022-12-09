@@ -342,24 +342,7 @@ void App::PickingUpdate(std::vector<Core::Node*> nodes)
 	}
 	if (IsDown)
 	{
-		if (ArrowClicked >= 0)
-		{
-			if (ArrowClicked < 3)
-			{
-				Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
-				mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
-				auto currentMousePos = mouse;
-				auto node = EditorUi::Editor::GetInspector()->NodesSelected[0];
-				float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (_gizmo.ForwardDistance * 5), 20);
-				Math::Vector3 NewPosition;
-				NewPosition[ArrowClicked] = ArrowClicked == 2 ? -difValue : difValue;
-				if (_settings.S_Transform == Utils::Settings::Transform::Local)
-					NewPosition = _gizmo.NodeTransform->GetWorldRotation() * NewPosition;
-				node->Transform.SetLocalPosition(node->Transform.GetLocalPosition() + NewPosition);
-				mousePosition = currentMousePos;
-			}
-
-		}
+		_gizmo.Update(ArrowClicked, mousePosition);
 	}
 }
 #pragma endregion
