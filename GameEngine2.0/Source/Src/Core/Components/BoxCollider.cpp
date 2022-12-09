@@ -34,7 +34,7 @@ void Core::Components::BoxCollider::Initialize()
 {
 	_vertices = Physic::GetCubeVertices();
 
-	_shader = Resources::ResourceManager::GetDefaultShader();
+	_shader = Application.GetResourceManager()->GetDefaultShader();
 
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
@@ -59,7 +59,7 @@ void Core::Components::BoxCollider::Update()
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.
 	Math::Matrix4 M = Transform.GetModelMatrix();
-	Math::Matrix4 MVP = App::GetVPMatrix() * M;
+	Math::Matrix4 MVP = Application.GetVPMatrix() * M;
 
 	// Send to the Shader.
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
@@ -79,9 +79,9 @@ void Core::Components::BoxCollider::Update()
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
 
-	//App::GetEditorCamera()->UnProject(App::GetFramebuffer()->GetMousePosition()).Print();
+	//Application.GetEditorCamera()->UnProject(Application.GetFramebuffer()->GetMousePosition()).Print();
 	//Physic::Ray ray;
-	//ray.Set(App::GetEditorCamera()->Transform.GetLocalPosition(), App::GetEditorCamera()->Transform.GetForwardVector() * 10000);
+	//ray.Set(Application.GetEditorCamera()->Transform.GetLocalPosition(), Application.GetEditorCamera()->Transform.GetForwardVector() * 10000);
 	//if (RayIntersection(ray))
 		//printf("Colision");
 

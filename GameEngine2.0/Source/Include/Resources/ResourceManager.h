@@ -19,7 +19,7 @@ namespace Resources {
 		ResourceManager();
 		~ResourceManager();
 
-		template<typename T> static T* Create(std::string filename)
+		template<typename T> T* Create(std::string filename)
 		{
 			std::string Path = filename;
 			filename = filename.substr(filename.find_last_of("//\\") + 1);
@@ -30,7 +30,7 @@ namespace Resources {
 			return dynamic_cast<T*>(_resource[Path]);
 		}
 
-		template<typename T> static T* Get(const char* filename)
+		template<typename T> T* Get(const char* filename)
 		{
 			if (_resource.count(filename))
 				return dynamic_cast<T*>(_resource.at(filename));
@@ -38,7 +38,7 @@ namespace Resources {
 				return nullptr;
 		}
 
-		template<typename T> static T* GetWithPath(const char* filename)
+		template<typename T> T* GetWithPath(const char* filename)
 		{
 			for (auto r : _resource)
 			{
@@ -49,12 +49,12 @@ namespace Resources {
 		}
 
 		// Basicaly _resource[filename] = res;
-		template<typename T> static void Add(std::string filename, T* res)
+		template<typename T> void Add(std::string filename, T* res)
 		{
 			_resource[filename] = res;
 		}
 
-		template<typename T> static void ChangeKey(std::string lastName, std::string newName, T* res)
+		template<typename T> void ChangeKey(std::string lastName, std::string newName, T* res)
 		{
 			_resource.erase(lastName);
 			_resource[newName] = res;
@@ -62,11 +62,11 @@ namespace Resources {
 
 		void RecompileShaders();
 
-		static Shader* GetDefaultShader();
-		static Shader* GetPickingShader();
-		static Mesh* GetDefaultCube();
+		Shader* GetDefaultShader();
+		Shader* GetPickingShader();
+		Mesh* GetDefaultCube();
 
-		template<typename T> static T* ResourcesPopup(const char* popupName)
+		template<typename T> T* ResourcesPopup(const char* popupName)
 		{
 			T* out = nullptr;
 			int id = 0;
@@ -91,11 +91,11 @@ namespace Resources {
 			}
 			return out;
 		}
-		static std::unordered_map<std::string, Resources::IResource*> GetAllResources() { return _resource; }
-		static int TextureIndex;
+		std::unordered_map<std::string, Resources::IResource*> GetAllResources() { return _resource; }
+		int TextureIndex;
 
 	private:
-		static std::unordered_map<std::string, Resources::IResource*> _resource;
+		std::unordered_map<std::string, Resources::IResource*> _resource;
 
 		
 	};

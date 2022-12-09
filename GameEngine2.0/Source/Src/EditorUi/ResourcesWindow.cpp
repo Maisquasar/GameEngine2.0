@@ -1,5 +1,6 @@
 #include "..\..\Include\EditorUi\ResourcesWindow.h"
-#include "Include/Resources/ResourceManager.h"
+#include "Include/App.h"
+
 
 EditorUi::ResourcesWindow::ResourcesWindow()
 {
@@ -24,7 +25,7 @@ void EditorUi::ResourcesWindow::Draw()
 			ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_None);
 			ImGui::TableHeadersRow();
 			int row = 0;
-			for (auto res : Resources::ResourceManager::GetAllResources()) {
+			for (auto res : Application.GetResourceManager()->GetAllResources()) {
 				ImGui::TableNextRow();
 				for (int column = 0; column < 3; column++)
 				{

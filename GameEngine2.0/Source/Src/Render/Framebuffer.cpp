@@ -12,7 +12,7 @@ Render::FrameBuffer::~FrameBuffer()
 
 void Render::FrameBuffer::Initialize(Math::Integer2 size)
 {
-	this->shader = Resources::ResourceManager::Get<Resources::Shader>("DefaultScreenShader");
+	this->shader = Application.GetResourceManager()->Get<Resources::Shader>("DefaultScreenShader");
 	// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
 
 	glGenFramebuffers(1, &FBO);
@@ -21,7 +21,7 @@ void Render::FrameBuffer::Initialize(Math::Integer2 size)
 	// Create Texture.
 	Tex = new Resources::Texture();
 	Tex->NewTexture("FrameBuffer");
-	Resources::ResourceManager::Add("FrameBuffer", Tex);
+	Application.GetResourceManager()->Add("FrameBuffer", Tex);
 	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, Tex->GetDataPtr());
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
@@ -45,6 +45,7 @@ void Render::FrameBuffer::Initialize(Math::Integer2 size)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _RBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+const char* TransformSettings[] = { "Local", "World" };
 
 void Render::FrameBuffer::Draw()
 {
@@ -56,11 +57,20 @@ void Render::FrameBuffer::Draw()
 		if (!Window)
 			Window = ImGui::GetCurrentWindow();
 
-
 		if (ImGui::BeginMenuBar()) {
-			if (ImGui::BeginMenu("Transform")) {
-				ImGui::Checkbox("Local", &App::GetSettings()->LocalTransform);
-				ImGui::EndMenu();
+			ImGui::SetNextItemWidth(100);
+			if (ImGui::BeginCombo("Transform", TransformSettings[(int)Application.GetSettings()->S_Transform])) {
+				for (int n = 0; n < IM_ARRAYSIZE(TransformSettings); n++)
+				{
+					const bool is_selected = ((int)Application.GetSettings()->S_Transform == n);
+					if (ImGui::Selectable(TransformSettings[n], is_selected))
+						Application.GetSettings()->S_Transform = (Utils::Settings::Transform)n;
+
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
 			}
 			ImGui::EndMenuBar();
 		}

@@ -332,7 +332,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 			auto mat = new Resources::Material();
 			mat->SetPath(_current->Directory + "/NewMaterial.mat");
 			mat->SetName("NewMaterial");
-			Resources::ResourceManager::Add(mat->GetPath().c_str(), mat);
+			Application.GetResourceManager()->Add(mat->GetPath().c_str(), mat);
 			Utils::Loader::WriteMaterial(mat);
 			_current->FoundChildren();
 			ImGui::CloseCurrentPopup();
@@ -353,7 +353,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 					std::string NewName = Name;
 					NewName = NewName.substr(0, NewName.find_last_of(".") - 1);
 					_rightClicked->ResourceLink->SetName(NewName);
-					Resources::ResourceManager::ChangeKey(_rightClicked->ResourceLink->GetPath(), NewPath, _rightClicked->ResourceLink);
+					Application.GetResourceManager()->ChangeKey(_rightClicked->ResourceLink->GetPath(), NewPath, _rightClicked->ResourceLink);
 					_rightClicked->ResourceLink->SetPath(NewPath);
 				}
 				_current->FoundChildren();
@@ -365,7 +365,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 			{
 				if (ImGui::Button("LoadScene"))
 				{
-					App::LoadScene(_rightClicked->Directory);
+					Application.LoadScene(_rightClicked->Directory);
 				}
 			}
 			// ------------- Show in Explorer ------------- //

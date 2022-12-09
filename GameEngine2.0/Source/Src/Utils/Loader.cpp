@@ -1,5 +1,5 @@
 #include "..\..\Include\Utils\Loader.h"
-#include "Include/Resources/ResourceManager.h"
+#include "Include/App.h"
 
 void Utils::Loader::SkipLine(const char* data, uint32_t& pos)
 {
@@ -209,7 +209,7 @@ void Utils::Loader::MtlLoader(std::string path)
 			auto name = currentLine.substr(currentLine.find_first_of(' ') + 1);
 			path = path.substr(0, path.find_last_of('/')) + '/' + name + ".mat";
 
-			if (auto mat = Resources::ResourceManager::Get<Resources::Material>((path).c_str()))
+			if (auto mat = Application.GetResourceManager()->Get<Resources::Material>((path).c_str()))
 			{
 				continue;
 			}
@@ -219,7 +219,7 @@ void Utils::Loader::MtlLoader(std::string path)
 			currentMaterial = new Resources::Material();
 			currentMaterial->SetName(name);
 			currentMaterial->SetPath(path);
-			Resources::ResourceManager::Add(path, currentMaterial);
+			Application.GetResourceManager()->Add(path, currentMaterial);
 			LOG(Debug::LogType::INFO, "Sucessfuly Loaded Material %s from MTL !", currentMaterial->GetPath().c_str())
 		}
 		else if (!currentMaterial)
@@ -250,13 +250,13 @@ void Utils::Loader::MtlLoader(std::string path)
 		else if (prefix == "ma")
 		{
 			std::string texPath = Utils::Loader::GetString(currentLine);
-			if (auto texture = Resources::ResourceManager::Get<Resources::Texture>(texPath.c_str()))
+			if (auto texture = Application.GetResourceManager()->Get<Resources::Texture>(texPath.c_str()))
 			{
 				currentMaterial->SetTexture(texture);
 			}
 			else
 			{
-				texture = Resources::ResourceManager::Create<Resources::Texture>(texPath);
+				texture = Application.GetResourceManager()->Create<Resources::Texture>(texPath);
 				currentMaterial->SetTexture(texture);
 			}
 		}
@@ -316,12 +316,12 @@ void Utils::Loader::LoadMaterial(std::string path)
 		else if (prefix == "Sha")
 		{
 			auto shaderPath = Utils::Loader::GetString(currentLine);
-			material->SetShader(Resources::ResourceManager::Get<Resources::Shader>(shaderPath.c_str()));
+			material->SetShader(Application.GetResourceManager()->Get<Resources::Shader>(shaderPath.c_str()));
 		}
 		else if (prefix == "Tex")
 		{
 			auto texturePath = Utils::Loader::GetString(currentLine);
-			material->SetTexture(Resources::ResourceManager::Get<Resources::Texture>(texturePath.c_str()));
+			material->SetTexture(Application.GetResourceManager()->Get<Resources::Texture>(texturePath.c_str()));
 		}
 		else if (prefix == "Amb")
 		{
@@ -347,7 +347,7 @@ void Utils::Loader::LoadMaterial(std::string path)
 		pos++;
 	}
 	material->SetInitialized();
-	Resources::ResourceManager::Add(material->GetPath(), material);
+	Application.GetResourceManager()->Add(material->GetPath(), material);
 	LOG(Debug::LogType::INFO, "Successfully loaded Material : %s", path.c_str());
 	delete[] data;
 }

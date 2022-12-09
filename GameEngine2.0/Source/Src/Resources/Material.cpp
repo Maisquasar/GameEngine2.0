@@ -5,7 +5,7 @@
 
 Resources::Material::Material()
 {
-	_shader = Resources::ResourceManager::GetDefaultShader();
+	_shader = Application.GetResourceManager()->GetDefaultShader();
 	_initialized = true;
 }
 
@@ -24,7 +24,7 @@ void Resources::Material::ShowInInspector()
 	{
 		ImGui::OpenPopup("ShaderPopup");
 	}
-	if (auto sha = Resources::ResourceManager::ResourcesPopup<Resources::Shader>("ShaderPopup"))
+	if (auto sha = Application.GetResourceManager()->ResourcesPopup<Resources::Shader>("ShaderPopup"))
 		SetShader(sha);
 	ImGui::SameLine();
 	ImGui::Text("%s", GetShader()->GetName().c_str());
@@ -35,7 +35,7 @@ void Resources::Material::ShowInInspector()
 	{
 		ImGui::OpenPopup("TexturePopup");
 	}
-	if (auto tex = Resources::ResourceManager::ResourcesPopup<Resources::Texture>("TexturePopup"))
+	if (auto tex = Application.GetResourceManager()->ResourcesPopup<Resources::Texture>("TexturePopup"))
 		SetTexture(tex);
 	ImGui::SameLine();
 	if (GetTexture())
@@ -69,7 +69,7 @@ void Resources::Material::ShowInInspector()
 
 void Resources::Material::Load(std::string filename)
 {
-	App::ThreadManager.QueueJob(&Material::MultiThreadLoad, this, filename);
+	Application.ThreadManager.QueueJob(&Material::MultiThreadLoad, this, filename);
 }
 
 void Resources::Material::MultiThreadLoad(std::string filename)
@@ -92,12 +92,12 @@ void Resources::Material::MultiThreadLoad(std::string filename)
 		else if (prefix == "Sha")
 		{
 			auto shaderPath = Utils::Loader::GetString(currentLine);
-			SetShader(Resources::ResourceManager::Get<Resources::Shader>(shaderPath.c_str()));
+			SetShader(Application.GetResourceManager()->Get<Resources::Shader>(shaderPath.c_str()));
 		}
 		else if (prefix == "Tex")
 		{
 			auto texturePath = Utils::Loader::GetString(currentLine);
-			SetTexture(Resources::ResourceManager::Get<Resources::Texture>(texturePath.c_str()));
+			SetTexture(Application.GetResourceManager()->Get<Resources::Texture>(texturePath.c_str()));
 		}
 		else if (prefix == "Amb")
 		{

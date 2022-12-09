@@ -31,46 +31,58 @@ public:
 	App(const char* Name, int width, int height);
 	~App();
 
-	void InitializeApp();
+	void InitializeApp(const char* Name, int width, int height);
 	void Update();
 	void ClearApp();
-	static void CloseApp();
+	void CloseApp();
 
-	static void LoadScene(std::string Path);
-	static Core::Node* LoadNode(std::string Path);
-	static void LoadTemporaryScene(std::string Path);
-	static void SaveScene();
-	static void SaveNode(std::string Path, Core::Node* node);
+	void LoadScene(std::string Path);
+	Core::Node* LoadNode(std::string Path);
+	void LoadTemporaryScene(std::string Path);
+	void SaveScene();
+	void SaveNode(std::string Path, Core::Node* node);
 
-	static void BeginPlay();
-	static void EndPlay();
+	void BeginPlay();
+	void EndPlay();
 
-	static GLFWwindow* GetWindow() { return _window; }
-	static Math::Integer2 GetWindowSize();
-	static const GLFWvidmode* GetMonitorVideoMode();
-	static Math::Matrix4 GetVPMatrix() { return _VP; }
-	static GameState GetGameState() { return _gameState; }
-	static std::string GetCurrentScenePath() { _currentScenePath; }
-	static float GetDeltaTime() { return (float)_deltaTime; }
-	static Render::CameraEditor* GetEditorCamera() { return &_cameraEditor; }
-	static Render::Gizmo* GetGizmo() { return &_gizmo; }
-	static Render::FrameBuffer* GetFramebuffer() { return &_framebuffer; }
-	static Utils::AppSettings* GetSettings() { return &_settings; }
+	GLFWwindow* GetWindow() { return _window; }
 
-	static std::shared_ptr<Core::Node> SceneNode;
-	static Core::Components::Data Components;
-	static Utils::ThreadManager ThreadManager;
-	static std::vector<Resources::IResource**> MultiThreadMeshes;
+	Math::Integer2 GetWindowSize();
+
+	const GLFWvidmode* GetMonitorVideoMode();
+
+	Math::Matrix4 GetVPMatrix() { return _VP; }
+
+	GameState GetGameState() { return _gameState; }
+
+	std::string GetCurrentScenePath() { return _currentScenePath; }
+
+	float GetDeltaTime() { return (float)_deltaTime; }
+
+	Render::CameraEditor* GetEditorCamera() { return &_cameraEditor; }
+
+	Render::Gizmo* GetGizmo() { return &_gizmo; }
+
+	Render::FrameBuffer* GetFramebuffer() { return &_framebuffer; }
+
+	Utils::AppSettings* GetSettings() { return &_settings; }
+
+	Resources::ResourceManager* GetResourceManager() { return &_resourceManager; }
+
+	std::shared_ptr<Core::Node> SceneNode;
+	Core::Components::Data Components;
+	Utils::ThreadManager ThreadManager;
+	std::vector<Resources::IResource**> MultiThreadMeshes;
 private:
 	// Window
-	static GLFWwindow* _window;
-	static const GLFWvidmode* _videoMode;
-	static bool _shouldClose;
-	static Math::Matrix4 _VP;
-	static GameState _gameState;
-	static std::string _currentScenePath;
+	GLFWwindow* _window;
+	const GLFWvidmode* _videoMode;
+	bool _shouldClose;
+	Math::Matrix4 _VP;
+	GameState _gameState;
+	std::string _currentScenePath;
 	double _lastFrame = 0;
-	static double _deltaTime;
+	double _deltaTime;
 
 	const char* _windowName = "GameEngine2.0";
 	bool _everythingIsLoaded = false;
@@ -87,12 +99,12 @@ private:
 
 	// Utils
 	Utils::Input _input;
-	static Utils::AppSettings _settings;
+	Utils::AppSettings _settings;
 
 	// Render
-	static Render::CameraEditor _cameraEditor;
-	static Render::FrameBuffer _framebuffer;
-	static Render::Gizmo _gizmo;
+	Render::CameraEditor _cameraEditor;
+	Render::FrameBuffer _framebuffer;
+	Render::Gizmo _gizmo;
 
 	void InitGlfw();
 	void InitImGui();
@@ -104,5 +116,7 @@ private:
 	void MultiThreadLoad();
 	void PickingUpdate(std::vector<Core::Node*> nodes);
 };
+
+extern App Application;
 
 //TODO: Lights

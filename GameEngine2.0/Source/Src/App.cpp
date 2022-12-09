@@ -6,28 +6,7 @@
 #include "Include/Debug/Line.h"
 #include "Include/Core/Components/MeshComponent.h"
 
-#pragma region Static Variables
-// Static Variables.
-GLFWwindow* App::_window = nullptr;
-const GLFWvidmode* App::_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());;
-bool App::_shouldClose = false;
-Math::Matrix4 App::_VP;
-GameState App::_gameState = GameState::Editor;
-std::string App::_currentScenePath;
-double App::_deltaTime;
-
-Render::CameraEditor App::_cameraEditor;
-Render::Gizmo App::_gizmo;
-Render::FrameBuffer App::_framebuffer;
-
-Utils::AppSettings App::_settings;
-
-std::shared_ptr<Core::Node> App::SceneNode = std::make_shared<Core::Node>();
-Core::Components::Data App::Components;
-Utils::ThreadManager App::ThreadManager = Utils::ThreadManager();
-std::vector<Resources::IResource**> App::MultiThreadMeshes;
-
-#pragma endregion
+App Application;
 
 #pragma region Callbacks
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
@@ -94,8 +73,10 @@ App::App(const char* Name, int width, int height)
 }
 App::~App() {}
 
-void App::InitializeApp()
+void App::InitializeApp(const char* Name, int width, int height)
 {
+	_windowName = Name;
+	_width = width; _height = height;
 	InitGlfw();
 	InitGlad();
 	InitImGui();
@@ -372,7 +353,7 @@ void App::PickingUpdate(std::vector<Core::Node*> nodes)
 				float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (_gizmo.ForwardDistance * 5), 20);
 				Math::Vector3 NewPosition;
 				NewPosition[ArrowClicked] = ArrowClicked == 2 ? -difValue : difValue;
-				if (_settings.LocalTransform)
+				if (_settings.S_Transform == Utils::Settings::Transform::Local)
 					NewPosition = _gizmo.NodeTransform->GetWorldRotation() * NewPosition;
 				node->Transform.SetLocalPosition(node->Transform.GetLocalPosition() + NewPosition);
 				mousePosition = currentMousePos;
@@ -507,7 +488,8 @@ void App::LoadScene(std::string Path)
 {
 	if (EditorUi::Inspector().NodesSelected.size() > 0)
 		EditorUi::Inspector().NodesSelected.clear();
-	SceneNode->RemoveAllChildrens();
+	if (SceneNode)
+		SceneNode->RemoveAllChildrens();
 	_currentScenePath = Path;
 	SceneNode = std::shared_ptr<Core::Node>(LoadNode(Path));
 }

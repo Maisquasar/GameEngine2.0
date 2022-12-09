@@ -115,7 +115,7 @@ void Core::Node::UpdateSelfAndChilds()
 	{
 		if (component->IsEnable())
 		{
-			switch (App::GetGameState())
+			switch (Application.GetGameState())
 			{
 			case GameState::Play:
 				component->GameUpdate();
@@ -276,7 +276,7 @@ void Core::Node::Load(const char* data, uint32_t& pos)
 		else if (currentLine.substr(0, 15) == "#BeginComponent")
 		{
 			auto Type = Utils::Loader::GetString(currentLine);
-			for (auto component : App::Components.Components)
+			for (auto component : Application.Components.Components)
 			{
 				if (Type == component->ComponentName)
 				{

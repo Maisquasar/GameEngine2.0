@@ -23,20 +23,20 @@ void Render::EditorGrid::Draw()
 	if (_meshComponent->GetMesh())
 	{
 		glDisable(GL_CULL_FACE);
-		Math::Matrix4 MVP = App::GetVPMatrix() * Math::Matrix4::Identity();
+		Math::Matrix4 MVP = Application.GetVPMatrix() * Math::Matrix4::Identity();
 		_meshComponent->GetMesh()->Update(MVP, false);
 		glEnable(GL_CULL_FACE);
 	}
 	else
 	{
-		if (auto mesh = Resources::ResourceManager::Get<Resources::Mesh>("Assets/Default/Models/Grid.obj::Grid"))
+		if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>("Assets/Default/Models/Grid.obj::Grid"))
 		{
 			if (!mesh->Loaded)
 				return;
 			_meshComponent->SetMesh(dynamic_cast<Resources::Mesh*>(mesh->Clone()));
 			for (auto sub : _meshComponent->GetMesh()->SubMeshes)
 			{
-				sub.Material->SetShader(Resources::ResourceManager::Get<Resources::Shader>("Assets/Default/Shaders/GridShader"));
+				sub.Material->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/GridShader"));
 			}
 		}
 	}

@@ -37,18 +37,18 @@ void EditorUi::MainBar::Draw()
 			}
 			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 			{
-				App::SaveScene();
+				Application.SaveScene();
 			}
 			if (ImGui::MenuItem("Save as Scene", "Ctrl+Shift+S"))
 			{
 				EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(true);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetState(EditorUi::FileExplorerState::Write);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetTargetExtension(".scene");
-				App::SceneNode->Save("", content);
+				Application.SceneNode->Save("", content);
 			}
 			if (ImGui::MenuItem("Exit", "Alt+F4"))
 			{
-				App::CloseApp();
+				Application.CloseApp();
 			}
 			ImGui::EndMenu();
 		}
@@ -62,27 +62,27 @@ void EditorUi::MainBar::Draw()
 			ImGui::Checkbox("Performance", Editor::GetPerformanceWindow()->IsOpen());
 			ImGui::EndMenu();
 		}
-		ImGui::SetCursorPosX((float)(App::GetWindowSize().x / 2) - 25.f);
+		ImGui::SetCursorPosX((float)(Application.GetWindowSize().x / 2) - 25.f);
 		if (ImGui::MenuItem("I>"))
 		{
-			if (App::GetGameState() != GameState::Play)
+			if (Application.GetGameState() != GameState::Play)
 			{
-				App::BeginPlay();
+				Application.BeginPlay();
 				EditorUi::Editor::GetConsole()->Clear();
 			}
 		}
 		if (ImGui::MenuItem("||"))
 		{
-			if (App::GetGameState() != GameState::Editor)
+			if (Application.GetGameState() != GameState::Editor)
 			{
-				App::EndPlay();
+				Application.EndPlay();
 			}
 		}
 	}
 	ImGui::EndMainMenuBar();
 	if (auto file = EditorUi::Editor::GetFloatingFileExplorer()->DrawAndRead())
 	{
-		App::LoadScene(file->Directory);
+		Application.LoadScene(file->Directory);
 		EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(false);
 	}
 	if (EditorUi::Editor::GetFloatingFileExplorer()->GetState() == EditorUi::FileExplorerState::Write) 

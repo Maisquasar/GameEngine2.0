@@ -35,7 +35,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 		ImGui::Text(GetMesh()->GetName().c_str());
 	else
 		ImGui::Text("None");
-	if (auto Mesh = Resources::ResourceManager::ResourcesPopup<Resources::Mesh>("MeshPopup")) {
+	if (auto Mesh = Application.GetResourceManager()->ResourcesPopup<Resources::Mesh>("MeshPopup")) {
 		delete _currentMesh;
 		_currentMesh = Mesh->Clone();
 	}
@@ -78,7 +78,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 			}
 		}
 		ImGui::PushID(SelectedRow);
-		if (auto mat = Resources::ResourceManager::ResourcesPopup<Resources::Material>("MaterialPopup")) {
+		if (auto mat = Application.GetResourceManager()->ResourcesPopup<Resources::Material>("MaterialPopup")) {
 			ChangeMat->Material = mat;
 		}
 		ImGui::PopID();
@@ -100,7 +100,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 			{
 				ImGui::OpenPopup("ShaderPopup");
 			}
-			if (auto sha = Resources::ResourceManager::ResourcesPopup<Resources::Shader>("ShaderPopup"))
+			if (auto sha = Application.GetResourceManager()->ResourcesPopup<Resources::Shader>("ShaderPopup"))
 				Sub.Material->SetShader(sha);
 			ImGui::SameLine();
 			ImGui::Text("%s", Sub.Material->GetShader()->GetName().c_str());
@@ -110,7 +110,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 			{
 				ImGui::OpenPopup("TexturePopup");
 			}
-			if (auto tex = Resources::ResourceManager::ResourcesPopup<Resources::Texture>("TexturePopup"))
+			if (auto tex = Application.GetResourceManager()->ResourcesPopup<Resources::Texture>("TexturePopup"))
 				Sub.Material->SetTexture(tex);
 			ImGui::SameLine();
 			if (Sub.Material->GetTexture())
@@ -139,7 +139,7 @@ void Core::Components::MeshComponent::Draw()
 {
 	if (!_currentMesh || !_enable)
 		return;
-	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
+	auto MVP = Application.GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (_currentMesh)
 		GetMesh()->Update(MVP, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 }
@@ -148,7 +148,7 @@ void Core::Components::MeshComponent::DrawPicking(int id)
 {
 	if (!_currentMesh || !_enable)
 		return;
-	auto MVP = App::GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
+	auto MVP = Application.GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (_currentMesh)
 		GetMesh()->DrawPicking(MVP, id);
 }
@@ -172,20 +172,20 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 		if (currentLine.substr(0, 4) == "Mesh")
 		{
 			auto MeshPath = Utils::Loader::GetString(currentLine);
-			if (auto mesh = Resources::ResourceManager::Get<Resources::Mesh>(MeshPath.c_str())) {
+			if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>(MeshPath.c_str())) {
 				this->_currentMesh = mesh->Clone();
 			}
 			else
 			{
 				_currentMesh = new Resources::Mesh();
 				_currentMesh->SetPath(MeshPath);
-				App::MultiThreadMeshes.push_back(&_currentMesh);
+				Application.MultiThreadMeshes.push_back(&_currentMesh);
 			}
 		}
 		else if (currentLine.substr(0, 7) == "SubMesh")
 		{
 			auto SubMeshMaterialPath = Utils::Loader::GetString(currentLine);
-			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(SubMeshMaterialPath.c_str())) {
+			if (auto mat = Application.GetResourceManager()->Get<Resources::Material>(SubMeshMaterialPath.c_str())) {
 				if (GetMesh()->SubMeshes.size() <= SubMeshIndex) {
 					GetMesh()->SubMeshes.push_back(Resources::SubMesh());
 				}

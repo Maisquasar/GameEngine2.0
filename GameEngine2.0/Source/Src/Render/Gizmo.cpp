@@ -58,7 +58,7 @@ void Render::Gizmo::Draw()
 		{
 			if (!_foundMesh[i])
 			{
-				if (auto mesh = Resources::ResourceManager::Get<Resources::Mesh>(MeshesName[i]))
+				if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>(MeshesName[i]))
 				{
 					auto MeshComp = new Core::Components::MeshComponent();
 					_axis[i]->AddComponent(MeshComp);
@@ -66,7 +66,7 @@ void Render::Gizmo::Draw()
 					MeshComp->SetMesh(clonedMesh);
 					for (auto Sub : clonedMesh->SubMeshes)
 					{
-						Sub.Material->SetShader(Resources::ResourceManager::GetDefaultShader());
+						Sub.Material->SetShader(Application.GetResourceManager()->GetDefaultShader());
 					}
 					initializedNumber++;
 				}
@@ -95,7 +95,7 @@ void Render::Gizmo::DrawPicking(int id)
 		if (!_initialized)
 			mesh->Initialize();
 		glBindVertexArray(mesh->_VAO);
-		glUseProgram(Resources::ResourceManager::GetPickingShader()->Program);
+		glUseProgram(Application.GetResourceManager()->GetPickingShader()->Program);
 		int r = (id & 0x000000FF) >> 0;
 		int g = (id & 0x0000FF00) >> 8;
 		int b = (id & 0x00FF0000) >> 16;
@@ -107,8 +107,8 @@ void Render::Gizmo::DrawPicking(int id)
 		{
 			if (!Sub.Material)
 				continue;
-			glUniformMatrix4fv(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-			glUniform4f(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
+			glUniformMatrix4fv(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+			glUniform4f(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
 			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 		}
@@ -120,21 +120,21 @@ void Render::Gizmo::DrawPicking(int id)
 Math::Matrix4 Render::Gizmo::GetMVP()
 {
 	// Project the points onto the custom axis
-	auto axis = App::GetEditorCamera()->Transform.GetForwardVector();
+	auto axis = Application.GetEditorCamera()->Transform.GetForwardVector();
 	float dot1 = NodeTransform->GetWorldPosition().DotProduct(axis);
-	float dot2 = App::GetEditorCamera()->Transform.GetLocalPosition().DotProduct(axis);
+	float dot2 = Application.GetEditorCamera()->Transform.GetLocalPosition().DotProduct(axis);
 	ForwardDistance = abs(dot1 - dot2);
 	// Calculate the distance between the projected points
 
-	if (App::GetSettings()->LocalTransform)
+	if (Application.GetSettings()->S_Transform == Utils::Settings::Transform::Local)
 	{
 		auto M = *NodeTransform;
 		M.SetLocalScale(ForwardDistance / 10);
-		return App::GetVPMatrix() * M.GetLocalModelMatrix();
+		return Application.GetVPMatrix() * M.GetLocalModelMatrix();
 	}
 	else
 	{
 		auto M = *NodeTransform;
-		return App::GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(M.GetWorldPosition(), Math::Vector3(), ForwardDistance / 10);
+		return Application.GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(M.GetWorldPosition(), Math::Vector3(), ForwardDistance / 10);
 	}
 }

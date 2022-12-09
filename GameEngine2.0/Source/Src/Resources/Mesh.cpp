@@ -167,7 +167,7 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 	if (!_initialized)
 		Initialize();
 	glBindVertexArray(_VAO);
-	glUseProgram(Resources::ResourceManager::GetPickingShader()->Program);
+	glUseProgram(Application.GetResourceManager()->GetPickingShader()->Program);
 	int r = (id & 0x000000FF) >> 0;
 	int g = (id & 0x0000FF00) >> 8;
 	int b = (id & 0x00FF0000) >> 16;
@@ -175,8 +175,8 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 	{
 		if (!Sub.Material)
 			continue;
-		glUniformMatrix4fv(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-		glUniform4f(Resources::ResourceManager::GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r/255.f, g/255.f, b/255.f, 1.f);
+		glUniformMatrix4fv(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+		glUniform4f(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r/255.f, g/255.f, b/255.f, 1.f);
 
 		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}

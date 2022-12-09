@@ -13,7 +13,7 @@ Resources::Model::~Model()
 
 void Resources::Model::Load(std::string filename)
 {
-	App::ThreadManager.QueueJob(&Model::MultiThreadLoad, this, filename);
+	Application.ThreadManager.QueueJob(&Model::MultiThreadLoad, this, filename);
 }
 
 void Resources::Model::MultiThreadLoad(std::string filename)
@@ -92,7 +92,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 			if (Meshes.back().SubMeshes.size() == 0)
 			{
 				Meshes.back().SubMeshes.push_back(SubMesh());
-				Meshes.back().SubMeshes.back().Material = Resources::ResourceManager::Get<Resources::Material>("DefaultMaterial");
+				Meshes.back().SubMeshes.back().Material = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
 			}
 			auto indices = Utils::Loader::GetIndices(currentLine);
 			for (size_t i = 0; i < 3; i++)
@@ -112,12 +112,12 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 			// Set Name
 			std::string MaterialName = Utils::Loader::GetString(currentLine);
 			MaterialName = GetPath().substr(0, GetPath().find_last_of('/') + 1) + MaterialName + ".mat";
-			if (auto mat = Resources::ResourceManager::Get<Resources::Material>(MaterialName.c_str())) {
+			if (auto mat = Application.GetResourceManager()->Get<Resources::Material>(MaterialName.c_str())) {
 				subMesh.Material = mat;
 			}
 			else
 			{
-				mat = Resources::ResourceManager::Get<Resources::Material>("DefaultMaterial");
+				mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
 				subMesh.Material = mat;
 			}
 			Meshes.back().SubMeshes.push_back(subMesh);
@@ -131,7 +131,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		auto MeshNode = new Core::Node();
 		mesh.Load("");
 		mesh.SetPath(GetPath() + "::" + mesh.GetName());
-		Resources::ResourceManager::Add(GetPath() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
+		Application.GetResourceManager()->Add(GetPath() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
 		auto meshComp = new Core::Components::MeshComponent();
 		meshComp->SetMesh(mesh.Clone());
 		MeshNode->AddComponent(meshComp);

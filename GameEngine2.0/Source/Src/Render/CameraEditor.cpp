@@ -28,12 +28,12 @@ void Render::CameraEditor::Update(bool firstUpdate)
 		auto mousePos = ImGui::GetMousePos();
 		// Set Mouse Pos Modulo Monitor Size
 		if (mousePos.x < 1)
-			SetCursorPos(App::GetMonitorVideoMode()->width - 2, (int)mousePos.y);
-		if (mousePos.x >= App::GetMonitorVideoMode()->width - 1)
+			SetCursorPos(Application.GetMonitorVideoMode()->width - 2, (int)mousePos.y);
+		if (mousePos.x >= Application.GetMonitorVideoMode()->width - 1)
 			SetCursorPos(2, (int)mousePos.y);
 		if (mousePos.y < 1)
-			SetCursorPos((int)mousePos.x, App::GetMonitorVideoMode()->height - 2);
-		if (mousePos.y >= App::GetMonitorVideoMode()->height - 1)
+			SetCursorPos((int)mousePos.x, Application.GetMonitorVideoMode()->height - 2);
+		if (mousePos.y >= Application.GetMonitorVideoMode()->height - 1)
 			SetCursorPos((int)mousePos.x, 2);
 	}
 
@@ -117,8 +117,8 @@ Math::Vector3 Render::CameraEditor::UnProject(Math::Vector2 point)
 {    
 	// Convert the screen position to normalized device coordinates
 	Math::Vector3 ndc;
-	ndc.x = (point.x / App::GetFramebuffer()->GetSize().x) * 2 - 1;
-	ndc.y = ((App::GetFramebuffer()->GetSize().y - point.y) / App::GetFramebuffer()->GetSize().y) * 2 - 1;
+	ndc.x = (point.x / Application.GetFramebuffer()->GetSize().x) * 2 - 1;
+	ndc.y = ((Application.GetFramebuffer()->GetSize().y - point.y) / Application.GetFramebuffer()->GetSize().y) * 2 - 1;
 	ndc.z = 10;
 
 	// Use the inverse of the projection matrix to convert from NDC to world space

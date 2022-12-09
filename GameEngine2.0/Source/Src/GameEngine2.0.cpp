@@ -8,12 +8,11 @@
 
 void Main()
 {
-    App app = App("GameEngine2.0", 1920, 1080);
-    app.InitializeApp();
+    Application.InitializeApp("GameEngine2.0", 1920, 1080);
 
-    app.Update();
+    Application.Update();
 
-    app.ClearApp();
+    Application.ClearApp();
 };
 
 int main()

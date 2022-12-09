@@ -21,7 +21,7 @@ Core::Components::Component* ComponentsPopup()
 	Core::Components::Component* out = nullptr;
 	if (ImGui::BeginPopup("Components", ImGuiWindowFlags_AlwaysVerticalScrollbar))
 	{
-		for (auto component : App::Components.Components)
+		for (auto component : Application.Components.Components)
 		{
 			if (ImGui::Button(component->ComponentName.c_str())) {
 				out = component->Clone();
@@ -98,7 +98,7 @@ void EditorUi::Inspector::Draw()
 void EditorUi::Inspector::AddNodeSelected(Core::Node* node)
 {
 	NodesSelected.push_back(node);
-	App::GetGizmo()->NodeTransform = &node->Transform;
+	Application.GetGizmo()->NodeTransform = &node->Transform;
 	node->SetSelected(true);
 	FileSelected = nullptr;
 }
@@ -108,7 +108,7 @@ void EditorUi::Inspector::ClearSelected()
 	for (auto node : NodesSelected) node->SetSelected(false);
 	NodesSelected.clear();
 	FileSelected = nullptr;
-	App::GetGizmo()->NodeTransform = nullptr;
+	Application.GetGizmo()->NodeTransform = nullptr;
 }
 
 void EditorUi::Inspector::SetFileSelected(EditorUi::File* file)
@@ -116,7 +116,7 @@ void EditorUi::Inspector::SetFileSelected(EditorUi::File* file)
 	FileSelected = file;
 	for (auto node : NodesSelected) node->SetSelected(false);
 	NodesSelected.clear();
-	App::GetGizmo()->NodeTransform = nullptr;
+	Application.GetGizmo()->NodeTransform = nullptr;
 }
 
 bool EditorUi::Inspector::IsSelected(Core::Node* node)

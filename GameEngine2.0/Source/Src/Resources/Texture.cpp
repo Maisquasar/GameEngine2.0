@@ -9,21 +9,21 @@ Resources::Texture::~Texture() {}
 
 void Resources::Texture::NewTexture(std::string filename)
 {
-	_index = Resources::ResourceManager::TextureIndex;
-	Resources::ResourceManager::TextureIndex++;
+	_index = Application.GetResourceManager()->TextureIndex;
+	Application.GetResourceManager()->TextureIndex++;
 	this->_name = filename;
 	this->_initialized = true;
 }
 
 void Resources::Texture::Load(std::string filename)
 {
-	App::ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename);
+	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename);
 }
 
 void Resources::Texture::MultiThreadLoading(std::string filename)
 {
-	_index = Resources::ResourceManager::TextureIndex;
-	Resources::ResourceManager::TextureIndex++;
+	_index = Application.GetResourceManager()->TextureIndex;
+	Application.GetResourceManager()->TextureIndex++;
 	int NrChannels;
 	this->_data = stbi_load(_path.c_str(), &_width, &_height, &NrChannels, 4);
 	if (_data == nullptr) {

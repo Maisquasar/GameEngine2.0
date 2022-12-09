@@ -75,7 +75,7 @@ void EditorUi::Console::Draw()
 
 void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 {
-	App::ThreadManager.Lock();
+	Application.ThreadManager.Lock();
 	auto Text = ConsoleText{ t, s };
 
 	switch (t)
@@ -115,7 +115,7 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 		_consoleText.erase(_consoleText.begin(), it);
 	}
 	_consoleText.push_back(Text);
-	App::ThreadManager.Unlock();
+	Application.ThreadManager.Unlock();
 }
 
 void EditorUi::Console::Clear()

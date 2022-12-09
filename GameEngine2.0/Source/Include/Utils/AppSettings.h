@@ -1,13 +1,22 @@
 #pragma once
 namespace Utils {
 
+	namespace Settings
+	{
+		enum class Transform
+		{
+			Local,
+			World
+		};
+	}
+
 	class AppSettings
 	{
 	public:
 		AppSettings();
 		~AppSettings();
 
-		bool LocalTransform = false;
+		Settings::Transform S_Transform = Settings::Transform::World;
 	private:
 		
 	};

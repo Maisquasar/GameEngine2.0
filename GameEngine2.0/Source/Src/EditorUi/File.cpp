@@ -1,5 +1,5 @@
 #include "Include/EditorUi/File.h"
-#include "Include/Resources/ResourceManager.h"
+#include "Include/App.h"
 
 // -------------- File --------------
 EditorUi::File::File() {}
@@ -11,12 +11,12 @@ EditorUi::File::File(std::string filename) {
 	if (std::filesystem::is_directory(Directory))
 	{
 		this->Type = EditorUi::FileType::Folder;
-		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/folder_icon.png");
+		this->Icon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/folder_icon.png");
 	}
 	else if (extension == "png")
 	{
 		this->Type = EditorUi::FileType::Img;
-		if (auto tex = Resources::ResourceManager::Get<Resources::Texture>(this->Directory.c_str())) {
+		if (auto tex = Application.GetResourceManager()->Get<Resources::Texture>(this->Directory.c_str())) {
 			this->Icon = tex;
 			this->ResourceLink = tex;
 		}
@@ -24,8 +24,8 @@ EditorUi::File::File(std::string filename) {
 	else if (extension == "mat")
 	{
 		this->Type = EditorUi::FileType::Mat;
-		if (auto mat = Resources::ResourceManager::Get<Resources::Material>(this->Directory.c_str())) {
-			this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/material_icon.png");
+		if (auto mat = Application.GetResourceManager()->Get<Resources::Material>(this->Directory.c_str())) {
+			this->Icon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/material_icon.png");
 			this->ResourceLink = mat;
 		}
 	}
@@ -36,20 +36,20 @@ EditorUi::File::File(std::string filename) {
 	else if (extension == "mtl")
 	{
 		this->Type = EditorUi::FileType::Mtl;
-		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/mtl_icon.png");
+		this->Icon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/mtl_icon.png");
 	}
 	else if (extension == "obj")
 	{
 		this->Type = EditorUi::FileType::Obj;
-		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/obj_icon.png");
+		this->Icon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/obj_icon.png");
 	}
 	else
 	{
 		this->Type = EditorUi::FileType::None;
-		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
+		this->Icon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
 	}
 	if (!Icon)
-		this->Icon = Resources::ResourceManager::Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
+		this->Icon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/file_icon.png");
 }
 
 
