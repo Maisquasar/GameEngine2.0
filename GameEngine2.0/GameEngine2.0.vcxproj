@@ -27,6 +27,7 @@
     <ClCompile Include="External_Includes\ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="External_Includes\ImGui\imgui_tables.cpp" />
     <ClCompile Include="External_Includes\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="External_Includes\ImGui\Nodes\NodeWindow.cpp" />
     <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="External_Includes\ImGui\imstb_rectpack.h" />
     <ClInclude Include="External_Includes\ImGui\imstb_textedit.h" />
     <ClInclude Include="External_Includes\ImGui\imstb_truetype.h" />
+    <ClInclude Include="External_Includes\ImGui\Nodes\NodeWindow.h" />
     <ClInclude Include="External_Includes\STB_Image\stb_image.h" />
     <ClInclude Include="Source\Include\App.h" />
     <ClInclude Include="Source\Include\Core\Components\Component.h" />

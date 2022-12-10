@@ -1,5 +1,9 @@
 #pragma once
 #include <ImGui/imgui.h>
+namespace ImGui
+{
+	class NodeWindow;
+}
 
 namespace EditorUi {
 	class MainBar;
@@ -38,5 +42,6 @@ namespace EditorUi {
 		static Inspector _inspector;
 		static ResourcesWindow _resourcesWindow;
 		static PerformanceWindow _performanceWindow;
+		static ImGui::NodeWindow _nodeWindow;
 	};
 }

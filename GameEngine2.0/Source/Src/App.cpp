@@ -415,7 +415,6 @@ void App::Update()
 			_cameraEditor.Update();
 		}
 
-		//TODO: this.
 		auto mouse = ImGui::GetMousePos();
 		auto vecMouse = Math::Vector2(mouse.x, mouse.y) - _framebuffer.GetPos();
 

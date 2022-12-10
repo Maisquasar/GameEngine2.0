@@ -149,6 +149,7 @@ void Core::Node::DrawPicking(int id)
 }
 
 #include "Include/EditorUi/Inspector.h"
+#include "..\..\..\External_Includes\ImGui\Nodes\NodeWindow.h"
 void Core::Node::ShowInHierarchy(int index)
 {
 	ImGui::BeginDisabled(!_active);

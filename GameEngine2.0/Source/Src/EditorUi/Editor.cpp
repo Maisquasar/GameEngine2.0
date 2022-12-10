@@ -7,6 +7,7 @@
 #include "Include/EditorUi/Inspector.h"
 #include "Include/EditorUi/ResourcesWindow.h"
 #include "Include/EditorUi/PerformanceWindow.h"
+#include "ImGui/Nodes/NodeWindow.h"
 
 EditorUi::MainBar EditorUi::Editor::_mainBar;
 EditorUi::FileExplorer EditorUi::Editor::_fileExplorer;
@@ -15,6 +16,7 @@ EditorUi::Hierarchy EditorUi::Editor::_hierarchy;
 EditorUi::Inspector EditorUi::Editor::_inspector;
 EditorUi::ResourcesWindow EditorUi::Editor::_resourcesWindow;
 EditorUi::PerformanceWindow EditorUi::Editor::_performanceWindow;
+ImGui::NodeWindow EditorUi::Editor::_nodeWindow;
 
 EditorUi::Editor::Editor(){}
 
@@ -36,6 +38,7 @@ void EditorUi::Editor::Draw()
 	_inspector.Draw();
 	_resourcesWindow.Draw();
 	_performanceWindow.Draw();
+	_nodeWindow.Draw();
 	Debug::Log::Console.Draw();
 }
 
