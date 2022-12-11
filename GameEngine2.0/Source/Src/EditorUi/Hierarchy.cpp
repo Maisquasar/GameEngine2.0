@@ -83,7 +83,7 @@ void EditorUi::Hierarchy::RightClickWindow()
 		if (ImGui::Button("Clear Parent"))
 		{
 			for (auto node : _rightClicked) {
-				node->SetParent(Application.SceneNode.get());
+				node->SetParent(Application.SceneNode);
 			}
 			ImGui::CloseCurrentPopup();
 		}

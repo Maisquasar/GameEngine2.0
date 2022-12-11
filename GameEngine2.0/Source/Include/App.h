@@ -69,7 +69,7 @@ public:
 
 	Resources::ResourceManager* GetResourceManager() { return &_resourceManager; }
 
-	std::shared_ptr<Core::Node> SceneNode;
+	Core::Node* SceneNode;
 	Core::Components::Data Components;
 	Utils::ThreadManager ThreadManager;
 	std::vector<Resources::IResource**> MultiThreadMeshes;

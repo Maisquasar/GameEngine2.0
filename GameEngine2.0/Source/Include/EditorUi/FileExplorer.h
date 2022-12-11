@@ -19,5 +19,6 @@ namespace EditorUi {
 		~FileExplorer();
 
 		void Draw() override;
+		void Refresh() override;
 	};
 }

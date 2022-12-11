@@ -73,12 +73,64 @@ void EditorUi::File::FoundChildren()
 	}
 }
 
+void EditorUi::File::FindAllChilden()
+{
+	Children.clear();
+	if (Directory.substr(this->Directory.find_last_of("/") + 1) == this->Directory)
+		this->Directory += '/';
+	if (this->Type == FileType::Folder) {
+		for (const auto& entry : std::filesystem::directory_iterator(this->Directory)) {
+			std::string dir = entry.path().generic_string().data();
+			try
+			{
+				Children.push_back(std::make_shared<File>(dir));
+			}
+			catch (const std::exception&)
+			{
+
+			}
+		}
+		for (auto child : Children)
+		{
+			child->FindAllChilden();
+		}
+	}
+}
+
 std::shared_ptr<EditorUi::File> EditorUi::File::GetParent()
 {
 	auto dir = this->Directory.substr(0, this->Directory.find_last_of("/"));
 	auto par = std::make_shared<File>(dir);
 	par->FoundChildren();
 	return par;
+}
+void EditorUi::File::DrawInFileExplorer(File* &clicked)
+{
+	if (Type == FileType::Folder)
+	{
+		auto flag = ImGuiTreeNodeFlags_Leaf;
+		for (auto child : Children) {
+			if (child->Type == FileType::Folder) {
+				flag = ImGuiTreeNodeFlags_None;
+				break;
+			}
+		}
+		ImGui::BeginGroup();
+		ImGui::Image((ImTextureID)Icon->GetData(), ImVec2(16, 16));
+		ImGui::SameLine();
+		if (ImGui::TreeNodeEx(this->Name.c_str(), flag)) {
+			if (ImGui::IsItemClicked())
+			{
+				clicked = this;
+			}
+			for (auto child : Children)
+			{
+				child->DrawInFileExplorer(clicked);
+			}
+			ImGui::TreePop();
+		}
+		ImGui::EndGroup();
+	}
 }
 void EditorUi::File::ShowInInspector()
 {

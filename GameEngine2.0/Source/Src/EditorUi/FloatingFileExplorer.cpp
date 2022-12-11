@@ -12,6 +12,7 @@ EditorUi::FloatingFileExplorer::FloatingFileExplorer()
 	_open = false;
 	_path = std::filesystem::current_path().string() + "/Assets";
 	std::replace(_path.begin(), _path.end(), '\\', '/');
+
 }
 
 EditorUi::FloatingFileExplorer::~FloatingFileExplorer() {}

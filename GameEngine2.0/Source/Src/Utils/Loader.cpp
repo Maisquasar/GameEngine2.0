@@ -77,6 +77,9 @@ std::vector<Math::Integer3> Utils::Loader::GetIndices(std::string line)
 		}
 		temp = temp.substr(temp.find_first_of(' ') + 1);
 	}
+	value.clear();
+	temp.clear();
+	temp2.clear();
 	return out;
 }
 

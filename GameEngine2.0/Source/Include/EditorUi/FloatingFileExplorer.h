@@ -24,7 +24,7 @@ namespace EditorUi {
 		std::shared_ptr<File> DrawAndRead();
 		void DrawAndSave(std::string data);
 		void Draw() override;
-		void Refresh();
+		virtual void Refresh();
 
 		void SetOpen(bool value) override;
 		void SetTargetExtension(std::string ext);

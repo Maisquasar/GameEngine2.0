@@ -38,7 +38,7 @@ void EditorUi::Editor::Draw()
 	_inspector.Draw();
 	_resourcesWindow.Draw();
 	_performanceWindow.Draw();
-	_nodeWindow.Draw();
+	//_nodeWindow.Draw();
 	Debug::Log::Console.Draw();
 }
 

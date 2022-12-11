@@ -128,14 +128,9 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
 	for (auto mesh : Meshes)
 	{
-		auto MeshNode = new Core::Node();
 		mesh.Load("");
 		mesh.SetPath(GetPath() + "::" + mesh.GetName());
 		Application.GetResourceManager()->Add(GetPath() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
-		auto meshComp = new Core::Components::MeshComponent();
-		meshComp->SetMesh(mesh.Clone());
-		MeshNode->AddComponent(meshComp);
-		this->AddChildren(MeshNode);
 		_initialized = true;
 	}
 }

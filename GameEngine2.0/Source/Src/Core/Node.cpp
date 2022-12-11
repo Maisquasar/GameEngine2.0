@@ -94,6 +94,7 @@ void Core::Node::RemoveAllChildrens()
 	for (auto child : Childrens)
 	{
 		child->RemoveAllChildrens();
+		delete child;
 	}
 	Childrens.clear();
 }

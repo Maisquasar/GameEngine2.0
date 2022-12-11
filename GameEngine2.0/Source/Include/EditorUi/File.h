@@ -39,7 +39,10 @@ namespace EditorUi {
 		Resources::IResource* ResourceLink = nullptr;
 
 		void FoundChildren();
+		void FindAllChilden();
 		std::shared_ptr<File> GetParent();
+
+		void DrawInFileExplorer(File*& clicked);
 
 		void ShowInInspector();
 

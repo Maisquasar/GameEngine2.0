@@ -402,8 +402,6 @@ void App::Update()
 
 		_gizmo.Draw();
 
-		_cameraEditor.UnProject(GetFramebuffer()->GetMousePosition());
-
 		Grid.Draw();
 
 		SceneNode->UpdateSelfAndChilds();
@@ -452,6 +450,7 @@ void App::ClearApp()
 {
 	// Cleanup
 	Components.Destroy();
+	delete SceneNode;
 
 	App::ThreadManager.Terminate();
 	ImGui_ImplOpenGL3_Shutdown();
@@ -472,8 +471,9 @@ void App::LoadScene(std::string Path)
 		EditorUi::Inspector().NodesSelected.clear();
 	if (SceneNode)
 		SceneNode->RemoveAllChildrens();
+	delete SceneNode;
 	_currentScenePath = Path;
-	SceneNode = std::shared_ptr<Core::Node>(LoadNode(Path));
+	SceneNode = LoadNode(Path);
 }
 
 Core::Node* App::LoadNode(std::string Path)
@@ -497,12 +497,12 @@ void App::LoadTemporaryScene(std::string Path)
 	if (EditorUi::Inspector().NodesSelected.size() > 0)
 		EditorUi::Inspector().NodesSelected.clear();
 	SceneNode->RemoveAllChildrens();
-	SceneNode = std::shared_ptr<Core::Node>(LoadNode(Path));
+	SceneNode = LoadNode(Path);
 }
 
 void App::SaveScene()
 {
-	SaveNode(_currentScenePath, SceneNode.get());
+	SaveNode(_currentScenePath, SceneNode);
 	PrintLog("Scene Saved at %s", _currentScenePath.c_str());
 }
 void App::SaveNode(std::string Path, Core::Node* node)

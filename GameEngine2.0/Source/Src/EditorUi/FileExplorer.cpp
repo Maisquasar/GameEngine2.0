@@ -33,6 +33,19 @@ void EditorUi::FileExplorer::Draw()
 	ImGuiWindowFlags_ flag = ImGuiWindowFlags_::ImGuiWindowFlags_None;
 	if (ImGui::Begin(_windowName.c_str(), &_open, flag))
 	{
+		ImGui::BeginChild("List", ImVec2(ImGui::GetWindowWidth() * 0.1f, 0));
+		File* clicked = nullptr;
+		_main->DrawInFileExplorer(clicked);
+		if (clicked)
+		{
+			_current = std::make_shared<File>(*clicked);
+			_current->FoundChildren();
+		}
+		ImGui::EndChild();
+		ImGui::SameLine();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical | ImGuiSeparatorFlags_SpanAllColumns);
+		ImGui::SameLine();
+		ImGui::BeginChild("Main");
 		// ------------- Back Button ------------- //
 		if (ImGui::Button("Back"))
 		{
@@ -139,8 +152,14 @@ void EditorUi::FileExplorer::Draw()
 			_rightClicked = nullptr;
 		}
 		RightClickWindow();
+		ImGui::EndChild();
 	}
 	ImGui::End();
 	ImGui::PopID();
+}
+void EditorUi::FileExplorer::Refresh()
+{
+	FloatingFileExplorer::Refresh();
+	_main->FindAllChilden();
 }
 #pragma endregion
