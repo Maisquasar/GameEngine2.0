@@ -361,13 +361,40 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 				ImGui::OpenPopup("Rename");
 				ImGui::CloseCurrentPopup();
 			}
-			// ------------- Load Scene ------------- //
-			if (_rightClicked->Type == FileType::Scn)
+			switch (_rightClicked->Type)
+			{
+			case FileType::Shdr:
+			{
+				if (ImGui::Button("Edit"))
+				{
+					// Settings Parameters
+					EditorUi::Editor::GetTextEditor()->SetOpen(true);
+					EditorUi::Editor::GetTextEditor()->SetTitle(_rightClicked->Name.c_str());
+					EditorUi::Editor::GetTextEditor()->SetLanguageDefinition(TextEditor::LanguageDefinition::GLSL());
+					EditorUi::Editor::GetTextEditor()->SetPath(_rightClicked->Directory.c_str());
+
+					// Reading File.
+					uint32_t size = 0;
+					bool sucess;
+					auto text = Utils::Loader::ReadFile(_rightClicked->Directory.c_str(), size, sucess);
+					std::string cuted = text;
+					cuted = cuted.substr(0, size);
+					EditorUi::Editor::GetTextEditor()->SetText(cuted);
+					delete[] text;
+				}
+				break;
+			}
+				// ------------- Load Scene ------------- //
+			case FileType::Scn:
 			{
 				if (ImGui::Button("LoadScene"))
 				{
 					Application.LoadScene(_rightClicked->Directory);
 				}
+				break;
+			}
+			default:
+				break;
 			}
 			// ------------- Show in Explorer ------------- //
 			if (ImGui::Button("Show in Explorer"))

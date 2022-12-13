@@ -399,7 +399,6 @@ void App::Update()
 		{
 			child->DrawSelf();
 		}
-
 		_gizmo.Draw();
 
 		Grid.Draw();

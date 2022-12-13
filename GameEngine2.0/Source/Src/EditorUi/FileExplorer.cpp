@@ -33,6 +33,7 @@ void EditorUi::FileExplorer::Draw()
 	ImGuiWindowFlags_ flag = ImGuiWindowFlags_::ImGuiWindowFlags_None;
 	if (ImGui::Begin(_windowName.c_str(), &_open, flag))
 	{
+		// ------------- Folders List ------------- //
 		ImGui::BeginChild("List", ImVec2(ImGui::GetWindowWidth() * 0.1f, 0));
 		File* clicked = nullptr;
 		_main->DrawInFileExplorer(clicked);

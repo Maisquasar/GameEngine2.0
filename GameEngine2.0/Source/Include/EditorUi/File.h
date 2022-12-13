@@ -21,6 +21,7 @@ namespace EditorUi {
 		Mtl,
 		Obj,
 		Scn,
+		Shdr,
 	};
 
 	class File

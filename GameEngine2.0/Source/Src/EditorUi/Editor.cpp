@@ -17,6 +17,7 @@ EditorUi::Inspector EditorUi::Editor::_inspector;
 EditorUi::ResourcesWindow EditorUi::Editor::_resourcesWindow;
 EditorUi::PerformanceWindow EditorUi::Editor::_performanceWindow;
 ImGui::NodeWindow EditorUi::Editor::_nodeWindow;
+TextEditor EditorUi::Editor::_textEditor;
 
 EditorUi::Editor::Editor(){}
 
@@ -39,6 +40,7 @@ void EditorUi::Editor::Draw()
 	_resourcesWindow.Draw();
 	_performanceWindow.Draw();
 	//_nodeWindow.Draw();
+	_textEditor.Render();
 	Debug::Log::Console.Draw();
 }
 

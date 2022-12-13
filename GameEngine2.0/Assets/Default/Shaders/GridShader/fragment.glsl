@@ -18,7 +18,8 @@ void main()
 
 
     if (value && value2)
-        FragColor = vec4(0, 0, 0, 0);
+        discard;
     else
         FragColor = vec4(1, 1, 1, 0.65 );
 }
+

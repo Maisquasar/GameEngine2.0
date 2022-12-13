@@ -43,6 +43,10 @@ EditorUi::File::File(std::string filename) {
 		this->Type = EditorUi::FileType::Obj;
 		this->Icon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/obj_icon.png");
 	}
+	else if (extension == "glsl")
+	{
+		this->Type = EditorUi::FileType::Shdr;
+	}
 	else
 	{
 		this->Type = EditorUi::FileType::None;
@@ -116,7 +120,7 @@ void EditorUi::File::DrawInFileExplorer(File* &clicked)
 			}
 		}
 		ImGui::BeginGroup();
-		ImGui::Image((ImTextureID)Icon->GetData(), ImVec2(16, 16));
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Icon->GetData()), ImVec2(16, 16));
 		ImGui::SameLine();
 		if (ImGui::TreeNodeEx(this->Name.c_str(), flag)) {
 			if (ImGui::IsItemClicked())
