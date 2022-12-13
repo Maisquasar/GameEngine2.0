@@ -29,6 +29,8 @@
     <ClCompile Include="External_Includes\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="External_Includes\ImGui\Nodes\NodeWindow.cpp" />
     <ClCompile Include="External_Includes\ImGui\TextEditor.cpp" />
+    <ClCompile Include="External_Includes\OpenFBX\miniz.c" />
+    <ClCompile Include="External_Includes\OpenFBX\ofbx.cpp" />
     <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
@@ -41,6 +43,7 @@
     <ClCompile Include="Source\Src\Physic\Physic.cpp" />
     <ClCompile Include="Source\Src\Render\EditorGrid.cpp" />
     <ClCompile Include="Source\Src\Render\Gizmo.cpp" />
+    <ClCompile Include="Source\Src\Resources\Animation.cpp" />
     <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
     <ClCompile Include="Source\Src\Core\Node.cpp" />
     <ClCompile Include="Source\Src\Core\Transform.cpp" />
@@ -87,6 +90,8 @@
     <ClInclude Include="External_Includes\ImGui\imstb_truetype.h" />
     <ClInclude Include="External_Includes\ImGui\Nodes\NodeWindow.h" />
     <ClInclude Include="External_Includes\ImGui\TextEditor.h" />
+    <ClInclude Include="External_Includes\OpenFBX\miniz.h" />
+    <ClInclude Include="External_Includes\OpenFBX\ofbx.h" />
     <ClInclude Include="External_Includes\STB_Image\stb_image.h" />
     <ClInclude Include="Source\Include\App.h" />
     <ClInclude Include="Source\Include\Core\Components\Component.h" />
@@ -100,6 +105,7 @@
     <ClInclude Include="Source\Include\Physic\Physic.h" />
     <ClInclude Include="Source\Include\Render\EditorGrid.h" />
     <ClInclude Include="Source\Include\Render\Gizmo.h" />
+    <ClInclude Include="Source\Include\Resources\Animation.h" />
     <ClInclude Include="Source\Include\Resources\Mesh.h" />
     <ClInclude Include="Source\Include\Core\Node.h" />
     <ClInclude Include="Source\Include\Core\Transform.h" />

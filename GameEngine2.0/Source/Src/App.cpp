@@ -5,7 +5,6 @@
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Debug/Line.h"
 #include "Include/Core/Components/MeshComponent.h"
-
 App Application;
 
 #pragma region Callbacks
@@ -190,7 +189,8 @@ void App::LoadResources()
 
 void App::FilesLoad(std::string path)
 {
-	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+	auto dirIt = std::filesystem::directory_iterator(path);
+	for (const auto& entry : dirIt) {
 		auto ext = entry.path().string().substr(entry.path().string().find_last_of('.') + 1);
 		if (entry.is_directory())
 		{
@@ -207,6 +207,10 @@ void App::FilesLoad(std::string path)
 		else if (ext == "png" || ext == "jpg" || ext == "jpeg")
 		{
 			_resourceManager.Create<Resources::Texture>(entry.path().generic_string().data());
+		}
+		else if (ext == "fbx")
+		{
+			Utils::Loader::FBXLoad(entry.path().generic_string().data());
 		}
 	}
 }
@@ -331,7 +335,7 @@ void App::PickingUpdate(std::vector<Core::Node*> nodes)
 			mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
 			mousePosition = mouse;
 		}
-		glClearColor(_clearColor.x* _clearColor.w, _clearColor.y* _clearColor.w, _clearColor.z* _clearColor.w, _clearColor.w);
+		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
 		// Re-clear the screen for real rendering
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}

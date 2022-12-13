@@ -354,3 +354,83 @@ void Utils::Loader::LoadMaterial(std::string path)
 	LOG(Debug::LogType::INFO, "Successfully loaded Material : %s", path.c_str());
 	delete[] data;
 }
+
+#include <OpenFBX/ofbx.h>
+void Utils::Loader::FBXLoad(std::string path)
+{
+	/*
+	uint32_t size;
+	bool sucess;
+	auto data = Utils::Loader::ReadFile(path.c_str(), size, sucess);
+	if (!sucess) {
+		delete[] data;
+		return;
+	}
+	auto test = ofbx::load((ofbx::u8*)data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
+
+	test->getGeometry(0)->getMaterials();
+
+	int count = test->getMeshCount();
+	for (int i = 0; i < count; i++)
+		LoadMesh(test->getMesh(i), path);
+
+	delete[] data;
+	*/
+}
+
+void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
+{
+	auto Mesh = new Resources::Mesh();
+	auto name = path.substr(path.find_last_of('/') + 1);
+	name = name.substr(0, name.find_last_of('.'));
+	Mesh->SetName(name);
+	Mesh->SetPath(path);
+	for (int i = 0; i < mesh->getGeometry()->getVertexCount(); i++)
+	{
+		auto vec = mesh->getGeometry()->getVertices()[i];
+		Mesh->Positions.push_back({ (float)vec.x, (float)vec.y, (float)vec.z });
+	}
+
+	const ofbx::Vec3* normals = mesh->getGeometry()->getNormals();
+	int count = mesh->getGeometry()->getIndexCount();
+
+	for (int i = 0; i < count; ++i)
+	{
+		ofbx::Vec3 n = normals[i];
+		Mesh->Normals.push_back({ (float)n.x, (float)n.y, (float)n.y });
+	}
+
+
+	const ofbx::Vec2* uvs = mesh->getGeometry()->getUVs();
+	count = mesh->getGeometry()->getIndexCount();
+
+	for (int i = 0; i < count; ++i)
+	{
+		ofbx::Vec2 uv = uvs[i];
+		Mesh->TextureUVs.push_back({ (float)uv.x, (float)uv.y });
+	}
+
+	const int* indices = mesh->getGeometry()->getFaceIndices();
+	int index_count = mesh->getGeometry()->getIndexCount();
+
+	for (int i = 0; i < index_count * 3; i += 3)
+	{
+		Mesh->Indices.push_back(Math::Integer3(indices[i], indices[i + 1], abs(indices[i + 2])));
+	}
+	int mat_count = mesh->getMaterialCount();
+	for (int i = 0; i < mat_count; i++)
+	{
+		auto mat = new Resources::Material();
+		auto mesh_mat = mesh->getMaterial(0)->getAmbientColor();
+		mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
+		mat->SetAmbient(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b));
+		Mesh->SubMeshes.push_back(Resources::SubMesh());
+		Mesh->SubMeshes.back().Material = mat;
+		Mesh->SubMeshes.back().StartIndex = 0;
+		Mesh->SubMeshes.back().Count = Mesh->Indices.size();
+	}
+
+	Application.GetResourceManager()->Add(path, Mesh);
+	Mesh->Load("");
+	Mesh->Initialize();
+}

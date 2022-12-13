@@ -11,6 +11,12 @@ namespace Resources
 	class Material;
 }
 
+namespace ofbx
+{
+	struct IScene;
+	struct Mesh;
+}
+
 namespace Utils::Loader
 {
 	void SkipLine(const char* data, uint32_t& pos);
@@ -33,4 +39,7 @@ namespace Utils::Loader
 	void WriteMaterial(Resources::Material* material);
 
 	void LoadMaterial(std::string path);
+
+	void FBXLoad(std::string path);
+	void LoadMesh(const ofbx::Mesh* mesh, std::string path);
 }
