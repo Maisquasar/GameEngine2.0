@@ -163,7 +163,6 @@ void Core::Transform::Update()
 
 void Core::Transform::ForceUpdate()
 {
-	_localRotation = _localEulerRotation.ToQuaternion();
 	if (Parent)
 		ComputeModelMatrix(Parent->Transform.GetModelMatrix());
 	else
@@ -263,7 +262,8 @@ void Core::Transform::ShowInInspector()
 	if (position != _localPosition || rotation != _localEulerRotation || scale != _localScale) {
 		SetLocalPosition(position);
 		float mod = 360.f;
-		_localEulerRotation = Math::Vector3(Math::Mod(rotation.x, mod), Math::Mod(rotation.y, mod), Math::Mod(rotation.z, mod));
+		_localEulerRotation = Math::Vector3(rotation.x, rotation.y, rotation.z);
+		_localRotation = _localEulerRotation.ToQuaternion();
 		SetLocalScale(scale);
 		_dirty = true;
 	}

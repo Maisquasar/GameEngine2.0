@@ -119,6 +119,7 @@ Quaternion Math::Quaternion::LookRotation(Vector3 forward, Vector3 up)
 
 Math::Vector3 Math::Quaternion::ToEuler()
 {
+	// IT WORKS
 	Math::Vector3 euler;
 	Math::Matrix4 rotMat = ToRotationMatrix();
 

@@ -201,7 +201,25 @@ Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxLength)
 
 Quaternion  Vector3::ToQuaternion()
 {
-	return Quaternion::AngleAxis(x, Vector3(1, 0, 0)) * Quaternion::AngleAxis(y, Vector3(0, 1, 0)) * Quaternion::AngleAxis(z, Vector3(0, 0, 1));
+	auto a = this->ToRad();
+	// Calculate the cosine of each half angle
+	float cy = std::cosf(a.z * 0.5);
+	float cp = std::cosf(a.y * 0.5);
+	float cr = std::cosf(a.x * 0.5);
+
+	// Calculate the sine of each half angle
+	float sy = std::sinf(a.z * 0.5);
+	float sp = std::sinf(a.y * 0.5);
+	float sr = std::sinf(a.x * 0.5);
+
+	// Calculate the quaternion elements
+	Quaternion q;
+	q.w = cy * cp * cr + sy * sp * sr;
+	q.x = cy * cp * sr - sy * sp * cr;
+	q.y = sy * cp * sr + cy * sp * cr;
+	q.z = sy * cp * cr - cy * sp * sr;
+
+	return q;
 }
 
 void Math::Vector3::Print() const
