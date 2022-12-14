@@ -366,14 +366,14 @@ void Utils::Loader::FBXLoad(std::string path)
 		return;
 	}
 	ofbx::IScene* test = ofbx::load(data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
+	if (test) {
+		int count = test->getMeshCount();
+		for (int i = 0; i < count; i++)
+			LoadMesh(test->getMesh(i), path);
 
-	int count = test->getMeshCount();
-	for (int i = 0; i < count; i++)
-		LoadMesh(test->getMesh(i), path);
-
-	auto sca = test->getRoot()->getLocalScaling();
+		test->destroy();
+	}
 	delete[] data;
-	test->destroy();
 }
 
 void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
@@ -463,6 +463,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 		LoadSkeleton(skin, path + "::" + Mesh->GetName());
 }
 #include "Include/Resources/Skeleton.h"
+#define FBXScale 0.01f
 void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 {
 	auto NewSkel = new Resources::Skeleton();
@@ -479,19 +480,21 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 		Bone* bone = new Bone();
 		bone->Name = link->name;
 		bone->Id = i;
+		auto x = link->getLocalTransform();
+
 		auto pos = link->getLocalTranslation();
 		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z);
 		printf("%s : ", bone->Name.c_str());
 		vecPos.Print();
 
-		auto rot = link->getLocalRotation();
-		Math::Vector3 vecRot = { (float)rot.x, (float)rot.y, (float)rot.z };
+		Math::Matrix4 localMatrix = Math::Matrix4(x.m);
+		auto rot = localMatrix.GetRotation();
 
 		auto sca = link->getLocalScaling();
 		Math::Vector3 vecSca = Math::Vector3((float)sca.x, (float)sca.y, (float)sca.z);
 
 		bone->Transform.SetLocalPosition(vecPos);
-		bone->Transform.SetLocalRotation(vecRot.ToQuaternion());
+		bone->Transform.SetLocalRotation(rot);
 		bone->Transform.SetLocalScale(vecSca);
 
 		if (i != 0)

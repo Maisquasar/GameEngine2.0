@@ -24,6 +24,8 @@ namespace Core::Components
 		void Save(std::string space, std::string& content) override;
 		void Load(const char* data, uint32_t& pos) override;
 	private:
+		bool _showMesh = true;
+		bool _showSkeleton = true;
 
 	};
 }

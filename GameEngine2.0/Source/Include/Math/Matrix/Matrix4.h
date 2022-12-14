@@ -27,6 +27,8 @@ namespace Math {
 
 		Matrix4(const float* data);
 
+		Matrix4(const double* data);
+
 		Matrix4 Multiply(Matrix4 a) const;
 
 		Matrix4 operator*(const Matrix4& a) const;

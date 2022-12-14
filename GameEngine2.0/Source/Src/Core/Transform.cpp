@@ -17,7 +17,7 @@ void Core::Transform::ComputeModelMatrix()
 
 void Core::Transform::ComputeModelMatrix(Math::Matrix4 parent)
 {
-	_modelMatrix = GetLocalModelMatrix() * parent;
+	_modelMatrix = parent * GetLocalModelMatrix();
 	_dirty = false;
 }
 

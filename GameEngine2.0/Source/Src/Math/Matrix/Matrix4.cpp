@@ -28,6 +28,17 @@ Matrix4::Matrix4(const float* data)
 		}
 	}
 }
+Math::Matrix4::Matrix4(const double* data)
+{
+	for (size_t j = 0; j < 4; j++)
+	{
+		for (size_t i = 0; i < 4; i++)
+		{
+			content[j][i] = (float)data[j * 4 + i];
+		}
+	}
+}
+
 Matrix4 Matrix4::Multiply(Matrix4 a) const
 {
 	Matrix4 out;

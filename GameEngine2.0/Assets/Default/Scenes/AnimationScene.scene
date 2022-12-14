@@ -17,8 +17,8 @@ Scale : 1.000000 1.000000 1.000000
 		Rotation : 0.000000 0.000000 0.000000 1.000000
 		Scale : 1.000000 1.000000 1.000000
 		#BeginComponent SkeletalMesh
-		Skeleton : Assets/Default/Models/Arm_Stretching.fbx::Alpha_Surface::Skel
-		Mesh : Assets/Default/Models/Arm_Stretching.fbx::Alpha_Surface
+		Skeleton : Assets/Default/Models/Y Bot.fbx::Alpha_Surface::Skel
+		Mesh : Assets/Default/Models/Y Bot.fbx::Alpha_Surface
 		#EndComponent SkeletalMesh
 			#BeginNode
 			Name : Node
@@ -1835,6 +1835,370 @@ Scale : 1.000000 1.000000 1.000000
 								Rotation : 0.000000 0.000000 0.000000 1.000000
 								Scale : 1.000000 1.000000 1.000000
 								#EndNode
+							#EndNode
+						#EndNode
+					#EndNode
+				#EndNode
+			#EndNode
+			#BeginNode
+			Name : mixamorig:Hips
+			IsActive : 1
+			Position : -0.000007 99.791939 0.000048
+			Rotation : 0.000000 0.000000 0.000000 1.000000
+			Scale : 1.000000 1.000000 1.000000
+				#BeginNode
+				Name : mixamorig:Spine
+				IsActive : 1
+				Position : 0.000860 9.923462 -1.227335
+				Rotation : 0.000000 0.000000 0.000000 1.000000
+				Scale : 1.000000 1.000000 1.000000
+					#BeginNode
+					Name : mixamorig:Spine1
+					IsActive : 1
+					Position : 0.000000 11.731978 -0.000000
+					Rotation : -0.000000 0.000000 -0.000000 1.000000
+					Scale : 1.000000 1.000000 1.000000
+						#BeginNode
+						Name : mixamorig:Spine2
+						IsActive : 1
+						Position : 0.000000 13.458837 0.000000
+						Rotation : 0.000000 0.000000 0.000000 1.000000
+						Scale : 1.000000 1.000000 1.000000
+							#BeginNode
+							Name : mixamorig:Neck
+							IsActive : 1
+							Position : 0.000025 15.027761 0.877907
+							Rotation : 0.000000 0.000000 0.000000 1.000000
+							Scale : 1.000000 1.000000 1.000000
+								#BeginNode
+								Name : mixamorig:Head
+								IsActive : 1
+								Position : 0.000003 10.321838 3.142429
+								Rotation : 0.000000 0.000000 0.000000 1.000000
+								Scale : 1.000000 1.000000 1.000000
+								#EndNode
+							#EndNode
+							#BeginNode
+							Name : mixamorig:LeftShoulder
+							IsActive : 1
+							Position : 6.105824 9.106292 0.757062
+							Rotation : 0.000000 0.000000 0.000000 1.000000
+							Scale : 1.000000 1.000000 1.000000
+								#BeginNode
+								Name : mixamorig:LeftArm
+								IsActive : 1
+								Position : 0.000000 12.922286 0.000000
+								Rotation : 0.000000 0.000000 0.000000 1.000000
+								Scale : 1.000000 1.000000 1.000000
+									#BeginNode
+									Name : mixamorig:LeftForeArm
+									IsActive : 1
+									Position : 0.000000 27.404682 -0.000000
+									Rotation : 0.000000 0.000000 0.000000 1.000000
+									Scale : 1.000000 1.000000 1.000000
+										#BeginNode
+										Name : mixamorig:LeftHand
+										IsActive : 1
+										Position : -0.000013 27.614464 0.000000
+										Rotation : 0.000000 0.000000 0.000000 1.000000
+										Scale : 1.000000 1.000000 1.000000
+											#BeginNode
+											Name : mixamorig:LeftHandThumb1
+											IsActive : 1
+											Position : -3.002975 3.788809 2.167149
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:LeftHandThumb2
+												IsActive : 1
+												Position : -0.000000 4.744970 0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:LeftHandThumb3
+													IsActive : 1
+													Position : -0.000000 4.382129 0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:LeftHandIndex1
+											IsActive : 1
+											Position : -2.822044 12.266617 0.231825
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:LeftHandIndex2
+												IsActive : 1
+												Position : -0.000000 3.891968 -0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:LeftHandIndex3
+													IsActive : 1
+													Position : 0.000000 3.415161 -0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:LeftHandMiddle1
+											IsActive : 1
+											Position : -0.000018 12.775528 -0.000001
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:LeftHandMiddle2
+												IsActive : 1
+												Position : -0.000000 3.613968 -0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:LeftHandMiddle3
+													IsActive : 1
+													Position : 0.000029 3.459763 -0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:LeftHandRing1
+											IsActive : 1
+											Position : 2.216630 12.147010 -0.009996
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:LeftHandRing2
+												IsActive : 1
+												Position : 0.000000 3.601189 0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:LeftHandRing3
+													IsActive : 1
+													Position : -0.000000 3.307312 0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:LeftHandPinky1
+											IsActive : 1
+											Position : 4.725832 10.908195 0.226132
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:LeftHandPinky2
+												IsActive : 1
+												Position : -0.000000 4.136657 0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:LeftHandPinky3
+													IsActive : 1
+													Position : 0.000000 2.594835 0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+										#EndNode
+									#EndNode
+								#EndNode
+							#EndNode
+							#BeginNode
+							Name : mixamorig:RightShoulder
+							IsActive : 1
+							Position : -6.105696 9.106383 0.757076
+							Rotation : 0.000000 0.000000 0.000000 1.000000
+							Scale : 1.000000 1.000000 1.000000
+								#BeginNode
+								Name : mixamorig:RightArm
+								IsActive : 1
+								Position : 0.000000 12.922287 -0.000000
+								Rotation : 0.000000 0.000000 0.000000 1.000000
+								Scale : 1.000000 1.000000 1.000000
+									#BeginNode
+									Name : mixamorig:RightForeArm
+									IsActive : 1
+									Position : 0.000000 27.404682 -0.000000
+									Rotation : 0.000000 0.000000 0.000000 1.000000
+									Scale : 1.000000 1.000000 1.000000
+										#BeginNode
+										Name : mixamorig:RightHand
+										IsActive : 1
+										Position : 0.000013 27.614464 0.000015
+										Rotation : 0.000000 0.000000 0.000000 1.000000
+										Scale : 1.000000 1.000000 1.000000
+											#BeginNode
+											Name : mixamorig:RightHandThumb1
+											IsActive : 1
+											Position : 3.002975 3.788809 2.167149
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:RightHandThumb2
+												IsActive : 1
+												Position : -0.000000 4.744970 -0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:RightHandThumb3
+													IsActive : 1
+													Position : -0.000000 4.382135 -0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:RightHandIndex1
+											IsActive : 1
+											Position : 2.822042 12.266617 0.231825
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:RightHandIndex2
+												IsActive : 1
+												Position : 0.000000 3.891968 -0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:RightHandIndex3
+													IsActive : 1
+													Position : -0.000000 3.415161 0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:RightHandMiddle1
+											IsActive : 1
+											Position : 0.000017 12.775528 -0.000001
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:RightHandMiddle2
+												IsActive : 1
+												Position : 0.000000 3.613968 -0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:RightHandMiddle3
+													IsActive : 1
+													Position : -0.000029 3.459763 0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:RightHandRing1
+											IsActive : 1
+											Position : -2.216632 12.147003 -0.009996
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:RightHandRing2
+												IsActive : 1
+												Position : -0.000000 3.601196 -0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:RightHandRing3
+													IsActive : 1
+													Position : -0.000000 3.307312 -0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+											#BeginNode
+											Name : mixamorig:RightHandPinky1
+											IsActive : 1
+											Position : -4.725833 10.908195 0.226132
+											Rotation : 0.000000 0.000000 0.000000 1.000000
+											Scale : 1.000000 1.000000 1.000000
+												#BeginNode
+												Name : mixamorig:RightHandPinky2
+												IsActive : 1
+												Position : -0.000000 4.136650 -0.000000
+												Rotation : 0.000000 0.000000 0.000000 1.000000
+												Scale : 1.000000 1.000000 1.000000
+													#BeginNode
+													Name : mixamorig:RightHandPinky3
+													IsActive : 1
+													Position : -0.000000 2.594841 -0.000000
+													Rotation : 0.000000 0.000000 0.000000 1.000000
+													Scale : 1.000000 1.000000 1.000000
+													#EndNode
+												#EndNode
+											#EndNode
+										#EndNode
+									#EndNode
+								#EndNode
+							#EndNode
+						#EndNode
+					#EndNode
+				#EndNode
+				#BeginNode
+				Name : mixamorig:LeftUpLeg
+				IsActive : 1
+				Position : 9.123874 -6.657188 -0.055403
+				Rotation : 0.000000 0.000000 0.000000 1.000000
+				Scale : 1.000000 1.000000 1.000000
+					#BeginNode
+					Name : mixamorig:LeftLeg
+					IsActive : 1
+					Position : -0.000000 40.599438 0.000000
+					Rotation : 0.000000 0.000000 0.000000 1.000000
+					Scale : 1.000000 1.000000 1.000000
+						#BeginNode
+						Name : mixamorig:LeftFoot
+						IsActive : 1
+						Position : -0.000000 42.099026 0.000000
+						Rotation : 0.000000 0.000000 0.000000 1.000000
+						Scale : 1.000000 1.000000 1.000000
+							#BeginNode
+							Name : mixamorig:LeftToeBase
+							IsActive : 1
+							Position : 0.000000 15.721560 -0.000000
+							Rotation : 0.000000 0.000000 0.000000 1.000000
+							Scale : 1.000000 1.000000 1.000000
+							#EndNode
+						#EndNode
+					#EndNode
+				#EndNode
+				#BeginNode
+				Name : mixamorig:RightUpLeg
+				IsActive : 1
+				Position : -9.125032 -6.655602 -0.055353
+				Rotation : 0.000000 0.000000 0.000000 1.000000
+				Scale : 1.000000 1.000000 1.000000
+					#BeginNode
+					Name : mixamorig:RightLeg
+					IsActive : 1
+					Position : 0.000000 40.599438 0.000000
+					Rotation : 0.000000 0.000000 0.000000 1.000000
+					Scale : 1.000000 1.000000 1.000000
+						#BeginNode
+						Name : mixamorig:RightFoot
+						IsActive : 1
+						Position : -0.000000 42.099026 -0.000000
+						Rotation : 0.000000 0.000000 0.000000 1.000000
+						Scale : 1.000000 1.000000 1.000000
+							#BeginNode
+							Name : mixamorig:RightToeBase
+							IsActive : 1
+							Position : 0.000000 15.721559 0.000000
+							Rotation : 0.000000 0.000000 0.000000 1.000000
+							Scale : 1.000000 1.000000 1.000000
 							#EndNode
 						#EndNode
 					#EndNode

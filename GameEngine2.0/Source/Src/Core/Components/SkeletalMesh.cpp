@@ -8,10 +8,10 @@ Core::Components::SkeletalMesh::~SkeletalMesh() { delete Mesh; }
 
 void Core::Components::SkeletalMesh::Update()
 {
-	if (Skeleton) {
+	if (Skeleton && _showSkeleton) {
 		Skeleton->RootBone->DrawDebug();
 	}
-	if (Mesh) {
+	if (Mesh && _showMesh) {
 		Mesh->Update(Application.GetVPMatrix() * GameObject->Transform.GetModelMatrix());
 	}
 }
@@ -49,6 +49,12 @@ void Core::Components::SkeletalMesh::ShowInInspector()
 	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::Mesh>("MeshPopup")) {
 		Mesh = Cast(Resources::Mesh, m->Clone());
 	}
+	if (Skeleton)
+		Skeleton->RootBone->ShowInInspector();
+
+
+	ImGui::Checkbox("Show Mesh", &_showMesh);
+	ImGui::Checkbox("Show Skeleton", &_showSkeleton);
 }
 
 void Core::Components::SkeletalMesh::SetSkeleton(Resources::Skeleton* skel)
