@@ -35,16 +35,18 @@ void Core::Node::AddComponent(Core::Components::Component* comp)
 
 void Core::Node::SetParent(Node* node)
 {
-	// Remove this transform from the current parent's children list
-	auto it = std::find(Parent->Childrens.begin(), Parent->Childrens.end(), this);
-	if (it != Parent->Childrens.end())
-	{
-		Parent->Childrens.erase(it);
+	if (Parent) {
+		// Remove this transform from the current parent's children list
+		auto it = std::find(Parent->Childrens.begin(), Parent->Childrens.end(), this);
+		if (it != Parent->Childrens.end())
+		{
+			Parent->Childrens.erase(it);
+		}
 	}
 
 	// Set the new parent and add this transform to the new parent's children list
 	Parent = node;
-	node->Transform.Parent = Parent;
+	this->Transform.Parent = Parent;
 	if (Parent)
 	{
 		Parent->AddChildren(this);
@@ -132,6 +134,8 @@ void Core::Node::UpdateSelfAndChilds()
 	}
 	for (auto child : this->Childrens)
 	{
+		if (!child->_active)
+			continue;
 		child->UpdateSelfAndChilds();
 	}
 }
@@ -139,14 +143,16 @@ void Core::Node::UpdateSelfAndChilds()
 
 void Core::Node::DrawSelf()
 {
-	if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
-		meshComp->Draw();
+	if (_active)
+		if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
+			meshComp->Draw();
 }
 
 void Core::Node::DrawPicking(int id)
 {
-	if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
-		meshComp->DrawPicking(id);
+	if (_active)
+		if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
+			meshComp->DrawPicking(id);
 }
 
 #include "Include/EditorUi/Inspector.h"

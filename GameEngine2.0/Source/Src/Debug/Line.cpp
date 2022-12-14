@@ -47,6 +47,7 @@ void Debug::Line::Initialize()
 
 void Debug::Line::Draw()
 {
+	glDepthRangef(0, 0.01);
 	float defaultWidth;
 	glGetFloatv(GL_LINE_WIDTH, &defaultWidth);
 	glLineWidth(_lineWidth);
@@ -60,4 +61,5 @@ void Debug::Line::Draw()
 
 	glDrawArrays(GL_LINES, 0, 9);
 	glLineWidth(defaultWidth);
+	glDepthRangef(0.01, 1);
 }

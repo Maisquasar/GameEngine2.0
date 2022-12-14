@@ -1,7 +1,11 @@
 #pragma once
 #include "ImGui/imgui.h"
 #include "Component.h"
-#include "Include/Resources/Mesh.h"
+namespace Resources
+{
+	class IResource;
+	class Mesh;
+}
 
 namespace Core::Components {
 	class MeshComponent : public BaseComponent<MeshComponent>
@@ -16,8 +20,8 @@ namespace Core::Components {
 		void Draw();
 		void DrawPicking(int id);
 
-		Resources::Mesh* GetMesh() { return dynamic_cast<Resources::Mesh*>(_currentMesh); }
-		void SetMesh(Resources::IResource* mesh) { _currentMesh = mesh; }
+		Resources::Mesh* GetMesh();
+		void SetMesh(Resources::IResource* mesh);
 
 		void Save(std::string space, std::string& content) override;
 		void Load(const char* data, uint32_t& pos) override;

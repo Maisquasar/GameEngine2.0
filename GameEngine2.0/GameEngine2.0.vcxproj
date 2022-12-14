@@ -34,6 +34,7 @@
     <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\SkeletalMesh.cpp" />
     <ClCompile Include="Source\Src\Debug\Line.cpp" />
     <ClCompile Include="Source\Src\EditorUi\File.cpp" />
     <ClCompile Include="Source\Src\EditorUi\FloatingFileExplorer.cpp" />
@@ -70,6 +71,7 @@
     <ClCompile Include="Source\Src\Resources\Model.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Shader.cpp" />
+    <ClCompile Include="Source\Src\Resources\Skeleton.cpp" />
     <ClCompile Include="Source\Src\Resources\Texture.cpp" />
     <ClCompile Include="Source\Src\Utils\AppSettings.cpp" />
     <ClCompile Include="Source\Src\Utils\Input.cpp" />
@@ -96,6 +98,7 @@
     <ClInclude Include="Source\Include\App.h" />
     <ClInclude Include="Source\Include\Core\Components\Component.h" />
     <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
+    <ClInclude Include="Source\Include\Core\Components\SkeletalMesh.h" />
     <ClInclude Include="Source\Include\Debug\Line.h" />
     <ClInclude Include="Source\Include\EditorUi\File.h" />
     <ClInclude Include="Source\Include\EditorUi\FloatingFileExplorer.h" />
@@ -133,6 +136,7 @@
     <ClInclude Include="Source\Include\Resources\Material.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Shader.h" />
+    <ClInclude Include="Source\Include\Resources\Skeleton.h" />
     <ClInclude Include="Source\Include\Resources\Texture.h" />
     <ClInclude Include="Source\Include\Utils\AppSettings.h" />
     <ClInclude Include="Source\Include\Utils\Input.h" />

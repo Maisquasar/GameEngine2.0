@@ -15,6 +15,7 @@ namespace Core {
 		std::vector<Node*> Childrens;
 		std::vector<Components::Component*> Components;
 		Core::Transform Transform;
+		virtual void Test() {}
 
 		std::string Name = "Node";
 

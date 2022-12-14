@@ -1,8 +1,6 @@
 #pragma once
 #include "Include/Core/Components/Component.h"
 #include "Include/Core/Transform.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 namespace Resources
 {
 	class Shader;

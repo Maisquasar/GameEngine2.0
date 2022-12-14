@@ -370,6 +370,8 @@ void Utils::Loader::FBXLoad(std::string path)
 	int count = test->getMeshCount();
 	for (int i = 0; i < count; i++)
 		LoadMesh(test->getMesh(i), path);
+
+	auto sca = test->getRoot()->getLocalScaling();
 	delete[] data;
 	test->destroy();
 }
@@ -382,10 +384,11 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 	Mesh->SetPath(path + "::" + Mesh->GetName());
 
 	// Vertices Loading.
+	auto sca = mesh->getLocalScaling();
 	for (int i = 0; i < mesh->getGeometry()->getVertexCount(); i++)
 	{
 		auto vec = mesh->getGeometry()->getVertices()[i];
-		Mesh->Positions.push_back({ (float)vec.x, (float)vec.y, (float)vec.z });
+		Mesh->Positions.push_back({ (float)vec.x * (float)sca.x, (float)vec.y * (float)sca.y, (float)vec.z * (float)sca.z });
 	}
 
 	const ofbx::Vec3* normals = mesh->getGeometry()->getNormals();
@@ -410,7 +413,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 				auto mat = new Resources::Material();
 				auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
 				mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
-				mat->SetDiffuse(Math::Vector4( mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+				mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
 				Mesh->SubMeshes.push_back(Resources::SubMesh());
 				Mesh->SubMeshes.back().Material = mat;
 				Mesh->SubMeshes.back().StartIndex = lastIndex;
@@ -455,4 +458,46 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 	Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
 	Mesh->Loaded = true;
 	Mesh->Initialize();
+
+	if (auto skin = mesh->getGeometry()->getSkin())
+		LoadSkeleton(skin, path + "::" + Mesh->GetName());
+}
+#include "Include/Resources/Skeleton.h"
+void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
+{
+	auto NewSkel = new Resources::Skeleton();
+	auto name = path.substr(path.find_last_of(':') + 1);
+	name = name + "::" + "Skel";
+	path = path + "::" + "Skel";
+	NewSkel->SetPath(path);
+	NewSkel->SetName(name);
+	Bone* root = nullptr;
+	std::map<std::string, Bone*> Bones;
+	for (int i = 0; i < Skel->getClusterCount(); i++)
+	{
+		auto link = Skel->getCluster(i)->getLink();
+		Bone* bone = new Bone();
+		bone->Name = link->name;
+		bone->Id = i;
+		auto pos = link->getLocalTranslation();
+		auto eul = link->getLocalRotation();
+		auto scale = link->getLocalScaling();
+		Math::Vector3 Rot = { (float)eul.x, (float)eul.y, (float)eul.z };
+
+		bone->Transform.SetLocalPosition(Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z));
+		bone->Transform.SetLocalRotation(Rot.ToQuaternion());
+		bone->Transform.SetLocalScale(Math::Vector3((float)scale.x, (float)scale.y, (float)scale.z));
+
+		if (i != 0)
+		{
+			bone->SetParent(Bones[link->getParent()->name]);
+		}
+		if (i == 0)
+			root = bone;
+		Bones[bone->Name] = bone;
+	}
+	if (root)
+		NewSkel->RootBone = root;
+
+	Application.GetResourceManager()->Add(NewSkel->GetPath(), NewSkel);
 }

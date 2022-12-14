@@ -1,6 +1,7 @@
 #include "Include\Core\Components\Component.h"
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Core/Components/BoxCollider.h"
+#include "Include/Core/Components/SkeletalMesh.h"
 #include "Include/Core/Node.h"
 std::vector<Core::Components::Component*> Core::Components::Data::Components;
 
@@ -48,4 +49,5 @@ void Core::Components::Data::Initialize()
 {
 	this->NewComponent(new Core::Components::MeshComponent());
 	this->NewComponent(new Core::Components::BoxCollider());
+	this->NewComponent(new Core::Components::SkeletalMesh());
 }

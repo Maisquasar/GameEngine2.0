@@ -15,6 +15,8 @@ namespace ofbx
 {
 	struct IScene;
 	struct Mesh;
+	struct NodeAttribute;
+	struct Skin;
 }
 
 namespace Utils::Loader
@@ -42,4 +44,5 @@ namespace Utils::Loader
 
 	void FBXLoad(std::string path);
 	void LoadMesh(const ofbx::Mesh* mesh, std::string path);
+	void LoadSkeleton(const ofbx::Skin* Skel, std::string path);
 }

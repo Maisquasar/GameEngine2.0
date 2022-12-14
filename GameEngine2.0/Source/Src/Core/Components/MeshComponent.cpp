@@ -2,6 +2,7 @@
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
 #include "Include/EditorUi/Inspector.h"
+#include "Include/Resources/Mesh.h"
 
 Core::Components::MeshComponent::MeshComponent()
 {
@@ -151,6 +152,16 @@ void Core::Components::MeshComponent::DrawPicking(int id)
 	auto MVP = Application.GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (_currentMesh)
 		GetMesh()->DrawPicking(MVP, id);
+}
+
+Resources::Mesh* Core::Components::MeshComponent::GetMesh()
+{
+	return dynamic_cast<Resources::Mesh*>(_currentMesh);
+}
+
+void Core::Components::MeshComponent::SetMesh(Resources::IResource* mesh)
+{
+	_currentMesh = mesh;
 }
 
 void Core::Components::MeshComponent::Save(std::string space, std::string& content)

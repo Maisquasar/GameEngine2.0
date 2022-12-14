@@ -1,5 +1,7 @@
 #include "Include/Core/Components/BoxCollider.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <array>
 #include "Include/Math/Math.h"
 #include "Include/Physic/Physic.h"

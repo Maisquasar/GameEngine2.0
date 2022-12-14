@@ -51,9 +51,7 @@ void Core::Transform::SetWorldScale(Math::Vector3 sca)
 Math::Vector3 Core::Transform::GetWorldPosition()
 {
 	if (Parent)
-	{
 		return Parent->Transform.GetModelMatrix() * (_localPosition);
-	}
 	else
 		return _localPosition;
 }
@@ -80,7 +78,10 @@ Math::Vector3 Core::Transform::GetWorldScale()
 
 Math::Matrix4 Core::Transform::GetModelMatrix()
 {
-	return _modelMatrix;
+	if (Parent)
+		return Parent->Transform.GetModelMatrix() * GetLocalModelMatrix();
+	return 
+		GetLocalModelMatrix();
 }
 
 void Core::Transform::SetLocalPosition(Math::Vector3 newpos)

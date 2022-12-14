@@ -357,7 +357,7 @@ void App::Update()
 	_lastFrame = 0;
 	Render::EditorGrid Grid;
 	Grid.Initialize();
-	this->Components.Initialize();
+	Components.Initialize();
 	_editorUi.Initialize();
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
 	_cameraEditor.Update(true);
@@ -472,6 +472,9 @@ void App::LoadScene(std::string Path)
 {
 	if (EditorUi::Inspector().NodesSelected.size() > 0)
 		EditorUi::Inspector().NodesSelected.clear();
+	if (_gizmo.NodeTransform)
+		_gizmo.NodeTransform = nullptr;
+
 	if (SceneNode)
 		SceneNode->RemoveAllChildrens();
 	delete SceneNode;
