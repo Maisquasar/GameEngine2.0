@@ -206,7 +206,7 @@ Quaternion  Vector3::ToQuaternion()
 
 void Math::Vector3::Print() const
 {
-	printf("(%.2f, %.2f, %.2f)\n", x, y, z);
+	printf("(%.5f, %.5f, %.5f)\n", x, y, z);
 }
 std::string Math::Vector3::ToString()
 {

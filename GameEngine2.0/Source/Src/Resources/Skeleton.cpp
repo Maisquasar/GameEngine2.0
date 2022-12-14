@@ -38,4 +38,11 @@ void Bone::DrawDebug()
 
 Resources::Skeleton::Skeleton() {}
 
-Resources::Skeleton::~Skeleton() {}
+Resources::Skeleton::~Skeleton() { if (!RootBone->Parent) delete RootBone; }
+
+//TODO : 
+//		- Fix Scene Loading With Skeleton.
+//		- Fix Skeleton on Load FBX.
+//		- Fix ofbx.h leaks.
+//		- Clean Loader Code.
+//		- Fix Crash on delete node.

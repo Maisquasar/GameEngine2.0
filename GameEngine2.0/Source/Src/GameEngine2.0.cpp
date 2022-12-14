@@ -21,7 +21,7 @@ int main()
     // |
     // V
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
-    //_CrtSetBreakAlloc(12837);
+    //_CrtSetBreakAlloc(600459);
     Main();
     return 0;
 }
