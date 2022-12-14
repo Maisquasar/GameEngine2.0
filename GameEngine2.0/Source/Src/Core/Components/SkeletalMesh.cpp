@@ -31,8 +31,7 @@ void Core::Components::SkeletalMesh::ShowInInspector()
 	}
 	ImGui::Text(name.c_str());
 	if (auto skel = Application.GetResourceManager()->ResourcesPopup<Resources::Skeleton>("SkeletonPopup")) {
-		Skeleton = skel;
-		Skeleton->RootBone->SetParent(GameObject);
+		SetSkeleton(skel);
 	}
 
 	// Mesh Button
@@ -50,6 +49,12 @@ void Core::Components::SkeletalMesh::ShowInInspector()
 	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::Mesh>("MeshPopup")) {
 		Mesh = Cast(Resources::Mesh, m->Clone());
 	}
+}
+
+void Core::Components::SkeletalMesh::SetSkeleton(Resources::Skeleton* skel)
+{
+	Skeleton = skel;
+	Skeleton->RootBone->SetParent(GameObject);
 }
 
 void Core::Components::SkeletalMesh::Save(std::string space, std::string& content)
@@ -75,7 +80,7 @@ void Core::Components::SkeletalMesh::Load(const char* data, uint32_t& pos)
 		{
 			auto SkelPath = Utils::Loader::GetString(currentLine);
 			if (auto skel = Application.GetResourceManager()->Get<Resources::Skeleton>(SkelPath.c_str())) {
-				Skeleton = skel;
+				SetSkeleton(skel);
 			}
 		}
 		pos++;

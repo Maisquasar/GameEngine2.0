@@ -480,13 +480,19 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 		bone->Name = link->name;
 		bone->Id = i;
 		auto pos = link->getLocalTranslation();
-		auto eul = link->getLocalRotation();
-		auto scale = link->getLocalScaling();
-		Math::Vector3 Rot = { (float)eul.x, (float)eul.y, (float)eul.z };
+		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z);
+		printf("%s : ", bone->Name.c_str());
+		vecPos.Print();
 
-		bone->Transform.SetLocalPosition(Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z));
-		bone->Transform.SetLocalRotation(Rot.ToQuaternion());
-		bone->Transform.SetLocalScale(Math::Vector3((float)scale.x, (float)scale.y, (float)scale.z));
+		auto rot = link->getLocalRotation();
+		Math::Vector3 vecRot = { (float)rot.x, (float)rot.y, (float)rot.z };
+
+		auto sca = link->getLocalScaling();
+		Math::Vector3 vecSca = Math::Vector3((float)sca.x, (float)sca.y, (float)sca.z);
+
+		bone->Transform.SetLocalPosition(vecPos);
+		bone->Transform.SetLocalRotation(vecRot.ToQuaternion());
+		bone->Transform.SetLocalScale(vecSca);
 
 		if (i != 0)
 		{

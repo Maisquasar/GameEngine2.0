@@ -33,6 +33,7 @@ namespace Core {
 		void UpdateSelfAndChilds();
 		void DrawSelf();
 		void DrawPicking(int id);
+		virtual void DrawDebug() {}
 
 		void ShowInHierarchy(int index);
 

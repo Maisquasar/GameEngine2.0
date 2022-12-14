@@ -2,6 +2,8 @@
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"
 #include "Include/EditorUi/Hierarchy.h"
+#include "Include/EditorUi/Inspector.h"
+#include "Include/Core/Components/MeshComponent.h"
 
 Core::Node::Node()
 {
@@ -139,7 +141,6 @@ void Core::Node::UpdateSelfAndChilds()
 		child->UpdateSelfAndChilds();
 	}
 }
-#include "Include/Core/Components/MeshComponent.h"
 
 void Core::Node::DrawSelf()
 {
@@ -155,8 +156,7 @@ void Core::Node::DrawPicking(int id)
 			meshComp->DrawPicking(id);
 }
 
-#include "Include/EditorUi/Inspector.h"
-#include "..\..\..\External_Includes\ImGui\Nodes\NodeWindow.h"
+
 void Core::Node::ShowInHierarchy(int index)
 {
 	ImGui::BeginDisabled(!_active);
@@ -216,12 +216,9 @@ std::vector<Core::Node*> Core::Node::GetAllChildrens()
 	std::vector<Core::Node*> node;
 	for (auto child : Childrens)
 	{
-		auto cc = child->GetAllChildrens();
-		for (auto&& c : cc)
-		{
-			node.push_back(c);
-		}
 		node.push_back(child);
+		auto cc = child->GetAllChildrens();
+		node.insert(node.begin(), cc.begin(), cc.end());
 	}
 	return node;
 }
@@ -289,6 +286,7 @@ void Core::Node::Load(const char* data, uint32_t& pos)
 				if (Type == component->ComponentName)
 				{
 					auto newComponent = component->Clone();
+					newComponent->GameObject = this;
 					newComponent->Load(data, pos);
 					this->AddComponent(newComponent);
 					break;

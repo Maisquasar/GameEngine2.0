@@ -2,7 +2,7 @@
 #include "Include/Debug/Line.h"
 #include "Include/Debug/Log.h"
 
-Bone::Bone() { Transform.GameObject = this; }
+Bone::Bone() { if (!Transform.GameObject) Transform.GameObject = this; }
 
 Bone::~Bone() {}
 
@@ -30,7 +30,7 @@ void Bone::DrawDebug()
 		Debug::Line line(pos, pos2, 1);
 		line.Initialize();
 		line.Draw();
-		Cast(Bone, child)->DrawDebug();
+		child->DrawDebug();
 	}
 }
 
@@ -38,4 +38,4 @@ void Bone::DrawDebug()
 
 Resources::Skeleton::Skeleton() {}
 
-Resources::Skeleton::~Skeleton() { if (RootBone) delete RootBone; }
+Resources::Skeleton::~Skeleton() {}

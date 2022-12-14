@@ -16,6 +16,8 @@ namespace Core::Components
 		void Update() override;
 		void ShowInInspector() override;
 
+		void SetSkeleton(Resources::Skeleton* skel);
+
 		Resources::Skeleton* Skeleton = nullptr;
 		Resources::Mesh* Mesh = nullptr;
 

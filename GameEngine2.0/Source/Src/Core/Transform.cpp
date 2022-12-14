@@ -78,22 +78,17 @@ Math::Vector3 Core::Transform::GetWorldScale()
 
 Math::Matrix4 Core::Transform::GetModelMatrix()
 {
-	if (Parent)
-		return Parent->Transform.GetModelMatrix() * GetLocalModelMatrix();
-	return 
-		GetLocalModelMatrix();
+	if (_dirty) {
+		if (Parent)
+			return _modelMatrix = Parent->Transform.GetModelMatrix() * GetLocalModelMatrix();
+		return _modelMatrix = GetLocalModelMatrix();
+	}
+	return _modelMatrix;
 }
 
 void Core::Transform::SetLocalPosition(Math::Vector3 newpos)
 {
-	if (Parent)
-	{
-		_localPosition = Parent->Transform.TranformPoint(newpos);
-	}
-	else
-	{
-		_localPosition = newpos;
-	}
+	_localPosition = newpos;
 	_dirty = true;
 }
 

@@ -10,7 +10,7 @@ public:
 	~Bone();
 
 	void ShowInInspector();
-	void DrawDebug();
+	void DrawDebug() override;
 
 	int Id = -1;
 private:

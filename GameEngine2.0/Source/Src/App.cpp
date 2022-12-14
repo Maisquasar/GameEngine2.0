@@ -101,7 +101,9 @@ void App::InitGlfw()
 	}
 	glfwMakeContextCurrent(_window);
 	glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
-	glfwSwapInterval(1); // Enable vsync
+
+	// Disable V-Sync
+	glfwSwapInterval(0);
 }
 
 void App::InitImGui()
