@@ -86,7 +86,8 @@ void Core::Components::SkeletalMesh::Load(const char* data, uint32_t& pos)
 		{
 			auto SkelPath = Utils::Loader::GetString(currentLine);
 			if (auto skel = Application.GetResourceManager()->Get<Resources::Skeleton>(SkelPath.c_str())) {
-				SetSkeleton(skel);
+				Skeleton = skel;
+				Skeleton->RootBone->Transform.Parent = GameObject;
 			}
 		}
 		pos++;

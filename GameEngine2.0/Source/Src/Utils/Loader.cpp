@@ -481,29 +481,22 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 		bone->Name = link->name;
 		bone->Id = i;
 
+		// Set Up Transform
 		auto pos = link->getLocalTranslation();
-		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z);
-		printf("%s : ", bone->Name.c_str());
-		vecPos.Print();
-
-		auto locRot = link->getPreRotation();
-		auto newnewrot = Math::Vector3(locRot.x, locRot.y, locRot.z);
-		newnewrot.Print();
-		newnewrot.ToQuaternion().Print();
-
+		auto rot = link->getPreRotation();
 		auto sca = link->getLocalScaling();
+
+		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z);
+		Math::Vector3 vecRot = Math::Vector3((float)rot.x, (float)rot.y, (float)rot.z);
 		Math::Vector3 vecSca = Math::Vector3((float)sca.x, (float)sca.y, (float)sca.z);
 
 		bone->Transform.SetLocalPosition(vecPos);
-		bone->Transform.SetLocalRotation(newnewrot.ToQuaternion());
+		bone->Transform.SetLocalRotation(vecRot.ToQuaternion());
 		bone->Transform.SetLocalScale(vecSca);
 
-		if (i != 0)
-		{
-			bone->SetParent(Bones[link->getParent()->name]);
-		}
-		if (i == 0)
-			root = bone;
+		if (i != 0) { bone->SetParent(Bones[link->getParent()->name]); }
+		else { root = bone; }
+
 		Bones[bone->Name] = bone;
 	}
 	if (root)
