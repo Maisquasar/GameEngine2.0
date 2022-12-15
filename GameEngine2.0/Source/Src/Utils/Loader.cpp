@@ -365,15 +365,19 @@ void Utils::Loader::FBXLoad(std::string path)
 		delete[] data;
 		return;
 	}
-	ofbx::IScene* test = ofbx::load(data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
-	if (test) {
-		int count = test->getMeshCount();
+	ofbx::IScene* Scene = ofbx::load(data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
+	if (Scene) {
+		int count = Scene->getMeshCount();
 		for (int i = 0; i < count; i++)
-			LoadMesh(test->getMesh(i), path);
+			LoadMesh(Scene->getMesh(i), path);
 
+		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
+		{
+			LoadAnimation(Scene->getAnimationStack(i), path);
+		}
 	}
 	delete[] data;
-	test->destroy();
+	Scene->destroy();
 }
 
 void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
@@ -503,4 +507,70 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 		NewSkel->RootBone = root;
 
 	Application.GetResourceManager()->Add(NewSkel->GetPath(), NewSkel);
+}
+
+#include "Include/Resources/Animation.h"
+
+void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string path)
+{
+	for (int j = 0; stack->getLayer(j); ++j)
+	{
+		const ofbx::AnimationLayer* layer = stack->getLayer(j);
+		Resources::Animation* Animation = new Resources::Animation();
+		auto name = path.substr(path.find_last_of('/') + 1);
+		name = name + "::" + "Anim";
+		path = path + "::" + "Anim";
+		Animation->SetPath(path);
+		Animation->SetName(name);
+
+		printf("Layer %s %d\n", layer->name, j);
+		for (int k = 0; layer->getCurveNode(k); ++k)
+		{
+			const ofbx::AnimationCurveNode* node = layer->getCurveNode(k);
+			if (!std::strcmp(node->name, "T")) {
+				Animation->KeyPositions.push_back(std::vector<Math::Vector3>());
+				int i = 0;
+
+				if (node->getCurve(i)) {
+
+					if (Animation->KeyPosCount == 0)
+						Animation->KeyPosCount = node->getCurve(i)->getKeyCount();
+
+
+					for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
+						Math::Vector3 Position;
+						for (i = 0; i < 3; i++) {
+							Position[i] = node->getCurve(i)->getKeyValue()[p];
+						}
+						i = 0;
+						Animation->KeyPositions.back().push_back(Position);
+						Animation->KeyPositions.back().back().Print();
+					}
+				}
+			}
+			else if (!std::strcmp(node->name, "R")) {
+				Animation->KeyRotations.push_back(std::vector<Math::Quaternion>());
+				int i = 0;
+				if (node->getCurve(i)) {
+
+
+					if (Animation->KeyRotCount == 0)
+						Animation->KeyRotCount = node->getCurve(i)->getKeyCount();
+
+					for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
+						Math::Vector3 Rotation;
+						for (i = 0; i < 3; i++) {
+							Rotation[i] = node->getCurve(i)->getKeyValue()[p];
+						}
+						i = 0;
+						Animation->KeyRotations.back().push_back(Rotation.ToQuaternion());
+						Animation->KeyRotations.back().back().Print();
+					}
+				}
+			}
+
+		}
+		Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
+	}
+
 }

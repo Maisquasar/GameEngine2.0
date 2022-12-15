@@ -135,6 +135,8 @@ namespace Math {
 			return Vector3(x, y, z);
 		}
 
+		static Vector3 SLerp(Math::Vector3 a, Math::Vector3 b, float t);
+
 		Quaternion ToQuaternion();
 
 		std::string ToString();

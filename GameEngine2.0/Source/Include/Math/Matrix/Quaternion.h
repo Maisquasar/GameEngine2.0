@@ -23,6 +23,8 @@ namespace Math {
 
 		Quaternion operator*(const Quaternion& a);
 
+		Quaternion operator*(const float& a);
+
 		Vector3 operator*(const Vector3& a);
 
 		float& operator[](int index);
@@ -32,6 +34,8 @@ namespace Math {
 		static Quaternion AngleAxis(float angle, Vector3 axis);
 
 		static Quaternion LookRotation(Vector3 forward, Vector3 up);
+
+		static Quaternion SLerp(Quaternion a, Quaternion b, float time);
 
 		void Inverse();
 

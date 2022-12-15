@@ -199,6 +199,22 @@ Vector3 Vector3::ClampMagnitude(Vector3 vector, float maxLength)
 	return vector;
 }
 
+Vector3 Math::Vector3::SLerp(Math::Vector3 a, Math::Vector3 b, float t)
+{
+	float dot = a.DotProduct(b);
+
+	if (dot > 1)
+		dot = 1;
+	else if (dot < -1)
+		dot = -1;
+
+	float theta = std::acos(dot) * t;
+	Vector3 RelativeVec = b - a * dot;
+	RelativeVec.Normalize();
+
+	return ((a * std::cos(theta)) + (RelativeVec * std::sin(theta)));
+}
+
 Quaternion  Vector3::ToQuaternion()
 {
 	auto a = this->ToRad();

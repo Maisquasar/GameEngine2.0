@@ -3,6 +3,9 @@
 #include "Include/Core/Transform.h"
 #include "Include/Core/Node.h"
 
+namespace Resources {
+	class Animation;
+}
 class Bone : public Core::Node
 {
 public:
@@ -11,6 +14,7 @@ public:
 
 	void ShowInInspector();
 	void DrawDebug() override;
+	void UpdateBone(Resources::Animation*, float);
 
 	int Id = -1;
 private:

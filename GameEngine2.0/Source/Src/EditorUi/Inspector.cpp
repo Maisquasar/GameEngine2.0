@@ -67,7 +67,9 @@ void EditorUi::Inspector::Draw()
 				ImGui::Checkbox("##", component->GetEnable());
 				ImGui::SameLine();
 				if (ImGui::CollapsingHeader(component->ComponentName.c_str(), &destroy, ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
+					ImGui::TreePush(component->ComponentName.c_str());
 					component->ShowInInspector();
+					ImGui::TreePop();
 				}
 				ImGui::NewLine();
 				ImGui::Separator();

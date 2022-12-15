@@ -20,6 +20,12 @@ Quaternion Quaternion::operator*(const Quaternion& a)
 		w * a.w - x * a.x - y * a.y - z * a.z);
 }
 
+
+Quaternion Math::Quaternion::operator*(const float& a)
+{
+	return Quaternion(this->x * a, this->y * a, this->z * a, this->w * a);
+}
+
 Vector3 Math::Quaternion::operator*(const Vector3& a)
 {
 	Vector3 vector;
@@ -115,6 +121,45 @@ Quaternion Math::Quaternion::LookRotation(Vector3 forward, Vector3 up)
 	quaternion.z = 0.5f * num5;
 	quaternion.w = (m01 - m10) * num2;
 	return quaternion;
+}
+
+Quaternion Math::Quaternion::SLerp(Quaternion a, Quaternion b, float t)
+{
+	if (t < 0)
+		return a;
+	else if (t > 1)
+		return b;
+	// Compute the cosine of the angle between the two quaternions
+	double dot = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+
+	// If the dot product is negative, the quaternions
+	// have opposite handed-ness so we must negate one of them
+	if (dot < 0.0f)
+	{
+		b = b.GetConjugate();
+		dot = -dot;
+	}
+
+	// If the quaternions are close, linearly interpolate between them
+	// to avoid division by zero and rounding errors
+	if (dot > 0.9995)
+	{
+		Quaternion result = a + (b - a) * t;
+		result.Normalize();
+		return result;
+	}
+
+	// Compute the angle between the two quaternions
+	double theta_0 = acos(dot);
+	double theta = theta_0 * t;
+
+	// Compute a normalized vector perpendicular to both a and b
+	Quaternion qperp = b - a * dot;
+	qperp.Normalize();
+
+	// Compute the final quaternion
+	Quaternion result = a * cos(theta) + qperp * sin(theta);
+	return result.GetNormalized();
 }
 
 Math::Vector3 Math::Quaternion::ToEuler()

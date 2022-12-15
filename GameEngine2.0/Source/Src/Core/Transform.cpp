@@ -250,7 +250,6 @@ bool DrawVec3Control(const std::string& label, float* values, float resetValue =
 
 void Core::Transform::ShowInInspector()
 {
-	ImGui::TreePush("##transform");
 	Math::Vector3 position = _localPosition;
 	Math::Vector3 rotation = _localEulerRotation;
 	Math::Vector3 scale = _localScale;
@@ -267,7 +266,6 @@ void Core::Transform::ShowInInspector()
 		SetLocalScale(scale);
 		_dirty = true;
 	}
-	ImGui::TreePop();
 }
 
 void Core::Transform::Save(std::string space, std::string& content)

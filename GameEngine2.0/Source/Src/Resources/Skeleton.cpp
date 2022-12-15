@@ -34,6 +34,21 @@ void Bone::DrawDebug()
 	}
 }
 
+#include "Include/Resources/Animation.h"
+void Bone::UpdateBone(Resources::Animation* anim, float time)
+{
+	Math::Vector3 Position;
+	Math::Quaternion Rotation;
+	anim->GetAnimAtFrame(Id, time, Position, Rotation);
+
+	Transform.SetLocalPosition(Position);
+	Transform.SetLocalRotation(Rotation);
+
+	for (auto child : Childrens)
+		if (auto c = dynamic_cast<Bone*>(child))
+			c->UpdateBone(anim, time);
+}
+
 
 
 Resources::Skeleton::Skeleton() {}
