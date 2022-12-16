@@ -37,18 +37,31 @@ void Bone::DrawDebug()
 #include "Include/Resources/Animation.h"
 void Bone::UpdateBone(Resources::Animation* anim, float time)
 {
-	Math::Vector3 Position;
+	Math::Vector3 Position = DefaultPosition;
 	Math::Quaternion Rotation;
 	anim->GetAnimAtFrame(Id, time, Position, Rotation);
 
 	Transform.SetLocalPosition(Position);
-	Transform.SetLocalRotation(Rotation);
+	Transform.SetLocalRotation(DefaultRotation * Rotation);
 
 	Transform.Update();
 
 	for (auto child : Childrens)
-		if (auto c = dynamic_cast<Bone*>(child))
-			c->UpdateBone(anim, time);
+		child->UpdateBone(anim, time);
+}
+
+void Bone::SetDefault()
+{
+	Transform.SetLocalPosition(DefaultPosition);
+	Transform.SetLocalRotation(DefaultRotation);
+
+	for (auto child : Childrens)
+	{
+		if (auto bone = dynamic_cast<Bone*>(child))
+		{
+			bone->SetDefault();
+		}
+	}
 }
 
 

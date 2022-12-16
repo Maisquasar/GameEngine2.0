@@ -13,12 +13,16 @@ Core::Components::AnimationComponent::AnimationComponent()
 
 Core::Components::AnimationComponent::~AnimationComponent()
 {
+	if (_skeleton && _skeleton->Skeleton && _skeleton->Skeleton->RootBone)
+	{
+		_skeleton->Skeleton->RootBone->SetDefault();
+	}
 }
 
 void Core::Components::AnimationComponent::Update()
 {
 	if (!_skeleton)
-		_skeleton = GameObject->GetComponent<Core::Components::SkeletalMesh>();
+		SetSkeleton(GameObject->GetComponent<Core::Components::SkeletalMesh>());
 	if (_currentAnimation && _skeleton)
 	{
 		if (_skeleton->Skeleton && _skeleton->Skeleton->RootBone)
@@ -30,7 +34,7 @@ void Core::Components::AnimationComponent::Update()
 		if (_currentTime > _currentAnimation->KeyRotCount)
 			_currentTime = 0;
 		else if (_currentTime <= 0)
-			_currentTime = _currentAnimation->KeyRotCount;
+			_currentTime = (float)_currentAnimation->KeyRotCount;
 	}
 }
 
@@ -54,4 +58,9 @@ void Core::Components::AnimationComponent::ShowInInspector()
 void Core::Components::AnimationComponent::SetCurrentAnimation(Resources::Animation* a)
 {
 	_currentAnimation = a;
+}
+
+void Core::Components::AnimationComponent::SetSkeleton(SkeletalMesh* s)
+{
+	_skeleton = s;
 }

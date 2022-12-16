@@ -1,10 +1,17 @@
 #include "Include/Core/Components/SkeletalMesh.h"
 #include "Include/Resources/Skeleton.h"
 #include "Include/App.h"
+#include "Include/Core/Components/AnimationComponent.h"
 
 Core::Components::SkeletalMesh::SkeletalMesh() { this->ComponentName = "SkeletalMesh"; }
 
-Core::Components::SkeletalMesh::~SkeletalMesh() { delete Mesh; }
+Core::Components::SkeletalMesh::~SkeletalMesh()
+{
+	if (GameObject)
+		if (auto anim = GameObject->GetComponent<AnimationComponent>())
+			anim->SetSkeleton(nullptr);
+	delete Mesh;
+}
 
 void Core::Components::SkeletalMesh::Update()
 {

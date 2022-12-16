@@ -477,6 +477,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 	NewSkel->SetName(name);
 	Bone* root = nullptr;
 	std::map<std::string, Bone*> Bones;
+	NewSkel->BoneCount = Skel->getClusterCount();
 	for (int i = 0; i < Skel->getClusterCount(); i++)
 	{
 		auto link = Skel->getCluster(i)->getLink();
@@ -494,7 +495,9 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 		Math::Vector3 vecSca = Math::Vector3((float)sca.x, (float)sca.y, (float)sca.z);
 
 		bone->Transform.SetLocalPosition(vecPos);
+		bone->DefaultPosition = vecPos;
 		bone->Transform.SetLocalRotation(vecRot.ToQuaternion());
+		bone->DefaultRotation = vecRot.ToQuaternion();
 		bone->Transform.SetLocalScale(vecSca);
 
 		if (i != 0) { bone->SetParent(Bones[link->getParent()->name]); }
@@ -512,9 +515,8 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 
 void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string path)
 {
-	for (int j = 0; stack->getLayer(j); ++j)
+	if (const ofbx::AnimationLayer* layer = stack->getLayer(0))
 	{
-		const ofbx::AnimationLayer* layer = stack->getLayer(j);
 		Resources::Animation* Animation = new Resources::Animation();
 		auto name = path.substr(path.find_last_of('/') + 1);
 		name = name + "::" + "Anim";
@@ -522,7 +524,7 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 		Animation->SetPath(path);
 		Animation->SetName(name);
 
-		printf("Layer %s %d\n", layer->name, j);
+		printf("Layer %s %d\n", layer->name, 0);
 		for (int k = 0; layer->getCurveNode(k); ++k)
 		{
 			const ofbx::AnimationCurveNode* node = layer->getCurveNode(k);
@@ -569,5 +571,4 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 		}
 		Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
 	}
-
 }

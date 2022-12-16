@@ -16,9 +16,11 @@ Core::Node::~Node()
 	{
 		delete child;
 	}
-	for (auto component : Components)
+	for (int i = Components.size() - 1; i >= 0; i--)
 	{
-		delete component;
+		auto comp = Components[i];
+		Components.erase(Components.begin() + i);
+		delete comp;
 	}
 }
 

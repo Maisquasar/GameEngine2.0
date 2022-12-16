@@ -150,7 +150,7 @@ Quaternion Math::Quaternion::SLerp(Quaternion a, Quaternion b, float t)
 	}
 
 	// Compute the angle between the two quaternions
-	double theta_0 = acos(dot);
+	double theta_0 = acosf(dot);
 	double theta = theta_0 * t;
 
 	// Compute a normalized vector perpendicular to both a and b
@@ -158,7 +158,7 @@ Quaternion Math::Quaternion::SLerp(Quaternion a, Quaternion b, float t)
 	qperp.Normalize();
 
 	// Compute the final quaternion
-	Quaternion result = a * cos(theta) + qperp * sin(theta);
+	Quaternion result = a * cosf(theta) + qperp * sinf(theta);
 	return result.GetNormalized();
 }
 

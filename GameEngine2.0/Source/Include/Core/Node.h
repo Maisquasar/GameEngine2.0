@@ -3,6 +3,10 @@
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_internal.h>
 #include "Components/Component.h"
+namespace Resources
+{
+	class Animation;
+}
 
 namespace Core {
 	class Node
@@ -34,6 +38,7 @@ namespace Core {
 		void DrawSelf();
 		void DrawPicking(int id);
 		virtual void DrawDebug() {}
+		virtual void UpdateBone(Resources::Animation*, float) {}
 
 		void ShowInHierarchy(int index);
 

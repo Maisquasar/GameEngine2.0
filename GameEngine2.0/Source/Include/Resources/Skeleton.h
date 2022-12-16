@@ -14,9 +14,12 @@ public:
 
 	void ShowInInspector();
 	void DrawDebug() override;
-	void UpdateBone(Resources::Animation*, float);
+	void UpdateBone(Resources::Animation*, float) override;
+	void SetDefault();
 
 	int Id = -1;
+	Math::Vector3 DefaultPosition;
+	Math::Quaternion DefaultRotation;
 private:
 
 };
@@ -28,6 +31,8 @@ namespace Resources {
 		~Skeleton();
 
 		Bone* RootBone = nullptr;
+
+		size_t BoneCount = 0;
 	private:
 
 	};

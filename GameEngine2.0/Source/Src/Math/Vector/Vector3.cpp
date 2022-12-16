@@ -219,14 +219,14 @@ Quaternion  Vector3::ToQuaternion()
 {
 	auto a = this->ToRad();
 	// Calculate the cosine of each half angle
-	float cy = std::cosf(a.z * 0.5);
-	float cp = std::cosf(a.y * 0.5);
-	float cr = std::cosf(a.x * 0.5);
+	float cy = std::cosf(a.z * 0.5f);
+	float cp = std::cosf(a.y * 0.5f);
+	float cr = std::cosf(a.x * 0.5f);
 
 	// Calculate the sine of each half angle
-	float sy = std::sinf(a.z * 0.5);
-	float sp = std::sinf(a.y * 0.5);
-	float sr = std::sinf(a.x * 0.5);
+	float sy = std::sinf(a.z * 0.5f);
+	float sp = std::sinf(a.y * 0.5f);
+	float sr = std::sinf(a.x * 0.5f);
 
 	// Calculate the quaternion elements
 	Quaternion q;

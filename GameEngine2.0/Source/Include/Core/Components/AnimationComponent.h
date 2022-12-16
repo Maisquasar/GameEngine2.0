@@ -16,6 +16,7 @@ namespace Core::Components
 		void ShowInInspector() override;
 
 		void SetCurrentAnimation(Resources::Animation*);
+		void SetSkeleton(class SkeletalMesh*);
 	private:
 		Resources::Animation* _currentAnimation = nullptr;
 		class SkeletalMesh* _skeleton;
