@@ -467,7 +467,6 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 		LoadSkeleton(skin, path + "::" + Mesh->GetName());
 }
 #include "Include/Resources/Skeleton.h"
-#define FBXScale 0.01f
 void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 {
 	auto NewSkel = new Resources::Skeleton();
@@ -544,7 +543,6 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 						}
 						i = 0;
 						Animation->KeyPositions.back().push_back(Position);
-						Animation->KeyPositions.back().back().Print();
 					}
 				}
 			}
@@ -564,7 +562,6 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 						}
 						i = 0;
 						Animation->KeyRotations.back().push_back(Rotation.ToQuaternion());
-						Animation->KeyRotations.back().back().Print();
 					}
 				}
 			}

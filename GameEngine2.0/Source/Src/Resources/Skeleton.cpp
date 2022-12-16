@@ -44,6 +44,8 @@ void Bone::UpdateBone(Resources::Animation* anim, float time)
 	Transform.SetLocalPosition(Position);
 	Transform.SetLocalRotation(Rotation);
 
+	Transform.Update();
+
 	for (auto child : Childrens)
 		if (auto c = dynamic_cast<Bone*>(child))
 			c->UpdateBone(anim, time);
