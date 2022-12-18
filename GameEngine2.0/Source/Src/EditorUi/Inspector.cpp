@@ -4,6 +4,7 @@
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/EditorUi/FileExplorer.h"
 #include "Include/EditorUi/File.h"
+#include "Include/Core/Node.h"
 
 std::vector<Core::Node*> EditorUi::Inspector::NodesSelected;
 EditorUi::File* EditorUi::Inspector::FileSelected;

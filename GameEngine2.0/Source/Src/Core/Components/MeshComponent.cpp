@@ -190,7 +190,9 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 			{
 				_currentMesh = new Resources::Mesh();
 				_currentMesh->SetPath(MeshPath);
+#if MULTITHREAD_LOADING
 				Application.MultiThreadMeshes.push_back(&_currentMesh);
+#endif
 			}
 		}
 		else if (currentLine.substr(0, 7) == "SubMesh")

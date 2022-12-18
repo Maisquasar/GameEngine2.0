@@ -1,5 +1,5 @@
 #pragma once
-#include "Include/Core/Components/Component.h"
+#include <Windows.h>
 #include "Include/Core/Transform.h"
 namespace Resources
 {

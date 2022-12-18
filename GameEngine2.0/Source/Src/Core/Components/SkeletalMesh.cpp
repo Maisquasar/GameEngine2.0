@@ -54,6 +54,8 @@ void Core::Components::SkeletalMesh::ShowInInspector()
 	}
 	ImGui::Text(name.c_str());
 	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::Mesh>("MeshPopup")) {
+		if (Mesh)
+			delete Mesh;
 		Mesh = Cast(Resources::Mesh, m->Clone());
 	}
 	if (Skeleton)

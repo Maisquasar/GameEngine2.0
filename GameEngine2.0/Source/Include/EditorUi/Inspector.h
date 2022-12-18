@@ -1,6 +1,12 @@
 #pragma once
+#include <Windows.h>
+#include <vector>
 #include "../EditorUi/EditorWindow.h"
-#include "Include/Core/Node.h"
+namespace Core
+{
+	class Node;
+}
+
 namespace EditorUi
 {
 	class Inspector : public EditorWindow

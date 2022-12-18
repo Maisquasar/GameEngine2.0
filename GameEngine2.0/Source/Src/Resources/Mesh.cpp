@@ -24,6 +24,10 @@ void Resources::Mesh::Load(std::string filename)
 		this->Vertices = _vertices;
 	}
 	Loaded = true;
+
+#if !MULTITHREAD_LOADING
+	Initialize();
+#endif
 }
 
 void Resources::Mesh::Initialize()

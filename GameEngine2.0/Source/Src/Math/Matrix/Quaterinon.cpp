@@ -125,41 +125,33 @@ Quaternion Math::Quaternion::LookRotation(Vector3 forward, Vector3 up)
 
 Quaternion Math::Quaternion::SLerp(Quaternion a, Quaternion b, float t)
 {
-	if (t < 0)
+	if (t < 0.0f)
 		return a;
-	else if (t > 1)
+	else if (t >= 1.0f)
 		return b;
-	// Compute the cosine of the angle between the two quaternions
-	double dot = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+	float d = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+	float s0, s1;
+	float sd = (float)((d > 0.0f) - (d < 0.0f));
 
-	// If the dot product is negative, the quaternions
-	// have opposite handed-ness so we must negate one of them
-	if (dot < 0.0f)
+	d = fabs(d);
+
+	if (d < 0.9995f)
 	{
-		b = b.GetConjugate();
-		dot = -dot;
+		float s = sqrtf(1.0f - d * d);
+		float a = atan2f(s, d);
+		float c = cosf(t * a);
+
+
+		s1 = sqrtf(1.0f - c * c) / s;
+		s0 = c - d * s1;
+	}
+	else
+	{
+		s0 = 1.0f - t;
+		s1 = t;
 	}
 
-	// If the quaternions are close, linearly interpolate between them
-	// to avoid division by zero and rounding errors
-	if (dot > 0.9995)
-	{
-		Quaternion result = a + (b - a) * t;
-		result.Normalize();
-		return result;
-	}
-
-	// Compute the angle between the two quaternions
-	double theta_0 = acosf(dot);
-	double theta = theta_0 * t;
-
-	// Compute a normalized vector perpendicular to both a and b
-	Quaternion qperp = b - a * dot;
-	qperp.Normalize();
-
-	// Compute the final quaternion
-	Quaternion result = a * cosf(theta) + qperp * sinf(theta);
-	return result.GetNormalized();
+	return a * s0 + b * sd * s1;
 }
 
 Math::Vector3 Math::Quaternion::ToEuler()

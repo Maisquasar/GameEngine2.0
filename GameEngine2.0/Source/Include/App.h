@@ -69,20 +69,20 @@ public:
 
 	Resources::ResourceManager* GetResourceManager() { return &_resourceManager; }
 
-	Core::Node* SceneNode;
+	Core::Node* SceneNode = nullptr;
 	Core::Components::Data Components;
 	Utils::ThreadManager ThreadManager;
 	std::vector<Resources::IResource**> MultiThreadMeshes;
 private:
 	// Window
-	GLFWwindow* _window;
-	const GLFWvidmode* _videoMode;
-	bool _shouldClose;
-	Math::Matrix4 _VP;
-	GameState _gameState;
-	std::string _currentScenePath;
+	GLFWwindow* _window = nullptr;
+	const GLFWvidmode* _videoMode = nullptr;
+	bool _shouldClose = false;
+	Math::Matrix4 _VP = Math::Matrix4::Identity();
+	GameState _gameState = GameState::Editor;
+	std::string _currentScenePath = "";
 	double _lastFrame = 0;
-	double _deltaTime;
+	double _deltaTime = 0;
 
 	const char* _windowName = "GameEngine2.0";
 	bool _everythingIsLoaded = false;

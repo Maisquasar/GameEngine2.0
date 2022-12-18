@@ -21,6 +21,11 @@ namespace Resources {
 
 		template<typename T> T* Create(std::string filename)
 		{
+			if (_resource.find(filename) == _resource.end()) {}
+			else
+			{
+				return nullptr;
+			}
 			std::string Path = filename;
 			filename = filename.substr(filename.find_last_of("//\\") + 1);
 			_resource[Path] = new T();
@@ -38,22 +43,32 @@ namespace Resources {
 				return nullptr;
 		}
 
-		template<typename T> T* GetWithPath(const char* filename)
-		{
-			for (auto r : _resource)
-			{
-				if (r.second->GetPath() == filename)
-					return dynamic_cast<T*>(r.second);
-			}
-			return nullptr;
-		}
-
-		// Basicaly _resource[filename] = res;
+		// Basicaly _resource[filename] = res (Replace the last one if exist);
 		template<typename T> void Add(std::string filename, T* res)
 		{
+			if (_resource.find(filename) == _resource.end()) {}
+			else
+			{
+				// Delete if already exist to replace.
+				delete _resource[filename];
+			}
 			_resource[filename] = res;
 		}
 
+		// Create A new Resource with the name as key (Replace the last one if exist).
+		template<typename T> T* CreateNew(std::string filename)
+		{
+			if (_resource.find(filename) == _resource.end()) {}
+			else
+			{
+				// Delete if already exist to replace.
+				delete _resource[filename];
+			}
+			_resource[filename] = new T();
+			return dynamic_cast<T*>(_resource[filename]);
+		}
+
+		// Change the Key of an existing resource.
 		template<typename T> void ChangeKey(std::string lastName, std::string newName, T* res)
 		{
 			_resource.erase(lastName);
@@ -80,6 +95,12 @@ namespace Resources {
 							out = res;
 							ImGui::CloseCurrentPopup();
 						}
+						if (ImGui::IsItemHovered())
+						{
+							ImGui::BeginTooltip();
+							ImGui::Text(res->GetPath().c_str());
+							ImGui::EndTooltip();
+						}
 						ImGui::PopID();
 					}
 				}
@@ -97,6 +118,6 @@ namespace Resources {
 	private:
 		std::unordered_map<std::string, Resources::IResource*> _resource;
 
-		
+
 	};
 }

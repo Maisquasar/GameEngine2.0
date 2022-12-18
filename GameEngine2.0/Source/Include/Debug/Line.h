@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 #include "Include/Math/Math.h"
 namespace Resources
 {

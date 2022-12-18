@@ -183,6 +183,7 @@ void App::LoadResources()
 	auto defaultMat = new Resources::Material();
 	defaultMat->SetEditable(false);
 	defaultMat->SetName("DefaultMaterial");
+	defaultMat->SetShader(_resourceManager.GetDefaultShader());
 	_resourceManager.Add<Resources::Material>("DefaultMaterial", defaultMat);
 
 	// Load Textures - Materials - Models.
@@ -367,7 +368,9 @@ void App::Update()
 	// Main loop
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
+#if MULTITHREAD_LOADING
 		MultiThreadLoad();
+#endif
 		// Begin Frame
 		glfwPollEvents();
 		ImGui_ImplOpenGL3_NewFrame();

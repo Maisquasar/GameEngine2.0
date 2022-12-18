@@ -13,7 +13,11 @@ Resources::Model::~Model()
 
 void Resources::Model::Load(std::string filename)
 {
+#if MULTITHREAD_LOADING
 	Application.ThreadManager.QueueJob(&Model::MultiThreadLoad, this, filename);
+#else
+	MultiThreadLoad(filename);
+#endif
 }
 
 void Resources::Model::MultiThreadLoad(std::string filename)
@@ -65,7 +69,8 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 					Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
 			}
 			Meshes.push_back(Resources::Mesh());
-			Meshes.back().SetName(Utils::Loader::GetString(currentLine));
+			std::string Name = Utils::Loader::GetString(currentLine);
+			Meshes.back().SetName(Name);
 		}
 		else if (prefix == "mt")
 		{
@@ -112,12 +117,18 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 			// Set Name
 			std::string MaterialName = Utils::Loader::GetString(currentLine);
 			MaterialName = GetPath().substr(0, GetPath().find_last_of('/') + 1) + MaterialName + ".mat";
-			if (auto mat = Application.GetResourceManager()->Get<Resources::Material>(MaterialName.c_str())) {
+			Resources::Material* mat;
+			if (mat = Application.GetResourceManager()->Get<Resources::Material>(MaterialName.c_str())) {
 				subMesh.Material = mat;
 			}
 			else
 			{
-				mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
+				if (mat = Application.GetResourceManager()->Create<Resources::Material>(MaterialName))
+				{
+
+				}
+				else
+					mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
 				subMesh.Material = mat;
 			}
 			Meshes.back().SubMeshes.push_back(subMesh);
@@ -131,6 +142,6 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		mesh.Load("");
 		mesh.SetPath(GetPath() + "::" + mesh.GetName());
 		Application.GetResourceManager()->Add(GetPath() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
-		_initialized = true;
 	}
+	_initialized = true;
 }

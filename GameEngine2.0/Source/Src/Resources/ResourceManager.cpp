@@ -4,9 +4,11 @@ Resources::ResourceManager::ResourceManager() {}
 
 Resources::ResourceManager::~ResourceManager() 
 {
-	for (auto i : _resource)
+	for (auto it = _resource.begin(); it != _resource.end(); )
 	{
-		delete i.second;
+		printf("Delete %s\n", it->first.c_str());
+		delete it->second;
+		it = _resource.erase(it);
 	}
 	_resource.clear();
 }

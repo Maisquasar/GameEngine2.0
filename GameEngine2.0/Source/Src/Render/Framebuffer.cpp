@@ -1,3 +1,4 @@
+#include <ImGui/imgui_internal.h>
 #include "Include/Render/Framebuffer.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"

@@ -9,6 +9,7 @@
 #include "Include/App.h"
 #include "Include/Physic/Ray.h"
 #include "Include/Debug/Line.h"
+#include "Include/Core/Transform.h"
 
 
 Core::Components::BoxCollider::BoxCollider()

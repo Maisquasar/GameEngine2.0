@@ -17,7 +17,11 @@ void Resources::Texture::NewTexture(std::string filename)
 
 void Resources::Texture::Load(std::string filename)
 {
+#if MULTITHREAD_LOADING
 	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename);
+#else
+	MultiThreadLoading(filename);
+#endif
 }
 
 void Resources::Texture::MultiThreadLoading(std::string filename)
@@ -32,6 +36,9 @@ void Resources::Texture::MultiThreadLoading(std::string filename)
 		return;
 	}
 	Loaded = true;
+#if !MULTITHREAD_LOADING
+	Initialize();
+#endif
 }
 
 void Resources::Texture::Initialize()

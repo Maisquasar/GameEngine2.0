@@ -19,6 +19,7 @@ namespace Resources
 		size_t KeyPosCount = 0;
 		size_t KeyRotCount = 0;
 
+
 		std::vector < std::vector<Math::Vector3>> KeyPositions;
 		std::vector < std::vector<Math::Quaternion>> KeyRotations;
 	private:

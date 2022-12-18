@@ -69,7 +69,11 @@ void Resources::Material::ShowInInspector()
 
 void Resources::Material::Load(std::string filename)
 {
+#if MULTITHREAD_LOADING
 	Application.ThreadManager.QueueJob(&Material::MultiThreadLoad, this, filename);
+#else
+	MultiThreadLoad(filename);
+#endif
 }
 
 void Resources::Material::MultiThreadLoad(std::string filename)

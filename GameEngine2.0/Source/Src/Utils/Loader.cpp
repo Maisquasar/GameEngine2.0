@@ -219,10 +219,9 @@ void Utils::Loader::MtlLoader(std::string path)
 			if (currentMaterial)
 				WriteMaterial(currentMaterial);
 
-			currentMaterial = new Resources::Material();
+			currentMaterial = Application.GetResourceManager()->CreateNew<Resources::Material>(path);
 			currentMaterial->SetName(name);
 			currentMaterial->SetPath(path);
-			Application.GetResourceManager()->Add(path, currentMaterial);
 			LOG(Debug::LogType::INFO, "Sucessfuly Loaded Material %s from MTL !", currentMaterial->GetPath().c_str())
 		}
 		else if (!currentMaterial)
@@ -266,7 +265,9 @@ void Utils::Loader::MtlLoader(std::string path)
 		pos++;
 	}
 	if (currentMaterial)
+	{
 		WriteMaterial(currentMaterial);
+	}
 	delete[] data;
 }
 
@@ -414,10 +415,21 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 		for (size_t i = 0; i < count / 3; i++)
 		{
 			if (lastMaterial != mesh->getGeometry()->getMaterials()[i]) {
-				auto mat = new Resources::Material();
-				auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
-				mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
-				mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+				Resources::Material* mat = nullptr;
+				std::string matName = mesh->getMaterial((int)lastMaterial)->name;
+				std::string matPath = Mesh->GetPath().substr(0, Mesh->GetPath().find_last_of('/') + 1) + matName + ".mat";
+				mat = Application.GetResourceManager()->Get<Resources::Material>(matPath.c_str());
+				if (!mat)
+				{
+					auto mat = new Resources::Material();
+					mat->SetName(matName);
+					mat->SetPath(matPath);
+					auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
+					mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
+					mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+					Application.GetResourceManager()->Add<Resources::Material>(matPath, mat);
+				}
+
 				Mesh->SubMeshes.push_back(Resources::SubMesh());
 				Mesh->SubMeshes.back().Material = mat;
 				Mesh->SubMeshes.back().StartIndex = lastIndex;
@@ -427,10 +439,20 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 			}
 		}
 	}
-	auto mat = new Resources::Material();
-	auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
-	mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
-	mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b));
+	Resources::Material* mat = nullptr;
+	std::string matName = mesh->getMaterial((int)lastMaterial)->name;
+	std::string meshPath = Mesh->GetPath().substr(0, Mesh->GetPath().find_last_of('/') + 1) + matName + ".mat";
+	mat = Application.GetResourceManager()->Get<Resources::Material>(meshPath.c_str());
+	if (!mat)
+	{
+		mat = new Resources::Material();
+		mat->SetName(matName);
+		mat->SetPath(meshPath);
+		auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
+		mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
+		mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+		Application.GetResourceManager()->Add<Resources::Material>(meshPath.c_str(), mat);
+	}
 	Mesh->SubMeshes.push_back(Resources::SubMesh());
 	Mesh->SubMeshes.back().Material = mat;
 	Mesh->SubMeshes.back().StartIndex = lastIndex;
@@ -515,60 +537,61 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 
 void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string path)
 {
-	if (const ofbx::AnimationLayer* layer = stack->getLayer(0))
-	{
-		Resources::Animation* Animation = new Resources::Animation();
-		auto name = path.substr(path.find_last_of('/') + 1);
-		name = name + "::" + "Anim";
-		path = path + "::" + "Anim";
-		Animation->SetPath(path);
-		Animation->SetName(name);
-
-		printf("Layer %s %d\n", layer->name, 0);
-		for (int k = 0; layer->getCurveNode(k); ++k)
+	for (int i = 0; i < 3; i++) {
+		if (const ofbx::AnimationLayer* layer = stack->getLayer(i))
 		{
-			const ofbx::AnimationCurveNode* node = layer->getCurveNode(k);
-			if (!std::strcmp(node->name, "T")) {
-				Animation->KeyPositions.push_back(std::vector<Math::Vector3>());
-				int i = 0;
+			Resources::Animation* Animation(new Resources::Animation());
+			auto name = path.substr(path.find_last_of('/') + 1);
+			name = name + "::" + "Anim";
+			path = path + "::" + "Anim";
+			Animation->SetPath(path);
+			Animation->SetName(name);
 
-				if (node->getCurve(i)) {
+			for (int k = 0; layer->getCurveNode(k); ++k)
+			{
+				const ofbx::AnimationCurveNode* node = layer->getCurveNode(k);
+				if (!std::strcmp(node->name, "T")) {
+					Animation->KeyPositions.push_back(std::vector<Math::Vector3>());
+					int i = 0;
 
-					if (Animation->KeyPosCount == 0)
-						Animation->KeyPosCount = node->getCurve(i)->getKeyCount();
+					if (node->getCurve(i)) {
+
+						if (Animation->KeyPosCount == 0)
+							Animation->KeyPosCount = node->getCurve(i)->getKeyCount();
 
 
-					for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
-						Math::Vector3 Position;
-						for (i = 0; i < 3; i++) {
-							Position[i] = node->getCurve(i)->getKeyValue()[p];
+						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
+							Math::Vector3 Position;
+							for (i = 0; i < 3; i++) {
+								Position[i] = node->getCurve(i)->getKeyValue()[p];
+							}
+							i = 0;
+							Animation->KeyPositions.back().push_back(Position);
 						}
-						i = 0;
-						Animation->KeyPositions.back().push_back(Position);
 					}
 				}
-			}
-			else if (!std::strcmp(node->name, "R")) {
-				Animation->KeyRotations.push_back(std::vector<Math::Quaternion>());
-				int i = 0;
-				if (node->getCurve(i)) {
+				else if (!std::strcmp(node->name, "R")) {
+					Animation->KeyRotations.push_back(std::vector<Math::Quaternion>());
+					int i = 0;
+					if (node->getCurve(i)) {
 
 
-					if (Animation->KeyRotCount == 0)
-						Animation->KeyRotCount = node->getCurve(i)->getKeyCount();
+						if (Animation->KeyRotCount == 0)
+							Animation->KeyRotCount = node->getCurve(i)->getKeyCount();
 
-					for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
-						Math::Vector3 Rotation;
-						for (i = 0; i < 3; i++) {
-							Rotation[i] = node->getCurve(i)->getKeyValue()[p];
+						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
+							Math::Vector3 Rotation;
+							for (i = 0; i < 3; i++) {
+								Rotation[i] = node->getCurve(i)->getKeyValue()[p];
+							}
+							i = 0;
+							Animation->KeyRotations.back().push_back(Rotation.ToQuaternion());
 						}
-						i = 0;
-						Animation->KeyRotations.back().push_back(Rotation.ToQuaternion());
 					}
 				}
-			}
 
+			}
+			Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
 		}
-		Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
 	}
 }

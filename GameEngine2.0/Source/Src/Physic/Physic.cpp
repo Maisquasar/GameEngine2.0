@@ -19,8 +19,8 @@ bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Ma
 	{
 		float t1 = (box->Transform.GetWorldScale().x - localRayOrigin.x) / localRayDirection.x;
 		float t2 = (-box->Transform.GetWorldScale().x - localRayOrigin.x) / localRayDirection.x;
-		tMin = std::max(tMin, std::min(t1, t2));
-		tMax = std::min(tMax, std::max(t1, t2));
+		tMin = max(tMin, min(t1, t2));
+		tMax = min(tMax, max(t1, t2));
 	}
 
 	// Check intersection with the y-aligned planes of the box.
@@ -28,8 +28,8 @@ bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Ma
 	{
 		float t1 = (box->Transform.GetWorldScale().y - localRayOrigin.y) / localRayDirection.y;
 		float t2 = (-box->Transform.GetWorldScale().y - localRayOrigin.y) / localRayDirection.y;
-		tMin = std::max(tMin, std::min(t1, t2));
-		tMax = std::min(tMax, std::max(t1, t2));
+		tMin = max(tMin, min(t1, t2));
+		tMax = min(tMax, max(t1, t2));
 	}
 
 	// Check intersection with the z-aligned planes of the box.
@@ -37,8 +37,8 @@ bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Ma
 	{
 		float t1 = (box->Transform.GetWorldScale().z - localRayOrigin.z) / localRayDirection.z;
 		float t2 = (-box->Transform.GetWorldScale().z - localRayOrigin.z) / localRayDirection.z;
-		tMin = std::max(tMin, std::min(t1, t2));
-		tMax = std::min(tMax, std::max(t1, t2));
+		tMin = max(tMin, min(t1, t2));
+		tMax = min(tMax, max(t1, t2));
 	}
 
 	// Check if there is an intersection.
