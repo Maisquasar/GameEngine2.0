@@ -21,11 +21,9 @@ namespace Resources {
 
 		template<typename T> T* Create(std::string filename)
 		{
-			if (_resource.find(filename) == _resource.end()) {}
-			else
-			{
+			if (_resource.find(filename) != _resource.end() || !std::filesystem::exists(filename))
 				return nullptr;
-			}
+
 			std::string Path = filename;
 			filename = filename.substr(filename.find_last_of("//\\") + 1);
 			_resource[Path] = new T();
@@ -113,7 +111,7 @@ namespace Resources {
 			return out;
 		}
 		std::unordered_map<std::string, Resources::IResource*> GetAllResources() { return _resource; }
-		int TextureIndex;
+		int TextureIndex = 0;
 
 	private:
 		std::unordered_map<std::string, Resources::IResource*> _resource;

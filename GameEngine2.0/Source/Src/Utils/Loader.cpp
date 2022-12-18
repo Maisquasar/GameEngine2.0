@@ -190,6 +190,7 @@ const char* Utils::Loader::ReadFile(const char* filename, uint32_t& size, bool& 
 	}
 }
 
+#include "Include/Resources/Material.h"
 void Utils::Loader::MtlLoader(std::string path)
 {
 	// Read File.
@@ -421,13 +422,16 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 				mat = Application.GetResourceManager()->Get<Resources::Material>(matPath.c_str());
 				if (!mat)
 				{
-					auto mat = new Resources::Material();
-					mat->SetName(matName);
-					mat->SetPath(matPath);
-					auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
-					mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
-					mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
-					Application.GetResourceManager()->Add<Resources::Material>(matPath, mat);
+					mat = Application.GetResourceManager()->Create<Resources::Material>(matPath.c_str());
+					if (!mat) {
+						mat = new Resources::Material();
+						mat->SetName(matName);
+						mat->SetPath(matPath);
+						auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
+						mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
+						mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+						Application.GetResourceManager()->Add<Resources::Material>(matPath, mat);
+					}
 				}
 
 				Mesh->SubMeshes.push_back(Resources::SubMesh());
@@ -441,23 +445,25 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 	}
 	Resources::Material* mat = nullptr;
 	std::string matName = mesh->getMaterial((int)lastMaterial)->name;
-	std::string meshPath = Mesh->GetPath().substr(0, Mesh->GetPath().find_last_of('/') + 1) + matName + ".mat";
-	mat = Application.GetResourceManager()->Get<Resources::Material>(meshPath.c_str());
+	std::string matPath = Mesh->GetPath().substr(0, Mesh->GetPath().find_last_of('/') + 1) + matName + ".mat";
+	mat = Application.GetResourceManager()->Get<Resources::Material>(matPath.c_str());
 	if (!mat)
 	{
-		mat = new Resources::Material();
-		mat->SetName(matName);
-		mat->SetPath(meshPath);
-		auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
-		mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
-		mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
-		Application.GetResourceManager()->Add<Resources::Material>(meshPath.c_str(), mat);
+		mat = Application.GetResourceManager()->Create<Resources::Material>(matPath.c_str());
+		if (!mat) {
+			mat = new Resources::Material();
+			mat->SetName(matName);
+			mat->SetPath(matPath);
+			auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
+			mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
+			mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+			Application.GetResourceManager()->Add<Resources::Material>(matPath.c_str(), mat);
+		}
 	}
 	Mesh->SubMeshes.push_back(Resources::SubMesh());
 	Mesh->SubMeshes.back().Material = mat;
 	Mesh->SubMeshes.back().StartIndex = lastIndex;
 	Mesh->SubMeshes.back().Count = (size_t)mesh->getGeometry()->getIndexCount() - lastIndex;
-
 
 
 	// Set-up all Vertices.
@@ -467,9 +473,9 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 
 	for (int i = 0; i < index_count; i++)
 	{
-		Mesh->Vertices.push_back(Mesh->Positions[i].x);
-		Mesh->Vertices.push_back(Mesh->Positions[i].y);
-		Mesh->Vertices.push_back(Mesh->Positions[i].z);
+		Mesh->Vertices.push_back(Mesh->Positions[i].x * 0.01f);
+		Mesh->Vertices.push_back(Mesh->Positions[i].y * 0.01f);
+		Mesh->Vertices.push_back(Mesh->Positions[i].z * 0.01f);
 		Mesh->Vertices.push_back(Mesh->Normals[i].x);
 		Mesh->Vertices.push_back(Mesh->Normals[i].y);
 		Mesh->Vertices.push_back(Mesh->Normals[i].z);
@@ -512,7 +518,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 		auto rot = link->getPreRotation();
 		auto sca = link->getLocalScaling();
 
-		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z);
+		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z) * 0.01f;
 		Math::Vector3 vecRot = Math::Vector3((float)rot.x, (float)rot.y, (float)rot.z);
 		Math::Vector3 vecSca = Math::Vector3((float)sca.x, (float)sca.y, (float)sca.z);
 

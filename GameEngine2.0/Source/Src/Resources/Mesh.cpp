@@ -175,7 +175,7 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 	int r = (id & 0x000000FF) >> 0;
 	int g = (id & 0x0000FF00) >> 8;
 	int b = (id & 0x00FF0000) >> 16;
-	for (auto Sub : this->SubMeshes)
+	for (const auto& Sub : this->SubMeshes)
 	{
 		if (!Sub.Material)
 			continue;

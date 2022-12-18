@@ -78,6 +78,8 @@ void Resources::Material::Load(std::string filename)
 
 void Resources::Material::MultiThreadLoad(std::string filename)
 {
+	if (Loaded)
+		return;
 	uint32_t size = 0;
 	bool sucess = false;
 	auto data = Utils::Loader::ReadFile(_path.c_str(), size, sucess);

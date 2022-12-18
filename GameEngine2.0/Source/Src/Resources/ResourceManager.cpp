@@ -1,12 +1,11 @@
 #include "Include/Resources/ResourceManager.h"
 
-Resources::ResourceManager::ResourceManager() {}
+Resources::ResourceManager::ResourceManager() { TextureIndex = 0; }
 
 Resources::ResourceManager::~ResourceManager() 
 {
 	for (auto it = _resource.begin(); it != _resource.end(); )
 	{
-		printf("Delete %s\n", it->first.c_str());
 		delete it->second;
 		it = _resource.erase(it);
 	}
