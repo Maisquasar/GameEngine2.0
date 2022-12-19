@@ -17,6 +17,12 @@ public:
 	void UpdateBone(Resources::Animation*, float) override;
 	void SetDefault();
 
+	// Clone this Bones and his childrens.
+	Bone* Clone() override;
+
+	void Save(std::string space, std::string& content) override;
+	void Load(const char* data, uint32_t& pos) override;
+
 	int Id = -1;
 	Math::Vector3 DefaultPosition;
 	Math::Quaternion DefaultRotation;
@@ -29,6 +35,8 @@ namespace Resources {
 	public:
 		Skeleton();
 		~Skeleton();
+
+		Skeleton* Clone() const override;
 
 		Bone* RootBone = nullptr;
 

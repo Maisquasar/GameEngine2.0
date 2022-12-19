@@ -27,6 +27,9 @@ namespace Core {
 		void AddComponent(Core::Components::Component* comp);
 		void SetParent(Node* node);
 
+		// Clone this Node and his childrens.
+		virtual Node* Clone();
+
 		void RemoveChildren(Node* node);
 		void RemoveFromParent();
 		void RemoveComponent(Core::Components::Component* comp);
@@ -50,9 +53,9 @@ namespace Core {
 
 		void SetSelected(bool value) { _selected = value; }
 
-		void Save(std::string space, std::string& content);
-		void Load(const char* data, uint32_t& pos);
-	private:
+		virtual void Save(std::string space, std::string& content);
+		virtual void Load(const char* data, uint32_t& pos);
+	protected:
 		bool _open = false;
 		bool _active = true; // Boolean for inspector active
 		bool _selected = false;

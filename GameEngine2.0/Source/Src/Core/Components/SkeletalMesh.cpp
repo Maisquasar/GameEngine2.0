@@ -11,6 +11,7 @@ Core::Components::SkeletalMesh::~SkeletalMesh()
 		if (auto anim = GameObject->GetComponent<AnimationComponent>())
 			anim->SetSkeleton(nullptr);
 	delete Mesh;
+	delete Skeleton;
 }
 
 void Core::Components::SkeletalMesh::Update()
@@ -68,19 +69,22 @@ void Core::Components::SkeletalMesh::ShowInInspector()
 
 void Core::Components::SkeletalMesh::SetSkeleton(Resources::Skeleton* skel)
 {
-	Skeleton = skel;
+	if (Skeleton)
+		delete Skeleton;
+	Skeleton = Cast(Resources::Skeleton, skel->Clone());
 	Skeleton->RootBone->SetParent(GameObject);
 }
 
 void Core::Components::SkeletalMesh::Save(std::string space, std::string& content)
 {
-	content += space + Utils::StringFormat("Skeleton : %s\n", this->Skeleton->GetPath().c_str());
-	content += space + Utils::StringFormat("Mesh : %s\n", this->Mesh->GetPath().c_str());
+	content += space + Utils::StringFormat("Skeleton : %s\n", Skeleton ? Skeleton->GetPath().c_str() : "None");
+	content += space + Utils::StringFormat("Mesh : %s\n", Mesh ? Mesh->GetPath().c_str() : "None");
 }
 
 void Core::Components::SkeletalMesh::Load(const char* data, uint32_t& pos)
 {
 	std::string currentLine;
+	Skeleton = new Resources::Skeleton();
 	while (currentLine.substr(0, 13) != "#EndComponent")
 	{
 		currentLine = Utils::Loader::GetLine(data, pos);
@@ -94,11 +98,9 @@ void Core::Components::SkeletalMesh::Load(const char* data, uint32_t& pos)
 		else if (currentLine.substr(0, 8) == "Skeleton")
 		{
 			auto SkelPath = Utils::Loader::GetString(currentLine);
-			if (auto skel = Application.GetResourceManager()->Get<Resources::Skeleton>(SkelPath.c_str())) {
-				Skeleton = skel;
-				Skeleton->RootBone->Transform.Parent = GameObject;
-				Skeleton->RootBone->Parent = GameObject;
-			}
+			Skeleton->SetPath(SkelPath);
+			auto name = SkelPath.substr(SkelPath.find_first_of(':') + 2);
+			Skeleton->SetName(name);
 		}
 		pos++;
 	}

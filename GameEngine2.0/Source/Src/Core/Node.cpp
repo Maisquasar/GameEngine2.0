@@ -4,6 +4,7 @@
 #include "Include/EditorUi/Hierarchy.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Core/Components/MeshComponent.h"
+#include "Include/Resources/Skeleton.h"
 
 Core::Node::Node()
 {
@@ -12,15 +13,15 @@ Core::Node::Node()
 
 Core::Node::~Node()
 {
-	for (auto child : Childrens)
-	{
-		delete child;
-	}
 	for (int i = (int)Components.size() - 1; i >= 0; i--)
 	{
 		auto comp = Components[i];
 		Components.erase(Components.begin() + i);
 		delete comp;
+	}
+	for (auto child : Childrens)
+	{
+		delete child;
 	}
 }
 
@@ -57,12 +58,28 @@ void Core::Node::SetParent(Node* node)
 	}
 }
 
+Core::Node* Core::Node::Clone()
+{
+	auto node = new Node(static_cast<Node const&>(*this));
+	node->Childrens.clear();
+	node->Components.clear();
+	for (auto child : Childrens)
+	{
+		node->AddChildren(child->Clone());
+	}
+	for (auto child : Components)
+	{
+		node->AddComponent(child->Clone());
+	}
+	return node;
+}
+
 void Core::Node::RemoveChildren(Node* node)
 {
 	auto it = std::find(Childrens.begin(), Childrens.end(), node);
 	if (it != Childrens.end())
 	{
-		delete node;;
+		delete node;
 		// Remove the child from the list of children
 		Childrens.erase(it);
 	}
@@ -73,7 +90,6 @@ void Core::Node::RemoveFromParent()
 	if (!Parent)
 		return;
 	Parent->RemoveChildren(this);
-	int index = 0;
 }
 
 void Core::Node::RemoveComponent(Core::Components::Component* comp)
@@ -279,6 +295,11 @@ void Core::Node::Load(const char* data, uint32_t& pos)
 		{
 			this->AddChildren(new Node());
 			this->Childrens.back()->Load(data, pos);
+		}
+		else if (currentLine.substr(0, 10) == "#BeginBone")
+		{
+			this->AddChildren(new Bone());
+			dynamic_cast<Bone*>(this->Childrens.back())->Load(data, pos);
 		}
 		else if (currentLine.substr(0, 15) == "#BeginComponent")
 		{

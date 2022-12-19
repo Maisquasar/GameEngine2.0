@@ -21,9 +21,13 @@ int main()
     // |
     // V
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
-    //_CrtSetBreakAlloc(1015891);
+    //_CrtSetBreakAlloc(1014553);
     Main();
     return 0;
 }
 
-//TODO : Fix RubixFBX Loading
+//TODO : 
+//		- Fix ofbx.h leaks.
+//		- Clean Loader Code.
+//      - Fix Bone Loading (dans le .scene specifier si c'est un bone et mettre l'id et le default transform)
+//      - Fix Bone Delete.
