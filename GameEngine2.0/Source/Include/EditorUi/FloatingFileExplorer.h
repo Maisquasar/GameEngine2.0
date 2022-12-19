@@ -23,7 +23,6 @@ namespace EditorUi {
 
 		std::shared_ptr<File> DrawAndRead();
 		void DrawAndSave(std::string data);
-		void Draw() override;
 		virtual void Refresh();
 
 		void SetOpen(bool value) override;

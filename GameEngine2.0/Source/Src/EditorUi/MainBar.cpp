@@ -34,6 +34,7 @@ void EditorUi::MainBar::Draw()
 			{
 				EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(true);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetState(EditorUi::FileExplorerState::Read);
+				EditorUi::Editor::GetFloatingFileExplorer()->SetTargetExtension(".scene");
 			}
 			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 			{

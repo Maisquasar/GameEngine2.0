@@ -25,9 +25,3 @@ int main()
     Main();
     return 0;
 }
-
-//TODO : 
-//		- Fix ofbx.h leaks.
-//		- Clean Loader Code.
-//      - Fix Bone Loading (dans le .scene specifier si c'est un bone et mettre l'id et le default transform)
-//      - Fix Bone Delete.
