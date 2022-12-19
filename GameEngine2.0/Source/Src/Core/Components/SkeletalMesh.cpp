@@ -16,7 +16,7 @@ Core::Components::SkeletalMesh::~SkeletalMesh()
 
 void Core::Components::SkeletalMesh::Update()
 {
-	if (Skeleton && _showSkeleton) {
+	if (Skeleton && _showSkeleton && Skeleton->RootBone) {
 		Skeleton->RootBone->DrawDebug();
 	}
 	if (Mesh && _showMesh) {
@@ -40,6 +40,13 @@ void Core::Components::SkeletalMesh::ShowInInspector()
 	ImGui::Text(name.c_str());
 	if (auto skel = Application.GetResourceManager()->ResourcesPopup<Resources::Skeleton>("SkeletonPopup")) {
 		SetSkeleton(skel);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Reset") && Skeleton && Skeleton->RootBone)
+	{
+		Skeleton->RootBone->RemoveFromParent();
+		delete Skeleton;
+		Skeleton = nullptr;
 	}
 
 	// Mesh Button

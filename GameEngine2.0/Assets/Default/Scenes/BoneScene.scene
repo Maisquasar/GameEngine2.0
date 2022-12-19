@@ -17,7 +17,7 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginBone
 		Id : 0
 		DefaultPosition : -0.000000 0.997919 0.000000
-		DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+		DefaultRotation : 0.000000 -0.000002 0.000044 1.000000
 		Name : mixamorig:Hips
 		IsActive : 1
 		Position : -0.000000 0.997919 0.000000
@@ -26,7 +26,7 @@ Scale : 1.000000 1.000000 1.000000
 			#BeginBone
 			Id : 1
 			DefaultPosition : 0.000009 0.099235 -0.012273
-			DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+			DefaultRotation : -0.060730 -0.000000 0.000006 0.998154
 			Name : mixamorig:Spine
 			IsActive : 1
 			Position : 0.000009 0.099235 -0.012273
@@ -35,7 +35,7 @@ Scale : 1.000000 1.000000 1.000000
 				#BeginBone
 				Id : 2
 				DefaultPosition : 0.000000 0.117320 -0.000000
-				DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+				DefaultRotation : 0.000196 0.000000 -0.000009 1.000000
 				Name : mixamorig:Spine1
 				IsActive : 1
 				Position : 0.000000 0.117320 -0.000000
@@ -44,7 +44,7 @@ Scale : 1.000000 1.000000 1.000000
 					#BeginBone
 					Id : 3
 					DefaultPosition : 0.000000 0.134588 0.000000
-					DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+					DefaultRotation : 0.057712 0.000002 0.000003 0.998333
 					Name : mixamorig:Spine2
 					IsActive : 1
 					Position : 0.000000 0.134588 0.000000
@@ -53,7 +53,7 @@ Scale : 1.000000 1.000000 1.000000
 						#BeginBone
 						Id : 4
 						DefaultPosition : 0.000000 0.150278 0.008779
-						DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+						DefaultRotation : 0.002828 0.000000 0.000000 0.999996
 						Name : mixamorig:Neck
 						IsActive : 1
 						Position : 0.000000 0.150278 0.008779
@@ -73,7 +73,7 @@ Scale : 1.000000 1.000000 1.000000
 						#BeginBone
 						Id : 6
 						DefaultPosition : 0.061058 0.091063 0.007571
-						DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+						DefaultRotation : -0.453835 -0.544849 0.551139 -0.439794
 						Name : mixamorig:LeftShoulder
 						IsActive : 1
 						Position : 0.061058 0.091063 0.007571
@@ -82,7 +82,7 @@ Scale : 1.000000 1.000000 1.000000
 							#BeginBone
 							Id : 7
 							DefaultPosition : 0.000000 0.129223 0.000000
-							DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+							DefaultRotation : -0.010452 -0.001063 0.101150 0.994816
 							Name : mixamorig:LeftArm
 							IsActive : 1
 							Position : 0.000000 0.129223 0.000000
@@ -109,7 +109,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 10
 										DefaultPosition : -0.030030 0.037888 0.021671
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.251895 -0.059464 0.221924 0.940087
 										Name : mixamorig:LeftHandThumb1
 										IsActive : 1
 										Position : -0.030030 0.037888 0.021671
@@ -118,7 +118,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 11
 											DefaultPosition : -0.000000 0.047450 0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : 0.000007 0.000000 0.000001 1.000000
 											Name : mixamorig:LeftHandThumb2
 											IsActive : 1
 											Position : -0.000000 0.047450 0.000000
@@ -139,7 +139,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 13
 										DefaultPosition : -0.028220 0.122666 0.002318
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000001 -0.000000 0.000005 1.000000
 										Name : mixamorig:LeftHandIndex1
 										IsActive : 1
 										Position : -0.028220 0.122666 0.002318
@@ -148,7 +148,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 14
 											DefaultPosition : -0.000000 0.038920 -0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : 0.000000 0.000000 -0.000006 1.000000
 											Name : mixamorig:LeftHandIndex2
 											IsActive : 1
 											Position : -0.000000 0.038920 -0.000000
@@ -169,7 +169,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 16
 										DefaultPosition : -0.000000 0.127755 -0.000000
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000001 -0.000000 0.000000 1.000000
 										Name : mixamorig:LeftHandMiddle1
 										IsActive : 1
 										Position : -0.000000 0.127755 -0.000000
@@ -199,7 +199,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 19
 										DefaultPosition : 0.022166 0.121470 -0.000100
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000001 -0.000000 0.000005 1.000000
 										Name : mixamorig:LeftHandRing1
 										IsActive : 1
 										Position : 0.022166 0.121470 -0.000100
@@ -208,7 +208,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 20
 											DefaultPosition : 0.000000 0.036012 0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : -0.000002 0.000000 -0.000008 1.000000
 											Name : mixamorig:LeftHandRing2
 											IsActive : 1
 											Position : 0.000000 0.036012 0.000000
@@ -229,7 +229,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 22
 										DefaultPosition : 0.047258 0.109082 0.002261
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000003 -0.000000 0.000141 1.000000
 										Name : mixamorig:LeftHandPinky1
 										IsActive : 1
 										Position : 0.047258 0.109082 0.002261
@@ -238,7 +238,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 23
 											DefaultPosition : -0.000000 0.041367 0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : -0.000006 0.000000 -0.000368 1.000000
 											Name : mixamorig:LeftHandPinky2
 											IsActive : 1
 											Position : -0.000000 0.041367 0.000000
@@ -247,7 +247,7 @@ Scale : 1.000000 1.000000 1.000000
 												#BeginBone
 												Id : 24
 												DefaultPosition : 0.000000 0.025948 0.000000
-												DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+												DefaultRotation : 0.000004 0.000000 0.000230 1.000000
 												Name : mixamorig:LeftHandPinky3
 												IsActive : 1
 												Position : 0.000000 0.025948 0.000000
@@ -263,7 +263,7 @@ Scale : 1.000000 1.000000 1.000000
 						#BeginBone
 						Id : 25
 						DefaultPosition : -0.061057 0.091064 0.007571
-						DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+						DefaultRotation : -0.453838 0.544847 -0.551140 -0.439793
 						Name : mixamorig:RightShoulder
 						IsActive : 1
 						Position : -0.061057 0.091064 0.007571
@@ -272,7 +272,7 @@ Scale : 1.000000 1.000000 1.000000
 							#BeginBone
 							Id : 26
 							DefaultPosition : 0.000000 0.129223 -0.000000
-							DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+							DefaultRotation : -0.010455 0.001063 -0.101149 0.994816
 							Name : mixamorig:RightArm
 							IsActive : 1
 							Position : 0.000000 0.129223 -0.000000
@@ -299,7 +299,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 29
 										DefaultPosition : 0.030030 0.037888 0.021671
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.251895 0.059464 -0.221923 0.940087
 										Name : mixamorig:RightHandThumb1
 										IsActive : 1
 										Position : 0.030030 0.037888 0.021671
@@ -308,7 +308,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 30
 											DefaultPosition : -0.000000 0.047450 -0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : 0.000008 -0.000000 -0.000000 1.000000
 											Name : mixamorig:RightHandThumb2
 											IsActive : 1
 											Position : -0.000000 0.047450 -0.000000
@@ -329,7 +329,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 32
 										DefaultPosition : 0.028220 0.122666 0.002318
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000001 -0.000000 -0.000005 1.000000
 										Name : mixamorig:RightHandIndex1
 										IsActive : 1
 										Position : 0.028220 0.122666 0.002318
@@ -338,7 +338,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 33
 											DefaultPosition : 0.000000 0.038920 -0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : 0.000000 0.000000 0.000006 1.000000
 											Name : mixamorig:RightHandIndex2
 											IsActive : 1
 											Position : 0.000000 0.038920 -0.000000
@@ -359,7 +359,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 35
 										DefaultPosition : 0.000000 0.127755 -0.000000
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000001 -0.000000 -0.000000 1.000000
 										Name : mixamorig:RightHandMiddle1
 										IsActive : 1
 										Position : 0.000000 0.127755 -0.000000
@@ -389,7 +389,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 38
 										DefaultPosition : -0.022166 0.121470 -0.000100
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000001 -0.000000 -0.000005 1.000000
 										Name : mixamorig:RightHandRing1
 										IsActive : 1
 										Position : -0.022166 0.121470 -0.000100
@@ -398,7 +398,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 39
 											DefaultPosition : -0.000000 0.036012 -0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : 0.000000 0.000000 0.000008 1.000000
 											Name : mixamorig:RightHandRing2
 											IsActive : 1
 											Position : -0.000000 0.036012 -0.000000
@@ -419,7 +419,7 @@ Scale : 1.000000 1.000000 1.000000
 										#BeginBone
 										Id : 41
 										DefaultPosition : -0.047258 0.109082 0.002261
-										DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+										DefaultRotation : 0.000001 -0.000000 -0.000003 1.000000
 										Name : mixamorig:RightHandPinky1
 										IsActive : 1
 										Position : -0.047258 0.109082 0.002261
@@ -428,7 +428,7 @@ Scale : 1.000000 1.000000 1.000000
 											#BeginBone
 											Id : 42
 											DefaultPosition : -0.000000 0.041366 -0.000000
-											DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+											DefaultRotation : 0.000000 0.000000 0.000010 1.000000
 											Name : mixamorig:RightHandPinky2
 											IsActive : 1
 											Position : -0.000000 0.041366 -0.000000
@@ -437,7 +437,7 @@ Scale : 1.000000 1.000000 1.000000
 												#BeginBone
 												Id : 43
 												DefaultPosition : -0.000000 0.025948 -0.000000
-												DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+												DefaultRotation : 0.000000 0.000000 -0.000010 1.000000
 												Name : mixamorig:RightHandPinky3
 												IsActive : 1
 												Position : -0.000000 0.025948 -0.000000
@@ -456,7 +456,7 @@ Scale : 1.000000 1.000000 1.000000
 			#BeginBone
 			Id : 44
 			DefaultPosition : 0.091239 -0.066572 -0.000554
-			DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+			DefaultRotation : -0.000020 0.006350 -0.999975 0.002970
 			Name : mixamorig:LeftUpLeg
 			IsActive : 1
 			Position : 0.091239 -0.066572 -0.000554
@@ -465,7 +465,7 @@ Scale : 1.000000 1.000000 1.000000
 				#BeginBone
 				Id : 45
 				DefaultPosition : -0.000000 0.405994 0.000000
-				DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+				DefaultRotation : -0.018114 0.000182 -0.005920 0.999818
 				Name : mixamorig:LeftLeg
 				IsActive : 1
 				Position : -0.000000 0.405994 0.000000
@@ -474,7 +474,7 @@ Scale : 1.000000 1.000000 1.000000
 					#BeginBone
 					Id : 46
 					DefaultPosition : -0.000000 0.420990 0.000000
-					DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+					DefaultRotation : 0.540550 0.014366 0.024951 0.840819
 					Name : mixamorig:LeftFoot
 					IsActive : 1
 					Position : -0.000000 0.420990 0.000000
@@ -483,7 +483,7 @@ Scale : 1.000000 1.000000 1.000000
 						#BeginBone
 						Id : 47
 						DefaultPosition : 0.000000 0.157216 -0.000000
-						DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+						DefaultRotation : 0.227692 -0.032521 -0.015366 0.973069
 						Name : mixamorig:LeftToeBase
 						IsActive : 1
 						Position : 0.000000 0.157216 -0.000000
@@ -496,7 +496,7 @@ Scale : 1.000000 1.000000 1.000000
 			#BeginBone
 			Id : 48
 			DefaultPosition : -0.091250 -0.066556 -0.000554
-			DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+			DefaultRotation : -0.000018 -0.006334 0.999975 0.003057
 			Name : mixamorig:RightUpLeg
 			IsActive : 1
 			Position : -0.091250 -0.066556 -0.000554
@@ -505,7 +505,7 @@ Scale : 1.000000 1.000000 1.000000
 				#BeginBone
 				Id : 49
 				DefaultPosition : 0.000000 0.405994 0.000000
-				DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+				DefaultRotation : -0.018147 -0.000182 0.005920 0.999818
 				Name : mixamorig:RightLeg
 				IsActive : 1
 				Position : 0.000000 0.405994 0.000000
@@ -514,7 +514,7 @@ Scale : 1.000000 1.000000 1.000000
 					#BeginBone
 					Id : 50
 					DefaultPosition : -0.000000 0.420990 -0.000000
-					DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+					DefaultRotation : 0.540564 -0.014366 -0.024951 0.840810
 					Name : mixamorig:RightFoot
 					IsActive : 1
 					Position : -0.000000 0.420990 -0.000000
@@ -523,7 +523,7 @@ Scale : 1.000000 1.000000 1.000000
 						#BeginBone
 						Id : 51
 						DefaultPosition : 0.000000 0.157216 0.000000
-						DefaultRotation : 0.000000 0.000000 0.000000 1.000000
+						DefaultRotation : 0.227709 0.032120 0.015258 0.973080
 						Name : mixamorig:RightToeBase
 						IsActive : 1
 						Position : 0.000000 0.157216 0.000000

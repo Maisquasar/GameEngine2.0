@@ -54,4 +54,4 @@ namespace Debug {
 #define PrintLog(x, ...) Debug::Log::Print(__FILENAME__, __LINE__, Debug::LogType::INFO, x, __VA_ARGS__);
 #define Serialize(Variable) (#Variable)
 #define Cast(T,x) dynamic_cast<T*>(x)
-//#define MULTITHREAD_LOADING 1
+#define MULTITHREAD_LOADING 0

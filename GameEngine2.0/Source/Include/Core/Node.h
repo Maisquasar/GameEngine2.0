@@ -13,7 +13,7 @@ namespace Core {
 	{
 	public:
 		Node();
-		~Node();
+		virtual ~Node();
 
 		Node* Parent = nullptr;
 		std::vector<Node*> Childrens;

@@ -1,4 +1,5 @@
 #include "Include/Resources/Skeleton.h"
+#include "Include/Core/Components/SkeletalMesh.h"
 #include "Include/Debug/Line.h"
 #include "Include/Debug/Log.h"
 
@@ -7,7 +8,18 @@ Bone::Bone() {
 		Transform.GameObject = this;
 }
 
-Bone::~Bone() {}
+Bone::~Bone() {
+	// Remove it from the Skeletal Mesh.
+	if (Parent) {
+		if (auto skel = Parent->GetComponent<Core::Components::SkeletalMesh>()) {
+			if (skel->Skeleton && skel->Skeleton->RootBone == this)
+			{
+				delete skel->Skeleton;
+				skel->Skeleton = nullptr;
+			}
+		}
+	}
+}
 
 void Bone::ShowInInspector()
 {
@@ -136,7 +148,7 @@ void Bone::Load(const char* data, uint32_t& pos)
 		{
 			this->DefaultPosition = Utils::Loader::GetVector3(currentLine);
 		}
-		else if (currentLine.substr(0, 15) == "DefaultPosition")
+		else if (currentLine.substr(0, 15) == "DefaultRotation")
 		{
 			this->DefaultRotation = Utils::Loader::GetVec4(currentLine);
 		}

@@ -21,7 +21,11 @@ int main()
     // |
     // V
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
-    //_CrtSetBreakAlloc(1014553);
+    //_CrtSetBreakAlloc(14630);
     Main();
     return 0;
 }
+
+//TODO : 
+//      - Split Bone into an other file.
+//      - Fix animation bug.
