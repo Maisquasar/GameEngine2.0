@@ -569,7 +569,7 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
 							Math::Vector3 Position;
 							for (i = 0; i < 3; i++) {
-								Position[i] = node->getCurve(i)->getKeyValue()[p];
+								Position[i] = node->getCurve(i)->getKeyValue()[p] * 0.01f;
 							}
 							i = 0;
 							Animation->KeyPositions.back().push_back(Position);
