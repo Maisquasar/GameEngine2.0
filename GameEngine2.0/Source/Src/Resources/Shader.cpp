@@ -70,6 +70,7 @@ void Resources::Shader::Recompile()
 	SetShader(this->GetPath());
 	SetFragmentShader(this->GetPath());
 	Link();
+	PrintLog("Shader %s Recompiled !", this->GetPath().c_str());
 }
 
 

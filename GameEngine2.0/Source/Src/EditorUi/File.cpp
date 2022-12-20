@@ -46,6 +46,7 @@ EditorUi::File::File(std::string filename) {
 	else if (extension == "glsl")
 	{
 		this->Type = EditorUi::FileType::Shdr;
+		this->ResourceLink = Application.GetResourceManager()->Get<Resources::Shader>(Directory.substr(0, Directory.find_last_of('/')).c_str());
 	}
 	else
 	{

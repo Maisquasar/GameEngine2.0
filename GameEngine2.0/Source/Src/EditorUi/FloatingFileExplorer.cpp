@@ -371,6 +371,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 					// Settings Parameters
 					EditorUi::Editor::GetTextEditor()->Tabs.push_back(TextEditor());
 					EditorUi::Editor::GetTextEditor()->Tabs.back().SetTitle(_rightClicked->Name.c_str());
+					EditorUi::Editor::GetTextEditor()->Tabs.back().SetOpen(true);
 					EditorUi::Editor::GetTextEditor()->Tabs.back().SetLanguageDefinition(TextEditor::LanguageDefinition::GLSL());
 					EditorUi::Editor::GetTextEditor()->Tabs.back().SetPath(_rightClicked->Directory.c_str());
 
@@ -382,6 +383,11 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 					cuted = cuted.substr(0, size);
 					EditorUi::Editor::GetTextEditor()->Tabs.back().SetText(cuted);
 					delete[] text;
+				}
+				if (ImGui::Button("Recompile"))
+				{
+					if (auto shader = dynamic_cast<Resources::Shader*>(_rightClicked->ResourceLink))
+						shader->Recompile();
 				}
 				break;
 			}
