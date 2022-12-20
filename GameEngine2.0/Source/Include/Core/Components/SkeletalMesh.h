@@ -13,6 +13,7 @@ namespace Core::Components
 		SkeletalMesh();
 		~SkeletalMesh();
 
+		void DrawPicking(int id) override;
 		void Update() override;
 		void ShowInInspector() override;
 

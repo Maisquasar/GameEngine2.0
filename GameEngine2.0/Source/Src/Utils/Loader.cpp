@@ -543,20 +543,24 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 
 void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string path)
 {
+	Resources::Animation* Animation(new Resources::Animation());
+	auto name = path.substr(path.find_last_of('/') + 1);
+	name = name + "::" + "Anim";
+	path = path + "::" + "Anim";
+	Animation->SetPath(path);
+	Animation->SetName(name);
+
 	for (int i = 0; i < 3; i++) {
 		if (const ofbx::AnimationLayer* layer = stack->getLayer(i))
 		{
-			Resources::Animation* Animation(new Resources::Animation());
-			auto name = path.substr(path.find_last_of('/') + 1);
-			name = name + "::" + "Anim";
-			path = path + "::" + "Anim";
-			Animation->SetPath(path);
-			Animation->SetName(name);
-
 			for (int k = 0; layer->getCurveNode(k); ++k)
 			{
+				// Get the k-th curve node
 				const ofbx::AnimationCurveNode* node = layer->getCurveNode(k);
+
+				// Check if the curve node is for translation ("T") or rotation ("R")
 				if (!std::strcmp(node->name, "T")) {
+					// Add a new vector of Math::Vector3 to the KeyPositions field
 					Animation->KeyPositions.push_back(std::vector<Math::Vector3>());
 					int i = 0;
 
@@ -564,7 +568,6 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 
 						if (Animation->KeyPosCount == 0)
 							Animation->KeyPosCount = node->getCurve(i)->getKeyCount();
-
 
 						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
 							Math::Vector3 Position;
@@ -577,10 +580,11 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 					}
 				}
 				else if (!std::strcmp(node->name, "R")) {
+					// Add a new vector of Math::Quaternion to the KeyRotations field
 					Animation->KeyRotations.push_back(std::vector<Math::Quaternion>());
 					int i = 0;
-					if (node->getCurve(i)) {
 
+					if (node->getCurve(i)) {
 
 						if (Animation->KeyRotCount == 0)
 							Animation->KeyRotCount = node->getCurve(i)->getKeyCount();

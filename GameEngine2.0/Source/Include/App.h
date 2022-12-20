@@ -81,6 +81,7 @@ private:
 	Math::Matrix4 _VP = Math::Matrix4::Identity();
 	GameState _gameState = GameState::Editor;
 	std::string _currentScenePath = "";
+	double currentFrame = 0;
 	double _lastFrame = 0;
 	double _deltaTime = 0;
 

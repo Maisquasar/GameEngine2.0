@@ -17,8 +17,8 @@ namespace Core::Components {
 
 		void ShowInInspector() override;
 
-		void Draw();
-		void DrawPicking(int id);
+		void Update();
+		void DrawPicking(int id) override;
 
 		Resources::Mesh* GetMesh();
 		void SetMesh(Resources::IResource* mesh);

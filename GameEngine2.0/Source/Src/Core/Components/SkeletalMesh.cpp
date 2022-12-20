@@ -14,13 +14,23 @@ Core::Components::SkeletalMesh::~SkeletalMesh()
 	delete Skeleton;
 }
 
+void Core::Components::SkeletalMesh::DrawPicking(int id)
+{
+	if (!Mesh || !_enable)
+		return;
+	auto MVP = Application.GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
+	if (Mesh)
+		Mesh->DrawPicking(MVP, id);
+}
+
+#include "Include/EditorUi/Inspector.h"
 void Core::Components::SkeletalMesh::Update()
 {
 	if (Skeleton && _showSkeleton && Skeleton->RootBone) {
 		Skeleton->RootBone->DrawDebug();
 	}
 	if (Mesh && _showMesh) {
-		Mesh->Update(Application.GetVPMatrix() * GameObject->Transform.GetModelMatrix());
+		Mesh->Update(Application.GetVPMatrix() * GameObject->Transform.GetModelMatrix(), EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 	}
 }
 

@@ -136,7 +136,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 	}
 }
 
-void Core::Components::MeshComponent::Draw()
+void Core::Components::MeshComponent::Update()
 {
 	if (!_currentMesh || !_enable)
 		return;

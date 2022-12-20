@@ -164,14 +164,19 @@ void Core::Node::DrawSelf()
 {
 	if (_active)
 		if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
-			meshComp->Draw();
+			meshComp->Update();
 }
 
+#include "Include/Core/Components/SkeletalMesh.h"
 void Core::Node::DrawPicking(int id)
 {
-	if (_active)
-		if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
-			meshComp->DrawPicking(id);
+	if (_active) {
+		for (auto comp : Components)
+		{
+			comp->DrawPicking(id);
+		}
+	}
+	
 }
 
 

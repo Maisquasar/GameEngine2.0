@@ -21,6 +21,9 @@ namespace Core {
 			virtual void EditorUpdate() {}
 			virtual void GameUpdate() {}
 
+			// Function to Draw Picking.
+			virtual void DrawPicking(int id) {}
+
 			// Call On Begin Play.
 			virtual void Start() {}
 			// Call On Creation.

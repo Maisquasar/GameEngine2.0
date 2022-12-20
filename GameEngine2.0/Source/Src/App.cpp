@@ -241,8 +241,15 @@ void App::EndPlay()
 
 void App::MultiThreadLoad()
 {
+	// TODO: Move it to a update into resource manager
+	// TODO: Optimize it (create a list with all uninitialize)
 	if (_everythingIsLoaded)
 		return;
+	// Waiting 10 seconds until cancel it.
+	if (currentFrame >= 10)
+	{
+		_everythingIsLoaded = true;
+	}
 	size_t loaded = 0, total = 0;
 	for (auto res : _resourceManager.GetAllResources())
 	{
@@ -404,10 +411,6 @@ void App::Update()
 		// Draw Meshs with picking Shader.
 		PickingUpdate(ChildList);
 
-		for (auto child : ChildList)
-		{
-			child->DrawSelf();
-		}
 		_gizmo.Draw();
 
 		Grid.Draw();
@@ -447,7 +450,7 @@ void App::Update()
 
 		glfwSwapBuffers(_window);
 
-		double currentFrame = glfwGetTime();
+		currentFrame = glfwGetTime();
 		_deltaTime = currentFrame - _lastFrame;
 		_lastFrame = currentFrame;
 		// End Frame.
