@@ -53,7 +53,7 @@ void Debug::Line::Draw()
 	glLineWidth(_lineWidth);
 	glBindVertexArray(_VAO);
 	glUseProgram(_shader->Program);
-	auto MVP = Application.GetVPMatrix() * Math::Matrix4::Identity();
+	auto MVP = Application.GetScene()->GetVPMatrix() * Math::Matrix4::Identity();
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 	glDepthRange(0.01, 1.0);
 	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);

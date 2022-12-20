@@ -62,7 +62,7 @@ void Core::Components::BoxCollider::Update()
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.
 	Math::Matrix4 M = Transform.GetModelMatrix();
-	Math::Matrix4 MVP = Application.GetVPMatrix() * M;
+	Math::Matrix4 MVP = Application.GetScene()->GetVPMatrix() * M;
 
 	// Send to the Shader.
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);

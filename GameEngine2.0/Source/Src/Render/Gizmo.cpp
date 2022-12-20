@@ -189,9 +189,9 @@ void Render::Gizmo::Update(size_t ArrowClicked, Math::Vector2& mousePosition)
 Math::Matrix4 Render::Gizmo::GetMVP()
 {
 	// Project the points onto the custom axis
-	auto axis = Application.GetEditorCamera()->Transform.GetForwardVector();
+	auto axis = Application.GetScene()->GetCameraEditor()->Transform.GetForwardVector();
 	float dot1 = NodeTransform->GetWorldPosition().DotProduct(axis);
-	float dot2 = Application.GetEditorCamera()->Transform.GetLocalPosition().DotProduct(axis);
+	float dot2 = Application.GetScene()->GetCameraEditor()->Transform.GetLocalPosition().DotProduct(axis);
 	ForwardDistance = abs(dot1 - dot2);
 	// Calculate the distance between the projected points
 
@@ -199,11 +199,11 @@ Math::Matrix4 Render::Gizmo::GetMVP()
 	{
 		auto M = *NodeTransform;
 		M.SetLocalScale(ForwardDistance / 10);
-		return Application.GetVPMatrix() * M.GetLocalModelMatrix();
+		return Application.GetScene()->GetVPMatrix() * M.GetLocalModelMatrix();
 	}
 	else
 	{
 		auto M = *NodeTransform;
-		return Application.GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(M.GetWorldPosition(), Math::Vector3(), ForwardDistance / 10);
+		return Application.GetScene()->GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(M.GetWorldPosition(), Math::Vector3(), ForwardDistance / 10);
 	}
 }

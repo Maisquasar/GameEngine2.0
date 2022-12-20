@@ -390,7 +390,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 			{
 				if (ImGui::Button("LoadScene"))
 				{
-					Application.LoadScene(_rightClicked->Directory);
+					Application.GetScene()->LoadScene(_rightClicked->Directory);
 				}
 				break;
 			}

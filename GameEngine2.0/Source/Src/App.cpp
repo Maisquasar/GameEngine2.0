@@ -226,7 +226,7 @@ void App::BeginPlay()
 	std::string filepath = "Assets/Default/Scenes/TemporaryScene.scene";
 	_file.open(filepath);
 	std::string content;
-	SceneNode->Save("", content);
+	GetScene()->GetSceneNode()->Save("", content);
 	_file.write(content.c_str(), content.size());
 	_file.close();
 }
@@ -235,7 +235,7 @@ void App::EndPlay()
 {
 	_gameState = GameState::Editor;
 	auto file = "Assets/Default/Scenes/TemporaryScene.scene";
-	LoadScene(file);
+	GetScene()->LoadScene(file);
 	std::filesystem::remove_all(file);
 }
 
@@ -297,80 +297,15 @@ void App::MultiThreadLoad()
 		_everythingIsLoaded = true;
 
 }
-void App::PickingUpdate(std::vector<Core::Node*> nodes)
-{
-	static bool IsDown = false;
-	static size_t ArrowClicked = -1;
-	static Math::Vector2 mousePosition;
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && GetFramebuffer()->IsHovered) {
-		IsDown = true;
-		int id = 0;
-		size_t previousSize = nodes.size();
-
-		for (auto child : nodes)
-		{
-			child->DrawPicking(id);
-			id++;
-		}
-		_gizmo.DrawPicking(id);
-
-		glFlush();
-		glFinish();
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-		unsigned char data[4];
-		Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
-		mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
-		mouse.y = this->GetWindowSize().y - mouse.y;
-		glReadPixels((GLint)mouse.x, (GLint)mouse.y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-		int pickedID = data[0] + data[1] * 256 + data[2] * 256 * 256;
-
-		if ((pickedID == 0x00ffffff || pickedID >= nodes.size() + 4 || pickedID < 0) && pickedID) {
-			EditorUi::Inspector::ClearSelected();
-		}
-		else if (pickedID < nodes.size())
-		{
-			if (!ImGui::GetIO().KeyCtrl)
-			{
-				EditorUi::Inspector::ClearSelected();
-			}
-			EditorUi::Inspector::AddNodeSelected(nodes[pickedID]);
-		}
-		else
-		{
-			ArrowClicked = pickedID - nodes.size();
-			Math::Vector2 mouse = GetFramebuffer()->GetMousePosition();
-			mouse = mouse * Math::Vector2(this->GetWindowSize().x / GetFramebuffer()->GetSize().x, this->GetWindowSize().y / GetFramebuffer()->GetSize().y);
-			mousePosition = mouse;
-		}
-		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
-		// Re-clear the screen for real rendering
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-	else if (IsDown && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
-	{
-		IsDown = false;
-		ArrowClicked = -1;
-	}
-	if (IsDown)
-	{
-		_gizmo.Update(ArrowClicked, mousePosition);
-	}
-}
 #pragma endregion
 
 void App::Update()
 {
 	// Initilisation
 	_lastFrame = 0;
-	Render::EditorGrid Grid;
-	Grid.Initialize();
 	Components.Initialize();
 	_editorUi.Initialize();
-	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
-	_cameraEditor.Update(true);
+	_scene.Initialize();
 
 	// Main loop
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
@@ -393,37 +328,9 @@ void App::Update()
 			_resourceManager.RecompileShaders();
 		}
 
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(_clearColor.x* _clearColor.w, _clearColor.y* _clearColor.w, _clearColor.z* _clearColor.w, _clearColor.w);
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		// Begin Main Update
-
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-		// Update Camera AspectRatio.
-		if (_framebuffer.Window)
-			_cameraEditor.AspectRatio = _framebuffer.Window->Size.x / _framebuffer.Window->Size.y;
-
-		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
-
-		auto ChildList = SceneNode->GetAllChildrens();
-		Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition(), _cameraEditor.Transform.GetForwardVector());
-		// Draw Meshs with picking Shader.
-		PickingUpdate(ChildList);
-
-		Grid.Draw();
-
-		SceneNode->UpdateSelfAndChilds();
-
-		_gizmo.Draw();
+		_scene.Update();
 
 		_editorUi.Draw();
-
-		// Update Editor Camera.
-		if (_framebuffer.UpdateCameraEditor) {
-			_cameraEditor.Update();
-		}
 
 		auto mouse = ImGui::GetMousePos();
 		auto vecMouse = Math::Vector2(mouse.x, mouse.y) - _framebuffer.GetPos();
@@ -432,8 +339,9 @@ void App::Update()
 
 		_framebuffer.Draw();
 		// End Main Update.
+		auto clearColor = _scene.GetClearColor();
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
+		glClearColor(clearColor.x * clearColor.w, clearColor.y * clearColor.w, clearColor.z * clearColor.w, clearColor.w);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		// Rendering.
@@ -462,7 +370,6 @@ void App::ClearApp()
 {
 	// Cleanup
 	Components.Destroy();
-	delete SceneNode;
 
 	App::ThreadManager.Terminate();
 	ImGui_ImplOpenGL3_Shutdown();
@@ -474,62 +381,3 @@ void App::ClearApp()
 }
 
 void App::CloseApp() { App::_shouldClose = true; }
-
-#pragma region Load/Save
-
-void App::LoadScene(std::string Path)
-{
-	if (EditorUi::Inspector().NodesSelected.size() > 0)
-		EditorUi::Inspector().NodesSelected.clear();
-	if (_gizmo.NodeTransform)
-		_gizmo.NodeTransform = nullptr;
-
-	if (SceneNode)
-		SceneNode->RemoveAllChildrens();
-	delete SceneNode;
-	_currentScenePath = Path;
-	SceneNode = LoadNode(Path);
-}
-
-Core::Node* App::LoadNode(std::string Path)
-{
-	auto node = new Core::Node();
-	uint32_t size = 0;
-	bool sucess;
-	auto data = Utils::Loader::ReadFile(Path.c_str(), size, sucess);
-	if (!sucess)
-		nullptr;
-	uint32_t pos = 0;
-	// Skip First Line.
-	Utils::Loader::SkipLine(data, pos);
-	node->Load(data, pos);
-	delete[] data;
-	return node;
-}
-
-void App::LoadTemporaryScene(std::string Path)
-{
-	if (EditorUi::Inspector().NodesSelected.size() > 0)
-		EditorUi::Inspector().NodesSelected.clear();
-	SceneNode->RemoveAllChildrens();
-	SceneNode = LoadNode(Path);
-}
-
-void App::SaveScene()
-{
-	SaveNode(_currentScenePath, SceneNode);
-	PrintLog("Scene Saved at %s", _currentScenePath.c_str());
-}
-void App::SaveNode(std::string Path, Core::Node* node)
-{
-	// Save Scene To Temporary Scene.
-	std::ofstream _file;
-	_file.open(Path);
-	if (_file) {
-		std::string content;
-		node->Save("", content);
-		_file.write(content.c_str(), content.size());
-		_file.close();
-	}
-}
-#pragma endregion

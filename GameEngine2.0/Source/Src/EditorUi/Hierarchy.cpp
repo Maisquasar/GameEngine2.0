@@ -16,7 +16,7 @@ void EditorUi::Hierarchy::Draw()
 	if (ImGui::Begin("Hierarchy", &_open))
 	{
 		ImGui::BeginChild("Child");
-		Application.SceneNode->ShowInHierarchy(0);
+		Application.GetScene()->GetSceneNode()->ShowInHierarchy(0);
 		// RightClick
 		if (_openRightClick)
 		{
@@ -28,22 +28,22 @@ void EditorUi::Hierarchy::Draw()
 		if (Inspector::NodesSelected.size() == 1 && (Utils::Input::IsKeyDown(ImGuiKey_LeftCtrl) && Utils::Input::IsKeyPressed(ImGuiKey_C)))
 		{
 			// Save Scene To Temporary Scene.
-			Application.SaveNode("Assets/Default/Scenes/Clipboard.scene", Inspector::NodesSelected[0]);
+			Application.GetScene()->SaveNode("Assets/Default/Scenes/Clipboard.scene", Inspector::NodesSelected[0]);
 			PrintLog("Copy");
 		}
 		// Cut
 		else if (Inspector::NodesSelected.size() == 1 && (Utils::Input::IsKeyDown(ImGuiKey_LeftCtrl) && Utils::Input::IsKeyPressed(ImGuiKey_X)))
 		{
-			Application.SaveNode("Assets/Default/Scenes/Clipboard.scene", Inspector::NodesSelected[0]);
+			Application.GetScene()->SaveNode("Assets/Default/Scenes/Clipboard.scene", Inspector::NodesSelected[0]);
 			Inspector::NodesSelected[0]->RemoveFromParent();
 			Inspector::NodesSelected.erase(Inspector::NodesSelected.begin());
-			Application.GetGizmo()->NodeTransform = nullptr;
+			Application.GetScene()->GetGizmo()->NodeTransform = nullptr;
 			PrintLog("Cut");
 		}
 		// Paste
 		else if (Inspector::NodesSelected.size() == 1 && (Utils::Input::IsKeyDown(ImGuiKey_LeftCtrl) && Utils::Input::IsKeyPressed(ImGuiKey_V)))
 		{
-			Inspector::NodesSelected[0]->AddChildren(Application.LoadNode("Assets/Default/Scenes/Clipboard.scene"));
+			Inspector::NodesSelected[0]->AddChildren(Application.GetScene()->LoadNode("Assets/Default/Scenes/Clipboard.scene"));
 			PrintLog("Paste");
 		}
 		// Delete
@@ -51,7 +51,7 @@ void EditorUi::Hierarchy::Draw()
 		{
 			Inspector::NodesSelected[0]->RemoveFromParent();
 			Inspector::NodesSelected.erase(Inspector::NodesSelected.begin());
-			Application.GetGizmo()->NodeTransform = nullptr;
+			Application.GetScene()->GetGizmo()->NodeTransform = nullptr;
 		}
 		ImGui::EndChild();
 	}
@@ -83,7 +83,7 @@ void EditorUi::Hierarchy::RightClickWindow()
 		if (ImGui::Button("Clear Parent"))
 		{
 			for (auto node : _rightClicked) {
-				node->SetParent(Application.SceneNode);
+				node->SetParent(Application.GetScene()->GetSceneNode());
 			}
 			ImGui::CloseCurrentPopup();
 		}

@@ -27,10 +27,13 @@ namespace Core
 		Core::Node* LoadNode(std::string Path);
 		void LoadTemporaryScene(std::string Path);
 
-		// Getters
-		Node* GetSceneNode() { return _sceneNode; }
+		// ======================== Getters ========================
+		Node* GetSceneNode()					{ return _sceneNode; }
 		Render::CameraEditor* GetCameraEditor() { return &_cameraEditor; }
-
+		Render::Gizmo* GetGizmo()				{ return &_gizmo; }
+		std::string GetCurrentScenePath()		{ return _currentScenePath; }
+		Math::Matrix4 GetVPMatrix()				{ return _VP; }
+		Math::Vector4 GetClearColor()			{ return _clearColor; }
 	private:
 		std::string _currentScenePath = "";
 		Math::Matrix4 _VP;

@@ -54,10 +54,6 @@ void Core::Scene::Update()
 
 	auto mouse = ImGui::GetMousePos();
 	auto vecMouse = Math::Vector2(mouse.x, mouse.y) - _frameBuffer->GetPos();
-
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
-	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)

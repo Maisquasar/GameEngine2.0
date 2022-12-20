@@ -38,14 +38,14 @@ void EditorUi::MainBar::Draw()
 			}
 			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 			{
-				Application.SaveScene();
+				Application.GetScene()->SaveScene();
 			}
 			if (ImGui::MenuItem("Save as Scene", "Ctrl+Shift+S"))
 			{
 				EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(true);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetState(EditorUi::FileExplorerState::Write);
 				EditorUi::Editor::GetFloatingFileExplorer()->SetTargetExtension(".scene");
-				Application.SceneNode->Save("", content);
+				Application.GetScene()->GetSceneNode()->Save("", content);
 			}
 			if (ImGui::MenuItem("Exit", "Alt+F4"))
 			{
@@ -83,7 +83,7 @@ void EditorUi::MainBar::Draw()
 	ImGui::EndMainMenuBar();
 	if (auto file = EditorUi::Editor::GetFloatingFileExplorer()->DrawAndRead())
 	{
-		Application.LoadScene(file->Directory);
+		Application.GetScene()->LoadScene(file->Directory);
 		EditorUi::Editor::GetFloatingFileExplorer()->SetOpen(false);
 	}
 	if (EditorUi::Editor::GetFloatingFileExplorer()->GetState() == EditorUi::FileExplorerState::Write) 

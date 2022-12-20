@@ -37,12 +37,6 @@ public:
 	void ClearApp();
 	void CloseApp();
 
-	void LoadScene(std::string Path);
-	Core::Node* LoadNode(std::string Path);
-	void LoadTemporaryScene(std::string Path);
-	void SaveScene();
-	void SaveNode(std::string Path, Core::Node* node);
-
 	void BeginPlay();
 	void EndPlay();
 
@@ -52,17 +46,9 @@ public:
 
 	const GLFWvidmode* GetMonitorVideoMode();
 
-	Math::Matrix4 GetVPMatrix() { return _VP; }
-
 	GameState GetGameState() { return _gameState; }
 
-	std::string GetCurrentScenePath() { return _currentScenePath; }
-
 	float GetDeltaTime() { return (float)_deltaTime; }
-
-	Render::CameraEditor* GetEditorCamera() { return &_cameraEditor; }
-
-	Render::Gizmo* GetGizmo() { return &_gizmo; }
 
 	Render::FrameBuffer* GetFramebuffer() { return &_framebuffer; }
 
@@ -72,7 +58,6 @@ public:
 
 	Core::Scene* GetScene() { return &_scene; }
 
-	Core::Node* SceneNode = nullptr;
 	Core::Components::Data Components;
 	Utils::ThreadManager ThreadManager;
 	std::vector<Resources::IResource**> MultiThreadMeshes;
@@ -81,9 +66,7 @@ private:
 	GLFWwindow* _window = nullptr;
 	const GLFWvidmode* _videoMode = nullptr;
 	bool _shouldClose = false;
-	Math::Matrix4 _VP = Math::Matrix4::Identity();
 	GameState _gameState = GameState::Editor;
-	std::string _currentScenePath = "";
 	double currentFrame = 0;
 	double _lastFrame = 0;
 	double _deltaTime = 0;
@@ -92,8 +75,6 @@ private:
 	bool _everythingIsLoaded = false;
 	int _width = 800;
 	int _height = 600;
-
-	Math::Vector4 _clearColor = {0.45f, 0.55f, 0.60f, 1.00f};
 	
 	// Ui
 	EditorUi::Editor _editorUi;
@@ -106,9 +87,7 @@ private:
 	Utils::AppSettings _settings;
 
 	// Render
-	Render::CameraEditor _cameraEditor;
 	Render::FrameBuffer _framebuffer;
-	Render::Gizmo _gizmo;
 
 	Core::Scene _scene;
 
@@ -120,7 +99,6 @@ private:
 	void FilesLoad(std::string path);
 
 	void MultiThreadLoad();
-	void PickingUpdate(std::vector<Core::Node*> nodes);
 };
 
 extern App Application;

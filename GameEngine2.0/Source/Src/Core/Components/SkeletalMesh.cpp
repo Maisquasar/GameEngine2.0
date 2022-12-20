@@ -18,7 +18,7 @@ void Core::Components::SkeletalMesh::DrawPicking(int id)
 {
 	if (!Mesh || !_enable)
 		return;
-	auto MVP = Application.GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
+	auto MVP = Application.GetScene()->GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (Mesh)
 		Mesh->DrawPicking(MVP, id);
 }
@@ -30,7 +30,7 @@ void Core::Components::SkeletalMesh::Update()
 		Skeleton->RootBone->DrawDebug();
 	}
 	if (Mesh && _showMesh) {
-		Mesh->Update(Application.GetVPMatrix() * GameObject->Transform.GetModelMatrix(), EditorUi::Editor::GetInspector()->IsSelected(GameObject));
+		Mesh->Update(Application.GetScene()->GetVPMatrix() * GameObject->Transform.GetModelMatrix(), EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 	}
 }
 

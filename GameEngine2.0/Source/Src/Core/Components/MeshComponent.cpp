@@ -140,7 +140,7 @@ void Core::Components::MeshComponent::Update()
 {
 	if (!_currentMesh || !_enable)
 		return;
-	auto MVP = Application.GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
+	auto MVP = Application.GetScene()->GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (_currentMesh)
 		GetMesh()->Update(MVP, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 }
@@ -149,7 +149,7 @@ void Core::Components::MeshComponent::DrawPicking(int id)
 {
 	if (!_currentMesh || !_enable)
 		return;
-	auto MVP = Application.GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
+	auto MVP = Application.GetScene()->GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (_currentMesh)
 		GetMesh()->DrawPicking(MVP, id);
 }
