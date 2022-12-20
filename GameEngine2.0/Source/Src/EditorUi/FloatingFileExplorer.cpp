@@ -369,10 +369,10 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 				if (ImGui::Button("Edit"))
 				{
 					// Settings Parameters
-					EditorUi::Editor::GetTextEditor()->SetOpen(true);
-					EditorUi::Editor::GetTextEditor()->SetTitle(_rightClicked->Name.c_str());
-					EditorUi::Editor::GetTextEditor()->SetLanguageDefinition(TextEditor::LanguageDefinition::GLSL());
-					EditorUi::Editor::GetTextEditor()->SetPath(_rightClicked->Directory.c_str());
+					EditorUi::Editor::GetTextEditor()->Tabs.push_back(TextEditor());
+					EditorUi::Editor::GetTextEditor()->Tabs.back().SetTitle(_rightClicked->Name.c_str());
+					EditorUi::Editor::GetTextEditor()->Tabs.back().SetLanguageDefinition(TextEditor::LanguageDefinition::GLSL());
+					EditorUi::Editor::GetTextEditor()->Tabs.back().SetPath(_rightClicked->Directory.c_str());
 
 					// Reading File.
 					uint32_t size = 0;
@@ -380,12 +380,12 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 					auto text = Utils::Loader::ReadFile(_rightClicked->Directory.c_str(), size, sucess);
 					std::string cuted = text;
 					cuted = cuted.substr(0, size);
-					EditorUi::Editor::GetTextEditor()->SetText(cuted);
+					EditorUi::Editor::GetTextEditor()->Tabs.back().SetText(cuted);
 					delete[] text;
 				}
 				break;
 			}
-				// ------------- Load Scene ------------- //
+			// ------------- Load Scene ------------- //
 			case FileType::Scn:
 			{
 				if (ImGui::Button("LoadScene"))

@@ -5,6 +5,10 @@
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Debug/Line.h"
 #include "Include/Core/Components/MeshComponent.h"
+#include "Include/Render/CameraEditor.h"
+#include "Include/Render/Framebuffer.h"
+#include "Include/Core/Node.h"
+#include "Include/Render/Gizmo.h"
 App Application;
 
 #pragma region Callbacks

@@ -35,7 +35,7 @@ namespace EditorUi {
 		static ResourcesWindow* GetResourcesWindow() { return &_resourcesWindow; }
 		static PerformanceWindow* GetPerformanceWindow() { return &_performanceWindow; }
 		static Console* GetConsole() { return &Debug::Log::Console; }
-		static TextEditor* GetTextEditor() { return &_textEditor; }
+		static TextEditorWindow* GetTextEditor() { return &_textEditor; }
 	private:
 		static MainBar _mainBar;
 		static Hierarchy _hierarchy;
@@ -45,6 +45,6 @@ namespace EditorUi {
 		static ResourcesWindow _resourcesWindow;
 		static PerformanceWindow _performanceWindow;
 		static ImGui::NodeWindow _nodeWindow;
-		static TextEditor _textEditor;
+		static TextEditorWindow _textEditor;
 	};
 }

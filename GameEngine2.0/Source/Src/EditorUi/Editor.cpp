@@ -17,7 +17,7 @@ EditorUi::Inspector EditorUi::Editor::_inspector;
 EditorUi::ResourcesWindow EditorUi::Editor::_resourcesWindow;
 EditorUi::PerformanceWindow EditorUi::Editor::_performanceWindow;
 ImGui::NodeWindow EditorUi::Editor::_nodeWindow;
-TextEditor EditorUi::Editor::_textEditor;
+TextEditorWindow EditorUi::Editor::_textEditor;
 
 EditorUi::Editor::Editor(){}
 
@@ -32,6 +32,7 @@ void EditorUi::Editor::Initialize()
 void EditorUi::Editor::Draw()
 {
 	MainDocking();
+	//ImGui::ShowDemoWindow();
 	//ImGui::ShowStyleEditor();
 	_mainBar.Draw();
 	_hierarchy.Draw();
@@ -40,7 +41,7 @@ void EditorUi::Editor::Draw()
 	_resourcesWindow.Draw();
 	_performanceWindow.Draw();
 	//_nodeWindow.Draw();
-	_textEditor.Render();
+	_textEditor.Draw();
 	Debug::Log::Console.Draw();
 }
 

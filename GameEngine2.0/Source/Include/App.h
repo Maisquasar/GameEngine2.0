@@ -7,13 +7,9 @@
 #include <ImGui/imgui_impl_opengl3.h>
 #include <filesystem>
 
-#include "Include/Core/Node.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/Resources/Model.h"
-#include "Include/Render/CameraEditor.h"
-#include "Include/Render/Framebuffer.h"
-#include "Include/Render/Gizmo.h"
 #include "Include/Utils/Input.h"
 #include "Include/Utils/ThreadManager.h"
 #include "Include/Utils/AppSettings.h"

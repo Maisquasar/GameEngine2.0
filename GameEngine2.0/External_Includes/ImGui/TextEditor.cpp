@@ -9,6 +9,28 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui.h" // for imGui::GetCurrentWindow()
 
+void TextEditorWindow::Draw()
+{
+	if (!_open || Tabs.size() == 0)
+		return;
+	if (ImGui::Begin("TextEditor", &_open)) {
+		ImGui::BeginTabBar("Edit");
+		int i = 0;
+		for (auto&& tab : Tabs) {
+			if (!tab.IsOpen()) {
+				Tabs.erase(Tabs.begin() + i);
+				break;
+			}
+			tab.Render();
+			i++;
+		}
+
+		ImGui::EndTabBar();
+	}
+	ImGui::End();
+}
+
+
 // TODO
 // - multiline comments vs single-line: latter is blocking start of a ML
 
@@ -1123,49 +1145,57 @@ void TextEditor::Render(const ImVec2& aSize, bool aBorder)
 {
 	if (!_open)
 		return;
-	ImGui::PushID("TextEditor");
-	ImGui::Begin(_title.c_str(), &_open);
-	mTextChanged = false;
-	mCursorPositionChanged = false;
+	ImGui::PushID(_path.c_str());
+	if (ImGui::BeginTabItem(_title.c_str(), &_open, mTextChanged ? ImGuiTabItemFlags_UnsavedDocument : ImGuiTabItemFlags_None)) {
 
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::ColorConvertU32ToFloat4(mPalette[(int)PaletteIndex::Background]));
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
-	if (!mIgnoreImGuiChild)
-		ImGui::BeginChild(_title.c_str(), aSize, aBorder, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NoMove);
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text(_path.c_str());
+			ImGui::EndTooltip();
+		}
+		mCursorPositionChanged = false;
 
-	if (mHandleKeyboardInputs)
-	{
-		HandleKeyboardInputs();
-		ImGui::PushAllowKeyboardFocus(true);
+		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::ColorConvertU32ToFloat4(mPalette[(int)PaletteIndex::Background]));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
+		if (!mIgnoreImGuiChild)
+			ImGui::BeginChild(_title.c_str(), aSize, aBorder, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NoMove);
+
+		if (mHandleKeyboardInputs)
+		{
+			HandleKeyboardInputs();
+			ImGui::PushAllowKeyboardFocus(true);
+		}
+
+		if (mHandleMouseInputs)
+			HandleMouseInputs();
+
+		ColorizeInternal();
+		PrivateRender();
+
+		if (mHandleKeyboardInputs)
+			ImGui::PopAllowKeyboardFocus();
+
+		if (!mIgnoreImGuiChild)
+			ImGui::EndChild();
+
+		ImGui::PopStyleVar();
+		ImGui::PopStyleColor();
+
+		mWithinRender = false;
+		if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && ImGui::IsKeyPressed(ImGuiKey_S) || ImGui::Button("Save"))
+		{
+			mTextChanged = false;
+			auto text = GetText();
+			std::ofstream _file;
+			auto dir = _path;
+			_file.open(dir);
+			_file.write(text.c_str(), text.size());
+			_file.close();
+		}
+
+		ImGui::EndTabItem();
 	}
-
-	if (mHandleMouseInputs)
-		HandleMouseInputs();
-
-	ColorizeInternal();
-	PrivateRender();
-
-	if (mHandleKeyboardInputs)
-		ImGui::PopAllowKeyboardFocus();
-
-	if (!mIgnoreImGuiChild)
-		ImGui::EndChild();
-
-	ImGui::PopStyleVar();
-	ImGui::PopStyleColor();
-
-	mWithinRender = false;
-	if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && ImGui::IsKeyPressed(ImGuiKey_S) || ImGui::Button("Save"))
-	{
-		auto text = GetText();
-		std::ofstream _file;
-		auto dir = _path;
-		_file.open(dir);
-		_file.write(text.c_str(), text.size());
-		_file.close();
-	}
-
-	ImGui::End();
 	ImGui::PopID();
 }
 
@@ -1187,7 +1217,7 @@ void TextEditor::SetText(const std::string& aText)
 		}
 	}
 
-	mTextChanged = true;
+	mTextChanged = false;
 	mScrollToTop = true;
 
 	mUndoBuffer.clear();
