@@ -235,7 +235,7 @@ void App::EndPlay()
 {
 	_gameState = GameState::Editor;
 	auto file = "Assets/Default/Scenes/TemporaryScene.scene";
-	LoadTemporaryScene(file);
+	LoadScene(file);
 	std::filesystem::remove_all(file);
 }
 
@@ -387,22 +387,23 @@ void App::Update()
 		glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
 		glEnable(GL_DEPTH_TEST);
 
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		// Begin Main Update
-		// Update Camera AspectRatio.
-		if (_framebuffer.Window)
-			_cameraEditor.AspectRatio = _framebuffer.Window->Size.x / _framebuffer.Window->Size.y;
-
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 		if (this->_input.IsKeyPressed(ImGuiKey_F4))
 		{
 			PrintLog("Recompiling Shaders");
 			_resourceManager.RecompileShaders();
 		}
+
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(_clearColor.x* _clearColor.w, _clearColor.y* _clearColor.w, _clearColor.z* _clearColor.w, _clearColor.w);
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Begin Main Update
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		// Update Camera AspectRatio.
+		if (_framebuffer.Window)
+			_cameraEditor.AspectRatio = _framebuffer.Window->Size.x / _framebuffer.Window->Size.y;
 
 		_VP = _cameraEditor.GetProjection() * _cameraEditor.GetViewMatrix();
 
@@ -411,11 +412,11 @@ void App::Update()
 		// Draw Meshs with picking Shader.
 		PickingUpdate(ChildList);
 
-		_gizmo.Draw();
-
 		Grid.Draw();
 
 		SceneNode->UpdateSelfAndChilds();
+
+		_gizmo.Draw();
 
 		_editorUi.Draw();
 

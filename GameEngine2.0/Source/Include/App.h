@@ -17,6 +17,7 @@
 #include "Include/Utils/Input.h"
 #include "Include/Utils/ThreadManager.h"
 #include "Include/Utils/AppSettings.h"
+#include "Include/Core/Scene.h"
 
 enum class GameState
 {
@@ -69,6 +70,8 @@ public:
 
 	Resources::ResourceManager* GetResourceManager() { return &_resourceManager; }
 
+	Core::Scene* GetScene() { return &_scene; }
+
 	Core::Node* SceneNode = nullptr;
 	Core::Components::Data Components;
 	Utils::ThreadManager ThreadManager;
@@ -106,6 +109,8 @@ private:
 	Render::CameraEditor _cameraEditor;
 	Render::FrameBuffer _framebuffer;
 	Render::Gizmo _gizmo;
+
+	Core::Scene _scene;
 
 	void InitGlfw();
 	void InitImGui();

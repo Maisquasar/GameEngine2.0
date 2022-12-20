@@ -1,4 +1,3 @@
-#include <ImGui/imgui_internal.h>
 #include "Include/Render/Framebuffer.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
@@ -52,7 +51,6 @@ void Render::FrameBuffer::Draw()
 {
 	// Force Fill Mode.
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	glClearColor(this->ClearColor.Value.x, this->ClearColor.Value.y, this->ClearColor.Value.z, this->ClearColor.Value.w);
 	if (ImGui::Begin("Scene", (bool*)true, ImGuiWindowFlags_MenuBar))
 	{
 		if (!Window)

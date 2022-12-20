@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <glad/glad.h>
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_internal.h>
 #include "../Math/Math.h"
 #include "../Resources/ResourceManager.h"
 
@@ -22,7 +24,6 @@ namespace Render {
 		ImGuiWindow* Window = nullptr;
 
 		Resources::Texture* Tex = nullptr;
-		ImColor ClearColor = ImColor(255, 255, 255, 255);
 
 		Resources::Shader* shader = nullptr;
 		GLuint FBO = 0;
