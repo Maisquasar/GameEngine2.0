@@ -35,7 +35,7 @@
     <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
-    <ClCompile Include="Source\Src\Core\Components\SkeletalMesh.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\SkeletalMeshComponent.cpp" />
     <ClCompile Include="Source\Src\Core\Scene.cpp" />
     <ClCompile Include="Source\Src\Debug\Line.cpp" />
     <ClCompile Include="Source\Src\EditorUi\File.cpp" />
@@ -101,7 +101,7 @@
     <ClInclude Include="Source\Include\Core\Components\AnimationComponent.h" />
     <ClInclude Include="Source\Include\Core\Components\Component.h" />
     <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
-    <ClInclude Include="Source\Include\Core\Components\SkeletalMesh.h" />
+    <ClInclude Include="Source\Include\Core\Components\SkeletalMeshComponent.h" />
     <ClInclude Include="Source\Include\Core\Scene.h" />
     <ClInclude Include="Source\Include\Debug\Line.h" />
     <ClInclude Include="Source\Include\EditorUi\File.h" />

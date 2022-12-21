@@ -167,7 +167,7 @@ void Core::Node::DrawSelf()
 			meshComp->Update();
 }
 
-#include "Include/Core/Components/SkeletalMesh.h"
+#include "Include/Core/Components/SkeletalMeshComponent.h"
 void Core::Node::DrawPicking(int id)
 {
 	if (_active) {

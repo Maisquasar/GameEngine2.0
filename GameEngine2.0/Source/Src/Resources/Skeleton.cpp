@@ -1,5 +1,5 @@
 #include "Include/Resources/Skeleton.h"
-#include "Include/Core/Components/SkeletalMesh.h"
+#include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Debug/Line.h"
 #include "Include/Debug/Log.h"
 
@@ -11,7 +11,7 @@ Bone::Bone() {
 Bone::~Bone() {
 	// Remove it from the Skeletal Mesh.
 	if (Parent) {
-		if (auto skel = Parent->GetComponent<Core::Components::SkeletalMesh>()) {
+		if (auto skel = Parent->GetComponent<Core::Components::SkeletalMeshComponent>()) {
 			if (skel->Skeleton && skel->Skeleton->RootBone == this)
 			{
 				delete skel->Skeleton;
@@ -125,7 +125,7 @@ void Bone::Save(std::string space, std::string& content)
 
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"
-#include "Include/Core/Components/SkeletalMesh.h"
+#include "Include/Core/Components/SkeletalMeshComponent.h"
 void Bone::Load(const char* data, uint32_t& pos)
 {
 	std::string currentLine;
@@ -198,7 +198,7 @@ void Bone::Load(const char* data, uint32_t& pos)
 	}
 	if (Parent && !dynamic_cast<Bone*>(Parent))
 	{
-		if (auto skel = Parent->GetComponent<Core::Components::SkeletalMesh>())
+		if (auto skel = Parent->GetComponent<Core::Components::SkeletalMeshComponent>())
 			if (skel->Skeleton)
 				skel->Skeleton->RootBone = this;
 	}

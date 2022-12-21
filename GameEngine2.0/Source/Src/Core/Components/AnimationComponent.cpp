@@ -1,5 +1,5 @@
 #include "Include/Core/Components/AnimationComponent.h"
-#include "Include/Core/Components/SkeletalMesh.h"
+#include "Include/Core/Components/SkeletalMeshComponent.h"
 
 #include "Include/Resources/Animation.h"
 #include "Include/Resources/Skeleton.h"
@@ -22,7 +22,7 @@ Core::Components::AnimationComponent::~AnimationComponent()
 void Core::Components::AnimationComponent::Update()
 {
 	if (!_skeleton)
-		SetSkeleton(GameObject->GetComponent<Core::Components::SkeletalMesh>());
+		SetSkeleton(GameObject->GetComponent<Core::Components::SkeletalMeshComponent>());
 	if (_currentAnimation && _skeleton)
 	{
 		if (_skeleton->Skeleton && _skeleton->Skeleton->RootBone)
@@ -60,7 +60,7 @@ void Core::Components::AnimationComponent::SetCurrentAnimation(Resources::Animat
 	_currentAnimation = a;
 }
 
-void Core::Components::AnimationComponent::SetSkeleton(SkeletalMesh* s)
+void Core::Components::AnimationComponent::SetSkeleton(SkeletalMeshComponent* s)
 {
 	_skeleton = s;
 }

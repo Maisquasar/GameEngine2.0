@@ -7,11 +7,11 @@ namespace Resources
 }
 namespace Core::Components
 {
-	class SkeletalMesh : public BaseComponent<SkeletalMesh>
+	class SkeletalMeshComponent : public BaseComponent<SkeletalMeshComponent>
 	{
 	public:
-		SkeletalMesh();
-		~SkeletalMesh();
+		SkeletalMeshComponent();
+		~SkeletalMeshComponent();
 
 		void DrawPicking(int id) override;
 		void Update() override;

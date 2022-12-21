@@ -1,13 +1,13 @@
-#include "Include/Core/Components/SkeletalMesh.h"
+#include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Resources/Skeleton.h"
 #include "Include/App.h"
 #include "Include/Core/Components/AnimationComponent.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
 
-Core::Components::SkeletalMesh::SkeletalMesh() { this->ComponentName = "SkeletalMesh"; }
+Core::Components::SkeletalMeshComponent::SkeletalMeshComponent() { this->ComponentName = "SkeletalMeshComponent"; }
 
-Core::Components::SkeletalMesh::~SkeletalMesh()
+Core::Components::SkeletalMeshComponent::~SkeletalMeshComponent()
 {
 	if (GameObject)
 		if (auto anim = GameObject->GetComponent<AnimationComponent>())
@@ -16,7 +16,7 @@ Core::Components::SkeletalMesh::~SkeletalMesh()
 	delete Skeleton;
 }
 
-void Core::Components::SkeletalMesh::DrawPicking(int id)
+void Core::Components::SkeletalMeshComponent::DrawPicking(int id)
 {
 	if (!Mesh || !_enable)
 		return;
@@ -26,7 +26,7 @@ void Core::Components::SkeletalMesh::DrawPicking(int id)
 }
 
 #include "Include/EditorUi/Inspector.h"
-void Core::Components::SkeletalMesh::Update()
+void Core::Components::SkeletalMeshComponent::Update()
 {
 	if (Skeleton && _showSkeleton && Skeleton->RootBone) {
 		Skeleton->RootBone->DrawDebug();
@@ -36,7 +36,7 @@ void Core::Components::SkeletalMesh::Update()
 	}
 }
 
-void Core::Components::SkeletalMesh::ShowInInspector()
+void Core::Components::SkeletalMeshComponent::ShowInInspector()
 {
 	// Skeleton Button
 	if (ImGui::Button("Skeleton"))
@@ -86,7 +86,7 @@ void Core::Components::SkeletalMesh::ShowInInspector()
 	ImGui::Checkbox("Show Skeleton", &_showSkeleton);
 }
 
-void Core::Components::SkeletalMesh::SetSkeleton(Resources::Skeleton* skel)
+void Core::Components::SkeletalMeshComponent::SetSkeleton(Resources::Skeleton* skel)
 {
 	if (Skeleton)
 		delete Skeleton;
@@ -94,13 +94,13 @@ void Core::Components::SkeletalMesh::SetSkeleton(Resources::Skeleton* skel)
 	Skeleton->RootBone->SetParent(GameObject);
 }
 
-void Core::Components::SkeletalMesh::Save(std::string space, std::string& content)
+void Core::Components::SkeletalMeshComponent::Save(std::string space, std::string& content)
 {
 	content += space + Utils::StringFormat("Skeleton : %s\n", Skeleton ? Skeleton->GetPath().c_str() : "None");
 	content += space + Utils::StringFormat("Mesh : %s\n", Mesh ? Mesh->GetPath().c_str() : "None");
 }
 
-void Core::Components::SkeletalMesh::Load(const char* data, uint32_t& pos)
+void Core::Components::SkeletalMeshComponent::Load(const char* data, uint32_t& pos)
 {
 	std::string currentLine;
 	Skeleton = new Resources::Skeleton();
