@@ -2,6 +2,8 @@
 #include "Include/Resources/Skeleton.h"
 #include "Include/App.h"
 #include "Include/Core/Components/AnimationComponent.h"
+#include "Include/Utils/Utils.h"
+#include "Include/Utils/Loader.h"
 
 Core::Components::SkeletalMesh::SkeletalMesh() { this->ComponentName = "SkeletalMesh"; }
 

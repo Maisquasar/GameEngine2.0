@@ -1,4 +1,7 @@
 #include "Include/Utils/Input.h"
+#include "Include/Debug/Log.h"
+#include "Include/App.h"
+
 float Utils::Input::MouseScroll;
 Math::Vector2 Utils::Input::MouseDelta;
 Math::Vector2 Utils::Input::MousePosition;
@@ -23,6 +26,13 @@ void Utils::Input::Update()
 	auto newMouse = ImGui::GetMousePos();
 	MouseDelta = Math::Vector2((float)(newMouse.x - MousePosition.x), (float)(newMouse.y - MousePosition.y));
 	MousePosition = Math::Vector2(newMouse.x, newMouse.y);
+
+
+	if (IsKeyPressed(ImGuiKey_F4))
+	{
+		PrintLog("Recompiling Shaders");
+		Application.GetResourceManager()->RecompileShaders();
+	}
 }
 
 bool Utils::Input::IsKeyDown(int key)

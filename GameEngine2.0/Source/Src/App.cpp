@@ -1,5 +1,10 @@
 #include "Include/App.h"
-#include <STB_Image/stb_image.h>
+
+#include <glad/glad.h>
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_glfw.h>
+#include <ImGui/imgui_impl_opengl3.h>
+
 #include "Include/Render/EditorGrid.h"
 #include "Include/Physic/Physic.h"
 #include "Include/EditorUi/Inspector.h"
@@ -9,6 +14,9 @@
 #include "Include/Render/Framebuffer.h"
 #include "Include/Core/Node.h"
 #include "Include/Render/Gizmo.h"
+#include "Include/Debug/Log.h"
+#include "Include/Resources/Model.h"
+
 App Application;
 
 #pragma region Callbacks
@@ -303,6 +311,21 @@ void App::MultiThreadLoad()
 }
 #pragma endregion
 
+void App::BeginFrame()
+{
+#if MULTITHREAD_LOADING
+	MultiThreadLoad();
+#endif
+	// Begin Frame
+	glfwPollEvents();
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	glfwGetFramebufferSize(_window, &_width, &_height);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
+	glEnable(GL_DEPTH_TEST);
+}
+
 void App::Update()
 {
 	// Initilisation
@@ -314,60 +337,47 @@ void App::Update()
 	// Main loop
 	while (!glfwWindowShouldClose(_window) && !_shouldClose)
 	{
-#if MULTITHREAD_LOADING
-		MultiThreadLoad();
-#endif
-		// Begin Frame
-		glfwPollEvents();
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		glfwGetFramebufferSize(_window, &_width, &_height);
-		glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
-		glEnable(GL_DEPTH_TEST);
-
-		if (this->_input.IsKeyPressed(ImGuiKey_F4))
-		{
-			PrintLog("Recompiling Shaders");
-			_resourceManager.RecompileShaders();
-		}
+		BeginFrame();
 
 		_scene.Update();
 
 		_editorUi.Draw();
 
-		auto mouse = ImGui::GetMousePos();
-		auto vecMouse = Math::Vector2(mouse.x, mouse.y) - _framebuffer.GetPos();
-
 		_input.Update();
 
 		_framebuffer.Draw();
-		// End Main Update.
-		auto clearColor = _scene.GetClearColor();
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(clearColor.x * clearColor.w, clearColor.y * clearColor.w, clearColor.z * clearColor.w, clearColor.w);
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		// Rendering.
-		ImGui::Render();
-
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
-		}
-
-		glfwSwapBuffers(_window);
-
-		currentFrame = glfwGetTime();
-		_deltaTime = currentFrame - _lastFrame;
-		_lastFrame = currentFrame;
-		// End Frame.
+		
+		EndFrame();
 	}
+}
+
+void App::EndFrame()
+{
+	// End Main Update.
+	auto clearColor = _scene.GetClearColor();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(clearColor.x * clearColor.w, clearColor.y * clearColor.w, clearColor.z * clearColor.w, clearColor.w);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	// Rendering.
+	ImGui::Render();
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		GLFWwindow* backup_current_context = glfwGetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(backup_current_context);
+	}
+
+	glfwSwapBuffers(_window);
+
+	currentFrame = glfwGetTime();
+	_deltaTime = currentFrame - _lastFrame;
+	_lastFrame = currentFrame;
+	// End Frame.
 }
 
 void App::ClearApp()

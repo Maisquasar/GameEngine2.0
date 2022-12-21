@@ -34,7 +34,7 @@ namespace EditorUi {
 		static Inspector* GetInspector() { return &_inspector; }
 		static ResourcesWindow* GetResourcesWindow() { return &_resourcesWindow; }
 		static PerformanceWindow* GetPerformanceWindow() { return &_performanceWindow; }
-		static Console* GetConsole() { return &Debug::Log::Console; }
+		static Console* GetConsole();
 		static TextEditorWindow* GetTextEditor() { return &_textEditor; }
 	private:
 		static MainBar _mainBar;

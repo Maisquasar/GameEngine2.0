@@ -1,15 +1,10 @@
 #pragma once
-#include "Include/Debug/Log.h"
-#include <glad/glad.h>
+#include <Windows.h>
 #include <GLFW/glfw3.h>
-#include <ImGui/imgui.h>
-#include <ImGui/imgui_impl_glfw.h>
-#include <ImGui/imgui_impl_opengl3.h>
 #include <filesystem>
 
 #include "Include/EditorUi/Editor.h"
 #include "Include/Resources/ResourceManager.h"
-#include "Include/Resources/Model.h"
 #include "Include/Utils/Input.h"
 #include "Include/Utils/ThreadManager.h"
 #include "Include/Utils/AppSettings.h"
@@ -29,7 +24,9 @@ public:
 	~App();
 
 	void InitializeApp(const char* Name, int width, int height);
+	void BeginFrame();
 	void Update();
+	void EndFrame();
 	void ClearApp();
 	void CloseApp();
 
@@ -71,7 +68,7 @@ private:
 	bool _everythingIsLoaded = false;
 	int _width = 800;
 	int _height = 600;
-	
+
 	// Ui
 	EditorUi::Editor _editorUi;
 

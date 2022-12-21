@@ -3,6 +3,9 @@
 #include "Include/App.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Resources/Mesh.h"
+#include "Include/Core/Node.h"
+#include "Include/Utils/Utils.h"
+#include "Include/Utils/Loader.h"
 
 Core::Components::MeshComponent::MeshComponent()
 {

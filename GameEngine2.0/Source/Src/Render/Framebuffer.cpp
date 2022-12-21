@@ -58,19 +58,7 @@ void Render::FrameBuffer::Draw()
 
 		if (ImGui::BeginMenuBar()) {
 			ImGui::SetNextItemWidth(100);
-			if (ImGui::BeginCombo("Transform", TransformSettings[(int)Application.GetSettings()->S_Transform])) {
-				for (int n = 0; n < IM_ARRAYSIZE(TransformSettings); n++)
-				{
-					const bool is_selected = ((int)Application.GetSettings()->S_Transform == n);
-					if (ImGui::Selectable(TransformSettings[n], is_selected))
-						Application.GetSettings()->S_Transform = (Utils::Settings::Transform)n;
-
-					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
-				}
-				ImGui::EndCombo();
-			}
+			ImGui::Combo("##", (int*)&Application.GetSettings()->S_Transform, "Local\0World\0");
 			ImGui::EndMenuBar();
 		}
 

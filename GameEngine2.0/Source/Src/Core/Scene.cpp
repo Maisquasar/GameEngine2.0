@@ -1,9 +1,12 @@
 #include <ImGui/imgui.h>
 
 #include "Include/Core/Scene.h"
+#include "Include/Core/Node.h"
 #include "Include/Debug/Log.h"
 #include "Include/App.h"
 #include "Include/EditorUi/Inspector.h"
+#include "Include/Utils/Utils.h"
+#include "Include/Utils/Loader.h"
 
 Core::Scene::Scene() {}
 
