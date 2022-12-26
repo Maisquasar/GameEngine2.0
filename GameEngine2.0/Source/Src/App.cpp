@@ -204,8 +204,13 @@ void App::LoadResources()
 	LightMat->SetShader(_resourceManager.GetDefaultShader());
 	_resourceManager.Add<Resources::Material>("LightMat", LightMat);
 
-	// Set-Up Default Plane.
+	auto CameraMat = new Resources::Material();
+	CameraMat->SetEditable(false);
+	CameraMat->SetName("CameraMat");
+	CameraMat->SetShader(_resourceManager.GetDefaultShader());
+	_resourceManager.Add<Resources::Material>("CameraMat", CameraMat);
 
+	// Set-Up Default Plane.
 	auto Plane = new Resources::Mesh();
 	Plane->SetName("DefaultPlane");
 	Plane->SetPath("DefaultPlane");
@@ -227,6 +232,7 @@ void App::LoadResources()
 	// Load Textures - Materials - Models.
 	FilesLoad("Assets");
 	LightMat->SetTexture(_resourceManager.Get<Resources::Texture>("Assets/Default/Textures/LightIcon.png"));
+	CameraMat->SetTexture(_resourceManager.Get<Resources::Texture>("Assets/Default/Textures/CameraIcon.png"));
 }
 
 void App::FilesLoad(std::string path)

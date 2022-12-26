@@ -11,7 +11,7 @@ namespace Core
 namespace Render {
 
 	// TO USE IT :
-	//  Add Initialize to be executed one time.
+	// Add Initialize to be executed one time.
 	// Call Draw on Update of the Component.
 	// Call Draw Picking on Drawpicking of the component.
 	class EditorIcon
@@ -20,7 +20,7 @@ namespace Render {
 		EditorIcon();
 		~EditorIcon();
 
-		void Initialize();
+		void Initialize(std::string TextName);
 		void Draw(Math::Matrix4 VP, Core::Transform transform);
 		void DrawPicking(Math::Matrix4 MVP, Core::Transform transform, int id);
 

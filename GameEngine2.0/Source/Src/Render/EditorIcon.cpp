@@ -8,12 +8,12 @@ Render::EditorIcon::EditorIcon()
 	delete Plane;
 }
 
-Render::EditorIcon::~EditorIcon(){}
+Render::EditorIcon::~EditorIcon() { delete Plane; }
 
-void Render::EditorIcon::Initialize()
+void Render::EditorIcon::Initialize(std::string MatName)
 {
 	Plane = Cast(Resources::Mesh, Application.GetResourceManager()->GetDefaultPlane()->Clone());
-	Plane->SubMeshes[0].Material = Application.GetResourceManager()->Get<Resources::Material>("LightMat");
+	Plane->SubMeshes[0].Material = Application.GetResourceManager()->Get<Resources::Material>(MatName.c_str());
 }
 
 void Render::EditorIcon::Draw(Math::Matrix4 VP, Core::Transform transform)

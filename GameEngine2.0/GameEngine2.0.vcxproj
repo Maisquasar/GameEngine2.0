@@ -32,6 +32,7 @@
     <ClCompile Include="External_Includes\OpenFBX\miniz.c" />
     <ClCompile Include="External_Includes\OpenFBX\ofbx.cpp" />
     <ClCompile Include="Source\Src\Core\Components\AnimationComponent.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\Camera.cpp" />
     <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="External_Includes\STB_Image\stb_image.h" />
     <ClInclude Include="Source\Include\App.h" />
     <ClInclude Include="Source\Include\Core\Components\AnimationComponent.h" />
+    <ClInclude Include="Source\Include\Core\Components\Camera.h" />
     <ClInclude Include="Source\Include\Core\Components\Component.h" />
     <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
     <ClInclude Include="Source\Include\Core\Components\SkeletalMeshComponent.h" />
