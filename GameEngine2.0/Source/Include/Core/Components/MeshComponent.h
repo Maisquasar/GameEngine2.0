@@ -6,6 +6,10 @@ namespace Resources
 	class IResource;
 	class Mesh;
 }
+namespace Render
+{
+	class EditorIcon;
+}
 
 namespace Core::Components {
 	class MeshComponent : public BaseComponent<MeshComponent>

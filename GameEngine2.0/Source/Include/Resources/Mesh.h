@@ -1,11 +1,12 @@
 #pragma once
+#include <vector>
 #include "Include/Math/Math.h"
-#include "Include/Resources/Material.h"
 #include "Include/Resources/IResource.h"
 #define POS 0
 #define NML 1
 #define TUV 2
 #define TAN 3
+
 namespace Core::Components
 {
 	class MeshComponent;
@@ -14,7 +15,7 @@ namespace Core::Components
 namespace Resources {
 	struct SubMesh
 	{
-		Resources::Material* Material;
+		class Material* Material;
 		size_t StartIndex;
 		size_t Count;
 	};
@@ -25,7 +26,7 @@ namespace Resources {
 		~Mesh();
 
 		void Load(std::string filename) override;
-		void Initialize() override;
+		virtual void Initialize() override;
 		
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
 

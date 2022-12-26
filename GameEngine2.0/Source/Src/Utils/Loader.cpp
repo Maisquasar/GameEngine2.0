@@ -382,10 +382,19 @@ void Utils::Loader::FBXLoad(std::string path)
 	Scene->destroy();
 }
 
+#include "Include/Resources/SkeletalMesh.h"
+
 void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 {
 	// Set-Up Mesh
-	auto Mesh = new Resources::Mesh();
+	//bool HasSkeleton = false;
+	//if (auto skin = mesh->getGeometry()->getSkin())
+		//HasSkeleton = true;
+	Resources::Mesh* Mesh = nullptr;
+	//if (!HasSkeleton)
+		Mesh = new Resources::Mesh();
+	//else
+		//Mesh = new Resources::SkeletalMesh();
 	Mesh->SetName(mesh->name);
 	Mesh->SetPath(path + "::" + Mesh->GetName());
 
@@ -465,38 +474,39 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 	Mesh->SubMeshes.back().StartIndex = lastIndex;
 	Mesh->SubMeshes.back().Count = (size_t)mesh->getGeometry()->getIndexCount() - lastIndex;
 
-
 	// Set-up all Vertices.
 	const int* indices = mesh->getGeometry()->getFaceIndices();
 	int index_count = mesh->getGeometry()->getIndexCount();
 
+	//if (!HasSkeleton) {
+		for (int i = 0; i < index_count; i++)
+		{
+			Mesh->Vertices.push_back(Mesh->Positions[i].x * 0.01f);
+			Mesh->Vertices.push_back(Mesh->Positions[i].y * 0.01f);
+			Mesh->Vertices.push_back(Mesh->Positions[i].z * 0.01f);
+			Mesh->Vertices.push_back(Mesh->Normals[i].x);
+			Mesh->Vertices.push_back(Mesh->Normals[i].y);
+			Mesh->Vertices.push_back(Mesh->Normals[i].z);
+			Mesh->Vertices.push_back(Mesh->TextureUVs[i].x);
+			Mesh->Vertices.push_back(Mesh->TextureUVs[i].y);
+			Mesh->Vertices.push_back(0);
+			Mesh->Vertices.push_back(0);
+			Mesh->Vertices.push_back(0);
+		}
 
-	for (int i = 0; i < index_count; i++)
-	{
-		Mesh->Vertices.push_back(Mesh->Positions[i].x * 0.01f);
-		Mesh->Vertices.push_back(Mesh->Positions[i].y * 0.01f);
-		Mesh->Vertices.push_back(Mesh->Positions[i].z * 0.01f);
-		Mesh->Vertices.push_back(Mesh->Normals[i].x);
-		Mesh->Vertices.push_back(Mesh->Normals[i].y);
-		Mesh->Vertices.push_back(Mesh->Normals[i].z);
-		Mesh->Vertices.push_back(Mesh->TextureUVs[i].x);
-		Mesh->Vertices.push_back(Mesh->TextureUVs[i].y);
-		Mesh->Vertices.push_back(0);
-		Mesh->Vertices.push_back(0);
-		Mesh->Vertices.push_back(0);
-	}
-	int mat_count = mesh->getMaterialCount();
-
-	Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
-	Mesh->Loaded = true;
-	Mesh->Initialize();
+		Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
+		Mesh->Loaded = true;
+		Mesh->Initialize();
+	//}
 
 	if (auto skin = mesh->getGeometry()->getSkin())
-		LoadSkeleton(skin, path + "::" + Mesh->GetName());
+		LoadSkeleton(skin, path + "::" + Mesh->GetName(), Mesh, index_count);
 }
+
 #include "Include/Resources/Skeleton.h"
-void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
+void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resources::Mesh* mesh, int index_count)
 {
+	//std::map<int, float> BoneWeight;
 	auto NewSkel = new Resources::Skeleton();
 	auto name = path.substr(path.find_last_of(':') + 1);
 	name = name + "::" + "Skel";
@@ -512,6 +522,19 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 		Bone* bone = new Bone();
 		bone->Name = link->name;
 		bone->Id = i;
+
+		//for (int j = 0; j < Skel->getCluster(i)->getWeightsCount(); j++)
+		//{
+		//	if (BoneWeight.find(Skel->getCluster(i)->getIndices()[j]) == BoneWeight.end())
+		//	{
+
+		//		BoneWeight[Skel->getCluster(i)->getIndices()[j]] = (float)Skel->getCluster(i)->getWeights()[j];
+		//	}
+		//	else
+		//	{
+		//		//printf("%d %f Test\n", Skel->getCluster(i)->getIndices()[j], (float)Skel->getCluster(i)->getWeights()[j]);
+		//	}
+		//}
 
 		// Set Up Transform
 		auto pos = link->getLocalTranslation();
@@ -535,6 +558,26 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path)
 	}
 	if (root)
 		NewSkel->RootBone = root;
+
+
+	/*for (int i = 0; i < index_count; i++)
+	{
+		mesh->Vertices.push_back(mesh->Positions[i].x * 0.01f);
+		mesh->Vertices.push_back(mesh->Positions[i].y * 0.01f);
+		mesh->Vertices.push_back(mesh->Positions[i].z * 0.01f);
+		mesh->Vertices.push_back(mesh->Normals[i].x);
+		mesh->Vertices.push_back(mesh->Normals[i].y);
+		mesh->Vertices.push_back(mesh->Normals[i].z);
+		mesh->Vertices.push_back(mesh->TextureUVs[i].x);
+		mesh->Vertices.push_back(mesh->TextureUVs[i].y);
+		mesh->Vertices.push_back(0);
+		mesh->Vertices.push_back(0);
+		mesh->Vertices.push_back(0);
+	}
+
+	Application.GetResourceManager()->Add(mesh->GetPath(), mesh);
+	mesh->Loaded = true;
+	mesh->Initialize();*/
 
 	Application.GetResourceManager()->Add(NewSkel->GetPath(), NewSkel);
 }

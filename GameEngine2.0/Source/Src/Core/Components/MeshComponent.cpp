@@ -6,6 +6,7 @@
 #include "Include/Core/Node.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
+#include "Include/Render./EditorIcon.h"
 
 Core::Components::MeshComponent::MeshComponent()
 {

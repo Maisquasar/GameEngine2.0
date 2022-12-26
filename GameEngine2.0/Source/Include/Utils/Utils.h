@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+
 #include "Include/Math/Math.h"
 
 namespace Core
@@ -30,4 +31,6 @@ namespace Utils
 	void SortByDistanceFromCamera(std::vector<Core::Node*>& list, Math::Vector3 CameraPosition, Math::Vector3 Forward);
 
 	std::vector<std::pair<Core::Node*, float> > BubbleSort(std::map<Core::Node*, float>& list);
+
+	void GetPlaneVertices(std::vector<Math::Vector3> &Positions, std::vector<Math::Vector2>& TextureUVs, std::vector<Math::Vector3> &Normals, std::vector<Math::Integer3>& Indices);
 }

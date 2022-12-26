@@ -46,6 +46,7 @@
     <ClCompile Include="Source\Src\Physic\Physic.cpp" />
     <ClCompile Include="Source\Src\Render\EditorGrid.cpp" />
     <ClCompile Include="Source\Src\Render\Gizmo.cpp" />
+    <ClCompile Include="Source\Src\Render\EditorIcon.cpp" />
     <ClCompile Include="Source\Src\Resources\Animation.cpp" />
     <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
     <ClCompile Include="Source\Src\Core\Node.cpp" />
@@ -73,6 +74,7 @@
     <ClCompile Include="Source\Src\Resources\Model.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Shader.cpp" />
+    <ClCompile Include="Source\Src\Resources\SkeletalMesh.cpp" />
     <ClCompile Include="Source\Src\Resources\Skeleton.cpp" />
     <ClCompile Include="Source\Src\Resources\Texture.cpp" />
     <ClCompile Include="Source\Src\Utils\AppSettings.cpp" />
@@ -111,6 +113,7 @@
     <ClInclude Include="Source\Include\EditorUi\ResourcesWindow.h" />
     <ClInclude Include="Source\Include\Physic\Physic.h" />
     <ClInclude Include="Source\Include\Render\EditorGrid.h" />
+    <ClInclude Include="Source\Include\Render\EditorIcon.h" />
     <ClInclude Include="Source\Include\Render\Gizmo.h" />
     <ClInclude Include="Source\Include\Resources\Animation.h" />
     <ClInclude Include="Source\Include\Resources\Mesh.h" />
@@ -140,6 +143,7 @@
     <ClInclude Include="Source\Include\Resources\Material.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Shader.h" />
+    <ClInclude Include="Source\Include\Resources\SkeletalMesh.h" />
     <ClInclude Include="Source\Include\Resources\Skeleton.h" />
     <ClInclude Include="Source\Include\Resources\Texture.h" />
     <ClInclude Include="Source\Include\Utils\AppSettings.h" />

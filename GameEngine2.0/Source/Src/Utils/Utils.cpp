@@ -45,3 +45,31 @@ std::vector<std::pair<Core::Node*, float> > Utils::BubbleSort(std::map<Core::Nod
 	sort(A.begin(), A.end(), cmp);
 	return A;
 }
+
+void Utils::GetPlaneVertices(std::vector<Math::Vector3>& Positions, std::vector<Math::Vector2>& TextureUVs, std::vector<Math::Vector3>& Normals, std::vector<Math::Integer3>& Indices)
+{
+	std::vector<Math::Vector3> v = {
+		{-1.000000f, 0.000000f, 1.000000},
+		{ 1.000000, 0.000000, 1.000000 },
+		{-1.000000, 0.000000, -1.000000},
+		{1.000000, 0.000000, -1.000000 },
+	};
+
+	std::vector < Math::Vector2> t = {
+		{0.000000, 0.000000},
+		{1.000000, 0.000000 },
+		{0.000000, 1.000000},
+		{1.000000, 1.000000 }
+	};
+	Math::Vector3 n = { -0.0000, 1.0000, -0.0000 };
+
+	std::vector<Math::Integer3> i{
+		{1, 1, 0}, {2, 2, 0}, {0, 0, 0},
+		{1, 1, 0}, {3, 3, 0}, {2, 2, 0}
+	};
+
+	Positions.insert(Positions.begin(), v.begin(), v.end());
+	TextureUVs.insert(TextureUVs.begin(), t.begin(), t.end());
+	Normals.push_back(n);
+	Indices.insert(Indices.begin(), i.begin(), i.end());
+}

@@ -78,6 +78,7 @@ namespace Resources {
 		Shader* GetDefaultShader();
 		Shader* GetPickingShader();
 		Mesh* GetDefaultCube();
+		Mesh* GetDefaultPlane();
 
 		template<typename T> T* ResourcesPopup(const char* popupName)
 		{

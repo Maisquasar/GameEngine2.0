@@ -11,6 +11,7 @@ Render::EditorGrid::EditorGrid()
 
 Render::EditorGrid::~EditorGrid()
 {
+	delete _meshComponent->GetMesh()->SubMeshes[0].Material;
 	delete _meshComponent;
 }
 
@@ -34,6 +35,7 @@ void Render::EditorGrid::Draw()
 			if (!mesh->Loaded)
 				return;
 			_meshComponent->SetMesh(dynamic_cast<Resources::Mesh*>(mesh->Clone()));
+			_meshComponent->GetMesh()->SubMeshes[0].Material = new Resources::Material();
 			for (auto sub : _meshComponent->GetMesh()->SubMeshes)
 			{
 				sub.Material->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/GridShader"));

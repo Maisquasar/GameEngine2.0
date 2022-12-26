@@ -191,15 +191,42 @@ void App::LoadResources()
 		_resourceManager.Create<Resources::Shader>(entry.path().generic_string().data());
 	}
 
-	// Set-Up Default Material.
+	// Set-Up Default Resources.
 	auto defaultMat = new Resources::Material();
 	defaultMat->SetEditable(false);
 	defaultMat->SetName("DefaultMaterial");
 	defaultMat->SetShader(_resourceManager.GetDefaultShader());
 	_resourceManager.Add<Resources::Material>("DefaultMaterial", defaultMat);
 
+	auto LightMat = new Resources::Material();
+	LightMat->SetEditable(false);
+	LightMat->SetName("LightMat");
+	LightMat->SetShader(_resourceManager.GetDefaultShader());
+	_resourceManager.Add<Resources::Material>("LightMat", LightMat);
+
+	// Set-Up Default Plane.
+
+	auto Plane = new Resources::Mesh();
+	Plane->SetName("DefaultPlane");
+	Plane->SetPath("DefaultPlane");
+	Utils::GetPlaneVertices(Plane->Positions, Plane->TextureUVs, Plane->Normals, Plane->Indices);
+	std::vector<float> _vertices;
+	std::vector<unsigned int> _indices;
+	Plane->VerticesLoop(_indices, _vertices);
+	Plane->Vertices = _vertices;
+	Plane->Initialize();
+	auto sub = Resources::SubMesh();
+	sub.Count = Plane->Indices.size();
+	sub.StartIndex = 0;
+	sub.Material = defaultMat;
+	Plane->SubMeshes.push_back(sub);
+	Plane->Loaded = true;
+
+	_resourceManager.Add<Resources::Mesh>("DefaultPlane", Plane);
+
 	// Load Textures - Materials - Models.
 	FilesLoad("Assets");
+	LightMat->SetTexture(_resourceManager.Get<Resources::Texture>("Assets/Default/Textures/LightIcon.png"));
 }
 
 void App::FilesLoad(std::string path)
@@ -346,7 +373,7 @@ void App::Update()
 		_input.Update();
 
 		_framebuffer.Draw();
-		
+
 		EndFrame();
 	}
 }

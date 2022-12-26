@@ -2,6 +2,7 @@
 #include <map>
 #include "Include/App.h"
 #include "Include/Resources/ResourceManager.h"
+#include "Include/Resources/Material.h"
 
 Resources::Mesh::Mesh()
 {
@@ -104,6 +105,7 @@ void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vect
 		vertices.push_back(Tangents[k].y);
 		vertices.push_back(Tangents[k].z);
 	}
+	
 }
 
 void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)

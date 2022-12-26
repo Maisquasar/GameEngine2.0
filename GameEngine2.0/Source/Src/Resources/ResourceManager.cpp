@@ -1,5 +1,7 @@
 #include "Include/Resources/ResourceManager.h"
 
+#include "Include/Utils/Utils.h"
+
 Resources::ResourceManager::ResourceManager() { TextureIndex = 0; }
 
 Resources::ResourceManager::~ResourceManager() 
@@ -39,4 +41,8 @@ Resources::Mesh* Resources::ResourceManager::GetDefaultCube()
 	return Get<Resources::Mesh>("Cube.obj::Cube");
 }
 
+Resources::Mesh* Resources::ResourceManager::GetDefaultPlane()
+{
+	return Get<Resources::Mesh>("DefaultPlane");
+}
 

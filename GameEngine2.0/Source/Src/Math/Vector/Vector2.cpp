@@ -57,7 +57,6 @@ float& Math::Vector2::operator[](const size_t a)
 {
 	return *((&x) + a);
 }
-
 bool Vector2::IsCollinearWith(Vector2 a)
 {
 	float res = a.x * y - a.y * x;
