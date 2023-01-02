@@ -76,9 +76,9 @@ Math::Vector3 Core::Transform::GetWorldScale()
 		return _localScale;
 }
 
-Math::Matrix4 Core::Transform::GetModelMatrix()
+Math::Matrix4 Core::Transform::GetModelMatrix(bool update)
 {
-	if (_dirty) {
+	if (_dirty || update) {
 		if (Parent)
 			return _modelMatrix = Parent->Transform.GetModelMatrix() * GetLocalModelMatrix();
 		return _modelMatrix = GetLocalModelMatrix();

@@ -8,22 +8,22 @@
 
 void Main()
 {
-    Application.InitializeApp("GameEngine2.0", 1920, 1080);
+	Application.InitializeApp("GameEngine2.0", 1920, 1080);
 
-    Application.Update();
+	Application.Update();
 
-    Application.ClearApp();
+	Application.ClearApp();
 };
 
 int main()
 {
-    //  TODO: Remove Comments
-    // |
-    // V
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
-    //_CrtSetBreakAlloc(14630);
-    Main();
-    return 0;
+	//  TODO: Remove Comments
+	// |
+	// V
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
+	//_CrtSetBreakAlloc(14630);
+	Main();
+	return 0;
 }
 
 //TODO : 

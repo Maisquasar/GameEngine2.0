@@ -80,6 +80,7 @@ void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outli
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);
+
 		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
 		if (Sub.Material->GetTexture())
 			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());

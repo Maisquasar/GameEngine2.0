@@ -23,7 +23,7 @@ Bone::~Bone() {
 
 void Bone::ShowInInspector()
 {
-	if (ImGui::CollapsingHeader(Name.c_str()))
+	if (ImGui::CollapsingHeader((Name + " " + std::to_string(Id)).c_str()))
 	{
 		Transform.ShowInInspector();
 		ImGui::TreePush(Name.c_str());
@@ -204,12 +204,23 @@ void Bone::Load(const char* data, uint32_t& pos)
 	}
 }
 
-Math::Matrix4 Bone::GetBoneMatrix()
+std::vector<Bone*> Bone::GetAllBones()
 {
-	return Transform.GetModelMatrix() * DefaultMatrix;
+	std::vector<Bone*> out;
+	for (auto c : Childrens)
+	{
+		auto vec = dynamic_cast<Bone*>(c)->GetAllBones();
+		out.insert(out.end(), vec.begin(), vec.end());
+	}
+	out.push_back(this);
+	return out;
 }
 
-
+Math::Matrix4 Bone::GetBoneMatrix()
+{
+	auto result = Transform.GetModelMatrix(true) * DefaultMatrix;
+	return result;
+}
 
 Resources::Skeleton::Skeleton() {}
 
@@ -226,6 +237,9 @@ Resources::Skeleton* Resources::Skeleton::Clone() const
 	// Clone All Bones.
 	Bone* node = skel->RootBone->Clone();
 	skel->RootBone = node;
+	auto bones = skel->RootBone->GetAllBones();
+	skel->Bones = bones;
+	skel->SortBones();
 	return skel;
 }
 
@@ -235,8 +249,18 @@ std::vector<Math::Matrix4> Resources::Skeleton::GetBonesMatrices()
 	//Matrix.resize(52);
 	for (size_t i = 0; i < Bones.size(); i++)
 	{
-		Matrix.push_back(Math::Matrix4::Identity());
-		//Matrix.push_back(Bones[i]->GetBoneMatrix());
+		//Matrix.push_back(Math::Matrix4::Identity());
+		Matrix.push_back(Bones[i]->GetBoneMatrix());
 	}
 	return Matrix;
+}
+
+bool compareById(Bone* a, Bone* b) {
+	return a->Id < b->Id;
+}
+
+void Resources::Skeleton::SortBones()
+{
+	std::vector<Bone*> out;
+	std::sort(Bones.begin(), Bones.end(), compareById);
 }

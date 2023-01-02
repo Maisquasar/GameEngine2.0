@@ -73,7 +73,7 @@ namespace Math {
 
 		Matrix4 GetCofactor(int p, int q, int n);
 
-		int GetDeterminant(int n);
+		float GetDeterminant(int n);
 
 		Matrix4 TransposeMatrix();
 

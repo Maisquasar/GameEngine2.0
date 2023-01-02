@@ -23,6 +23,8 @@ public:
 	void Save(std::string space, std::string& content) override;
 	void Load(const char* data, uint32_t& pos) override;
 
+	std::vector<Bone*> GetAllBones();
+
 	Math::Matrix4 GetBoneMatrix();
 
 	int Id = -1;
@@ -42,9 +44,11 @@ namespace Resources {
 		Skeleton* Clone() const override;
 
 		std::vector<Math::Matrix4> GetBonesMatrices();
+		void SortBones();
 
 		Bone* RootBone = nullptr;
 
+		// sorted list by index
 		std::vector<Bone*> Bones;
 
 		size_t BoneCount = 0;

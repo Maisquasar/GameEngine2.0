@@ -307,39 +307,65 @@ Matrix4 Matrix4::GetCofactor(int p, int q, int n)
 	return mat;
 }
 
-int Matrix4::GetDeterminant(int n)
+float Matrix4::GetDeterminant(int n)
 {
-	Matrix4 a;
-	int D = 0; // Initialize result
-
-	//  Base case : if matrix contains single element
-	if (n == 1)
-		return (int)content[0][0];
-
-	int sign = 1;  // To store sign multiplier
-
-	 // Iterate for each element of first row
-	for (int f = 0; f < n; f++)
+	if (n == 2)
 	{
-		// Getting Cofactor of matrix[0][f]
-		a = GetCofactor(0, f, n);
-		D += sign * (int)content[0][f] * a.GetDeterminant(n - 1);
-
-		// terms are to be added with alternate sign
-		sign = -sign;
+		float x = content[0][0] * content[1][1] - content[1][0] * content[0][1];
+		return content[0][0] * content[1][1] - content[1][0] * content[0][1];
 	}
+	else if (n == 3)
+	{
+		float result = content[0][0] * content[1][1] * content[2][2]
+			- content[0][0] * content[2][1] * content[1][2]
+			+ content[1][0] * content[2][1] * content[0][2]
+			- content[1][0] * content[0][1] * content[2][2]
+			+ content[2][0] * content[0][1] * content[1][2]
+			- content[2][0] * content[1][1] * content[0][2];
+		return result;
+	}
+	else if (n == 4)
+	{
+		float result = content[0][0] * (content[1][1] * content[2][2] * content[3][3] // a(fkp
+			- content[1][1] * content[3][2] * content[2][3] //flo
+			- content[2][1] * content[1][2] * content[3][3] //gjp
+			+ content[2][1] * content[3][2] * content[1][3] //gln
+			+ content[3][1] * content[1][2] * content[2][3] //hjo
+			- content[3][1] * content[2][2] * content[1][3]) // hkn
 
-	return D;
+			- content[1][0] * (content[0][1] * content[2][2] * content[3][3] //b(ekp
+				- content[0][1] * content[3][2] * content[2][3] // elo
+				- content[2][1] * content[0][2] * content[3][3] //gip
+				+ content[2][1] * content[3][2] * content[0][3] //glm
+				+ content[3][1] * content[0][2] * content[2][3] //hio
+				- content[3][1] * content[2][2] * content[0][3]) //hkm
+
+			+ content[2][0] * (content[0][1] * content[1][2] * content[3][3] // c(ejp
+				- content[0][1] * content[3][2] * content[1][3] //eln
+				- content[1][1] * content[0][2] * content[3][3] //fip
+				+ content[1][1] * content[3][2] * content[0][3] //flm
+				+ content[3][1] * content[0][2] * content[1][3] //hin
+				- content[3][1] * content[1][2] * content[0][3]) //hjm
+
+			- content[3][0] * (content[0][1] * content[1][2] * content[2][3] // d(ejo
+				- content[0][1] * content[2][2] * content[1][3] //ekn
+				- content[1][1] * content[0][2] * content[2][3] //fio
+				+ content[1][1] * content[2][2] * content[0][3] //fkm
+				+ content[2][1] * content[0][2] * content[1][3] //gin
+				- content[2][1] * content[1][2] * content[0][3]); //gjm
+		return result;
+	}
+	else return 0.0f;
 }
 
 Matrix4 Matrix4::CreateInverseMatrix()
 {
 	// Find determinant of matrix
-	Matrix4 inverse;
-	int det = GetDeterminant(4);
-	if (det == 0)
+	Matrix4 inverse(1);
+	float det = GetDeterminant(4);
+	if (det == 0.0f)
 	{
-		return 1;
+		return Matrix4(1);
 	}
 
 	// Find adjoint

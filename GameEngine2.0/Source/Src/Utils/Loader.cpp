@@ -552,9 +552,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 		bone->DefaultRotation = vecRot.ToQuaternion();
 		bone->Transform.SetLocalScale(vecSca);
 
-		bone->DefaultMatrix = bone->Transform.GetModelMatrix().CreateInverseMatrix();
-
-		if (i != 0) { 
+		if (i != 0) {
 			Bone* result = nullptr;
 			for (auto b : Bones)
 			{
@@ -567,6 +565,9 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 			bone->SetParent(result);
 		}
 		else { root = bone; }
+
+		bone->DefaultMatrix = bone->Transform.GetModelMatrix().CreateInverseMatrix();
+
 
 		Bones.push_back(bone);
 	}

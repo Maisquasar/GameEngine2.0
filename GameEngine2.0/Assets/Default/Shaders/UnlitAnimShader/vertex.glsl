@@ -14,7 +14,7 @@ uniform mat4 ProjectionMatrix;
 
 uniform mat4 ModelViewMatrix;
 
-const int MAX_BONES = 52;
+const int MAX_BONES = 100;
 
 uniform mat4 SkinningMatrices[MAX_BONES];
 

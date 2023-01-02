@@ -29,7 +29,7 @@ namespace Core
 		Math::Vector3 GetWorldPosition();
 		Math::Quaternion GetWorldRotation();
 		Math::Vector3 GetWorldScale();
-		Math::Matrix4 GetModelMatrix();
+		Math::Matrix4 GetModelMatrix(bool update = false);
 
 		// Local Setters
 		void SetLocalPosition(Math::Vector3);
