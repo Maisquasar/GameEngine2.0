@@ -78,6 +78,7 @@ namespace Resources {
 		Shader* GetDefaultShader();
 		Shader* GetDefaultAnimShader();
 		Shader* GetPickingShader();
+		Shader* GetPickingAnimShader();
 		Mesh* GetDefaultCube();
 		Mesh* GetDefaultPlane();
 

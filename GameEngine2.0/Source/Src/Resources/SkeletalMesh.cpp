@@ -69,7 +69,7 @@ void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outli
 	glStencilFunc(GL_ALWAYS, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	auto MV = M * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
+	auto MV = Application.GetScene()->GetCameraEditor()->GetViewMatrix() * M;
 	auto P = Application.GetScene()->GetCameraEditor()->GetProjection();
 	for (auto Sub : SubMeshes)
 	{
@@ -116,6 +116,27 @@ void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outli
 	}
 }
 
-void Resources::SkeletalMesh::DrawPicking(Math::Matrix4 MVP, int id)
+void Resources::SkeletalMesh::DrawPicking(Math::Matrix4 M, Skeleton* skel, int id)
 {
+	if (!Loaded)
+		return;
+	if (!_initialized)
+		Initialize();
+	auto picking_shader = Application.GetResourceManager()->GetPickingAnimShader();
+	glBindVertexArray(_VAO);
+	glUseProgram(picking_shader->Program);
+	int r = (id & 0x000000FF) >> 0;
+	int g = (id & 0x0000FF00) >> 8;
+	int b = (id & 0x00FF0000) >> 16;
+	auto MV = M * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
+	auto P = Application.GetScene()->GetCameraEditor()->GetProjection();
+	for (const auto& Sub : this->SubMeshes)
+	{
+		glUniformMatrix4fv(picking_shader->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
+		glUniformMatrix4fv(picking_shader->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
+		glUniformMatrix4fv(picking_shader->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);
+		glUniform4f(picking_shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
+
+		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+	}
 }

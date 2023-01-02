@@ -41,6 +41,11 @@ Resources::Shader* Resources::ResourceManager::GetPickingShader()
 	return Get<Resources::Shader>("Assets/Default/Shaders/PickingShader");
 }
 
+Resources::Shader* Resources::ResourceManager::GetPickingAnimShader()
+{
+	return Get<Resources::Shader>("Assets/Default/Shaders/PickingAnimShader");
+}
+
 Resources::Mesh* Resources::ResourceManager::GetDefaultCube()
 {
 	return Get<Resources::Mesh>("Cube.obj::Cube");

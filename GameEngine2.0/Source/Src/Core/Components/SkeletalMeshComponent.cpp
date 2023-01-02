@@ -21,9 +21,8 @@ void Core::Components::SkeletalMeshComponent::DrawPicking(int id)
 {
 	if (!Mesh || !_enable)
 		return;
-	auto MVP = Application.GetScene()->GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (Mesh)
-		Mesh->DrawPicking(MVP, id);
+		Mesh->DrawPicking(this->GameObject->Transform.GetModelMatrix(), Skeleton, id);
 }
 
 #include "Include/EditorUi/Inspector.h"
