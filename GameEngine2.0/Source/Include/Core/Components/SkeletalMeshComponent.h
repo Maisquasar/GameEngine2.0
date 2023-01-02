@@ -3,7 +3,7 @@
 namespace Resources
 {
 	class Skeleton;
-	class Mesh;
+	class SkeletalMesh;
 }
 namespace Core::Components
 {
@@ -20,7 +20,7 @@ namespace Core::Components
 		void SetSkeleton(Resources::Skeleton* skel);
 
 		Resources::Skeleton* Skeleton = nullptr;
-		Resources::Mesh* Mesh = nullptr;
+		Resources::SkeletalMesh* Mesh = nullptr;
 
 		void Save(std::string space, std::string& content) override;
 		void Load(const char* data, uint32_t& pos) override;

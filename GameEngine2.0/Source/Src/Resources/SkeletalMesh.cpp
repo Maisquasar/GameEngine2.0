@@ -1,4 +1,11 @@
+#include <Windows.h>
+#include <glad/glad.h>
+
 #include "Include/Resources/SkeletalMesh.h"
+#include "Include/Resources/Material.h"
+#include "Include/Resources/Shader.h"
+#include "Include/Resources/Skeleton.h"
+#include "Include/App.h"
 
 Resources::SkeletalMesh::SkeletalMesh()
 {
@@ -9,5 +16,105 @@ Resources::SkeletalMesh::~SkeletalMesh()
 }
 
 void Resources::SkeletalMesh::Initialize()
+{
+	glGenVertexArrays(1, &_VAO);
+	glGenBuffers(1, &_VBO);
+	//glGenBuffers(1, &EBO);
+
+	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+	glBindVertexArray(_VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+	if (!Vertices.empty()) {
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * Vertices.size(), Vertices.data(), GL_STATIC_DRAW);
+
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * _indices.size(), _indices.data(), GL_STATIC_DRAW);
+
+		// position attribute
+		glVertexAttribPointer(0U, 3, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0U);
+		// normal attribute
+		glVertexAttribPointer(1U, 3, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[3])));
+		glEnableVertexAttribArray(1U);
+		// texture coord attribute
+		glVertexAttribPointer(2U, 2, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[6])));
+		glEnableVertexAttribArray(2U);
+
+		glVertexAttribPointer(3U, 3, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[8])));
+		glEnableVertexAttribArray(3U);
+
+		glVertexAttribPointer(4U, 4, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[11])));
+		glEnableVertexAttribArray(4U);
+
+		glVertexAttribPointer(5U, 4, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[15])));
+		glEnableVertexAttribArray(5U);
+	}
+	_initialized = true;
+}
+
+void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outline)
+{
+	if (!Loaded || !skel)
+		return;
+	if (!_initialized)
+		Initialize();
+	glBindVertexArray(_VAO);
+	glClearStencil(0);
+	glClear(GL_STENCIL_BUFFER_BIT);
+	// Render the mesh into the stencil buffer.
+
+	glEnable(GL_STENCIL_TEST);
+
+	glStencilFunc(GL_ALWAYS, 1, -1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	auto MV = M * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
+	auto P = Application.GetScene()->GetCameraEditor()->GetProjection();
+	for (auto Sub : SubMeshes)
+	{
+		if (!Sub.Material)
+			continue;
+		glDepthRange(0.01, 1.0);
+		glUseProgram(Sub.Material->GetShader()->Program);
+		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
+		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
+		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);
+		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
+		if (Sub.Material->GetTexture())
+			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());
+		else
+			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
+
+		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+	}
+	if (outline)
+	{
+
+		// Render the thick wireframe version.
+		glStencilFunc(GL_NOTEQUAL, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+		glLineWidth(10);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDepthRange(0, 0.01);
+
+		for (auto Sub : SubMeshes)
+		{
+			if (!Sub.Material)
+				continue;
+			glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
+			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), 0.8f, 0.5f, 0, 1);
+			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		}
+
+
+		glDisable(GL_STENCIL_TEST);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glLineWidth(1);
+	}
+}
+
+void Resources::SkeletalMesh::DrawPicking(Math::Matrix4 MVP, int id)
 {
 }

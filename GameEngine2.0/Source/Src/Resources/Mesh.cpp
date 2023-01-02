@@ -187,3 +187,11 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
 }
+
+void Resources::Mesh::SetShader(Shader* s)
+{
+	for (auto Sub : SubMeshes)
+	{
+		Sub.Material->SetShader(s);
+	}
+}

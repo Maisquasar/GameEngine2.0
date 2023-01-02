@@ -76,6 +76,7 @@ namespace Resources {
 		void RecompileShaders();
 
 		Shader* GetDefaultShader();
+		Shader* GetDefaultAnimShader();
 		Shader* GetPickingShader();
 		Mesh* GetDefaultCube();
 		Mesh* GetDefaultPlane();

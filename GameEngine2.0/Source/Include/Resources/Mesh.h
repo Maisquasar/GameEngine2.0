@@ -31,8 +31,10 @@ namespace Resources {
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
 
 		// Call on MeshComponent Update.
-		void Update(Math::Matrix4 MVP, bool outline = false);
-		void DrawPicking(Math::Matrix4 MVP, int id);
+		virtual void Update(Math::Matrix4 MVP, bool outline = false);
+		virtual void DrawPicking(Math::Matrix4 MVP, int id);
+
+		virtual void SetShader(class Shader*);
 
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;

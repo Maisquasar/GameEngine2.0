@@ -53,7 +53,7 @@ void Bone::DrawDebug()
 void Bone::UpdateBone(Resources::Animation* anim, float time)
 {
 	Math::Vector3 Position = DefaultPosition;
-	Math::Quaternion Rotation;
+	Math::Quaternion Rotation = DefaultRotation;
 	anim->GetAnimAtFrame(Id, time, Position, Rotation);
 
 	Transform.SetLocalPosition(Position);
@@ -204,6 +204,11 @@ void Bone::Load(const char* data, uint32_t& pos)
 	}
 }
 
+Math::Matrix4 Bone::GetBoneMatrix()
+{
+	return Transform.GetModelMatrix() * DefaultMatrix;
+}
+
 
 
 Resources::Skeleton::Skeleton() {}
@@ -222,4 +227,16 @@ Resources::Skeleton* Resources::Skeleton::Clone() const
 	Bone* node = skel->RootBone->Clone();
 	skel->RootBone = node;
 	return skel;
+}
+
+std::vector<Math::Matrix4> Resources::Skeleton::GetBonesMatrices()
+{
+	std::vector<Math::Matrix4> Matrix;
+	//Matrix.resize(52);
+	for (size_t i = 0; i < Bones.size(); i++)
+	{
+		Matrix.push_back(Math::Matrix4::Identity());
+		//Matrix.push_back(Bones[i]->GetBoneMatrix());
+	}
+	return Matrix;
 }

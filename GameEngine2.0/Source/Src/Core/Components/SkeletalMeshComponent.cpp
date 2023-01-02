@@ -1,5 +1,6 @@
 #include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Resources/Skeleton.h"
+#include "Include/Resources/SkeletalMesh.h"
 #include "Include/App.h"
 #include "Include/Core/Components/AnimationComponent.h"
 #include "Include/Utils/Utils.h"
@@ -32,7 +33,7 @@ void Core::Components::SkeletalMeshComponent::Update()
 		Skeleton->RootBone->DrawDebug();
 	}
 	if (Mesh && _showMesh) {
-		Mesh->Update(Application.GetScene()->GetVPMatrix() * GameObject->Transform.GetModelMatrix(), EditorUi::Editor::GetInspector()->IsSelected(GameObject));
+		Mesh->Update(GameObject->Transform.GetModelMatrix(), Skeleton, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 	}
 }
 
@@ -64,7 +65,7 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 	// Mesh Button
 	if (ImGui::Button("Mesh"))
 	{
-		ImGui::OpenPopup("MeshPopup");
+		ImGui::OpenPopup("SkeletalMeshPopup");
 	}
 	ImGui::SameLine();
 	name = "None";
@@ -73,10 +74,11 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 		name = Mesh->GetName();
 	}
 	ImGui::Text(name.c_str());
-	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::Mesh>("MeshPopup")) {
+	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::SkeletalMesh>("SkeletalMeshPopup")) {
 		if (Mesh)
 			delete Mesh;
-		Mesh = Cast(Resources::Mesh, m->Clone());
+		Mesh = Cast(Resources::SkeletalMesh, m->Clone());
+		printf(Mesh->GetName().c_str());
 	}
 	if (Skeleton)
 		Skeleton->RootBone->ShowInInspector();
@@ -111,7 +113,7 @@ void Core::Components::SkeletalMeshComponent::Load(const char* data, uint32_t& p
 		{
 			auto MeshPath = Utils::Loader::GetString(currentLine);
 			if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>(MeshPath.c_str())) {
-				Mesh = Cast(Resources::Mesh, mesh->Clone());
+				Mesh = Cast(Resources::SkeletalMesh, mesh->Clone());
 			}
 		}
 		else if (currentLine.substr(0, 8) == "Skeleton")

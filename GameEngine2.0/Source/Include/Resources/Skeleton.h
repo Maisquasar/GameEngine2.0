@@ -23,9 +23,12 @@ public:
 	void Save(std::string space, std::string& content) override;
 	void Load(const char* data, uint32_t& pos) override;
 
+	Math::Matrix4 GetBoneMatrix();
+
 	int Id = -1;
 	Math::Vector3 DefaultPosition;
 	Math::Quaternion DefaultRotation;
+	Math::Matrix4 DefaultMatrix;
 private:
 
 };
@@ -38,7 +41,11 @@ namespace Resources {
 
 		Skeleton* Clone() const override;
 
+		std::vector<Math::Matrix4> GetBonesMatrices();
+
 		Bone* RootBone = nullptr;
+
+		std::vector<Bone*> Bones;
 
 		size_t BoneCount = 0;
 	private:

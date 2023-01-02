@@ -113,6 +113,9 @@ void Resources::Shader::Initialize()
 	_location[Location::L_POINT] = glGetUniformLocation(Program, "PointLight");
 	_location[Location::L_SPOT] = glGetUniformLocation(Program, "SpotLight");
 	_location[Location::L_COLOR] = glGetUniformLocation(Program, "OurColor");
+	_location[Location::L_PROJECTIONMATRIX] = glGetUniformLocation(Program, "ProjectionMatrix");
+	_location[Location::L_MODELVIEWMATRIX] = glGetUniformLocation(Program, "ModelViewMatrix");
+	_location[Location::L_SKINNINGMATRICES] = glGetUniformLocation(Program, "SkinningMatrices");
 	_initialized = true;
 }
 

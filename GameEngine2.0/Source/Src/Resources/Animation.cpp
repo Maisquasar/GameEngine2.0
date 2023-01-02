@@ -22,7 +22,7 @@ void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vector3& Pos
 			// Lerp The Position
 			Math::Vector3 PreviousFramePos = KeyPositions[id][pt0];
 			Math::Vector3 NextFramePos = KeyPositions[id][pt1];
-			Position = Math::Vector3::SLerp(PreviousFramePos, NextFramePos, (float)(time - pt0) / (float)(pt1 - pt0));
+			Position = Math::Vector3::Lerp(PreviousFramePos, NextFramePos, (float)(time - pt0) / (float)(pt1 - pt0));
 		}
 		else if (KeyPositions.size() > id && KeyPositions[id].size() > 0)
 		{

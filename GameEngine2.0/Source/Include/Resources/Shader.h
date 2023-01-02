@@ -27,6 +27,9 @@ namespace Resources
 		L_POINT,
 		L_SPOT,
 		L_COLOR,
+		L_PROJECTIONMATRIX,
+		L_MODELVIEWMATRIX,
+		L_SKINNINGMATRICES
 	};
 
 	class Shader : public BaseResource<Shader>

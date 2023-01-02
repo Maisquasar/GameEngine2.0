@@ -215,6 +215,15 @@ Vector3 Math::Vector3::SLerp(Math::Vector3 a, Math::Vector3 b, float t)
 	return ((a * std::cos(theta)) + (RelativeVec * std::sin(theta)));
 }
 
+Vector3 Math::Vector3::Lerp(Math::Vector3 a, Math::Vector3 b, float t)
+{
+	if (t < 0)
+		return a;
+	else if (t >= 1)
+		return b;
+	return a * (1 - t) + b * t;
+}
+
 Quaternion  Vector3::ToQuaternion()
 {
 	auto a = this->ToRad();

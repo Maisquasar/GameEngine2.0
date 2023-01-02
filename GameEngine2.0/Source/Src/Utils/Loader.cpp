@@ -387,14 +387,14 @@ void Utils::Loader::FBXLoad(std::string path)
 void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 {
 	// Set-Up Mesh
-	//bool HasSkeleton = false;
-	//if (auto skin = mesh->getGeometry()->getSkin())
-		//HasSkeleton = true;
+	bool HasSkeleton = false;
+	if (mesh->getGeometry()->getSkin())
+		HasSkeleton = true;
 	Resources::Mesh* Mesh = nullptr;
-	//if (!HasSkeleton)
+	if (!HasSkeleton)
 		Mesh = new Resources::Mesh();
-	//else
-		//Mesh = new Resources::SkeletalMesh();
+	else
+		Mesh = new Resources::SkeletalMesh();
 	Mesh->SetName(mesh->name);
 	Mesh->SetPath(path + "::" + Mesh->GetName());
 
@@ -478,7 +478,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 	const int* indices = mesh->getGeometry()->getFaceIndices();
 	int index_count = mesh->getGeometry()->getIndexCount();
 
-	//if (!HasSkeleton) {
+	if (!HasSkeleton) {
 		for (int i = 0; i < index_count; i++)
 		{
 			Mesh->Vertices.push_back(Mesh->Positions[i].x * 0.01f);
@@ -497,16 +497,25 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 		Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
 		Mesh->Loaded = true;
 		Mesh->Initialize();
-	//}
+	}
 
 	if (auto skin = mesh->getGeometry()->getSkin())
-		LoadSkeleton(skin, path + "::" + Mesh->GetName(), Mesh, index_count);
+		LoadSkeleton(skin, path + "::" + Mesh->GetName(), dynamic_cast<Resources::SkeletalMesh*>(Mesh), index_count);
 }
 
 #include "Include/Resources/Skeleton.h"
-void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resources::Mesh* mesh, int index_count)
+
+struct BonesVertices
 {
-	//std::map<int, float> BoneWeight;
+	int index;
+	float weigth;
+};
+
+void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resources::SkeletalMesh* mesh, int index_count)
+{
+	if (!mesh)
+		PrintError("Error mesh == nullptr");
+	std::map<int, std::vector<BonesVertices>> BoneWeight;
 	auto NewSkel = new Resources::Skeleton();
 	auto name = path.substr(path.find_last_of(':') + 1);
 	name = name + "::" + "Skel";
@@ -514,7 +523,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 	NewSkel->SetPath(path);
 	NewSkel->SetName(name);
 	Bone* root = nullptr;
-	std::map<std::string, Bone*> Bones;
+	std::vector<Bone*> Bones;
 	NewSkel->BoneCount = Skel->getClusterCount();
 	for (int i = 0; i < Skel->getClusterCount(); i++)
 	{
@@ -523,18 +532,10 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 		bone->Name = link->name;
 		bone->Id = i;
 
-		//for (int j = 0; j < Skel->getCluster(i)->getWeightsCount(); j++)
-		//{
-		//	if (BoneWeight.find(Skel->getCluster(i)->getIndices()[j]) == BoneWeight.end())
-		//	{
-
-		//		BoneWeight[Skel->getCluster(i)->getIndices()[j]] = (float)Skel->getCluster(i)->getWeights()[j];
-		//	}
-		//	else
-		//	{
-		//		//printf("%d %f Test\n", Skel->getCluster(i)->getIndices()[j], (float)Skel->getCluster(i)->getWeights()[j]);
-		//	}
-		//}
+		for (int j = 0; j < Skel->getCluster(i)->getWeightsCount(); j++)
+		{
+			BoneWeight[Skel->getCluster(i)->getIndices()[j]].push_back({ i, (float)Skel->getCluster(i)->getWeights()[j] });
+		}
 
 		// Set Up Transform
 		auto pos = link->getLocalTranslation();
@@ -551,16 +552,54 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 		bone->DefaultRotation = vecRot.ToQuaternion();
 		bone->Transform.SetLocalScale(vecSca);
 
-		if (i != 0) { bone->SetParent(Bones[link->getParent()->name]); }
+		bone->DefaultMatrix = bone->Transform.GetModelMatrix().CreateInverseMatrix();
+
+		if (i != 0) { 
+			Bone* result = nullptr;
+			for (auto b : Bones)
+			{
+				if (b->Name == link->getParent()->name)
+				{
+					result = b;
+					break;
+				}
+			}
+			bone->SetParent(result);
+		}
 		else { root = bone; }
 
-		Bones[bone->Name] = bone;
+		Bones.push_back(bone);
 	}
 	if (root)
 		NewSkel->RootBone = root;
 
+	int ind = 0;
+	for (int i = 0; i < Bones.size(); i++)
+	{
+		NewSkel->Bones.push_back(Bones.at(i));
+	}
 
-	/*for (int i = 0; i < index_count; i++)
+	auto getIndices = [&](int index, int i) -> int
+	{
+		if (BoneWeight[index].size() > i)
+		{
+			auto result = BoneWeight[index].at(i).index;
+			return result;
+		}
+		return 0;
+	};
+
+	auto getWeight = [&](int index, int i) -> float
+	{
+		if (BoneWeight[index].size() > i)
+		{
+			auto result = BoneWeight[index].at(i).weigth;
+			return BoneWeight[index].at(i).weigth;
+		}
+		return 0.0f;
+	};
+
+	for (int i = 0; i < index_count; i++)
 	{
 		mesh->Vertices.push_back(mesh->Positions[i].x * 0.01f);
 		mesh->Vertices.push_back(mesh->Positions[i].y * 0.01f);
@@ -573,11 +612,27 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 		mesh->Vertices.push_back(0);
 		mesh->Vertices.push_back(0);
 		mesh->Vertices.push_back(0);
+		mesh->Vertices.push_back((float)getIndices(i, 0));
+		mesh->Vertices.push_back((float)getIndices(i, 1));
+		mesh->Vertices.push_back((float)getIndices(i, 2));
+		mesh->Vertices.push_back((float)getIndices(i, 3));
+		mesh->Vertices.push_back(getWeight(i, 0));
+		mesh->Vertices.push_back(getWeight(i, 1));
+		mesh->Vertices.push_back(getWeight(i, 2));
+		mesh->Vertices.push_back(getWeight(i, 3));
 	}
+	// Find the maximum size of a vector in the map
+	auto result = std::max_element(BoneWeight.begin(), BoneWeight.end(), [](const auto& p1, const auto& p2) {
+		return p1.second.size() < p2.second.size();
+		});
 
-	Application.GetResourceManager()->Add(mesh->GetPath(), mesh);
+	if (result->second.size() > 4)
+		LOG(Debug::LogType::L_ERROR, "Skeletal Mesh %s is over 4 bone weight", mesh->GetPath().c_str());
+
+	Application.GetResourceManager()->Add<Resources::SkeletalMesh>(mesh->GetPath(), mesh);
 	mesh->Loaded = true;
-	mesh->Initialize();*/
+	mesh->Initialize();
+	mesh->SetShader(Application.GetResourceManager()->GetDefaultAnimShader());
 
 	Application.GetResourceManager()->Add(NewSkel->GetPath(), NewSkel);
 }
