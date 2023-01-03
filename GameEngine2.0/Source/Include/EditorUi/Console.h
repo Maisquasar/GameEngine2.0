@@ -34,6 +34,7 @@ namespace EditorUi {
 		void Clear();
 	private:
 		std::vector<ConsoleText> _consoleText;
+		std::string _checkBoxTexts[3];
 		int _numberOfInfo = 0;
 		int _numberOfWarn = 0;
 		int _numberOfErro = 0;

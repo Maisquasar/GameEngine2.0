@@ -114,6 +114,7 @@ namespace Resources {
 			return out;
 		}
 		std::unordered_map<std::string, Resources::IResource*> GetAllResources() { return _resource; }
+		std::unordered_map<std::string, Resources::IResource*>* GetAllResourcesPtr() { return &_resource; }
 		int TextureIndex = 0;
 
 	private:

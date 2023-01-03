@@ -4,6 +4,8 @@
 
 EditorUi::ResourcesWindow::ResourcesWindow()
 {
+	if (!this->_resource)
+		this->_resource = Application.GetResourceManager()->GetAllResourcesPtr();
 }
 
 EditorUi::ResourcesWindow::~ResourcesWindow()
@@ -25,7 +27,7 @@ void EditorUi::ResourcesWindow::Draw()
 			ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_None);
 			ImGui::TableHeadersRow();
 			int row = 0;
-			for (auto res : Application.GetResourceManager()->GetAllResources()) {
+			for (auto res : *_resource) {
 				ImGui::TableNextRow();
 				for (int column = 0; column < 3; column++)
 				{
@@ -36,10 +38,10 @@ void EditorUi::ResourcesWindow::Draw()
 						ImGui::Text("%s", typeid(*res.second).name());
 						break;
 					case 1:
-						ImGui::Text(res.second->GetName().c_str());
+						ImGui::TextUnformatted(res.second->GetName().c_str());
 						break;
 					case 2:
-						ImGui::Text(res.first.c_str());
+						ImGui::TextUnformatted(res.first.c_str());
 						break;
 					}
 				}

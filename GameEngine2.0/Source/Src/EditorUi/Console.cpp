@@ -17,22 +17,21 @@ void EditorUi::Console::Draw()
 		return;
 	if (ImGui::Begin("Console", &_open))
 	{
+		ImGui::PushID(0);
 		// ----------- LogType Buttons ----------- //
-		std::string info = Utils::StringFormat("%d Info", GetNumberOfLogType(Debug::LogType::INFO));
-		ImGui::Checkbox(info.c_str(), &_showInfo);
+		ImGui::Checkbox(_checkBoxTexts[0].c_str(), &_showInfo);
 		ImGui::SameLine();
 
 		ImGui::PushStyleColor(0, ImVec4(1, 0.5, 0, 1));
-		std::string warning = Utils::StringFormat("%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
-		ImGui::Checkbox(warning.c_str(), &_showWarning);
+		ImGui::Checkbox(_checkBoxTexts[1].c_str(), &_showWarning);
 		ImGui::PopStyleColor();
 		ImGui::SameLine();
 
 		ImGui::PushStyleColor(0, ImVec4(1, 0, 0, 1));
-		std::string error = Utils::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
-		ImGui::Checkbox(error.c_str(), &_showError);
+		ImGui::Checkbox(_checkBoxTexts[2].c_str(), &_showError);
 		ImGui::PopStyleColor();
 		ImGui::SameLine();
+		ImGui::PopID();
 
 		if (ImGui::Button("Clear"))
 		{
@@ -48,7 +47,7 @@ void EditorUi::Console::Draw()
 				{
 				case Debug::LogType::INFO:
 					if (_showInfo)
-						ImGui::Text(t._text.c_str());
+						ImGui::TextUnformatted(t._text.c_str());
 					break;
 				case Debug::LogType::WARNING:
 					if (_showWarning)
@@ -113,7 +112,11 @@ void EditorUi::Console::AddLine(Debug::LogType t, std::string s)
 			}
 		}
 		_consoleText.erase(_consoleText.begin(), it);
-	}
+	}				
+	_checkBoxTexts[0] = Utils::StringFormat("%d Info", GetNumberOfLogType(Debug::LogType::INFO));
+	_checkBoxTexts[1] = Utils::StringFormat("%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
+	_checkBoxTexts[2] = Utils::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
+
 	_consoleText.push_back(Text);
 	Application.ThreadManager.Unlock();
 }

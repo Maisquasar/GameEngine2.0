@@ -35,12 +35,12 @@ void EditorUi::Editor::Draw()
 	MainDocking();
 	_mainBar.Draw();
 	_hierarchy.Draw();
-	_fileExplorer.Draw();
+	Debug::Log::Console.Draw();
 	_inspector.Draw();
 	_resourcesWindow.Draw();
+	_fileExplorer.Draw();
 	_performanceWindow.Draw();
 	_textEditor.Draw();
-	Debug::Log::Console.Draw();
 }
 
 void EditorUi::Editor::MainDocking()

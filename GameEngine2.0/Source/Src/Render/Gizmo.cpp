@@ -36,7 +36,7 @@ void Render::Gizmo::Draw()
 	{
 		for (auto axis : _axis)
 		{
-			auto mesh = dynamic_cast<Resources::Mesh*>(axis->GetComponent<Core::Components::MeshComponent>()->GetMesh());
+			auto mesh = axis->GetComponent<Core::Components::MeshComponent>()->GetMesh();
 			if (!mesh->IsInitialized())
 				mesh->Initialize();
 			glBindVertexArray(mesh->_VAO);

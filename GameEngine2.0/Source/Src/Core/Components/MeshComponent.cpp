@@ -36,15 +36,15 @@ void Core::Components::MeshComponent::ShowInInspector()
 		ImGui::OpenPopup("MeshPopup");
 	}
 	ImGui::SameLine();
-	if (GetMesh())
-		ImGui::Text(GetMesh()->GetName().c_str());
+	if (_currentMesh)
+		ImGui::TextUnformatted(_currentMesh->GetName().c_str());
 	else
-		ImGui::Text("None");
+		ImGui::TextUnformatted("None");
 	if (auto Mesh = Application.GetResourceManager()->ResourcesPopup<Resources::Mesh>("MeshPopup")) {
 		delete _currentMesh;
 		_currentMesh = Mesh->Clone();
 	}
-	if (!GetMesh())
+	if (!_currentMesh)
 		return;
 
 	// Material List.

@@ -1,6 +1,6 @@
 #pragma once
 #include "../Debug/Log.h"
-#include <map>
+#include <unordered_map>
 #include <glad/glad.h>
 #include <iostream>
 #include <filesystem>
@@ -59,6 +59,6 @@ namespace Resources
 
 	private:
 		bool _linked = false;
-		std::map<Location, int> _location;
+		std::unordered_map<Location, int> _location;
 	};
 }
