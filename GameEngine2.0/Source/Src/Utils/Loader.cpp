@@ -376,9 +376,9 @@ void Utils::Loader::FBXLoad(std::string path)
 		for (int i = 0; i < count; i++)
 			LoadMesh(Scene->getMesh(i), path);
 
-		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
+		if (Scene->getAnimationStackCount() >= 1)
 		{
-			LoadAnimation(Scene->getAnimationStack(i), path);
+			LoadAnimation(Scene->getAnimationStack(0), path);
 		}
 	}
 	delete[] data;
@@ -542,7 +542,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 
 		// Set Up Transform
 		auto pos = link->getLocalTranslation();
-		auto rot = link->getPreRotation();
+		auto rot = link->getLocalRotation();
 		auto sca = link->getLocalScaling();
 
 		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z) * 0.01f;
@@ -645,15 +645,18 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 
 void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string path)
 {
-	Resources::Animation* Animation(new Resources::Animation());
-	auto name = path.substr(path.find_last_of('/') + 1);
-	name = name + "::" + "Anim";
-	path = path + "::" + "Anim";
-	Animation->SetPath(path);
-	Animation->SetName(name);
-	Animation->FrameRate = FileFrameRate;
+	Resources::Animation* Animation = nullptr;
 
 	for (int i = 0; i < 3; i++) {
+		if (Animation)
+			break;
+		Animation = (new Resources::Animation());
+		auto name = path.substr(path.find_last_of('/') + 1);
+		name = name + "::" + "Anim";
+		path = path + "::" + "Anim";
+		Animation->SetPath(path);
+		Animation->SetName(name);
+		Animation->FrameRate = FileFrameRate;
 		if (const ofbx::AnimationLayer* layer = stack->getLayer(i))
 		{
 			for (int k = 0; layer->getCurveNode(k); ++k)
@@ -710,8 +713,8 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 				}
 
 			}
-			Animation->Initialize();
-			Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
 		}
+		Animation->Initialize();
+		Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
 	}
 }
