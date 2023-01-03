@@ -357,6 +357,8 @@ void Utils::Loader::LoadMaterial(std::string path)
 	delete[] data;
 }
 
+static float FileFrameRate = 0;
+
 #include <OpenFBX/ofbx.h>
 void Utils::Loader::FBXLoad(std::string path)
 {
@@ -368,6 +370,7 @@ void Utils::Loader::FBXLoad(std::string path)
 		return;
 	}
 	ofbx::IScene* Scene = ofbx::load(data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
+	FileFrameRate = Scene->getSceneFrameRate();
 	if (Scene) {
 		int count = Scene->getMeshCount();
 		for (int i = 0; i < count; i++)
@@ -648,6 +651,7 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 	path = path + "::" + "Anim";
 	Animation->SetPath(path);
 	Animation->SetName(name);
+	Animation->FrameRate = FileFrameRate;
 
 	for (int i = 0; i < 3; i++) {
 		if (const ofbx::AnimationLayer* layer = stack->getLayer(i))
@@ -660,46 +664,53 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 				// Check if the curve node is for translation ("T") or rotation ("R")
 				if (!std::strcmp(node->name, "T")) {
 					// Add a new vector of Math::Vector3 to the KeyPositions field
-					Animation->KeyPositions.push_back(std::vector<Math::Vector3>());
+					Animation->KeyPositions.push_back(std::unordered_map<int, Math::Vector3>());
 					int i = 0;
 
 					if (node->getCurve(i)) {
 
-						if (Animation->KeyPosCount == 0)
-							Animation->KeyPosCount = node->getCurve(i)->getKeyCount();
-
 						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
 							Math::Vector3 Position;
+							int keyPosition = -1;
 							for (i = 0; i < 3; i++) {
 								Position[i] = node->getCurve(i)->getKeyValue()[p] * 0.01f;
+								if (i == 0)
+								{
+									auto value = ofbx::fbxTimeToSeconds(node->getCurve(i)->getKeyTime()[p]);
+									keyPosition = (int)(value * FileFrameRate);
+								}
 							}
 							i = 0;
-							Animation->KeyPositions.back().push_back(Position);
+							Animation->KeyPositions.back()[keyPosition] = (Position);
 						}
 					}
 				}
 				else if (!std::strcmp(node->name, "R")) {
 					// Add a new vector of Math::Quaternion to the KeyRotations field
-					Animation->KeyRotations.push_back(std::vector<Math::Quaternion>());
+					Animation->KeyRotations.push_back(std::unordered_map<int, Math::Quaternion>());
 					int i = 0;
 
 					if (node->getCurve(i)) {
 
-						if (Animation->KeyRotCount == 0)
-							Animation->KeyRotCount = node->getCurve(i)->getKeyCount();
-
 						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
 							Math::Vector3 Rotation;
+							int keyPosition = -1;
 							for (i = 0; i < 3; i++) {
 								Rotation[i] = node->getCurve(i)->getKeyValue()[p];
+								if (i == 0)
+								{
+									auto value = ofbx::fbxTimeToSeconds(node->getCurve(i)->getKeyTime()[p]);
+									keyPosition = (int)(value * FileFrameRate);
+								}
 							}
 							i = 0;
-							Animation->KeyRotations.back().push_back(Rotation.ToQuaternion());
+							Animation->KeyRotations.back()[keyPosition] = (Rotation.ToQuaternion());
 						}
 					}
 				}
 
 			}
+			Animation->Initialize();
 			Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
 		}
 	}

@@ -31,10 +31,10 @@ void Core::Components::AnimationComponent::Update()
 		}
 
 		_currentTime += ImGui::GetIO().DeltaTime * 30;
-		if (_currentTime > _currentAnimation->KeyRotCount)
+		if (_currentTime > _currentAnimation->KeyCount)
 			_currentTime = 0;
 		else if (_currentTime <= 0)
-			_currentTime = (float)_currentAnimation->KeyRotCount;
+			_currentTime = (float)_currentAnimation->KeyCount;
 	}
 }
 

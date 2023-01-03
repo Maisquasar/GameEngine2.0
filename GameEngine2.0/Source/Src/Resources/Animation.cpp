@@ -1,11 +1,98 @@
 #include "Include/Resources/Animation.h"
 
+#include <algorithm>
+
 Resources::Animation::Animation() {}
 
 Resources::Animation::~Animation() {}
 
+
 void Resources::Animation::Initialize()
 {
+	auto max_size_position = [&](const std::vector < std::unordered_map<int, Math::Vector3>>& a) -> int
+	{
+		int max = 0;
+
+		for (int x = 0; x < a.size(); x++)
+		{
+			for (auto i : a[x])
+			{
+				max = std::max(i.first, max);
+			}
+		}
+		return max;
+	};
+
+	auto max_size_rotation = [&](const std::vector < std::unordered_map<int, Math::Quaternion>>& a) -> int
+	{
+		int max = 0;
+
+		for (int x = 0; x < a.size(); x++)
+		{
+			for (auto i : a[x])
+			{
+				max = std::max(i.first, max);
+			}
+		}
+		return max;
+	};
+
+	auto nearest_values_pos = [&](const std::unordered_map<int, Math::Vector3>& m, int target) -> std::pair<int, int>
+	{
+		int lower = -1, upper = -1;
+		for (auto i : m) {
+			if (i.first < target) {
+				lower = i.first;
+			}
+			else if (i.first > target) {
+				upper = i.first;
+				break;
+			}
+		}
+		return std::make_pair(lower, upper);
+	};
+
+	auto nearest_values_rot = [&](const std::unordered_map<int, Math::Quaternion>& m, int target) -> std::pair<int, int>
+	{
+		int lower = -1, upper = -1;
+		for (auto i : m) {
+			if (i.first < target) {
+				lower = i.first;
+			}
+			else if (i.first > target) {
+				upper = i.first;
+				break;
+			}
+		}
+		return std::make_pair(lower, upper);
+	};
+
+	KeyCount = std::max(max_size_rotation(KeyRotations), max_size_position(KeyPositions));
+	for (int i = 0; i < KeyCount; i++)
+	{
+		for (auto& Key : KeyPositions)
+		{
+			if (Key.find(i) == Key.end())
+			{
+				auto nearests = nearest_values_pos(Key, i);
+				int lower = nearests.first;
+				int upper = nearests.second;
+				Key[i] = Math::Vector3::Lerp(Key[lower], Key[upper], (float)i / (float)KeyCount);
+			}
+
+		}
+		for (auto& Key : KeyRotations)
+		{
+			if (Key.find(i) == Key.end())
+			{
+				auto nearests = nearest_values_rot(Key, i);
+				int lower = nearests.first;
+				int upper = nearests.second;
+				Key[i] = Math::Quaternion::SLerp(Key[lower], Key[upper], (float)i / (float)KeyCount);
+			}
+
+		}
+	}
 }
 
 void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vector3& Position, Math::Quaternion& Rotation)
@@ -26,7 +113,7 @@ void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vector3& Pos
 		}
 		else if (KeyPositions.size() > id && KeyPositions[id].size() > 0)
 		{
-			Position = KeyPositions[id].back();
+			Position = KeyPositions[id].begin()->second;
 		}
 
 		// Rotation
@@ -43,7 +130,7 @@ void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vector3& Pos
 		}
 		else if (KeyRotations.size() > id && KeyRotations[id].size() > 0)
 		{
-			Rotation = KeyRotations[id].back();
+			Rotation = KeyRotations[id].begin()->second;
 		}
 	}
 }

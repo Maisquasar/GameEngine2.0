@@ -1,6 +1,7 @@
 #pragma once
 #include "IResource.h"
 #include <vector>
+#include <unordered_map>
 #include "Include/Math/Math.h"
 
 
@@ -16,12 +17,16 @@ namespace Resources
 
 		void GetAnimAtFrame(int id, float time, Math::Vector3& Position, Math::Quaternion& Rotation);
 
-		size_t KeyPosCount = 0;
-		size_t KeyRotCount = 0;
+		float FrameRate = 0;
 
+		size_t KeyCount = 0;
+		int BonesCount = 0;
 
-		std::vector < std::vector<Math::Vector3>> KeyPositions;
-		std::vector < std::vector<Math::Quaternion>> KeyRotations;
+		// List of all Bones, With all Key Inside with :
+		// - first = Current Keyframe
+		// - second = Transform at this keyFrame
+		std::vector < std::unordered_map<int, Math::Vector3>> KeyPositions;
+		std::vector < std::unordered_map<int, Math::Quaternion>> KeyRotations;
 	private:
 	};
 }
