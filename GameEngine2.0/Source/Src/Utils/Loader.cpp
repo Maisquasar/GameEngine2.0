@@ -2,6 +2,7 @@
 
 #include <OpenFBX/ofbx.h>
 #include "Include/App.h"
+#include "Include/Resources/Mesh.h"
 
 void Utils::Loader::SkipLine(const char* data, uint32_t& pos)
 {
@@ -361,6 +362,25 @@ void Utils::Loader::LoadMaterial(std::string path)
 
 static float FileFrameRate = 0;
 
+void MutlithreadLoad(ofbx::IScene* Scene, std::string path)
+{
+	if (Scene) {
+		FileFrameRate = Scene->getSceneFrameRate();
+		int count = Scene->getMeshCount();
+		for (int i = 0; i < count; i++)
+			Utils::Loader::LoadMesh(Scene->getMesh(i), path);
+
+		printf("================ %s ================\n", path.c_str());
+		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
+		{
+			Utils::Loader::LoadAnimation(Scene->getAnimationStack(i), path);
+			break;
+		}
+		printf("====================================\n");
+		Scene->destroy();
+	}
+}
+
 void Utils::Loader::FBXLoad(std::string path)
 {
 	uint32_t size;
@@ -371,21 +391,10 @@ void Utils::Loader::FBXLoad(std::string path)
 		return;
 	}
 	ofbx::IScene* Scene = ofbx::load(data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
-	FileFrameRate = Scene->getSceneFrameRate();
-	if (Scene) {
-		int count = Scene->getMeshCount();
-		for (int i = 0; i < count; i++)
-			LoadMesh(Scene->getMesh(i), path);
 
-		printf("================ %s ================\n", path.c_str());
-		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
-		{
-			LoadAnimation(Scene->getAnimationStack(i), path);
-		}
-		printf("====================================\n");
-	}
+	Application.ThreadManager.QueueJob(&MutlithreadLoad, Scene, path);
+
 	delete[] data;
-	Scene->destroy();
 }
 
 #include "Include/Resources/SkeletalMesh.h"
@@ -395,7 +404,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 	// Set-Up Mesh
 	bool HasSkeleton = mesh->getGeometry()->getSkin() != nullptr;
 	Resources::Mesh* Mesh = nullptr;
-	if (!HasSkeleton)
+	if (!HasSkeleton) 
 		Mesh = new Resources::Mesh();
 	else
 		Mesh = new Resources::SkeletalMesh();
@@ -501,7 +510,9 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 
 		Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
 		Mesh->Loaded = true;
+#if !MULTITHREAD_LOADING
 		Mesh->Initialize();
+#endif
 	}
 
 	if (auto skin = mesh->getGeometry()->getSkin())
@@ -572,7 +583,6 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 		else { root = bone; }
 
 		bone->DefaultMatrix = bone->Transform.GetModelMatrix().CreateInverseMatrix();
-
 
 		Bones.push_back(bone);
 	}
@@ -647,9 +657,12 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 
 	Application.GetResourceManager()->Add<Resources::SkeletalMesh>(mesh->GetPath(), mesh);
 	mesh->Loaded = true;
+#if !MULTITHREAD_LOADING
 	mesh->Initialize();
+#endif
 	mesh->SetShader(Application.GetResourceManager()->GetDefaultAnimShader());
 
+	NewSkel->SetInitialized();
 	Application.GetResourceManager()->Add(NewSkel->GetPath(), NewSkel);
 }
 
@@ -662,7 +675,7 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 	for (int i = 0; i < 3; i++) {
 		if (Animation)
 			break;
-		Animation = (new Resources::Animation());
+		Animation = new Resources::Animation();
 		auto name = path.substr(path.find_last_of('/') + 1);
 		name = name + "::" + "Anim";
 		path = path + "::" + "Anim";

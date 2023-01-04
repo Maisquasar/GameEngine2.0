@@ -93,6 +93,7 @@ void Resources::Animation::Initialize()
 
 		}
 	}
+	SetInitialized();
 }
 
 void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vector3& Position, Math::Quaternion& Rotation)

@@ -1,5 +1,6 @@
 #pragma once
 #include "IResource.h"
+#include "Include/Debug/Line.h"
 #include "Include/Core/Transform.h"
 #include "Include/Core/Node.h"
 
@@ -31,6 +32,8 @@ public:
 	Math::Vector3 DefaultPosition;
 	Math::Quaternion DefaultRotation;
 	Math::Matrix4 DefaultMatrix;
+
+	Debug::Line DebugLine;
 private:
 
 };

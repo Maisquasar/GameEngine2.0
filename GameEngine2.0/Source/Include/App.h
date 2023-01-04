@@ -63,6 +63,7 @@ private:
 	double currentFrame = 0;
 	double _lastFrame = 0;
 	double _deltaTime = 0;
+	bool _isClosingApplication = false;
 
 	const char* _windowName = "GameEngine2.0";
 	bool _everythingIsLoaded = false;

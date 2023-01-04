@@ -42,9 +42,7 @@ void Bone::DrawDebug()
 		auto pos = child->Transform.GetWorldPosition();
 		auto pos2 = Transform.GetWorldPosition();
 
-		Debug::Line line(pos, pos2, 1);
-		line.Initialize();
-		line.Draw();
+		DebugLine.Draw(pos, pos2);
 		child->DrawDebug();
 	}
 }

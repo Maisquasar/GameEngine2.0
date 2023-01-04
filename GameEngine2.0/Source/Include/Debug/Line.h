@@ -14,7 +14,7 @@ namespace Debug {
 		~Line();
 		
 		void Initialize();
-		void Draw();
+		void Draw(Math::Vector3 p1, Math::Vector3 p2);
 	private:
 		Math::Vector3 _point1;
 		Math::Vector3 _point2;
@@ -23,6 +23,7 @@ namespace Debug {
 		unsigned int _VAO;
 		unsigned int _VBO;
 		Resources::Shader* _shader;
+		bool _initialized = false;
 
 	};
 }

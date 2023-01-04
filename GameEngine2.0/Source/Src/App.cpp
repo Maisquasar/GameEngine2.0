@@ -290,11 +290,6 @@ void App::MultiThreadLoad()
 	// TODO: Optimize it (create a list with all uninitialize)
 	if (_everythingIsLoaded)
 		return;
-	// Waiting 10 seconds until cancel it.
-	if (currentFrame >= 10)
-	{
-		_everythingIsLoaded = true;
-	}
 	size_t loaded = 0, total = 0;
 	for (auto res : _resourceManager.GetAllResources())
 	{
@@ -335,9 +330,20 @@ void App::MultiThreadLoad()
 		}
 		if (res.second->IsInitialized())
 			loaded++;
+		else
+		{
+			int x = 0;
+		}
 		total++;
 	}
 	total += this->MultiThreadMeshes.size();
+
+	if (ImGui::Begin("##")) {
+		float fraction = (float)loaded / (float)total;
+		ImGui::ProgressBar(fraction);
+	}
+	ImGui::End();
+
 	if (loaded == total)
 		_everythingIsLoaded = true;
 
@@ -346,9 +352,6 @@ void App::MultiThreadLoad()
 
 void App::BeginFrame()
 {
-#if MULTITHREAD_LOADING
-	MultiThreadLoad();
-#endif
 	// Begin Frame
 	glfwPollEvents();
 	ImGui_ImplOpenGL3_NewFrame();
@@ -366,9 +369,9 @@ void App::Update()
 	Components.Initialize();
 	_editorUi.Initialize();
 	_scene.Initialize();
-
+	
 	// Main loop
-	while (!glfwWindowShouldClose(_window) && !_shouldClose)
+	while (!((glfwWindowShouldClose(_window) || _shouldClose) && _everythingIsLoaded))
 	{
 		BeginFrame();
 
@@ -379,6 +382,10 @@ void App::Update()
 		_input.Update();
 
 		_framebuffer.Draw();
+
+#if MULTITHREAD_LOADING
+		MultiThreadLoad();
+#endif
 
 		EndFrame();
 	}

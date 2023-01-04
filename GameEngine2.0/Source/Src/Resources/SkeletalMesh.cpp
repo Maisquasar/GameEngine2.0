@@ -88,7 +88,7 @@ void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outli
 			continue;
 		glDepthRange(0.01, 1.0);
 		glUseProgram(Sub.Material->GetShader()->Program);
-		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MAXBONEWEIGHT), MAX_BONE_WEIGHT);
+		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MAXBONEWEIGHT), skel->GetMaxBoneWeight());
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);
