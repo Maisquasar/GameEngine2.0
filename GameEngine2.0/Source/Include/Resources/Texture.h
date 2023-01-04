@@ -15,6 +15,8 @@ namespace Resources {
 
 		void Load(std::string filename) override;
 
+		void LoadFromMemory(unsigned char* data, int len);
+
 		void MultiThreadLoading(std::string filename);
 
 		void Initialize() override;

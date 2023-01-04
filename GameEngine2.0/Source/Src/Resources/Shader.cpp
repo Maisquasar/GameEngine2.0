@@ -116,6 +116,7 @@ void Resources::Shader::Initialize()
 	_location[Location::L_PROJECTIONMATRIX] = glGetUniformLocation(Program, "ProjectionMatrix");
 	_location[Location::L_MODELVIEWMATRIX] = glGetUniformLocation(Program, "ModelViewMatrix");
 	_location[Location::L_SKINNINGMATRICES] = glGetUniformLocation(Program, "SkinningMatrices");
+	_location[Location::L_MAXBONEWEIGHT] = glGetUniformLocation(Program, "MaxBoneWeight");
 	_initialized = true;
 }
 

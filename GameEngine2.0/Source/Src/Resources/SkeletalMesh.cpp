@@ -28,27 +28,38 @@ void Resources::SkeletalMesh::Initialize()
 	if (!Vertices.empty()) {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * Vertices.size(), Vertices.data(), GL_STATIC_DRAW);
 
+		bool over4 = MAX_BONE_WEIGHT > 4;
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * _indices.size(), _indices.data(), GL_STATIC_DRAW);
 
+		int size = 3 + 3 + 2 + 3 + (over4 ? 16 : 8);
+
 		// position attribute
-		glVertexAttribPointer(0U, 3, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0U, 3, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0U);
 		// normal attribute
-		glVertexAttribPointer(1U, 3, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[3])));
+		glVertexAttribPointer(1U, 3, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)(sizeof(float[3])));
 		glEnableVertexAttribArray(1U);
 		// texture coord attribute
-		glVertexAttribPointer(2U, 2, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[6])));
+		glVertexAttribPointer(2U, 2, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)(sizeof(float[6])));
 		glEnableVertexAttribArray(2U);
 
-		glVertexAttribPointer(3U, 3, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[8])));
+		glVertexAttribPointer(3U, 3, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)(sizeof(float[8])));
 		glEnableVertexAttribArray(3U);
 
-		glVertexAttribPointer(4U, 4, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[11])));
+		glVertexAttribPointer(4U, 4, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)(sizeof(float[11])));
 		glEnableVertexAttribArray(4U);
 
-		glVertexAttribPointer(5U, 4, GL_FLOAT, GL_FALSE, 19 * sizeof(float), (void*)(sizeof(float[15])));
+		glVertexAttribPointer(5U, 4, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)(sizeof(float[15])));
 		glEnableVertexAttribArray(5U);
+		if (over4) {
+
+			glVertexAttribPointer(6U, 4, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)(sizeof(float[19])));
+			glEnableVertexAttribArray(6U);
+
+			glVertexAttribPointer(7U, 4, GL_FLOAT, GL_FALSE, size * sizeof(float), (void*)(sizeof(float[23])));
+			glEnableVertexAttribArray(7U);
+		}
 	}
 	_initialized = true;
 }
@@ -77,6 +88,7 @@ void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outli
 			continue;
 		glDepthRange(0.01, 1.0);
 		glUseProgram(Sub.Material->GetShader()->Program);
+		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MAXBONEWEIGHT), MAX_BONE_WEIGHT);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);

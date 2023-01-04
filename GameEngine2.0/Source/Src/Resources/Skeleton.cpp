@@ -53,11 +53,11 @@ void Bone::DrawDebug()
 void Bone::UpdateBone(Resources::Animation* anim, float time)
 {
 	Math::Vector3 Position = DefaultPosition;
-	Math::Quaternion Rotation = Math::Quaternion::Identity();
+	Math::Quaternion Rotation;
 	anim->GetAnimAtFrame(Id, time, Position, Rotation);
 
 	Transform.SetLocalPosition(Position);
-	Transform.SetLocalRotation(Rotation);
+	Transform.SetLocalRotation(DefaultRotation * Rotation);
 
 	for (auto child : Childrens)
 		child->UpdateBone(anim, time);

@@ -14,7 +14,6 @@ namespace Resources {
 		SkeletalMesh* Clone() const {
 			return new SkeletalMesh(static_cast<SkeletalMesh const&>(*this));
 		}
-	private:
 
 	};
 }

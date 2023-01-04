@@ -29,7 +29,8 @@ namespace Resources
 		L_COLOR,
 		L_PROJECTIONMATRIX,
 		L_MODELVIEWMATRIX,
-		L_SKINNINGMATRICES
+		L_SKINNINGMATRICES,
+		L_MAXBONEWEIGHT
 	};
 
 	class Shader : public BaseResource<Shader>

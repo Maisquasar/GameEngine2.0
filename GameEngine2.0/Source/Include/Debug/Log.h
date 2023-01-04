@@ -56,4 +56,5 @@ namespace Debug {
 #define PrintError(x, ...) Debug::Log::Print(__FILENAME__, __LINE__, Debug::LogType::WARNING, x, __VA_ARGS__);
 #define Serialize(Variable) (#Variable)
 #define Cast(T,x) dynamic_cast<T*>(x)
-#define MULTITHREAD_LOADING 1
+#define MULTITHREAD_LOADING true
+#define MAX_BONE_WEIGHT 8 // Need to be % 4

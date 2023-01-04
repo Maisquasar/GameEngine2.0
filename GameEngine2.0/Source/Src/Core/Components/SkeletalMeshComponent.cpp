@@ -54,6 +54,11 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 		SetSkeleton(skel);
 	}
 	ImGui::SameLine();
+	if (Skeleton)
+	{
+		ImGui::Text("| Bones %d", Skeleton->BoneCount);
+	}
+	ImGui::SameLine();
 	if (ImGui::Button("Reset") && Skeleton && Skeleton->RootBone)
 	{
 		Skeleton->RootBone->RemoveFromParent();

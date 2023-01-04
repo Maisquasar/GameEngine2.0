@@ -1,4 +1,6 @@
 #include "..\..\Include\Utils\Loader.h"
+
+#include <OpenFBX/ofbx.h>
 #include "Include/App.h"
 
 void Utils::Loader::SkipLine(const char* data, uint32_t& pos)
@@ -359,7 +361,6 @@ void Utils::Loader::LoadMaterial(std::string path)
 
 static float FileFrameRate = 0;
 
-#include <OpenFBX/ofbx.h>
 void Utils::Loader::FBXLoad(std::string path)
 {
 	uint32_t size;
@@ -376,10 +377,12 @@ void Utils::Loader::FBXLoad(std::string path)
 		for (int i = 0; i < count; i++)
 			LoadMesh(Scene->getMesh(i), path);
 
-		if (Scene->getAnimationStackCount() >= 1)
+		printf("================ %s ================\n", path.c_str());
+		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
 		{
-			LoadAnimation(Scene->getAnimationStack(0), path);
+			LoadAnimation(Scene->getAnimationStack(i), path);
 		}
+		printf("====================================\n");
 	}
 	delete[] data;
 	Scene->destroy();
@@ -390,9 +393,7 @@ void Utils::Loader::FBXLoad(std::string path)
 void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 {
 	// Set-Up Mesh
-	bool HasSkeleton = false;
-	if (mesh->getGeometry()->getSkin())
-		HasSkeleton = true;
+	bool HasSkeleton = mesh->getGeometry()->getSkin() != nullptr;
 	Resources::Mesh* Mesh = nullptr;
 	if (!HasSkeleton)
 		Mesh = new Resources::Mesh();
@@ -432,6 +433,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 				std::string matName = mesh->getMaterial((int)lastMaterial)->name;
 				std::string matPath = Mesh->GetPath().substr(0, Mesh->GetPath().find_last_of('/') + 1) + matName + ".mat";
 				mat = Application.GetResourceManager()->Get<Resources::Material>(matPath.c_str());
+
 				if (!mat)
 				{
 					mat = Application.GetResourceManager()->Create<Resources::Material>(matPath.c_str());
@@ -542,7 +544,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 
 		// Set Up Transform
 		auto pos = link->getLocalTranslation();
-		auto rot = link->getLocalRotation();
+		auto rot = link->getPreRotation();
 		auto sca = link->getLocalScaling();
 
 		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z) * 0.01f;
@@ -616,22 +618,32 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 		mesh->Vertices.push_back(0);
 		mesh->Vertices.push_back(0);
 		mesh->Vertices.push_back(0);
-		mesh->Vertices.push_back((float)getIndices(i, 0));
-		mesh->Vertices.push_back((float)getIndices(i, 1));
-		mesh->Vertices.push_back((float)getIndices(i, 2));
-		mesh->Vertices.push_back((float)getIndices(i, 3));
-		mesh->Vertices.push_back(getWeight(i, 0));
-		mesh->Vertices.push_back(getWeight(i, 1));
-		mesh->Vertices.push_back(getWeight(i, 2));
-		mesh->Vertices.push_back(getWeight(i, 3));
+		for (int j = 0; j < 4; j++) {
+			mesh->Vertices.push_back((float)getIndices(i, j));
+		}
+		for (int j = 0; j < 4; j++) {
+			mesh->Vertices.push_back(getWeight(i, j));
+		}
+		if (MAX_BONE_WEIGHT > 4)
+		{
+			for (int j = 4; j < 8; j++) {
+				mesh->Vertices.push_back((float)getIndices(i, j));
+			}
+			for (int j = 4; j < 8; j++) {
+				mesh->Vertices.push_back(getWeight(i, j));
+			}
+		}
+
 	}
 	// Find the maximum size of a vector in the map
 	auto result = std::max_element(BoneWeight.begin(), BoneWeight.end(), [](const auto& p1, const auto& p2) {
 		return p1.second.size() < p2.second.size();
 		});
 
-	if (result->second.size() > 4)
-		LOG(Debug::LogType::L_ERROR, "Skeletal Mesh %s is over 4 bone weight", mesh->GetPath().c_str());
+	if (result->second.size() > MAX_BONE_WEIGHT)
+		LOG(Debug::LogType::L_ERROR, "Skeletal Mesh %s is over %d bone weight", mesh->GetPath().c_str(), MAX_BONE_WEIGHT);
+
+	NewSkel->SetMaxBoneWeight((int)result->second.size());
 
 	Application.GetResourceManager()->Add<Resources::SkeletalMesh>(mesh->GetPath(), mesh);
 	mesh->Loaded = true;
@@ -646,7 +658,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string path)
 {
 	Resources::Animation* Animation = nullptr;
-
+	printf("%s \n", stack->name);
 	for (int i = 0; i < 3; i++) {
 		if (Animation)
 			break;

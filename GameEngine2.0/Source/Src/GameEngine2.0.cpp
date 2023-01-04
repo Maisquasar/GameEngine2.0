@@ -21,11 +21,14 @@ int main()
 	// |
 	// V
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
-	//_CrtSetBreakAlloc(2694332);
+	//_CrtSetBreakAlloc(197822);
 	Main();
 	return 0;
 }
 
-//TODO : 
-//      - Split Bone into an other file.
-//      - Fix animation bug.
+//TODO: Lights
+//TODO: Fix Animation Translation
+//TODO: Loading Texture from FBX files
+//TODO: Fix Animation for other exportation than mixamo
+//TODO: Load Texture with fbx
+//TODO: Fix Leaks

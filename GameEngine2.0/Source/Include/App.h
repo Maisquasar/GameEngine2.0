@@ -95,6 +95,3 @@ private:
 };
 
 extern App Application;
-
-//TODO: Lights
-//TODO: Fix Animation Translation

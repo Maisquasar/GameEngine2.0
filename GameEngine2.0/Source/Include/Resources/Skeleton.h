@@ -52,7 +52,11 @@ namespace Resources {
 		std::vector<Bone*> Bones;
 
 		size_t BoneCount = 0;
+
+		void SetMaxBoneWeight(int i) { _maxBoneWeight = i; }
+		int GetMaxBoneWeight() { return _maxBoneWeight; }
 	private:
+		int _maxBoneWeight = 0;
 
 	};
 }
