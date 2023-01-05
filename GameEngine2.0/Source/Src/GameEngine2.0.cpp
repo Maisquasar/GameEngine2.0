@@ -31,4 +31,4 @@ int main()
 //TODO: Loading Texture from FBX files
 //TODO: Fix Animation for other exportation than mixamo
 //TODO: Load Texture with fbx
-//TODO: Fix Leaks
+//TODO: Draw Picking for Icons
