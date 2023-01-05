@@ -80,16 +80,6 @@ namespace Resources {
 			_resource[newName] = res;
 		}
 
-		void RecompileShaders();
-
-		Shader* GetDefaultShader();
-		Shader* GetDefaultAnimShader();
-		Shader* GetPickingShader();
-		Shader* GetPickingAnimShader();
-		Shader* GetBillboardShader();
-		Mesh* GetDefaultCube();
-		Mesh* GetDefaultPlane();
-
 		template<typename T> T* ResourcesPopup(const char* popupName)
 		{
 			T* out = nullptr;
@@ -121,6 +111,20 @@ namespace Resources {
 			}
 			return out;
 		}
+
+		void LoadDefaultsResources();
+
+		void RecompileShaders();
+
+		Shader* GetDefaultShader();
+		Shader* GetDefaultAnimShader();
+		Shader* GetPickingShader();
+		Shader* GetPickingAnimShader();
+		Shader* GetBillboardShader();
+		Shader* GetBillboardPickingShader();
+		Mesh* GetDefaultCube();
+		Mesh* GetDefaultPlane();
+
 		std::unordered_map<std::string, Resources::IResource*> GetAllResources() { return _resource; }
 		std::unordered_map<std::string, Resources::IResource*>* GetAllResourcesPtr() { return &_resource; }
 		int TextureIndex = 0;

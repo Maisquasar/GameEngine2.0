@@ -15,8 +15,6 @@ Render::EditorIcon::~EditorIcon() {
 
 void Render::EditorIcon::Initialize(std::string MatName)
 {
-	//Plane = Cast(Resources::Mesh, Application.GetResourceManager()->GetDefaultPlane()->Clone());
-	//auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>("Assets/Default/Models/Mario.obj::Mario");
 	auto mesh = Application.GetResourceManager()->GetDefaultPlane();
 	Plane = new Resources::BillBoard(*static_cast<Resources::BillBoard*>(mesh));
 	Plane->SubMeshes[0].Material = Application.GetResourceManager()->Get<Resources::Material>(MatName.c_str());
@@ -28,7 +26,7 @@ void Render::EditorIcon::Draw(Math::Matrix4 VP, Core::Transform transform)
 {
 	if (!Plane)
 		return;
-	Plane->Update(GetMVP(VP, transform), transform.GetWorldPosition());
+	Plane->Update(GetMVP(VP, transform));
 }
 
 
@@ -37,7 +35,12 @@ void Render::EditorIcon::DrawPicking(Math::Matrix4 VP, Core::Transform transform
 	Plane->DrawPicking(GetMVP(VP, transform), id);
 }
 
-Math::Matrix4 Render::EditorIcon::GetMVP(Math::Matrix4 VP, Core::Transform transform)
+void Render::EditorIcon::SetSize(Math::Vector2 size)
+{
+	if (Plane) Plane->SetSize(size);
+}
+
+Math::Matrix4 Render::EditorIcon::GetMVP(const Math::Matrix4& VP, Core::Transform& transform)
 {
 	return VP * transform.GetModelMatrix();
 }

@@ -191,6 +191,8 @@ void App::LoadResources()
 		_resourceManager.Create<Resources::Shader>(entry.path().generic_string().data());
 	}
 
+	_resourceManager.LoadDefaultsResources();
+
 	// Set-Up Default Resources.
 	auto defaultMat = new Resources::Material();
 	defaultMat->SetEditable(false);

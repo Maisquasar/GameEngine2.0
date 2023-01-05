@@ -34,7 +34,6 @@ namespace Resources
 		L_CAMUP,
 		L_CAMRIGHT,
 		L_BILLSIZE,
-		L_BILLPOS,
 	};
 
 	class Shader : public BaseResource<Shader>
@@ -44,7 +43,9 @@ namespace Resources
 		~Shader();
 		int Program = -1;
 		int VertexShader = 0;
+		std::string VertexPath;
 		int FragmentShader = 0;
+		std::string FragmentPath;
 
 		// Set Vertex Shader.S
 		bool SetShader(std::string filename);

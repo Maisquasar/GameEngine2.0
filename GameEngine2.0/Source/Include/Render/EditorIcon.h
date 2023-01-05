@@ -23,10 +23,11 @@ namespace Render {
 		void Initialize(std::string TextName);
 		void Draw(Math::Matrix4 VP, Core::Transform transform);
 		void DrawPicking(Math::Matrix4 MVP, Core::Transform transform, int id);
+		void SetSize(Math::Vector2 size);
 
 		Resources::BillBoard* Plane = nullptr;
 
-		Math::Matrix4 GetMVP(Math::Matrix4 VP, Core::Transform transform);
+		Math::Matrix4 GetMVP(const Math::Matrix4& VP, Core::Transform& transform);
 
 		void SetIconSize(float size) { IconSize = size; }
 	private:

@@ -15,6 +15,25 @@ Resources::ResourceManager::~ResourceManager()
 	_resource.clear();
 }
 
+void Resources::ResourceManager::LoadDefaultsResources()
+{
+	auto billboardPicking = new Resources::Shader();
+
+	billboardPicking->SetPath("Assets/Default/Shaders/BillboardPickingShader");
+	billboardPicking->SetName("BillboardPickingShader");
+
+	auto billboardShad = GetBillboardShader();
+	auto pickingShad = GetPickingShader();
+
+	billboardPicking->SetShader(billboardShad->VertexPath);
+	billboardPicking->SetFragmentShader(pickingShad->FragmentPath);
+
+	billboardPicking->Link();
+	billboardPicking->Initialize();
+
+	Add(billboardPicking->GetPath(), billboardPicking);
+}
+
 void Resources::ResourceManager::RecompileShaders()
 {
 	for (auto resources : _resource)
@@ -50,6 +69,11 @@ Resources::Shader* Resources::ResourceManager::GetPickingAnimShader()
 Resources::Shader* Resources::ResourceManager::GetBillboardShader()
 {
 	return Get<Resources::Shader>("Assets/Default/Shaders/BillboardShader");
+}
+
+Resources::Shader* Resources::ResourceManager::GetBillboardPickingShader()
+{
+	return Get<Resources::Shader>("Assets/Default/Shaders/BillboardPickingShader");
 }
 
 Resources::Mesh* Resources::ResourceManager::GetDefaultCube()

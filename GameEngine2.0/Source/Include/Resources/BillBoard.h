@@ -8,7 +8,8 @@ namespace Resources
 		BillBoard();
 		~BillBoard();
 
-		void Update(Math::Matrix4 MVP, Math::Vector3 pos, bool outline = false);
+		void Update(Math::Matrix4 MVP, bool outline = false) override;
+		void DrawPicking(Math::Matrix4 MVP, int id) override;
 
 		BillBoard* Clone() const {
 			return new BillBoard(static_cast<BillBoard const&>(*this));

@@ -11,7 +11,7 @@ Resources::Shader::~Shader()
 
 bool Resources::Shader::SetShader(std::string filename)
 {
-	filename += "/vertex.glsl";
+	VertexPath = filename;
 	std::string tmp = ReadFile(filename);
 	const char* vertexShaderSources = tmp.c_str();
 	VertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -33,7 +33,7 @@ bool Resources::Shader::SetShader(std::string filename)
 }
 bool Resources::Shader::SetFragmentShader(std::string filename)
 {
-	filename += "/fragment.glsl";
+	FragmentPath = filename;
 	std::string tmp = ReadFile(filename);
 	const char* fragmentShaderSource = tmp.c_str();
 	int success;
@@ -58,7 +58,7 @@ bool Resources::Shader::SetFragmentShader(std::string filename)
 
 void Resources::Shader::Load(std::string filename)
 {
-	if (SetShader(_path) && SetFragmentShader(_path))
+	if (SetShader(_path + "/vertex.glsl") && SetFragmentShader(_path + "/fragment.glsl"))
 	{
 		Link();
 	}
@@ -69,8 +69,8 @@ void Resources::Shader::Load(std::string filename)
 
 void Resources::Shader::Recompile()
 {
-	SetShader(this->GetPath());
-	SetFragmentShader(this->GetPath());
+	SetShader(VertexPath);
+	SetFragmentShader(FragmentPath);
 	Link();
 	PrintLog("Shader %s Recompiled !", this->GetPath().c_str());
 }
@@ -117,7 +117,6 @@ void Resources::Shader::Initialize()
 	_location[Location::L_MODELVIEWMATRIX] = glGetUniformLocation(Program, "ModelViewMatrix");
 	_location[Location::L_SKINNINGMATRICES] = glGetUniformLocation(Program, "SkinningMatrices");
 	_location[Location::L_MAXBONEWEIGHT] = glGetUniformLocation(Program, "MaxBoneWeight");
-	_location[Location::L_BILLPOS] = glGetUniformLocation(Program, "BillPos");
 	_location[Location::L_BILLSIZE] = glGetUniformLocation(Program, "BillSize");
 	_location[Location::L_CAMUP] = glGetUniformLocation(Program, "CamUp");
 	_location[Location::L_CAMRIGHT] = glGetUniformLocation(Program, "CamRight");
