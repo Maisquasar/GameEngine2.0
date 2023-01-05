@@ -80,7 +80,7 @@ void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outli
 	glStencilFunc(GL_ALWAYS, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	auto MV = Application.GetScene()->GetCameraEditor()->GetViewMatrix() * M;
+	auto MV = Application.GetScene()->GetCameraEditor()->GetViewMatrix();
 	auto P = Application.GetScene()->GetCameraEditor()->GetProjection();
 	for (auto Sub : SubMeshes)
 	{
@@ -140,7 +140,7 @@ void Resources::SkeletalMesh::DrawPicking(Math::Matrix4 M, Skeleton* skel, int i
 	int r = (id & 0x000000FF) >> 0;
 	int g = (id & 0x0000FF00) >> 8;
 	int b = (id & 0x00FF0000) >> 16;
-	auto MV = M * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
+	auto MV = Application.GetScene()->GetCameraEditor()->GetViewMatrix();
 	auto P = Application.GetScene()->GetCameraEditor()->GetProjection();
 	for (const auto& Sub : this->SubMeshes)
 	{

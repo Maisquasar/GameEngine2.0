@@ -27,8 +27,6 @@ int main()
 }
 
 //TODO: Lights
-//TODO: Fix Animation Translation
 //TODO: Loading Texture from FBX files
 //TODO: Fix Animation for other exportation than mixamo
-//TODO: Load Texture with fbx
-//TODO: Draw Picking for Icons
+//TODO: Particles

@@ -18,7 +18,7 @@ namespace Core
 		Node* Parent = nullptr;
 
 		void ComputeModelMatrix();
-		void ComputeModelMatrix(Math::Matrix4);
+		void ComputeModelMatrix(const Math::Matrix4&);
 
 		// World Setters
 		void SetWorldPosition(Math::Vector3);

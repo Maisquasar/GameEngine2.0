@@ -44,3 +44,4 @@ void main()
     Normal = aNormal;
     TexCoord = aTexCoord;
 }
+

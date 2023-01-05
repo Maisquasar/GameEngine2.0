@@ -15,7 +15,7 @@ void Core::Transform::ComputeModelMatrix()
 	_dirty = false;
 }
 
-void Core::Transform::ComputeModelMatrix(Math::Matrix4 parent)
+void Core::Transform::ComputeModelMatrix(const Math::Matrix4& parent)
 {
 	_modelMatrix = parent * GetLocalModelMatrix();
 	_dirty = false;
@@ -187,7 +187,7 @@ bool DrawVec3Control(const std::string& label, float* values, float resetValue =
 
 	ImGui::Columns(2);
 	ImGui::SetColumnWidth(0, columnWidth);
-	ImGui::Text("%s", label.c_str());
+	ImGui::TextUnformatted(label.c_str());
 	ImGui::NextColumn();
 
 	ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());

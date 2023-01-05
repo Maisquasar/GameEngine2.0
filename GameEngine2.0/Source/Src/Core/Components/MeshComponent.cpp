@@ -65,9 +65,9 @@ void Core::Components::MeshComponent::ShowInInspector()
 					break;
 				case 1:
 					if (GetMesh()->SubMeshes[row].Material)
-						ImGui::Text(GetMesh()->SubMeshes[row].Material->GetName().c_str());
+						ImGui::TextUnformatted(GetMesh()->SubMeshes[row].Material->GetName().c_str());
 					else
-						ImGui::Text("Missing Material");
+						ImGui::TextUnformatted("Missing Material");
 					break;
 				case 2:
 					ImGui::PushID(row);
@@ -160,7 +160,7 @@ void Core::Components::MeshComponent::DrawPicking(int id)
 
 Resources::Mesh* Core::Components::MeshComponent::GetMesh()
 {
-	return dynamic_cast<Resources::Mesh*>(_currentMesh);
+	return static_cast<Resources::Mesh*>(_currentMesh);
 }
 
 void Core::Components::MeshComponent::SetMesh(Resources::IResource* mesh)
