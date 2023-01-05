@@ -9,6 +9,7 @@
 #include "Include/EditorUi/PerformanceWindow.h"
 #include "ImGui/Nodes/NodeWindow.h"
 #include "Include/EditorUi/Console.h"
+#include "Include/EditorUi/AnimationWindow.h"
 
 EditorUi::MainBar EditorUi::Editor::_mainBar;
 EditorUi::FileExplorer EditorUi::Editor::_fileExplorer;
@@ -19,6 +20,7 @@ EditorUi::ResourcesWindow EditorUi::Editor::_resourcesWindow;
 EditorUi::PerformanceWindow EditorUi::Editor::_performanceWindow;
 ImGui::NodeWindow EditorUi::Editor::_nodeWindow;
 TextEditorWindow EditorUi::Editor::_textEditor;
+EditorUi::AnimationWindow EditorUi::Editor::_animationWindow;
 
 EditorUi::Editor::Editor() {}
 
@@ -41,6 +43,7 @@ void EditorUi::Editor::Draw()
 	_fileExplorer.Draw();
 	_performanceWindow.Draw();
 	_textEditor.Draw();
+	_animationWindow.Draw();
 }
 
 void EditorUi::Editor::MainDocking()

@@ -10,6 +10,7 @@
 #include "Include/EditorUi/Inspector.h"
 #include "Include/EditorUi/ResourcesWindow.h"
 #include "Include/EditorUi/PerformanceWindow.h"
+#include "Include/EditorUi/AnimationWindow.h"
 
 
 EditorUi::MainBar::MainBar()
@@ -61,6 +62,7 @@ void EditorUi::MainBar::Draw()
 			ImGui::Checkbox("Inspector", Editor::GetInspector()->IsOpen());
 			ImGui::Checkbox("Resources", Editor::GetResourcesWindow()->IsOpen());
 			ImGui::Checkbox("Performance", Editor::GetPerformanceWindow()->IsOpen());
+			ImGui::Checkbox("Animation", Editor::GetAnimationWindow()->IsOpen());
 			ImGui::EndMenu();
 		}
 		ImGui::SetCursorPosX((float)(Application.GetWindowSize().x / 2) - 25.f);

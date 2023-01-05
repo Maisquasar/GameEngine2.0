@@ -193,6 +193,8 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 
 void Resources::Mesh::SetShader(Shader* s)
 {
+	if (!s)
+		return;
 	for (auto Sub : SubMeshes)
 	{
 		Sub.Material->SetShader(s);

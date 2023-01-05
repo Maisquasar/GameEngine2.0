@@ -97,7 +97,7 @@ namespace Resources {
 						if (ImGui::IsItemHovered())
 						{
 							ImGui::BeginTooltip();
-							ImGui::Text(res->GetPath().c_str());
+							ImGui::TextUnformatted(res->GetPath().c_str());
 							ImGui::EndTooltip();
 						}
 						ImGui::PopID();

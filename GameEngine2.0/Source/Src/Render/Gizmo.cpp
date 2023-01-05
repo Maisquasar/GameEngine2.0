@@ -45,7 +45,7 @@ void Render::Gizmo::Draw()
 			glDepthRange(0, 0.01);
 			for (auto Sub : mesh->SubMeshes)
 			{
-				if (!Sub.Material)
+				if (!Sub.Material || !Sub.Material->GetShader())
 					continue;
 				glUseProgram(Sub.Material->GetShader()->Program);
 				glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);

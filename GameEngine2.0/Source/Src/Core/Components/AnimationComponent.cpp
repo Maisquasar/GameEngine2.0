@@ -3,6 +3,8 @@
 
 #include "Include/Resources/Animation.h"
 #include "Include/Resources/Skeleton.h"
+#include "Include/EditorUi/Editor.h"
+#include "Include/EditorUi/AnimationWindow.h"
 
 #include "Include/App.h"
 
@@ -30,11 +32,13 @@ void Core::Components::AnimationComponent::Update()
 			_skeleton->Skeleton->RootBone->UpdateBone(_currentAnimation, _currentTime);
 		}
 
-		_currentTime += ImGui::GetIO().DeltaTime * 30;
-		if (_currentTime > _currentAnimation->KeyCount)
-			_currentTime = 0;
-		else if (_currentTime <= 0)
-			_currentTime = (float)_currentAnimation->KeyCount;
+		if (_play) {
+			_currentTime += ImGui::GetIO().DeltaTime * 30;
+			if (_currentTime > _currentAnimation->KeyCount)
+				_currentTime = 0;
+			else if (_currentTime <= 0)
+				_currentTime = (float)_currentAnimation->KeyCount;
+		}
 	}
 }
 
@@ -52,6 +56,12 @@ void Core::Components::AnimationComponent::ShowInInspector()
 	if (auto anim = Application.GetResourceManager()->ResourcesPopup< Resources::Animation>("AnimationPopup"))
 	{
 		SetCurrentAnimation(anim);
+	}
+	if (ImGui::Button("Show in Window")) {
+		EditorUi::Editor::GetAnimationWindow()->SetOpen(true);
+		if (auto skelmesh = GameObject->GetComponent<Core::Components::SkeletalMeshComponent>())
+			if (auto animComp = GameObject->GetComponent<Core::Components::AnimationComponent>())
+				EditorUi::Editor::GetAnimationWindow()->SetAnimationAndSkeleton(animComp, skelmesh->Skeleton);
 	}
 }
 

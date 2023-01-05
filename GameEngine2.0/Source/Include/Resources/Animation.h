@@ -2,6 +2,7 @@
 #include "IResource.h"
 #include <vector>
 #include <unordered_map>
+#include <map>
 #include "Include/Math/Math.h"
 
 
@@ -20,7 +21,6 @@ namespace Resources
 		float FrameRate = 0;
 
 		size_t KeyCount = 0;
-		int BonesCount = 0;
 
 		// List of all Bones, With all Key Inside with :
 		// - first = Current Keyframe
