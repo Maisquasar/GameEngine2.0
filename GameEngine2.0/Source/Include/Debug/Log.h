@@ -7,9 +7,9 @@
 #include <string>
 #include <mutex>
 #include "Include/EditorUi/Console.h"
+#define MAX_LOG_SIZE 1024
 
 namespace Debug {
-
 	class Log
 	{
 	public:
@@ -18,8 +18,8 @@ namespace Debug {
 		template <typename ...Args> static void Print(const char* file, int line, LogType type, const char* format, Args ... args)
 		{
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-			char buf[256];
-			char buf2[256];
+			char buf[MAX_LOG_SIZE];
+			char buf2[MAX_LOG_SIZE];
 			sprintf_s(buf, "%s[%d] : ", file, line);
 			sprintf_s(buf2, format, args ...);
 			strcat_s(buf, buf2);

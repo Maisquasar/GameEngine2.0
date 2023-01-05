@@ -508,11 +508,11 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 			Mesh->Vertices.push_back(0);
 		}
 
-		Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
 		Mesh->Loaded = true;
 #if !MULTITHREAD_LOADING
 		Mesh->Initialize();
 #endif
+		Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
 	}
 
 	if (auto skin = mesh->getGeometry()->getSkin())
@@ -655,7 +655,6 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 
 	NewSkel->SetMaxBoneWeight((int)result->second.size());
 
-	Application.GetResourceManager()->Add<Resources::SkeletalMesh>(mesh->GetPath(), mesh);
 	mesh->Loaded = true;
 #if !MULTITHREAD_LOADING
 	mesh->Initialize();
@@ -663,7 +662,9 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 	mesh->SetShader(Application.GetResourceManager()->GetDefaultAnimShader());
 
 	NewSkel->SetInitialized();
+	Application.GetResourceManager()->Add<Resources::SkeletalMesh>(mesh->GetPath(), mesh);
 	Application.GetResourceManager()->Add(NewSkel->GetPath(), NewSkel);
+
 }
 
 #include "Include/Resources/Animation.h"

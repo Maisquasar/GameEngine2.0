@@ -127,6 +127,9 @@ void EditorUi::Console::Clear()
 	_numberOfInfo = 0;
 	_numberOfWarn = 0;
 	_numberOfErro = 0;
+	_checkBoxTexts[0] = Utils::StringFormat("%d Info", GetNumberOfLogType(Debug::LogType::INFO));
+	_checkBoxTexts[1] = Utils::StringFormat("%d Warning", GetNumberOfLogType(Debug::LogType::WARNING));
+	_checkBoxTexts[2] = Utils::StringFormat("%d Error", GetNumberOfLogType(Debug::LogType::L_ERROR));
 }
 
 int EditorUi::Console::GetNumberOfLogType(Debug::LogType t)

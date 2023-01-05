@@ -30,7 +30,11 @@ namespace Resources
 		L_PROJECTIONMATRIX,
 		L_MODELVIEWMATRIX,
 		L_SKINNINGMATRICES,
-		L_MAXBONEWEIGHT
+		L_MAXBONEWEIGHT,
+		L_CAMUP,
+		L_CAMRIGHT,
+		L_BILLSIZE,
+		L_BILLPOS,
 	};
 
 	class Shader : public BaseResource<Shader>

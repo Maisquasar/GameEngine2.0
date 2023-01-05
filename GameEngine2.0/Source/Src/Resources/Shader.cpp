@@ -60,9 +60,11 @@ void Resources::Shader::Load(std::string filename)
 {
 	if (SetShader(_path) && SetFragmentShader(_path))
 	{
-		if (Link())
-			Loaded = true;
+		Link();
 	}
+
+	Initialize();
+	Loaded = true;
 }
 
 void Resources::Shader::Recompile()
@@ -94,8 +96,6 @@ bool Resources::Shader::Link()
 		LOG(Debug::LogType::INFO, "Successfully link Shader %s", _name.c_str());
 		_linked = true;
 	}
-
-	Initialize();
 	return true;
 }
 
@@ -117,6 +117,10 @@ void Resources::Shader::Initialize()
 	_location[Location::L_MODELVIEWMATRIX] = glGetUniformLocation(Program, "ModelViewMatrix");
 	_location[Location::L_SKINNINGMATRICES] = glGetUniformLocation(Program, "SkinningMatrices");
 	_location[Location::L_MAXBONEWEIGHT] = glGetUniformLocation(Program, "MaxBoneWeight");
+	_location[Location::L_BILLPOS] = glGetUniformLocation(Program, "BillPos");
+	_location[Location::L_BILLSIZE] = glGetUniformLocation(Program, "BillSize");
+	_location[Location::L_CAMUP] = glGetUniformLocation(Program, "CamUp");
+	_location[Location::L_CAMRIGHT] = glGetUniformLocation(Program, "CamRight");
 	_initialized = true;
 }
 

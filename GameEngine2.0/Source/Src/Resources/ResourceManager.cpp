@@ -6,6 +6,7 @@ Resources::ResourceManager::ResourceManager() { TextureIndex = 0; }
 
 Resources::ResourceManager::~ResourceManager() 
 {
+	_deleted = true;
 	for (auto it = _resource.begin(); it != _resource.end(); )
 	{
 		delete it->second;
@@ -44,6 +45,11 @@ Resources::Shader* Resources::ResourceManager::GetPickingShader()
 Resources::Shader* Resources::ResourceManager::GetPickingAnimShader()
 {
 	return Get<Resources::Shader>("Assets/Default/Shaders/PickingAnimShader");
+}
+
+Resources::Shader* Resources::ResourceManager::GetBillboardShader()
+{
+	return Get<Resources::Shader>("Assets/Default/Shaders/BillboardShader");
 }
 
 Resources::Mesh* Resources::ResourceManager::GetDefaultCube()

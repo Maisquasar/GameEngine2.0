@@ -2,7 +2,7 @@
 #include "Include/Math/Math.h"
 
 namespace Resources{
-	class Mesh;
+	class BillBoard;
 }
 namespace Core
 {
@@ -24,7 +24,7 @@ namespace Render {
 		void Draw(Math::Matrix4 VP, Core::Transform transform);
 		void DrawPicking(Math::Matrix4 MVP, Core::Transform transform, int id);
 
-		Resources::Mesh* Plane = nullptr;
+		Resources::BillBoard* Plane = nullptr;
 
 		Math::Matrix4 GetMVP(Math::Matrix4 VP, Core::Transform transform);
 

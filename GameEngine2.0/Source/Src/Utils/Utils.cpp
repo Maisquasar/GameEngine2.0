@@ -49,10 +49,10 @@ std::vector<std::pair<Core::Node*, float> > Utils::BubbleSort(std::map<Core::Nod
 void Utils::GetPlaneVertices(std::vector<Math::Vector3>& Positions, std::vector<Math::Vector2>& TextureUVs, std::vector<Math::Vector3>& Normals, std::vector<Math::Integer3>& Indices)
 {
 	std::vector<Math::Vector3> v = {
-		{-1.000000f, 0.000000f, 1.000000},
-		{ 1.000000, 0.000000, 1.000000 },
-		{-1.000000, 0.000000, -1.000000},
-		{1.000000, 0.000000, -1.000000 },
+		{1.000000f, 1.000000f, 0.000000},
+		{ 1.000000, -1.000000, 0.000000 },
+		{-1.000000, 1.000000, 0.000000},
+		{-1.000000, -1.000000, 0.000000 },
 	};
 
 	std::vector < Math::Vector2> t = {

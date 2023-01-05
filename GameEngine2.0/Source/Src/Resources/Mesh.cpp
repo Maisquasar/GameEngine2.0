@@ -129,13 +129,13 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 		if (!Sub.Material)
 			continue;
 		glUseProgram(Sub.Material->GetShader()->Program);
-		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 		glDepthRange(0.01, 1.0);
-		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
+		glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
 		if (Sub.Material->GetTexture())
 			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());
 		else
-			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
+			glUniform4f(Sub.Material->GetShader()->GetLocation(Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
 
 		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
@@ -154,8 +154,8 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 		{
 			if (!Sub.Material)
 				continue;
-			glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), 0.8f, 0.5f, 0, 1);
+			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), false);
+			glUniform4f(Sub.Material->GetShader()->GetLocation(Location::L_COLOR), 0.8f, 0.5f, 0, 1);
 			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 		}
 
@@ -181,8 +181,8 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 	{
 		if (!Sub.Material)
 			continue;
-		glUniformMatrix4fv(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-		glUniform4f(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r/255.f, g/255.f, b/255.f, 1.f);
+		glUniformMatrix4fv(Application.GetResourceManager()->GetPickingShader()->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+		glUniform4f(Application.GetResourceManager()->GetPickingShader()->GetLocation(Location::L_COLOR), r/255.f, g/255.f, b/255.f, 1.f);
 
 		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
