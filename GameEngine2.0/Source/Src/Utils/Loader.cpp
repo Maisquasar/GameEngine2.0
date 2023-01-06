@@ -145,25 +145,23 @@ Math::Vector2 Utils::Loader::GetVec2(std::string line)
 	return out;
 }
 
-Math::Matrix4 Utils::Loader::GetMat4(const char* data, uint32_t& pos, int dec)
+Math::Matrix4 Utils::Loader::GetMat4(std::string line)
 {
+	auto temp = line;
 	Math::Matrix4 mat;
-	pos += dec;
 	std::string value;
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			while (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',' && data[pos] != '}')
-			{
-				if (data[pos] != '\0' && data[pos] != '\n' && data[pos] != ' ' && data[pos] != ',' && data[pos] != '}')
-					value.push_back(data[pos]);
-				pos++;
-			}
+	line = line.substr(line.find_first_of(' ') + 3);
+	for (int i = 0; i < 4; i++) 
+	{
+		for (int j = 0; j < 4; j++) 
+		{
+			value = line.substr(0, line.find_first_of(' '));
 			mat.content[i][j] = std::stof(value);
-			value.clear();
-			pos++;
+			line = line.substr(line.find_first_of(' ') + 1);
 		}
-		pos += 2;
 	}
+	
+	//line = line.substr(line.find)
 	return mat;
 }
 

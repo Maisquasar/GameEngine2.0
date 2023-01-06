@@ -434,6 +434,21 @@ void Matrix4::PrintMatrix()
 	printf("\n");
 }
 
+std::string Math::Matrix4::ToString()
+{
+	std::string print;
+	for (int j = 0; j < 4; j++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			print += std::to_string(content[j][i]);
+			print += " ";
+		}
+	}
+	return print;
+}
+
+
 Matrix4 Matrix4::Identity()
 {
 	return Matrix4(1);

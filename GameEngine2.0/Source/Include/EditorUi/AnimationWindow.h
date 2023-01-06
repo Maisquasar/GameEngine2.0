@@ -28,30 +28,6 @@ struct RampEdit : public ImCurveEdit::Delegate
 	{
 		mPts.resize(3);
 
-		/*
-		mPts.push_back(std::vector<ImVec2>());
-		mPts.back().push_back(ImVec2(-10.f, 0));
-		mPts.back().push_back(ImVec2(20.f, 0.6f));
-		mPts.back().push_back(ImVec2(25.f, 0.2f));
-		mPts.back().push_back(ImVec2(70.f, 0.4f));
-		mPts.back().push_back(ImVec2(120.f, 1.f));
-
-		mPts.push_back(std::vector<ImVec2>());
-		mPts.back().push_back(ImVec2(-50.f, 0.2f));
-		mPts.back().push_back(ImVec2(33.f, 0.7f));
-		mPts.back().push_back(ImVec2(80.f, 0.2f));
-		mPts.back().push_back(ImVec2(82.f, 0.8f));
-
-
-		mPts.push_back(std::vector<ImVec2>());
-		mPts.back().push_back(ImVec2(40.f, 0));
-		mPts.back().push_back(ImVec2(60.f, 0.1f));
-		mPts.back().push_back(ImVec2(90.f, 0.82f));
-		mPts.back().push_back(ImVec2(150.f, 0.24f));
-		mPts.back().push_back(ImVec2(200.f, 0.34f));
-		mPts.back().push_back(ImVec2(250.f, 0.12f));
-		*/
-
 		mbVisible[0] = mbVisible[1] = mbVisible[2] = true;
 		mMax = ImVec2(1.f, 1.f);
 		mMin = ImVec2(0.f, 0.f);

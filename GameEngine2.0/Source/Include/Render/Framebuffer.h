@@ -30,6 +30,7 @@ namespace Render {
 
 		bool UpdateCameraEditor = false;
 		bool IsHovered = false;
+		bool IsFocused = false;
 
 	private:
 		GLuint _RBO = 0;

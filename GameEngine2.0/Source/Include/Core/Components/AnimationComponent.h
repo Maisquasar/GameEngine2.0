@@ -19,6 +19,9 @@ namespace Core::Components
 		void Update() override;
 		void ShowInInspector() override;
 
+		void Save(std::string space, std::string& content) override;
+		void Load(const char* data, uint32_t& pos) override;
+
 		void SetCurrentAnimation(Resources::Animation*);
 		void SetSkeleton(class SkeletalMeshComponent*);
 

@@ -30,7 +30,7 @@ void MySequence::CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, 
 		if (editPoints[0].curveIndex == 0) {
 			int i = editPoints[0].pointIndex;
 			auto keypos = &EditorUi::Editor::GetAnimationWindow()->SelectedAnimationComp->GetCurrentAnimation()->KeyPositions;
-			if (keypos->size() > index && keypos[index].size() > i) {
+			if ((*keypos).size() > index && (*keypos)[index].size() > i) {
 				EditorUi::Editor::GetAnimationWindow()->SelectedPosition = &(*keypos)[index][i];
 				EditorUi::Editor::GetAnimationWindow()->SelectedRotation = nullptr;
 			}
@@ -39,7 +39,7 @@ void MySequence::CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, 
 		{
 			int i = editPoints[0].pointIndex;
 			auto keyrot = &EditorUi::Editor::GetAnimationWindow()->SelectedAnimationComp->GetCurrentAnimation()->KeyRotations;
-			if (keyrot->size() > index && keyrot[index].size() > i) {
+			if ((*keyrot).size() > index && (*keyrot)[index].size() > i) {
 				EditorUi::Editor::GetAnimationWindow()->SelectedRotation = &(*keyrot)[index][i];
 				EditorUi::Editor::GetAnimationWindow()->SelectedPosition = nullptr;
 			}

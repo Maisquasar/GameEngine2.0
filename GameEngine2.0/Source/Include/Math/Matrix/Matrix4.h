@@ -83,21 +83,7 @@ namespace Math {
 
 		void PrintMatrix();
 
-		std::string ToString()
-		{
-			std::string print;
-			for (int j = 0; j < 4; j++)
-			{
-				print += "{";
-				for (int i = 0; i < 4; i++)
-				{
-					print += " ";
-					print += std::to_string(content[j][i]);
-				}
-				print += "}";
-			}
-			return print;
-		}
+		std::string ToString();
 
 	};
 }

@@ -36,7 +36,7 @@ namespace Utils::Loader
 	Math::Vector3 GetVector3(std::string);
 	Math::Vector2 GetVec2(std::string);
 	std::vector<Math::Integer3> GetIndices(std::string);
-	Math::Matrix4 GetMat4(const char* data, uint32_t& pos, int dec);
+	Math::Matrix4 GetMat4(std::string line);
 
 	const char* ReadFile(const char* filename, uint32_t& size, bool& success);
 

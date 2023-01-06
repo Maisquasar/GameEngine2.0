@@ -99,6 +99,7 @@ void Bone::Save(std::string space, std::string& content)
 	content += space + Utils::StringFormat("Id : %d\n", Id);
 	content += space + Utils::StringFormat("DefaultPosition : %s\n", DefaultPosition.ToString().c_str());
 	content += space + Utils::StringFormat("DefaultRotation : %s\n", DefaultRotation.ToString().c_str());
+	content += space + Utils::StringFormat("DefaultMatrix : %s\n", DefaultMatrix.ToString().c_str());
 	content += space + Utils::StringFormat("Name : %s\n", Name.c_str());
 	content += space + Utils::StringFormat("IsActive : %d\n", _active);
 
@@ -148,17 +149,9 @@ void Bone::Load(const char* data, uint32_t& pos)
 		{
 			this->DefaultRotation = Utils::Loader::GetVec4(currentLine);
 		}
-		else if (currentLine.substr(0, 8) == "Position")
+		else if (currentLine.substr(0, 13) == "DefaultMatrix")
 		{
-			this->Transform.SetLocalPosition(Utils::Loader::GetVector3(currentLine));
-		}
-		else if (currentLine.substr(0, 8) == "Rotation")
-		{
-			this->Transform.SetLocalRotation(Utils::Loader::GetVec4(currentLine));
-		}
-		else if (currentLine.substr(0, 5) == "Scale")
-		{
-			this->Transform.SetLocalScale(Utils::Loader::GetVector3(currentLine));
+			this->DefaultMatrix = Utils::Loader::GetMat4(currentLine);
 		}
 		else if (currentLine.substr(0, 10) == "#BeginNode")
 		{
@@ -194,9 +187,15 @@ void Bone::Load(const char* data, uint32_t& pos)
 	}
 	if (Parent && !dynamic_cast<Bone*>(Parent))
 	{
-		if (auto skel = Parent->GetComponent<Core::Components::SkeletalMeshComponent>())
-			if (skel->Skeleton)
+		if (auto skel = Parent->GetComponent<Core::Components::SkeletalMeshComponent>()) {
+			if (skel->Skeleton) {
 				skel->Skeleton->RootBone = this;
+				skel->Skeleton->RootBone->SetDefault();
+				skel->Skeleton->Bones = this->GetAllBones();
+				skel->Skeleton->BoneCount = skel->Skeleton->Bones.size();
+				skel->Skeleton->SortBones();
+			}
+		}
 	}
 }
 
