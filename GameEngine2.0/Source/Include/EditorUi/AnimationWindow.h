@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <vector>
 
+#include "Include/Math/Math.h"
+
 namespace Resources
 {
 	class Animation;
@@ -170,7 +172,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 	MySequence() : mFrameMin(0), mFrameMax(0) {}
 	int mFrameMin, mFrameMax;
 
-	RampEdit rampEdit;
+	std::vector<RampEdit> rampEdits;
 
 	virtual void DoubleClick(int index) {
 		if (myItems[index].mExpanded)
@@ -204,6 +206,9 @@ namespace EditorUi
 		MySequence Interface;
 		Core::Components::AnimationComponent* SelectedAnimationComp = nullptr;
 		Resources::Skeleton* SelectedSkeleton = nullptr;
+
+		Math::Vector3* SelectedPosition;
+		Math::Quaternion* SelectedRotation;
 
 	private:
 
