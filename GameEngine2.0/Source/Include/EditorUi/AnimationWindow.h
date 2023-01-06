@@ -142,7 +142,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 	virtual void Del(int index) { myItems.erase(myItems.begin() + index); }
 	virtual void Duplicate(int index) { myItems.push_back(myItems[index]); }
 
-	virtual size_t GetCustomHeight(int index) { return myItems[index].mExpanded ? 300 : 0; }
+	virtual size_t GetCustomHeight(int index) { return myItems[index].mExpanded ? 100 : 0; }
 
 	// my datas
 	MySequence() : mFrameMin(0), mFrameMax(0) {}
@@ -183,8 +183,8 @@ namespace EditorUi
 		Core::Components::AnimationComponent* SelectedAnimationComp = nullptr;
 		Resources::Skeleton* SelectedSkeleton = nullptr;
 
-		Math::Vector3* SelectedPosition;
-		Math::Quaternion* SelectedRotation;
+		Math::Vector3* SelectedPosition = nullptr;
+		Math::Quaternion* SelectedRotation = nullptr;
 
 	private:
 

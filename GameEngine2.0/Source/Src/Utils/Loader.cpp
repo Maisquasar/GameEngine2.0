@@ -368,13 +368,11 @@ void MutlithreadLoad(ofbx::IScene* Scene, std::string path)
 		for (int i = 0; i < count; i++)
 			Utils::Loader::LoadMesh(Scene->getMesh(i), path);
 
-		printf("================ %s ================\n", path.c_str());
 		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
 		{
 			Utils::Loader::LoadAnimation(Scene->getAnimationStack(i), path);
 			break;
 		}
-		printf("====================================\n");
 		Scene->destroy();
 	}
 }
@@ -670,7 +668,6 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string path)
 {
 	Resources::Animation* Animation = nullptr;
-	printf("%s \n", stack->name);
 	for (int i = 0; i < 3; i++) {
 		if (Animation)
 			break;

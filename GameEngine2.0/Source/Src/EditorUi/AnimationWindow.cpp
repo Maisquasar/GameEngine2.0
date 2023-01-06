@@ -26,6 +26,8 @@ void MySequence::CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, 
 	ImVector<ImCurveEdit::EditPoint> editPoints;
 	ImCurveEdit::Edit(rampEdits[index], rc.Max - rc.Min, 137 + index, &clippingRect, &editPoints);
 	ImGui::SetCursorScreenPos(ImVec2(rc.Min.x + 10, rc.Min.y + 10));
+	
+	// Edit Points
 	if (editPoints.size() >= 1) {
 		if (editPoints[0].curveIndex == 0) {
 			int i = editPoints[0].pointIndex;
@@ -132,7 +134,12 @@ void EditorUi::AnimationWindow::Draw()
 		ImGui::SameLine();
 		if (ImGui::Button("|>|")) currentFrame++;
 		ImGui::SameLine();
-		if (ImGui::Button("|>|>")) currentFrame = Interface.mFrameMax;
+		if (ImGui::Button("|>|>")) {
+			if (SelectedAnimationComp && SelectedAnimationComp->GetCurrentAnimation())
+				currentFrame = (int)SelectedAnimationComp->GetCurrentAnimation()->KeyCount;
+			else
+				currentFrame = Interface.mFrameMax;
+		}
 		ImGui::PopItemWidth();
 		ImGui::PushItemWidth(200);
 		if (SelectedPosition)
@@ -163,7 +170,7 @@ void EditorUi::AnimationWindow::Draw()
 			SelectedAnimationComp->_play = play;
 			if (!play) {
 				SelectedAnimationComp->_currentTime = (float)currentFrame;
-				SelectedAnimationComp->_currentTime = (float)((int)SelectedAnimationComp->_currentTime % (Interface.mFrameMax + 1));
+				SelectedAnimationComp->_currentTime = (float)((int)SelectedAnimationComp->_currentTime % (SelectedAnimationComp->GetCurrentAnimation()->KeyCount + 1));
 				if (SelectedAnimationComp->_currentTime < 0)
 					SelectedAnimationComp->_currentTime = (float)SelectedAnimationComp->GetCurrentAnimation()->KeyCount;
 			}
