@@ -55,7 +55,7 @@ void Debug::Line::Draw(Math::Vector3 p1, Math::Vector3 p2)
 	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
 	glUniform4f(_shader->GetLocation(Resources::Location::L_COLOR), 1, 1, 1, 1);
 
-	glDrawArrays(GL_LINES, 0, 9);
+	glDraw(GL_LINES, 0, 9);
 	glLineWidth(defaultWidth);
 	glDepthRange(0.01, 1);
 }

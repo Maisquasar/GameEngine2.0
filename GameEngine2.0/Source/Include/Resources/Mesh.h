@@ -1,11 +1,17 @@
 #pragma once
 #include <vector>
+#include <Windows.h>
+#include <glad/glad.h>
 #include "Include/Math/Math.h"
 #include "Include/Resources/IResource.h"
+
 #define POS 0
 #define NML 1
 #define TUV 2
 #define TAN 3
+
+// Used to Count Vertices and draw Calls.
+void glDraw(uint32_t model, GLsizei start, GLsizei count);
 
 namespace Core::Components
 {
@@ -47,6 +53,8 @@ namespace Resources {
 		std::vector<float> Vertices;
 
 		std::vector<SubMesh> SubMeshes;
+
+		bool ShouldDrawCall = true;
 
 	private:
 		friend class Core::Components::MeshComponent;

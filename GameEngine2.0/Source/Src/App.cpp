@@ -362,6 +362,9 @@ void App::BeginFrame()
 	glfwGetFramebufferSize(_window, &_width, &_height);
 	glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
 	glEnable(GL_DEPTH_TEST);
+
+	GetSettings()->NumberOfDrawCalls = 0;
+	GetSettings()->NumberOfTrianglesDraw = 0;
 }
 
 void App::Update()

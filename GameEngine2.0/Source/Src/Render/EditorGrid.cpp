@@ -40,6 +40,7 @@ void Render::EditorGrid::Draw()
 			{
 				sub.Material->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/GridShader"));
 			}
+			_meshComponent->GetMesh()->ShouldDrawCall = false;
 		}
 	}
 }

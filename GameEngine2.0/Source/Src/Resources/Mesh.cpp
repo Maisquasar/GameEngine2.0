@@ -108,6 +108,20 @@ void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vect
 	
 }
 
+void glDraw(uint32_t model, GLsizei start, GLsizei count)
+{
+	glDrawArrays(model, (GLsizei)start, (GLsizei)count);
+	switch (model)
+	{
+	case GL_TRIANGLES:
+		Application.GetSettings()->NumberOfTrianglesDraw += count / 3;
+		break;
+	default:
+		break;
+	}
+	Application.GetSettings()->NumberOfDrawCalls++;
+}
+
 void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 {
 	if (!Loaded)
@@ -137,7 +151,10 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 		else
 			glUniform4f(Sub.Material->GetShader()->GetLocation(Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
 
-		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		if (ShouldDrawCall)
+			glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		else
+			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
 	if (outline)
 	{
@@ -156,7 +173,10 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 				continue;
 			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), false);
 			glUniform4f(Sub.Material->GetShader()->GetLocation(Location::L_COLOR), 0.8f, 0.5f, 0, 1);
-			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			if (ShouldDrawCall)
+				glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			else
+				glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 		}
 
 
@@ -187,7 +207,10 @@ void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
 		glUniformMatrix4fv(shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 		glUniform4f(shader->GetLocation(Location::L_COLOR), r/255.f, g/255.f, b/255.f, 1.f);
 
-		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		if (ShouldDrawCall)
+			glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		else
+			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
 }
 

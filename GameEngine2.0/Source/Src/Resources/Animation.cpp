@@ -68,6 +68,8 @@ void Resources::Animation::Initialize()
 	};
 
 	KeyCount = std::max(max_size_rotation(KeyRotations), max_size_position(KeyPositions));
+	//TODO : Fix This Commented For loop.
+	/*
 	for (int i = 0; i < KeyCount; i++)
 	{
 		for (auto& Key : KeyPositions)
@@ -93,6 +95,7 @@ void Resources::Animation::Initialize()
 
 		}
 	}
+	*/
 	SetInitialized();
 }
 

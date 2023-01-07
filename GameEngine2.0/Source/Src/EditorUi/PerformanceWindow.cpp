@@ -1,6 +1,7 @@
 #include "..\..\Include\EditorUi\PerformanceWindow.h"
-#include <glad/glad.h>
 #include <algorithm>
+
+#include "Include/App.h"
 
 EditorUi::PerformanceWindow::PerformanceWindow()
 {
@@ -52,6 +53,8 @@ void EditorUi::PerformanceWindow::Draw()
 			ImGui::Text(txt);
 			ImGui::TreePop();
 		}
+
+		ImGui::Text("Triangles Draw : %d\nDraw Calls : %d", Application.GetSettings()->NumberOfTrianglesDraw, Application.GetSettings()->NumberOfDrawCalls);
 	}
 	ImGui::End();
 }

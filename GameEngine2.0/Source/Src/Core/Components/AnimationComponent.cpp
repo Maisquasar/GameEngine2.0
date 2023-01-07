@@ -20,6 +20,10 @@ Core::Components::AnimationComponent::~AnimationComponent()
 	{
 		_skeleton->Skeleton->RootBone->SetDefault();
 	}
+	if (EditorUi::Editor::GetAnimationWindow()->SelectedAnimationComp == this)
+	{
+		EditorUi::Editor::GetAnimationWindow()->SetOpen(false);
+	}
 }
 
 void Core::Components::AnimationComponent::Update()
@@ -59,7 +63,6 @@ void Core::Components::AnimationComponent::ShowInInspector()
 		SetCurrentAnimation(anim);
 	}
 	if (ImGui::Button("Show in Window")) {
-		EditorUi::Editor::GetAnimationWindow()->SetOpen(true);
 		if (auto skelmesh = GameObject->GetComponent<Core::Components::SkeletalMeshComponent>())
 			if (auto animComp = GameObject->GetComponent<Core::Components::AnimationComponent>())
 				EditorUi::Editor::GetAnimationWindow()->SetAnimationAndSkeleton(animComp, skelmesh->Skeleton);

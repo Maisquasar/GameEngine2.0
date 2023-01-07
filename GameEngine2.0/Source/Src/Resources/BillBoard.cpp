@@ -49,7 +49,7 @@ void Resources::BillBoard::Update(Math::Matrix4 MVP, bool outline)
 		glUniform3f(Sub.Material->GetShader()->GetLocation(Location::L_CAMUP), up.x, up.y, up.z);
 		glUniform3f(Sub.Material->GetShader()->GetLocation(Location::L_CAMRIGHT), right.x, right.y, right.z);
 
-		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
 	if (outline)
 	{
@@ -70,7 +70,7 @@ void Resources::BillBoard::Update(Math::Matrix4 MVP, bool outline)
 			glUniform2f(Sub.Material->GetShader()->GetLocation(Location::L_BILLSIZE), _size.x, _size.y);
 			glUniform3f(Sub.Material->GetShader()->GetLocation(Location::L_CAMUP), up.x, up.y, up.z);
 			glUniform3f(Sub.Material->GetShader()->GetLocation(Location::L_CAMRIGHT), right.x, right.y, right.z);
-			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 		}
 
 
@@ -108,6 +108,6 @@ void Resources::BillBoard::DrawPicking(Math::Matrix4 MVP, int id)
 		glUniform3f(shader->GetLocation(Location::L_CAMRIGHT), right.x, right.y, right.z);
 		glUniform4f(shader->GetLocation(Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
-		glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 	}
 }

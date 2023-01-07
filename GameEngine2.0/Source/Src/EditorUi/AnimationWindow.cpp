@@ -82,8 +82,10 @@ EditorUi::AnimationWindow::~AnimationWindow()
 
 void EditorUi::AnimationWindow::SetAnimationAndSkeleton(Core::Components::AnimationComponent* a, Resources::Skeleton* s)
 {
-	if (!a || !a->GetCurrentAnimation() || !s)
+	if (!a || !a->GetCurrentAnimation() || !s) {
 		return;
+	}
+	_open = true;
 	SelectedAnimationComp = a;
 	SelectedSkeleton = s;
 	Interface.myItems.clear();

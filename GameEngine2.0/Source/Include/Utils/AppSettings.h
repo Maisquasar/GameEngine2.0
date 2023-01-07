@@ -17,6 +17,8 @@ namespace Utils {
 		~AppSettings();
 
 		Settings::Transform S_Transform = Settings::Transform::World;
+		size_t NumberOfDrawCalls;
+		size_t NumberOfTrianglesDraw;
 	private:
 		
 	};

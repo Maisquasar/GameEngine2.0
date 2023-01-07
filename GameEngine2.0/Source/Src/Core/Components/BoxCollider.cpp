@@ -76,7 +76,7 @@ void Core::Components::BoxCollider::Update()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glBindVertexArray(_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)_vertices.size());
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices.size());
 
 	// Disable Wireframe.
 	glEnable(GL_CULL_FACE);

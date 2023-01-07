@@ -20,9 +20,9 @@ namespace Debug {
 		Math::Vector3 _point2;
 		float _lineWidth = 1.f;
 
-		unsigned int _VAO;
-		unsigned int _VBO;
-		Resources::Shader* _shader;
+		unsigned int _VAO = 0;
+		unsigned int _VBO = 0;
+		Resources::Shader* _shader = nullptr;
 		bool _initialized = false;
 
 	};

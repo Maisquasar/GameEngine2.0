@@ -2,7 +2,10 @@
 #include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Debug/Line.h"
 #include "Include/Debug/Log.h"
+#include "Include/EditorUi/Editor.h"
+#include "Include/EditorUi/AnimationWindow.h"
 
+#pragma region Bone
 Bone::Bone() {
 	if (!Transform.GameObject)
 		Transform.GameObject = this;
@@ -216,6 +219,7 @@ Math::Matrix4 Bone::GetBoneMatrix()
 	auto result = Transform.GetModelMatrix(true) * DefaultMatrix;
 	return result;
 }
+#pragma endregion
 
 Resources::Skeleton::Skeleton() {}
 
@@ -223,6 +227,10 @@ Resources::Skeleton::~Skeleton()
 {
 	if (!RootBone->Parent)
 		delete RootBone;
+	if (EditorUi::Editor::GetAnimationWindow()->SelectedSkeleton == this)
+	{
+		EditorUi::Editor::GetAnimationWindow()->SetOpen(false);
+	}
 }
 
 Resources::Skeleton* Resources::Skeleton::Clone() const

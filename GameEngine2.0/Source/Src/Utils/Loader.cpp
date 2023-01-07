@@ -151,16 +151,16 @@ Math::Matrix4 Utils::Loader::GetMat4(std::string line)
 	Math::Matrix4 mat;
 	std::string value;
 	line = line.substr(line.find_first_of(' ') + 3);
-	for (int i = 0; i < 4; i++) 
+	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < 4; j++) 
+		for (int j = 0; j < 4; j++)
 		{
 			value = line.substr(0, line.find_first_of(' '));
 			mat.content[i][j] = std::stof(value);
 			line = line.substr(line.find_first_of(' ') + 1);
 		}
 	}
-	
+
 	//line = line.substr(line.find)
 	return mat;
 }
@@ -400,7 +400,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 	// Set-Up Mesh
 	bool HasSkeleton = mesh->getGeometry()->getSkin() != nullptr;
 	Resources::Mesh* Mesh = nullptr;
-	if (!HasSkeleton) 
+	if (!HasSkeleton)
 		Mesh = new Resources::Mesh();
 	else
 		Mesh = new Resources::SkeletalMesh();
@@ -735,7 +735,29 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 
 			}
 		}
+
 		Animation->Initialize();
+		/*if (Animation->GetName() == "Walking.fbx::Anim") {
+			std::ofstream file;
+			file.open("Temp2.txt");
+			for (int o = 0; o < Animation->KeyPositions.size(); o++)
+			{
+				for (auto pos : Animation->KeyPositions[o])
+				{
+					auto string = Utils::StringFormat("Bone[%d], KeyFrame[%d], Position : %s\n", o, pos.first, pos.second.ToString().c_str());
+					file.write(string.c_str(), string.size());
+				}
+			}
+			for (int o = 0; o < Animation->KeyRotations.size(); o++)
+			{
+				for (auto pos : Animation->KeyRotations[o])
+				{
+					auto string = Utils::StringFormat("Bone[%d], KeyFrame[%d], Rotation : %s\n", o, pos.first, pos.second.ToString().c_str());
+					file.write(string.c_str(), string.size());
+				}
+			}
+			file.close();
+		}*/
 		Application.GetResourceManager()->Add(Animation->GetPath(), Animation);
 	}
 }
