@@ -4,6 +4,7 @@
 namespace Render
 {
 	class EditorIcon;
+	class InstancesManager;
 }
 
 namespace Core::Components
@@ -21,6 +22,6 @@ namespace Core::Components
 
 		Render::EditorIcon* Icon = nullptr;
 	private:
-
+		Render::InstancesManager* _instancesManager;
 	};
 }

@@ -36,6 +36,7 @@ void Core::Node::AddComponent(Core::Components::Component* comp)
 {
 	this->Components.push_back(comp);
 	comp->SetGameobject(this);
+	comp->Initialize();
 }
 
 void Core::Node::SetParent(Node* node)

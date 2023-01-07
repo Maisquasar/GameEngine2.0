@@ -33,6 +33,7 @@
     <ClCompile Include="External_Includes\ImGui\TextEditor.cpp" />
     <ClCompile Include="External_Includes\OpenFBX\miniz.c" />
     <ClCompile Include="External_Includes\OpenFBX\ofbx.cpp" />
+    <ClCompile Include="Source\Include\Render\InstancesManager.h" />
     <ClCompile Include="Source\Src\Core\Components\AnimationComponent.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Camera.cpp" />
     <ClCompile Include="Source\Src\Core\Components\MeshComponent.cpp" />
@@ -51,6 +52,7 @@
     <ClCompile Include="Source\Src\Render\EditorGrid.cpp" />
     <ClCompile Include="Source\Src\Render\Gizmo.cpp" />
     <ClCompile Include="Source\Src\Render\EditorIcon.cpp" />
+    <ClCompile Include="Source\Src\Render\InstancesManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Animation.cpp" />
     <ClCompile Include="Source\Src\Resources\BillBoard.cpp" />
     <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
@@ -76,6 +78,7 @@
     <ClCompile Include="Source\Src\Render\CameraEditor.cpp" />
     <ClCompile Include="Source\Src\Render\Framebuffer.cpp" />
     <ClCompile Include="Source\Src\Resources\Material.cpp" />
+    <ClCompile Include="Source\Src\Resources\MeshInstance.cpp" />
     <ClCompile Include="Source\Src\Resources\Model.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Shader.cpp" />
@@ -148,6 +151,7 @@
     <ClInclude Include="Source\Include\Math\Vector\Vector4.h" />
     <ClInclude Include="Source\Include\Render\CameraEditor.h" />
     <ClInclude Include="Source\Include\Render\Framebuffer.h" />
+    <ClInclude Include="Source\Include\Resources\MeshInstance.h" />
     <ClInclude Include="Source\Include\Resources\Model.h" />
     <ClInclude Include="Source\Include\Resources\IResource.h" />
     <ClInclude Include="Source\Include\Resources\Material.h" />
