@@ -219,7 +219,7 @@
     <ClCompile Include="External_Includes\ImGui\ImGuizmo\ImCurveEdit.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Include\Render\InstancesManager.h">
+    <ClCompile Include="Source\Src\Core\Components\ParticleSystem.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\Src\Render\InstancesManager.cpp">
@@ -447,6 +447,12 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="External_Includes\ImGui\ImGuizmo\ImCurveEdit.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\Core\Components\ParticleSystem.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\Render\InstancesManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Source\Include\Resources\MeshInstance.h">

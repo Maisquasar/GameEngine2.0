@@ -4,6 +4,7 @@
 #include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Core/Components/AnimationComponent.h"
 #include "Include/Core/Components/Camera.h"
+#include "Include/Core/Components/ParticleSystem.h"
 #include "Include/Core/Node.h"
 
 std::vector<Core::Components::Component*> Core::Components::Data::Components;
@@ -55,4 +56,5 @@ void Core::Components::Data::Initialize()
 	this->NewComponent(new Core::Components::SkeletalMeshComponent());
 	this->NewComponent(new Core::Components::AnimationComponent());
 	this->NewComponent(new Core::Components::Camera());
+	this->NewComponent(new Core::Components::ParticleSystem());
 }
