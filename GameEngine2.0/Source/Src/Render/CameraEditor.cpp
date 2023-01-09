@@ -114,6 +114,16 @@ Math::Matrix4 Render::CameraEditor::GetModelMatrix()
 	return Transform.GetModelMatrix();
 }
 
+Math::Vector3 Render::CameraEditor::GetUp()
+{
+	return GetModelMatrix() * Math::Vector3::Up();
+}
+
+Math::Vector3 Render::CameraEditor::GetRight()
+{
+	return GetModelMatrix() * Math::Vector3::Right();
+}
+
 Math::Vector3 Render::CameraEditor::UnProject(Math::Vector2 point)
 {    
 	// Convert the screen position to normalized device coordinates

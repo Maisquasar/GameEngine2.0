@@ -35,6 +35,7 @@ namespace Resources
 		L_CAMRIGHT,
 		L_BILLSIZE,
 		L_VIEWMATRIX,
+		L_VIEWPROJECTIONMATRIX
 	};
 
 	class Shader : public BaseResource<Shader>

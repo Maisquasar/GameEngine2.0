@@ -20,7 +20,7 @@ void Core::Components::Camera::Initialize()
 {
 	auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>("DefaultPlane");
 	_instancesManager = new Render::InstancesManager();
-	_instancesManager->SetInstances((Resources::MeshInstance*)mesh, 10000);
+	_instancesManager->SetInstances((Resources::MeshInstance*)mesh, 100000);
 	_instancesManager->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/UnlitInstanceShader"));
 	_instancesManager->Initialize();
 }

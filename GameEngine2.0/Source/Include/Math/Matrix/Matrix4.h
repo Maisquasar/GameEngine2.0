@@ -31,7 +31,7 @@ namespace Math {
 
 		Matrix4 Multiply(Matrix4 a) const;
 
-		Matrix4 operator*(const Matrix4& a) const;
+		inline Matrix4 operator*(const Matrix4& a) const;
 
 		Vector4 operator*(const Vector4& a) const;
 

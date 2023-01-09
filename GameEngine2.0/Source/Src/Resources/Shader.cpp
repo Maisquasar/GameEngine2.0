@@ -121,6 +121,7 @@ void Resources::Shader::Initialize()
 	_location[Location::L_CAMUP] = glGetUniformLocation(Program, "CamUp");
 	_location[Location::L_CAMRIGHT] = glGetUniformLocation(Program, "CamRight");
 	_location[Location::L_VIEWMATRIX] = glGetUniformLocation(Program, "ViewMatrix");
+	_location[Location::L_VIEWPROJECTIONMATRIX] = glGetUniformLocation(Program, "ViewProjectionMatrix");
 	_initialized = true;
 }
 

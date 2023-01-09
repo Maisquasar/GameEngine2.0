@@ -15,9 +15,8 @@ Render::InstancesManager::~InstancesManager()
 
 void Render::InstancesManager::Initialize()
 {
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glGenBuffers(1, &_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffer);
 	std::vector<Math::Matrix4>  modelMatrices;
 	int i = 0;
 	int j = -1;
@@ -27,7 +26,7 @@ void Render::InstancesManager::Initialize()
 		if (i % modulo == 0)
 			j++;
 
-		modelMatrices.push_back(Math::Matrix4::CreateTransformMatrix(Math::Vector3((i % modulo) - modulo / 2, j, j) * 2, Math::Vector3(0), Math::Vector3(1)).TransposeMatrix());
+		modelMatrices.push_back(Math::Matrix4::CreateTransformMatrix(Math::Vector3((i % modulo) - modulo / 2, j*2, 0) * 2, Math::Vector3(0), Math::Vector3(1)).TransposeMatrix());
 		i++;
 	}
 	glBufferData(GL_ARRAY_BUFFER, _instances.size() * sizeof(float[16]), &modelMatrices[0].content[0][0], GL_STATIC_DRAW);
@@ -40,12 +39,19 @@ void Render::InstancesManager::Initialize()
 
 void Render::InstancesManager::Draw()
 {
+	static float i = 0;
 	if (!_currentShader)
 		return;
 	glUseProgram(_currentShader->Program);
 	glUniformMatrix4fv(_currentShader->GetLocation(Resources::Location::L_VIEWMATRIX), 1, GL_TRUE, &Application.GetScene()->GetCameraEditor()->GetViewMatrix().content[0][0]);
 	glUniformMatrix4fv(_currentShader->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &Application.GetScene()->GetCameraEditor()->GetProjection().content[0][0]);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, _buffer);
+	//auto mat = Math::Matrix4::CreateTransformMatrix(Math::Vector3(0.0f), Math::Vector3(i, 0, 0), Math::Vector3(1));
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, 16 * sizeof(float), &mat.content[0][0]);
 	_instances[0]->Draw(this->_currentShader, (int)_instances.size());
+
+	i += ImGui::GetIO().DeltaTime * 10;
 }
 
 void Render::InstancesManager::SetInstances(Resources::MeshInstance* ref, size_t size)

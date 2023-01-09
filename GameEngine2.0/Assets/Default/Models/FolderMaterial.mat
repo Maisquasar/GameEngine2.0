@@ -1,4 +1,4 @@
-Name : FolderMaterial
+Editable : 1
 Shader : Assets/Default/Shaders/UnlitShader
 Texture : Assets/Default/Textures/folder_icon.png
 Ambient : 1.000000 1.000000 1.000000 1.000000

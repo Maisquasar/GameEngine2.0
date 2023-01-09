@@ -55,8 +55,7 @@ Matrix4 Matrix4::Multiply(Matrix4 a) const
 	}
 	return out;
 }
-
-Matrix4 Matrix4::operator*(const Matrix4& in) const
+inline Matrix4 Math::Matrix4::operator*(const Matrix4& in) const
 {
 	Matrix4 out;
 	for (size_t j = 0; j < 4; j++)
@@ -72,7 +71,6 @@ Matrix4 Matrix4::operator*(const Matrix4& in) const
 	}
 	return out;
 }
-
 Matrix4 Matrix4::operator+(const Matrix4& a) const
 {
 	Matrix4 tmp;

@@ -27,5 +27,6 @@ namespace Render
 	private:
 		std::vector<Resources::MeshInstance*> _instances;
 		Resources::Shader* _currentShader = nullptr;
+		unsigned int _buffer;
 	};
 }

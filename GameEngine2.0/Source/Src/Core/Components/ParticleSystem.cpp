@@ -1,5 +1,11 @@
-#include "..\..\..\Include\Core\Components\ParticleSystem.h"
+#include "Include/Core/Components/ParticleSystem.h"
 #include "Include/Render/InstancesManager.h"
+#include "Include/Resources/MeshInstance.h"
+#include "Include/Resources/Shader.h"
+#include "Include/App.h"
+#include "Include/Core/Node.h"
+#include "Include/Core/Transform.h"
+
 #include <Windows.h>
 #include <glad/glad.h>
 
@@ -10,51 +16,181 @@ Core::Components::ParticleSystem::ParticleSystem()
 
 Core::Components::ParticleSystem::~ParticleSystem()
 {
+	for (auto p : _particles)
+	{
+		delete p;
+	}
+	_particles.clear();
 }
 
 void Core::Components::ParticleSystem::Initialize()
 {
-	MaxParticles = 100000;
-	// The VBO containing the 4 vertices of the particles.
-	// Thanks to instancing, they will be shared by all particles.
-	static const GLfloat g_vertex_buffer_data[] = {
-		 -0.5f, -0.5f, 0.0f,
-		  0.5f, -0.5f, 0.0f,
-		 -0.5f,  0.5f, 0.0f,
-		  0.5f,  0.5f, 0.0f,
-	};
-	GLuint billboard_vertex_buffer;
-	glGenBuffers(1, &billboard_vertex_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, billboard_vertex_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-	// The VBO containing the positions and sizes of the particles
-	GLuint particles_position_buffer;
-	glGenBuffers(1, &particles_position_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
-	// Initialize with empty (NULL) buffer : it will be updated later, each frame.
-	glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-
-	// The VBO containing the colors of the particles
-	GLuint particles_color_buffer;
-	glGenBuffers(1, &particles_color_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, particles_color_buffer);
-	// Initialize with empty (NULL) buffer : it will be updated later, each frame.
-	glBufferData(GL_ARRAY_BUFFER, MaxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+	_mesh = ((Resources::MeshInstance*)Application.GetResourceManager()->Get<Resources::Mesh>("DefaultPlane"));
+	this->_shader = Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/BillboardInstanceShader");
+	SetSize(_maxParticles);
 }
 
-Core::Components::Particle::Particle()
+void Core::Components::ParticleSystem::PostInitialize()
 {
+	if (_buffer > 0)
+		glDeleteBuffers(1, &_buffer);
+	glGenBuffers(1, &_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffer);
+	std::vector<Math::Matrix4>  modelMatrices;
+	for (auto instance : _particles)
+	{
+		modelMatrices.push_back(Math::Matrix4::Identity());
+	}
+	glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(float[16]), &modelMatrices[0].content[0][0], GL_STREAM_DRAW);
+
+	for (auto instance : _particles)
+	{
+		instance->Initialize();
+	}
+}
+
+void Core::Components::ParticleSystem::Update()
+{
+	if (!_shader || _particles.size() == 0 || !_mesh)
+		return;
+	if (_updateParticles) {
+		for (auto p : _particles)
+		{
+			p->Update();
+		}
+	}
+	glUseProgram(_shader->Program);
+	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
+	auto right = Application.GetScene()->GetCameraEditor()->Transform.GetRightVector();
+	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), _mesh->SubMeshes[0].Material->GetTexture() ? true : false);
+	if (_mesh->SubMeshes[0].Material->GetTexture())
+		glUniform1i(_shader->GetLocation(Resources::Location::L_TEXTURE), _mesh->SubMeshes[0].Material->GetTexture()->GetIndex());
+	else
+		glUniform4f(_shader->GetLocation(Resources::Location::L_COLOR), _mesh->SubMeshes[0].Material->GetDiffuse().x, _mesh->SubMeshes[0].Material->GetDiffuse().y, _mesh->SubMeshes[0].Material->GetDiffuse().z, _mesh->SubMeshes[0].Material->GetDiffuse().w);
+
+	glUniform2f(_shader->GetLocation(Resources::Location::L_BILLSIZE), _particlesSize.x, _particlesSize.y);
+	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMUP), up.x, up.y, up.z);
+	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMRIGHT), right.x, right.y, right.z);
+	auto vp = Application.GetScene()->GetCameraEditor()->GetProjection() * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
+	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_VIEWPROJECTIONMATRIX), 1, GL_TRUE, &vp.content[0][0]);
+	_particles[0]->Draw(this->_shader, (int)_particles.size());
+}
+
+void Core::Components::ParticleSystem::ShowInInspector()
+{
+	int size = (int)this->_maxParticles;
+	if (ImGui::InputInt("Particles Count", &size, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		if (size != this->_maxParticles && size >= 0)
+		{
+			this->SetSize(size);
+		}
+	}
+	ImGui::Checkbox("Update", &_updateParticles);
+	ImGui::DragFloat("Life Time", &_particlesLifeTime);
+	ImGui::DragFloat3("Direction", &_mainDirection.x, 0.1f);
+	ImGui::TextUnformatted(_mesh->SubMeshes[0].Material->GetPath().c_str());
+	if (ImGui::Button("Change Material"))
+	{
+		ImGui::OpenPopup("MaterialPopup");
+	}
+	if (auto mat = Application.GetResourceManager()->ResourcesPopup<Resources::Material>("MaterialPopup"))
+	{
+		_mesh->SubMeshes[0].Material = mat;
+		for (auto p : _particles)
+		{
+			p->SetMaterial(mat);
+		}
+	}
+}
+
+void Core::Components::ParticleSystem::SetSize(size_t size)
+{
+	_maxParticles = size;
+	for (auto p : _particles)
+	{
+		delete p;
+	}
+	_particles.clear();
+	for (int i = 0; i < _maxParticles; i++)
+	{
+		_particles.push_back(new Particle(this, i));
+		_particles.back()->SetMesh(_mesh);
+	}
+	this->PostInitialize();
+}
+
+void Core::Components::ParticleSystem::SetMesh(Resources::MeshInstance* mesh)
+{
+	_mesh = mesh;
+	for (auto p : _particles)
+	{
+		p->SetMesh(_mesh);
+	}
+}
+
+Core::Components::Particle::Particle(ParticleSystem* ps, int index)
+{
+	_index = index;
+	_particleSystem = ps;
 }
 
 Core::Components::Particle::~Particle()
 {
+	if (_mesh) {
+		delete _mesh;
+		_mesh = nullptr;
+	}
 }
 
 void Core::Components::Particle::Initialize()
 {
+	_mesh->Initialize();
+	ResetPosition();
+}
+
+void Core::Components::Particle::ResetPosition()
+{
+	float spread = 1.5f;
+	_position = Math::Vector3(0);
+	Math::Vector3 randomdir = Math::Vector3(
+		(rand() % 2000 - 1000.0f) / 1000.0f,
+		(rand() % 2000 - 1000.0f) / 1000.0f,
+		(rand() % 2000 - 1000.0f) / 1000.0f
+	);
+	_startTime = (float)_index * 5 / (float)_particleSystem->GetMaxParticles();
+	_speed = _particleSystem->GetDirection() + randomdir * 1.5f;
+	_life = 0;
 }
 
 void Core::Components::Particle::Update()
 {
+	if (_life > _startTime + _particleSystem->GetLifeTime())
+	{
+		ResetPosition();
+	}
+	else if (_life >= _startTime)
+	{
+		_speed += Math::Vector3(0.0f, -9.81f, 0.0f) * (float)ImGui::GetIO().DeltaTime * 0.5f;
+		_position += _speed * (float)ImGui::GetIO().DeltaTime;
+	}
+	_life += ImGui::GetIO().DeltaTime;
+
+	_localMat = Math::Matrix4::CreateTranslationMatrix(_position);
+	_worldMat = _particleSystem->GameObject->Transform.GetModelMatrix() * _localMat;
+	glBufferSubData(GL_ARRAY_BUFFER, _index * 16 * sizeof(float), 16 * sizeof(float), &_worldMat.TransposeMatrix().content[0][0]);
+}
+
+void Core::Components::Particle::Draw(Resources::Shader* shader, int amount)
+{
+	_mesh->Draw(shader, amount);
+}
+
+void Core::Components::Particle::SetMesh(Resources::MeshInstance* mesh)
+{
+	_mesh = new Resources::MeshInstance(*static_cast<Resources::MeshInstance*>(mesh));
+}
+
+void Core::Components::Particle::SetMaterial(Resources::Material* mat)
+{
+	_mesh->SubMeshes[0].Material = mat;
 }
