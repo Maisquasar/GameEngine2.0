@@ -147,10 +147,19 @@ Matrix4 Matrix4::CreateZRotationMatrix(float angle)
 	return out;
 }
 
-Matrix4 Matrix4::CreateTranslationMatrix(const Vector3& translation)
+Matrix4 Matrix4::CreateTranslationMatrix(const Vector3& translation, bool transpose)
 {
 	Matrix4 out = Matrix4(1);
-	for (size_t i = 0; i < 3; i++) out.at(3, (const unsigned char)i) = translation[i];
+	if (!transpose) {
+		out.at(3, 0) = translation[0];
+		out.at(3, 1) = translation[1];
+		out.at(3, 2) = translation[2];
+	}
+	else {
+		out.at(0, 3) = translation[0];
+		out.at(1, 3) = translation[1];
+		out.at(2, 3) = translation[2];
+	}
 	return out;
 }
 

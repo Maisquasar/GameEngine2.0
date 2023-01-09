@@ -61,14 +61,12 @@ Vector3 Vector3::operator-(const Vector3& a) const
 
 Vector3 Vector3::operator*(const Vector3& a) const
 {
-	Vector3 res = Vector3(this->x * a.x, this->y * a.y, this->z * a.z);
-	return res;
+	return { x * a.x, y * a.y, z * a.z };
 }
 
 Vector3 Vector3::operator*(const Integer3& a) const
 {
-	Vector3 res = Vector3(this->x * a.x, this->y * a.y, this->z * a.z);
-	return res;
+	return { x * a.x, y * a.y, z * a.z };
 }
 
 Vector3 Vector3::operator*(const float& a) const

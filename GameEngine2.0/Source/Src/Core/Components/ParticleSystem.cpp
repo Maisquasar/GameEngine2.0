@@ -167,13 +167,13 @@ void Core::Components::Particle::Initialize()
 void Core::Components::Particle::ResetPosition()
 {
 	float spread = 1.5f;
-	_position = Math::Vector3(0);
+	_position = _particleSystem->GameObject->Transform.GetWorldPosition();
 	Math::Vector3 randomdir = Math::Vector3(
 		(rand() % 2000 - 1000.0f) / 1000.0f,
 		(rand() % 2000 - 1000.0f) / 1000.0f,
 		(rand() % 2000 - 1000.0f) / 1000.0f
 	);
-	_startTime = (float)_index * 5 / (float)_particleSystem->GetMaxParticles();
+	_startTime = (float)(_index * 5.f) / (float)_particleSystem->GetMaxParticles();
 	_speed = _particleSystem->GetDirection() + randomdir * 1.5f;
 	_life = 0;
 }
@@ -191,9 +191,8 @@ void Core::Components::Particle::Update()
 	}
 	_life += ImGui::GetIO().DeltaTime;
 
-	_localMat = Math::Matrix4::CreateTranslationMatrix(_position);
-	_worldMat = _particleSystem->GameObject->Transform.GetModelMatrix() * _localMat;
-	glBufferSubData(GL_ARRAY_BUFFER, _index * 16 * sizeof(float), 16 * sizeof(float), &_worldMat.TransposeMatrix().content[0][0]);
+	_localMat = Math::Matrix4::CreateTranslationMatrix(_position, true);
+	glBufferSubData(GL_ARRAY_BUFFER, _index * 16 * sizeof(float), 16 * sizeof(float), &_localMat.content[0][0]);
 }
 
 void Core::Components::Particle::Draw(Resources::Shader* shader, int amount)

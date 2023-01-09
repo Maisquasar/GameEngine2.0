@@ -372,6 +372,8 @@ void App::BeginFrame()
 
 	GetSettings()->NumberOfDrawCalls = 0;
 	GetSettings()->NumberOfTrianglesDraw = 0;
+	GetSettings()->NumberOfInstances = 0;
+	GetSettings()->NumberOfInstancedTriangles = 0;
 }
 
 void App::Update()
@@ -426,9 +428,9 @@ void App::EndFrame()
 
 	glfwSwapBuffers(_window);
 
-	currentFrame = glfwGetTime();
-	_deltaTime = currentFrame - _lastFrame;
-	_lastFrame = currentFrame;
+	_currentFrame = glfwGetTime();
+	_deltaTime = _currentFrame - _lastFrame;
+	_lastFrame = _currentFrame;
 	// End Frame.
 }
 

@@ -60,7 +60,7 @@ private:
 	const GLFWvidmode* _videoMode = nullptr;
 	bool _shouldClose = false;
 	GameState _gameState = GameState::Editor;
-	double currentFrame = 0;
+	double _currentFrame = 0;
 	double _lastFrame = 0;
 	double _deltaTime = 0;
 	bool _isClosingApplication = false;

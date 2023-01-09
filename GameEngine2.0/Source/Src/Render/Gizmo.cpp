@@ -204,6 +204,6 @@ Math::Matrix4 Render::Gizmo::GetMVP()
 	else
 	{
 		auto M = *NodeTransform;
-		return Application.GetScene()->GetVPMatrix() * Math::Matrix4::CreateTransformMatrix(M.GetWorldPosition(), Math::Vector3(), ForwardDistance / 10);
+		return Application.GetScene()->GetVPMatrix() * (Math::Matrix4::CreateTranslationMatrix(M.GetWorldPosition()) * Math::Matrix4::CreateScaleMatrix(ForwardDistance / 10));
 	}
 }

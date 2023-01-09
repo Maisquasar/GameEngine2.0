@@ -37,8 +37,8 @@ void Resources::MeshInstance::Initialize()
 void Resources::MeshInstance::Draw(Shader* shader, int amount)
 {
 	glBindVertexArray(_VAO);
-	Application.GetSettings()->NumberOfInstancedTriangles += this->SubMeshes[0].Count;
-	Application.GetSettings()->NumberOfInstances++;
+	Application.GetSettings()->NumberOfInstancedTriangles += (this->SubMeshes[0].Count/3) * amount;
+	Application.GetSettings()->NumberOfInstances += amount;
 	glDrawArraysInstanced(GL_TRIANGLES, 0, (GLsizei)this->SubMeshes[0].Count, amount);
 	glBindVertexArray(0);
 }

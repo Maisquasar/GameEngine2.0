@@ -1,5 +1,7 @@
 #include "..\..\Include\EditorUi\PerformanceWindow.h"
 #include <algorithm>
+#include <Windows.h>
+#include <GLFW/glfw3.h>
 
 #include "Include/App.h"
 
@@ -38,6 +40,17 @@ void EditorUi::PerformanceWindow::Draw()
 		ImGui::BeginGroup();
 		ImGui::Text("Fps Min : %.2f", *std::min_element(std::begin(_fps), std::end(_fps)));
 		ImGui::Text("Fps Max : %.2f", *std::max_element(std::begin(_fps), std::end(_fps)));
+		static float average = 0;
+		auto value = Math::Mod((float)glfwGetTime(), 1.f);
+		if (value <= 0.1f) {
+			float sum = 0;
+			for (int i = 0; i < _fps.size(); i++)
+			{
+				sum += _fps[i];
+			}
+			average = sum / _fps.size();
+		}
+		ImGui::Text("Average Fps : %.2f", average);
 		ImGui::EndGroup();
 
 		if (ImGui::TreeNode("Other Informations "))
@@ -54,7 +67,7 @@ void EditorUi::PerformanceWindow::Draw()
 			ImGui::TreePop();
 		}
 
-		ImGui::Text("Triangles Draw : %d\nDraw Calls : %d\n Instances Draw : %d\n Instanced Triangles Draw : %d", 
+		ImGui::Text("Triangles Draw : %d\nDraw Calls : %d\nInstances Draw : %d\nInstanced Triangles Draw : %d", 
 			Application.GetSettings()->NumberOfTrianglesDraw, 
 			Application.GetSettings()->NumberOfDrawCalls, 
 			Application.GetSettings()->NumberOfInstances,
