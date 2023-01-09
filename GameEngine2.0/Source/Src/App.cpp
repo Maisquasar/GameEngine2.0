@@ -206,6 +206,12 @@ void App::LoadResources()
 	LightMat->SetShader(_resourceManager.GetDefaultShader());
 	_resourceManager.Add<Resources::Material>("LightMat", LightMat);
 
+	auto ParticleMat = new Resources::Material();
+	ParticleMat->SetEditable(false);
+	ParticleMat->SetName("ParticleMat");
+	ParticleMat->SetShader(_resourceManager.GetDefaultShader());
+	_resourceManager.Add<Resources::Material>("ParticleMat", ParticleMat);
+
 	auto CameraMat = new Resources::Material();
 	CameraMat->SetEditable(false);
 	CameraMat->SetName("CameraMat");
@@ -235,6 +241,7 @@ void App::LoadResources()
 	FilesLoad("Assets");
 	LightMat->SetTexture(_resourceManager.Get<Resources::Texture>("Assets/Default/Textures/LightIcon.png"));
 	CameraMat->SetTexture(_resourceManager.Get<Resources::Texture>("Assets/Default/Textures/CameraIcon.png"));
+	ParticleMat->SetTexture(_resourceManager.Get<Resources::Texture>("Assets/Default/Textures/ParticleIcon.png"));
 }
 
 void App::FilesLoad(std::string path)

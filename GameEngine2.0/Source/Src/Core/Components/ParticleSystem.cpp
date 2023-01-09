@@ -1,5 +1,6 @@
 #include "Include/Core/Components/ParticleSystem.h"
 #include "Include/Render/InstancesManager.h"
+#include "Include/Render/EditorIcon.h"
 #include "Include/Resources/MeshInstance.h"
 #include "Include/Resources/Shader.h"
 #include "Include/App.h"
@@ -21,6 +22,7 @@ Core::Components::ParticleSystem::~ParticleSystem()
 		delete p;
 	}
 	_particles.clear();
+	delete _icon;
 }
 
 void Core::Components::ParticleSystem::Initialize()
@@ -51,6 +53,15 @@ void Core::Components::ParticleSystem::PostInitialize()
 
 void Core::Components::ParticleSystem::Update()
 {
+	if (!_icon)
+	{
+		_icon = new Render::EditorIcon();
+		_icon->Initialize("ParticleMat");
+		_icon->SetSize(Math::Vector2(0.25f, 0.25f));
+
+	}
+	_icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform);
+
 	if (!_shader || _particles.size() == 0 || !_mesh)
 		return;
 	if (_updateParticles) {
@@ -74,6 +85,11 @@ void Core::Components::ParticleSystem::Update()
 	auto vp = Application.GetScene()->GetCameraEditor()->GetProjection() * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_VIEWPROJECTIONMATRIX), 1, GL_TRUE, &vp.content[0][0]);
 	_particles[0]->Draw(this->_shader, (int)_particles.size());
+}
+
+void Core::Components::ParticleSystem::DrawPicking(int index)
+{
+	_icon->DrawPicking(Application.GetScene()->GetVPMatrix(), GameObject->Transform, index);
 }
 
 void Core::Components::ParticleSystem::ShowInInspector()

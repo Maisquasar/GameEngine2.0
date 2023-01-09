@@ -11,6 +11,7 @@ namespace Resources
 namespace Render
 {
 	class InstanceManager;
+	class EditorIcon;
 }
 namespace Core::Components
 {
@@ -52,6 +53,7 @@ namespace Core::Components
 		void PostInitialize();
 
 		void Update() override;
+		void DrawPicking(int index) override;
 
 		void ShowInInspector() override;
 
@@ -63,6 +65,8 @@ namespace Core::Components
 		Math::Vector3 GetDirection() { return _mainDirection; }
 
 	private:
+		Render::EditorIcon* _icon = nullptr;
+
 		size_t _maxParticles = 100;
 		Resources::Shader* _shader = nullptr;;
 		std::vector<Particle*> _particles;

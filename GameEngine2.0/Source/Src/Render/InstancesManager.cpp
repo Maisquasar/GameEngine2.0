@@ -26,7 +26,7 @@ void Render::InstancesManager::Initialize()
 		if (i % modulo == 0)
 			j++;
 
-		modelMatrices.push_back(Math::Matrix4::CreateTransformMatrix(Math::Vector3((i % modulo) - modulo / 2, j*2, 0) * 2, Math::Vector3(0), Math::Vector3(1)).TransposeMatrix());
+		modelMatrices.push_back(Math::Matrix4::CreateTransformMatrix(Math::Vector3((float)(i % modulo) - modulo / 2, (float)j*2, 0) * 2, Math::Vector3(0), Math::Vector3(1)).TransposeMatrix());
 		i++;
 	}
 	glBufferData(GL_ARRAY_BUFFER, _instances.size() * sizeof(float[16]), &modelMatrices[0].content[0][0], GL_STATIC_DRAW);

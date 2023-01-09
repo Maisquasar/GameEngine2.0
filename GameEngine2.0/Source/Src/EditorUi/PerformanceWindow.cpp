@@ -54,7 +54,11 @@ void EditorUi::PerformanceWindow::Draw()
 			ImGui::TreePop();
 		}
 
-		ImGui::Text("Triangles Draw : %d\nDraw Calls : %d", Application.GetSettings()->NumberOfTrianglesDraw, Application.GetSettings()->NumberOfDrawCalls);
+		ImGui::Text("Triangles Draw : %d\nDraw Calls : %d\n Instances Draw : %d\n Instanced Triangles Draw : %d", 
+			Application.GetSettings()->NumberOfTrianglesDraw, 
+			Application.GetSettings()->NumberOfDrawCalls, 
+			Application.GetSettings()->NumberOfInstances,
+			Application.GetSettings()->NumberOfInstancedTriangles);
 	}
 	ImGui::End();
 }

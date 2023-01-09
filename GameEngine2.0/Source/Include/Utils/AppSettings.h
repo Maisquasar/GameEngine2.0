@@ -19,6 +19,8 @@ namespace Utils {
 		Settings::Transform S_Transform = Settings::Transform::World;
 		size_t NumberOfDrawCalls;
 		size_t NumberOfTrianglesDraw;
+		size_t NumberOfInstances;
+		size_t NumberOfInstancedTriangles;
 	private:
 		
 	};

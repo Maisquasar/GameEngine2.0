@@ -127,7 +127,7 @@ namespace Resources {
 
 		std::unordered_map<std::string, Resources::IResource*> GetAllResources() { return _resource; }
 		std::unordered_map<std::string, Resources::IResource*>* GetAllResourcesPtr() { return &_resource; }
-		int TextureIndex = 0;
+		int TextureIndex = 1;
 
 		bool IsDeleted() { return _deleted; }
 	private:

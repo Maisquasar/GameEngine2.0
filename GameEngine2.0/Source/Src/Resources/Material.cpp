@@ -2,6 +2,7 @@
 #include "Include/Resources/ResourceManager.h"
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"
+#include <functional>
 
 Resources::Material::Material()
 {
@@ -31,6 +32,10 @@ void Resources::Material::ShowInInspector()
 	ImGui::NewLine();
 
 	// Texture
+	if (GetTexture()) {
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(GetTexture()->GetData()), ImVec2(32, 32));
+		ImGui::SameLine();
+	}
 	if (ImGui::Button("Change Texture"))
 	{
 		ImGui::OpenPopup("TexturePopup");
@@ -103,7 +108,15 @@ void Resources::Material::MultiThreadLoad(std::string filename)
 		else if (prefix == "Tex")
 		{
 			auto texturePath = Utils::Loader::GetString(currentLine);
-			SetTexture(Application.GetResourceManager()->Get<Resources::Texture>(texturePath.c_str()));
+
+			if (auto tex = Application.GetResourceManager()->Get<Resources::Texture>(texturePath.c_str()))
+			{
+				SetTexture(tex);
+			}
+			else
+			{
+				SetTexture(Application.GetResourceManager()->Create<Resources::Texture>(texturePath.c_str()));
+			}
 		}
 		else if (prefix == "Amb")
 		{
