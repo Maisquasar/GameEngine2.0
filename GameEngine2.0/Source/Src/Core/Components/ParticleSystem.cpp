@@ -42,12 +42,9 @@ void Core::Components::ParticleSystem::PostInitialize()
 		glDeleteBuffers(1, &_buffer);
 	glGenBuffers(1, &_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer);
-	std::vector<Math::Matrix4>  modelMatrices;
-	for (auto instance : _particles)
-	{
-		modelMatrices.push_back(Math::Matrix4::Identity());
-	}
-	glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(float[16]), &modelMatrices[0].content[0][0], GL_STREAM_DRAW);
+	std::vector<Math::Vector4>  XYZS;
+	XYZS.resize(_particles.size());
+	glBufferData(GL_ARRAY_BUFFER, XYZS.size() * sizeof(float[4]), &XYZS[0], GL_STREAM_DRAW);
 
 	for (auto instance : _particles)
 	{
@@ -70,8 +67,6 @@ void Core::Components::ParticleSystem::Update()
 	}
 	_icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform);
 
-	if (!_shader || _particles.size() == 0 || !_mesh)
-		return;
 	if (_updateParticles) {
 		std::vector<Math::Vector4>  XYZS;
 		for (int i = 0; i < _particles.size(); i++)
@@ -81,7 +76,10 @@ void Core::Components::ParticleSystem::Update()
 		}
 
 		glBufferSubData(GL_ARRAY_BUFFER, 0, XYZS.size() * 4 * sizeof(float), &XYZS[0]);
+		_timeSinceStart += ImGui::GetIO().DeltaTime * _speed;
 	}
+	if (!_shader || _particles.size() == 0 || !_mesh)
+		return;
 	glUseProgram(_shader->Program);
 	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
 	auto right = Application.GetScene()->GetCameraEditor()->Transform.GetRightVector();
@@ -106,6 +104,21 @@ void Core::Components::ParticleSystem::DrawPicking(int index)
 
 void Core::Components::ParticleSystem::ShowInInspector()
 {
+	if (ImGui::Begin("Particles", (bool*)true, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize))
+	{
+		if (ImGui::Button(_updateParticles ? "Pause" : "Play")) { _updateParticles = !_updateParticles; }
+		ImGui::SameLine();
+		if (ImGui::Button("Restart")) { _timeSinceStart = 0; }
+		ImGui::SameLine();
+		if (ImGui::Button("Stop")) {
+			_timeSinceStart = 0; 
+			_updateParticles = false;
+		}
+		ImGui::DragFloat("Playback Time", &_timeSinceStart);
+		ImGui::DragFloat("Playback Speed", &_speed);
+		if (_speed < 0) _speed = 0;
+	}
+	ImGui::End();
 	int size = (int)this->_maxParticles;
 	if (ImGui::InputInt("Particles Count", &size, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue)) {
 		if (size != this->_maxParticles && size >= 0)
@@ -113,7 +126,6 @@ void Core::Components::ParticleSystem::ShowInInspector()
 			this->SetSize(size);
 		}
 	}
-	ImGui::Checkbox("Update", &_updateParticles);
 	ImGui::DragFloat("Life Time", &_particlesLifeTime);
 	ImGui::DragFloat3("Direction", &_mainDirection.x, 0.1f);
 	ImGui::DragFloatRange2("Min/Max Size", &_minSize, &_maxSize, 0.01f, 0.0f, 1.0f, "%.5f");

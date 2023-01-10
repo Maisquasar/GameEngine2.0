@@ -72,6 +72,7 @@ namespace Core::Components
 		void SetSize(size_t size);
 		void SetMesh(Resources::MeshInstance* mesh);
 
+		float GetTime() { return _timeSinceStart; }
 		float GetLifeTime() { return _particlesLifeTime; }
 		size_t GetMaxParticles() { return _maxParticles; }
 		Math::Vector3 GetDirection() { return _mainDirection; }
@@ -86,6 +87,8 @@ namespace Core::Components
 		GLuint _buffer;
 		Resources::MeshInstance* _mesh = nullptr;
 
+		float _timeSinceStart = 0.f;
+		float _speed = 1.f;
 		bool _updateParticles = true;
 		float _particlesLifeTime = 5.f;
 		Math::Vector2 _particlesSize = Math::Vector2(0.1f, 0.1f);
