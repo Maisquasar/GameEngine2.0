@@ -50,12 +50,12 @@ void Resources::Texture::MultiThreadLoading(std::string filename)
 	Application.GetResourceManager()->TextureIndex++;
 	int NrChannels;
 	this->_data = stbi_load(_path.c_str(), &_width, &_height, &NrChannels, 4);
+	Loaded = true;
 	if (_data == nullptr) {
 		auto fail = stbi_failure_reason();
 		LOG(Debug::LogType::L_ERROR, "Can't load Texture: \"%s\" : %s", _path.c_str(), fail);
 		return;
 	}
-	Loaded = true;
 #if !MULTITHREAD_LOADING
 	Initialize();
 #endif

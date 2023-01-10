@@ -5,6 +5,8 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <random>
+#include <cstdlib>
 
 #include "Include/Math/Math.h"
 
@@ -34,4 +36,6 @@ namespace Utils
 	std::vector<std::pair<Core::Node*, float> > BubbleSort(std::map<Core::Node*, float>& list);
 
 	void GetPlaneVertices(std::vector<Math::Vector3> &Positions, std::vector<Math::Vector2>& TextureUVs, std::vector<Math::Vector3> &Normals, std::vector<Math::Integer3>& Indices);
+
+	float RandomFloat(float min, float max);
 }

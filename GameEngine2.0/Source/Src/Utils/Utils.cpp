@@ -56,10 +56,10 @@ void Utils::GetPlaneVertices(std::vector<Math::Vector3>& Positions, std::vector<
 	};
 
 	std::vector < Math::Vector2> t = {
-		{1 -0.000000, 0.000000},
-		{1- 1.000000, 0.000000 },
-		{1- 0.000000, 1.000000},
-		{1- 1.000000, 1.000000 }
+		{1 - 0.000000, 0.000000},
+		{1 - 1.000000, 0.000000 },
+		{1 - 0.000000, 1.000000},
+		{1 - 1.000000, 1.000000 }
 	};
 	Math::Vector3 n = { -0.0000, 1.0000, -0.0000 };
 
@@ -72,4 +72,11 @@ void Utils::GetPlaneVertices(std::vector<Math::Vector3>& Positions, std::vector<
 	TextureUVs.insert(TextureUVs.begin(), t.begin(), t.end());
 	Normals.push_back(n);
 	Indices.insert(Indices.begin(), i.begin(), i.end());
+}
+
+float Utils::RandomFloat(float min, float max)
+{
+	static std::mt19937 gen(std::random_device{}());
+	std::uniform_real_distribution<float> dist(min, max);
+	return dist(gen);
 }
