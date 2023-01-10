@@ -73,11 +73,14 @@ void Core::Components::ParticleSystem::Update()
 	if (!_shader || _particles.size() == 0 || !_mesh)
 		return;
 	if (_updateParticles) {
+		std::vector<Math::Vector4>  XYZS;
 		for (int i = 0; i < _particles.size(); i++)
 		{
 			_particles[i]->Update();
+			XYZS.push_back(_particles[i]->GetXYZS());
 		}
 
+		glBufferSubData(GL_ARRAY_BUFFER, 0, XYZS.size() * 4 * sizeof(float), &XYZS[0]);
 	}
 	glUseProgram(_shader->Program);
 	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
@@ -207,7 +210,7 @@ void Core::Components::Particle::Update()
 		_position += _speed * (float)ImGui::GetIO().DeltaTime;
 	}
 	_life += ImGui::GetIO().DeltaTime;
-	SendToShader(_index);
+	//SendToShader(_index);
 }
 
 void Core::Components::Particle::SendToShader(size_t index)

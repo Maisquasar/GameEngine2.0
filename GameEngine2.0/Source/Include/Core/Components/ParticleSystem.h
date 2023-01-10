@@ -38,6 +38,7 @@ namespace Core::Components
 		void SetMaterial(Resources::Material* mat);
 		void SetIndex(size_t i) { _index = i; }
 
+		Math::Vector4 GetXYZS() {return { _position, _size };}
 		bool IsAlive() { return _alive; }
 	private:
 		Resources::MeshInstance* _mesh = nullptr;
