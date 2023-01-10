@@ -67,7 +67,7 @@ namespace Math {
 		Vector3 operator*(const Integer3& a) const;
 
 		// Return the result of the aritmetic multiplication of 'a' and 'b'
-		Vector3 operator*(const float& a) const;
+		inline Vector3 operator*(const float& a) const;
 
 		// Return the result of the aritmetic division of 'a' and 'b', will return 'a' * VEC_HIGH_VALUE if 'b' is equal 0;
 		Vector3 operator/(const float& b) const;

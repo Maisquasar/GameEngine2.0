@@ -29,6 +29,7 @@ namespace Resources {
 			_resource[Path] = new T();
 			_resource[Path]->SetPath(Path);
 			_resource[Path]->SetName(filename);
+			_resource[Path]->_inLoading = true;
 			_resource[Path]->Load(filename);
 			return dynamic_cast<T*>(_resource[Path]);
 		}

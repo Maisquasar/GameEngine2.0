@@ -31,14 +31,14 @@ namespace Core::Components
 		void ResetPosition();
 
 		void Update();
-		void SendToShader(size_t index);
 		void Draw(Resources::Shader* shader, int amount);
 
 		void SetMesh(Resources::MeshInstance* mesh);
 		void SetMaterial(Resources::Material* mat);
 		void SetIndex(size_t i) { _index = i; }
 
-		Math::Vector4 GetXYZS() {return { _position, _size };}
+		Math::Vector4 GetXYZS() {return { _position, _alive ? _size : 0.0f };}
+		size_t GetIndex() { return _index; }
 		bool IsAlive() { return _alive; }
 	private:
 		Resources::MeshInstance* _mesh = nullptr;
@@ -60,13 +60,13 @@ namespace Core::Components
 		ParticleSystem();
 		~ParticleSystem();
 
-		void Initialize() override;
 		// Call When the size is changed
 		void PostInitialize();
+		void ResetPositions();
 
+		void Initialize() override;
 		void Update() override;
 		void DrawPicking(int index) override;
-
 		void ShowInInspector() override;
 
 		void SetSize(size_t size);
@@ -90,6 +90,7 @@ namespace Core::Components
 		float _timeSinceStart = 0.f;
 		float _speed = 1.f;
 		bool _updateParticles = true;
+		bool _drawParticles = true;
 		float _particlesLifeTime = 5.f;
 		Math::Vector2 _particlesSize = Math::Vector2(0.1f, 0.1f);
 		Math::Vector3 _mainDirection = Math::Vector3(0.0f, 10.0f, 0.0f);

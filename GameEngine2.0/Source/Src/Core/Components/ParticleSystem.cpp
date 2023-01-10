@@ -12,6 +12,7 @@
 #include <glad/glad.h>
 #include <algorithm>
 
+#pragma region ParticleSystem
 Core::Components::ParticleSystem::ParticleSystem()
 {
 	ComponentName = "Particle System";
@@ -52,8 +53,12 @@ void Core::Components::ParticleSystem::PostInitialize()
 	}
 }
 
-bool SortParticle(Core::Components::Particle* a, Core::Components::Particle* b) {
-	return (int)a->IsAlive() > (int)b->IsAlive();
+void Core::Components::ParticleSystem::ResetPositions()
+{
+	for (auto p : _particles)
+	{
+		p->ResetPosition();
+	}
 }
 
 void Core::Components::ParticleSystem::Update()
@@ -69,16 +74,19 @@ void Core::Components::ParticleSystem::Update()
 
 	if (_updateParticles) {
 		std::vector<Math::Vector4>  XYZS;
+		XYZS.resize(_particles.size());
 		for (int i = 0; i < _particles.size(); i++)
 		{
 			_particles[i]->Update();
-			XYZS.push_back(_particles[i]->GetXYZS());
+			XYZS[i] = (_particles[i]->GetXYZS());
 		}
-
-		glBufferSubData(GL_ARRAY_BUFFER, 0, XYZS.size() * 4 * sizeof(float), &XYZS[0]);
+		if (_particles.size() > 0)
+			glBufferSubData(GL_ARRAY_BUFFER, 0, XYZS.size() * 4 * sizeof(float), &XYZS[0]);
 		_timeSinceStart += ImGui::GetIO().DeltaTime * _speed;
 	}
-	if (!_shader || _particles.size() == 0 || !_mesh)
+
+	// Sent Values to Shader
+	if (!_shader || _particles.size() == 0 || !_mesh || !_drawParticles)
 		return;
 	glUseProgram(_shader->Program);
 	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
@@ -94,7 +102,7 @@ void Core::Components::ParticleSystem::Update()
 	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMRIGHT), right.x, right.y, right.z);
 	auto vp = Application.GetScene()->GetCameraEditor()->GetProjection() * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_VIEWPROJECTIONMATRIX), 1, GL_TRUE, &vp.content[0][0]);
-	_particles[0]->Draw(this->_shader, _particles.size());
+	_particles[0]->Draw(this->_shader, (int)_particles.size());
 }
 
 void Core::Components::ParticleSystem::DrawPicking(int index)
@@ -104,19 +112,27 @@ void Core::Components::ParticleSystem::DrawPicking(int index)
 
 void Core::Components::ParticleSystem::ShowInInspector()
 {
-	if (ImGui::Begin("Particles", (bool*)true, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize))
+	if (ImGui::Begin("Particles", (bool*)true, ImGuiWindowFlags_NoDocking))
 	{
 		if (ImGui::Button(_updateParticles ? "Pause" : "Play")) { _updateParticles = !_updateParticles; }
 		ImGui::SameLine();
-		if (ImGui::Button("Restart")) { _timeSinceStart = 0; }
+		if (ImGui::Button("Restart"))
+		{
+			_timeSinceStart = 0;
+			ResetPositions();
+		}
 		ImGui::SameLine();
 		if (ImGui::Button("Stop")) {
-			_timeSinceStart = 0; 
+			_timeSinceStart = 0;
 			_updateParticles = false;
+			_drawParticles = false;
+			ResetPositions();
 		}
+		ImGui::PushItemWidth(100.f);
 		ImGui::DragFloat("Playback Time", &_timeSinceStart);
 		ImGui::DragFloat("Playback Speed", &_speed);
 		if (_speed < 0) _speed = 0;
+		ImGui::PopItemWidth();
 	}
 	ImGui::End();
 	int size = (int)this->_maxParticles;
@@ -129,6 +145,7 @@ void Core::Components::ParticleSystem::ShowInInspector()
 	ImGui::DragFloat("Life Time", &_particlesLifeTime);
 	ImGui::DragFloat3("Direction", &_mainDirection.x, 0.1f);
 	ImGui::DragFloatRange2("Min/Max Size", &_minSize, &_maxSize, 0.01f, 0.0f, 1.0f, "%.5f");
+	ImGui::Checkbox("Draw Particles", &_drawParticles);
 
 	// Material
 	ImGui::TextUnformatted(_mesh->SubMeshes[0].Material->GetPath().c_str());
@@ -170,7 +187,9 @@ void Core::Components::ParticleSystem::SetMesh(Resources::MeshInstance* mesh)
 		p->SetMesh(_mesh);
 	}
 }
+#pragma endregion
 
+#pragma region Particle
 Core::Components::Particle::Particle(ParticleSystem* ps, int index)
 {
 	_index = index;
@@ -189,6 +208,7 @@ void Core::Components::Particle::Initialize()
 {
 	_mesh->Initialize();
 	ResetPosition();
+	_startTime = (float)(_index * 5.f) / (float)_particleSystem->GetMaxParticles();
 }
 
 void Core::Components::Particle::ResetPosition()
@@ -200,8 +220,6 @@ void Core::Components::Particle::ResetPosition()
 		(rand() % 2000 - 1000.0f) / 1000.0f,
 		(rand() % 2000 - 1000.0f) / 1000.0f
 	);
-	if (_startTime == 0.00f)
-		_startTime = (float)(_index * 5.f) / (float)_particleSystem->GetMaxParticles();
 	_alive = false;
 	_speed = _particleSystem->GetDirection() + randomdir * 1.5f;
 	_life = 0.f;
@@ -222,13 +240,6 @@ void Core::Components::Particle::Update()
 		_position += _speed * (float)ImGui::GetIO().DeltaTime;
 	}
 	_life += ImGui::GetIO().DeltaTime;
-	//SendToShader(_index);
-}
-
-void Core::Components::Particle::SendToShader(size_t index)
-{
-	Math::Vector4 xyzs = Math::Vector4(_position, _size);
-	glBufferSubData(GL_ARRAY_BUFFER, index * 4 * sizeof(float), 4 * sizeof(float), &xyzs.x);
 }
 
 void Core::Components::Particle::Draw(Resources::Shader* shader, int amount)
@@ -245,3 +256,4 @@ void Core::Components::Particle::SetMaterial(Resources::Material* mat)
 {
 	_mesh->SubMeshes[0].Material = mat;
 }
+#pragma endregion

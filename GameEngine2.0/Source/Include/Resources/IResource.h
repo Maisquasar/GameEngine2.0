@@ -16,7 +16,9 @@ namespace Resources {
 
 		std::string GetPath() { return _path; }
 		std::string GetName() { return _name; }
+
 		virtual bool IsInitialized() { return _initialized; }
+		bool IsInLoading() { return _inLoading; }
 
 		void SetInitialized() { _initialized = true; }
 
@@ -25,6 +27,8 @@ namespace Resources {
 		std::string _path;
 		std::string _name;
 		bool _initialized = false;
+		bool _inLoading = false;
+		friend class ResourceManager;
 	};
 
 	template <typename Derived>
