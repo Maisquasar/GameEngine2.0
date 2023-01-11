@@ -22,11 +22,11 @@ void Render::EditorIcon::Initialize(std::string MatName)
 	Plane->SetSize(Math::Vector2(1, 1));
 }
 
-void Render::EditorIcon::Draw(Math::Matrix4 VP, Core::Transform transform)
+void Render::EditorIcon::Draw(Math::Matrix4 VP, Core::Transform transform, bool selected)
 {
 	if (!Plane)
 		return;
-	Plane->Update(GetMVP(VP, transform));
+	Plane->Update(GetMVP(VP, transform), selected);
 }
 
 

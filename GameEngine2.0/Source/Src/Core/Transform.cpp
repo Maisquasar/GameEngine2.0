@@ -1,4 +1,5 @@
 #include "Include/Core/Transform.h"
+#include "Include/Core/Components/Component.h"
 #include "Include/Core/Node.h"
 #include "Include/Utils/Loader.h"
 
@@ -173,6 +174,10 @@ void Core::Transform::ForceUpdate()
 		for (auto child : GameObject->Childrens)
 		{
 			child->Transform.ForceUpdate();
+		}
+		for (auto component : GameObject->Components)
+		{
+			component->UpdateTransform();
 		}
 	}
 }

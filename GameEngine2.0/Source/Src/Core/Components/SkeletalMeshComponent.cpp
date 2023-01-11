@@ -43,6 +43,9 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 	{
 		ImGui::OpenPopup("SkeletonPopup");
 	}
+	if (auto skel = Application.GetResourceManager()->ResourcesPopup<Resources::Skeleton>("SkeletonPopup")) {
+		SetSkeleton(skel);
+	}
 	ImGui::SameLine();
 	std::string name = "None";
 	if (Skeleton)
@@ -50,9 +53,6 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 		name = Skeleton->GetName();
 	}
 	ImGui::Text(name.c_str());
-	if (auto skel = Application.GetResourceManager()->ResourcesPopup<Resources::Skeleton>("SkeletonPopup")) {
-		SetSkeleton(skel);
-	}
 	ImGui::SameLine();
 	if (Skeleton)
 	{
@@ -71,6 +71,12 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 	{
 		ImGui::OpenPopup("SkeletalMeshPopup");
 	}
+	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::SkeletalMesh>("SkeletalMeshPopup")) {
+		if (Mesh)
+			delete Mesh;
+		Mesh = Cast(Resources::SkeletalMesh, m->Clone());
+		printf(Mesh->GetName().c_str());
+	}
 	ImGui::SameLine();
 	name = "None";
 	if (Mesh)
@@ -78,12 +84,6 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 		name = Mesh->GetName();
 	}
 	ImGui::Text(name.c_str());
-	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::SkeletalMesh>("SkeletalMeshPopup")) {
-		if (Mesh)
-			delete Mesh;
-		Mesh = Cast(Resources::SkeletalMesh, m->Clone());
-		printf(Mesh->GetName().c_str());
-	}
 	if (Skeleton)
 		Skeleton->RootBone->ShowInInspector();
 
@@ -129,4 +129,9 @@ void Core::Components::SkeletalMeshComponent::Load(const char* data, uint32_t& p
 		}
 		pos++;
 	}
+}
+
+void Core::Components::SkeletalMeshComponent::SetUIIcon()
+{
+	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/SkeletalMeshIcon.png");
 }

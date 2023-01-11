@@ -13,16 +13,10 @@ Core::Components::Camera::Camera()
 Core::Components::Camera::~Camera()
 {
 	delete Icon;
-	delete _instancesManager;
 }
 
 void Core::Components::Camera::Initialize()
 {
-	auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>("DefaultPlane");
-	_instancesManager = new Render::InstancesManager();
-	_instancesManager->SetInstances((Resources::MeshInstance*)mesh, 100000);
-	_instancesManager->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/UnlitInstanceShader"));
-	_instancesManager->Initialize();
 }
 
 void Core::Components::Camera::Update()
@@ -34,12 +28,15 @@ void Core::Components::Camera::Update()
 		Icon->SetSize(Math::Vector2(0.25f, 0.25f));
 
 	}
-	Icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform);
-
-	_instancesManager->Draw();
+	Icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform, GameObject->IsSelected());
 }
 
 void Core::Components::Camera::DrawPicking(int id)
 {
 	Icon->DrawPicking(Application.GetScene()->GetVPMatrix(), GameObject->Transform, id);
+}
+
+void Core::Components::Camera::SetUIIcon()
+{
+	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/CameraIcon.png");
 }

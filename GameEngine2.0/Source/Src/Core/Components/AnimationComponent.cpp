@@ -100,3 +100,8 @@ void Core::Components::AnimationComponent::SetSkeleton(SkeletalMeshComponent* s)
 {
 	_skeleton = s;
 }
+
+void Core::Components::AnimationComponent::SetUIIcon()
+{
+	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/AnimationIcon.png");
+}

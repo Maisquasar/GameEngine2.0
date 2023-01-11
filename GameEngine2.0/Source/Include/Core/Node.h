@@ -36,6 +36,7 @@ namespace Core {
 		void RemoveAllChildrens();
 
 		bool IsAParent(Node* node);
+		bool IsSelected() { return _selected; }
 
 		void UpdateSelfAndChilds();
 		void DrawSelf();

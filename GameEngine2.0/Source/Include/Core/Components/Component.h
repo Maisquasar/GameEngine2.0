@@ -4,6 +4,10 @@
 #include <vector>
 #include <ImGui/imgui.h>
 #include "Include/Math/Math.h"
+namespace Resources
+{
+	class Texture;
+}
 
 namespace Core {
 	class Node;
@@ -22,6 +26,8 @@ namespace Core {
 			virtual void EditorUpdate() {}
 			virtual void GameUpdate() {}
 
+			virtual void UpdateTransform() {}
+
 			// Function to Draw Picking.
 			virtual void DrawPicking(int id) {}
 
@@ -33,6 +39,7 @@ namespace Core {
 			virtual void ShowInInspector() { }
 
 			virtual void SetGameobject(Core::Node* node);
+			virtual void SetUIIcon() {}
 
 			virtual void Save(std::string space, std::string& content) {}
 			virtual void Load(const char* data, uint32_t& pos) { }
@@ -45,8 +52,12 @@ namespace Core {
 			// ===== Getters Functions ===== //
 			bool* GetEnable() { return &_enable; }
 			bool IsEnable() { return _enable; }
+
+			Resources::Texture* GetUIIcon() { return _UIIcon; }
 		protected:
 			bool _enable = true;
+
+			Resources::Texture* _UIIcon = nullptr;
 
 		};
 

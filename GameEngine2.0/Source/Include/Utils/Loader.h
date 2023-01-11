@@ -31,10 +31,14 @@ namespace Utils::Loader
 	int GetInt(std::string line);
 	float GetFloat(std::string line);
 	Math::Vector4 GetVec4(std::string);
+	// Obj Loading Vector3
 	Math::Vector3 GetVec3(std::string);
 	// Scene Loading Vector3
 	Math::Vector3 GetVector3(std::string);
+	// Obj Loading Vector2
 	Math::Vector2 GetVec2(std::string);
+	// Scene Loading Vector2
+	Math::Vector2 GetVector2(std::string);
 	std::vector<Math::Integer3> GetIndices(std::string);
 	Math::Matrix4 GetMat4(std::string line);
 

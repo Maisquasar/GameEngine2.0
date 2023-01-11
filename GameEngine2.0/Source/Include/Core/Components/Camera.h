@@ -20,8 +20,9 @@ namespace Core::Components
 		void Update() override;
 		void DrawPicking(int id) override;
 
+		void SetUIIcon() override;
+
 		Render::EditorIcon* Icon = nullptr;
 	private:
-		Render::InstancesManager* _instancesManager;
 	};
 }

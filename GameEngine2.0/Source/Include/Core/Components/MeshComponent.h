@@ -26,6 +26,7 @@ namespace Core::Components {
 
 		Resources::Mesh* GetMesh();
 		void SetMesh(Resources::IResource* mesh);
+		void SetUIIcon() override;
 
 		void Save(std::string space, std::string& content) override;
 		void Load(const char* data, uint32_t& pos) override;

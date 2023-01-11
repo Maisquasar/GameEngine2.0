@@ -24,6 +24,7 @@ namespace Core::Components
 
 		void SetCurrentAnimation(Resources::Animation*);
 		void SetSkeleton(class SkeletalMeshComponent*);
+		void SetUIIcon() override;
 
 		Resources::Animation* GetCurrentAnimation() { return _currentAnimation; }
 	private:

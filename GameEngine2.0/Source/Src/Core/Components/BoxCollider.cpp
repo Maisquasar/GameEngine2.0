@@ -58,7 +58,7 @@ void Core::Components::BoxCollider::Initialize()
 
 void Core::Components::BoxCollider::Update()
 {
-	Transform.ForceUpdate();
+	Transform.Update();
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.
 	Math::Matrix4 M = Transform.GetModelMatrix();
@@ -70,7 +70,7 @@ void Core::Components::BoxCollider::Update()
 	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
 
 	int polygonMode;
-	// Enable Wireframe.
+	// Enable Wire frame.
 	glDisable(GL_CULL_FACE);
 	glGetIntegerv(GL_POLYGON_MODE, &polygonMode);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -78,7 +78,7 @@ void Core::Components::BoxCollider::Update()
 	glBindVertexArray(_VAO);
 	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices.size());
 
-	// Disable Wireframe.
+	// Disable Wire frame.
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
 
@@ -86,13 +86,23 @@ void Core::Components::BoxCollider::Update()
 	//Physic::Ray ray;
 	//ray.Set(Application.GetEditorCamera()->Transform.GetLocalPosition(), Application.GetEditorCamera()->Transform.GetForwardVector() * 10000);
 	//if (RayIntersection(ray))
-		//printf("Colision");
+		//printf("Collision");
 
+}
+
+void Core::Components::BoxCollider::UpdateTransform()
+{
+	Transform.ForceUpdate();
 }
 
 void Core::Components::BoxCollider::ShowInInspector()
 {
 	Transform.ShowInInspector();
+}
+
+void Core::Components::BoxCollider::SetUIIcon()
+{
+	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/BoxColliderIcon.png");
 }
 
 bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)

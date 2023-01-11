@@ -38,4 +38,6 @@ namespace Utils
 	void GetPlaneVertices(std::vector<Math::Vector3> &Positions, std::vector<Math::Vector2>& TextureUVs, std::vector<Math::Vector3> &Normals, std::vector<Math::Integer3>& Indices);
 
 	float RandomFloat(float min, float max);
+
+	bool InputTextAutoCompletion(std::vector<std::string> datas, std::string& result);
 }

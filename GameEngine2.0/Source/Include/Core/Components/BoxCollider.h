@@ -23,8 +23,12 @@ namespace Core::Components {
 		void SetGameobject(Core::Node* node) override;
 
 		void Initialize() override;
+
 		void Update() override;
+		void UpdateTransform() override;
+
 		void ShowInInspector() override;
+		void SetUIIcon() override;
 
 		bool RayIntersection(Physic::Ray ray);
 

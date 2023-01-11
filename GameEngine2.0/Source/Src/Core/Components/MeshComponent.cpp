@@ -213,3 +213,8 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 		pos++;
 	}
 }
+
+void Core::Components::MeshComponent::SetUIIcon()
+{
+	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/MeshIcon.png");
+}

@@ -144,7 +144,7 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 			continue;
 		glUseProgram(Sub.Material->GetShader()->Program);
 		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-		glDepthRange(0.01, 1.0);
+		glDepthRange(0.02, 1.0);
 		glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
 		if (Sub.Material->GetTexture())
 			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());

@@ -63,6 +63,7 @@ namespace Core::Components
 		// Call When the size is changed
 		void PostInitialize();
 		void ResetPositions();
+		void InitializeParticles();
 
 		void Initialize() override;
 		void Update() override;
@@ -71,12 +72,17 @@ namespace Core::Components
 
 		void SetSize(size_t size);
 		void SetMesh(Resources::MeshInstance* mesh);
+		void SetUIIcon() override;
 
 		float GetTime() { return _timeSinceStart; }
 		float GetLifeTime() { return _particlesLifeTime; }
+		float GetAngle() { return _angle; }
 		size_t GetMaxParticles() { return _maxParticles; }
 		Math::Vector3 GetDirection() { return _mainDirection; }
-		Math::Vector2 GetMinMaxSize() { return { _minSize, _maxSize }; }
+		Math::Vector2 GetMinMaxSize() { return _size; }
+
+		void Save(std::string space, std::string& content) override;
+		void Load(const char* data, uint32_t& pos) override;
 
 	private:
 		Render::EditorIcon* _icon = nullptr;
@@ -84,6 +90,7 @@ namespace Core::Components
 		size_t _maxParticles = 100;
 		Resources::Shader* _shader = nullptr;;
 		std::vector<Particle*> _particles;
+		std::vector<Math::Vector4>  XYZS;
 		GLuint _buffer;
 		Resources::MeshInstance* _mesh = nullptr;
 
@@ -92,10 +99,9 @@ namespace Core::Components
 		bool _updateParticles = true;
 		bool _drawParticles = true;
 		float _particlesLifeTime = 5.f;
-		Math::Vector2 _particlesSize = Math::Vector2(0.1f, 0.1f);
+		float _angle = 25.f;
 		Math::Vector3 _mainDirection = Math::Vector3(0.0f, 10.0f, 0.0f);
-		float _minSize = 0.1f;
-		float _maxSize = 0.2f;
+		Math::Vector2 _size = Math::Vector2(0.1f , 0.2f);
 
 	};
 }

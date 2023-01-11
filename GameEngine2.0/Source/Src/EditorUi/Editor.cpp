@@ -34,6 +34,7 @@ void EditorUi::Editor::Initialize()
 
 void EditorUi::Editor::Draw()
 {
+	//ImGui::ShowDemoWindow();
 	MainDocking();
 	_mainBar.Draw();
 	_hierarchy.Draw();

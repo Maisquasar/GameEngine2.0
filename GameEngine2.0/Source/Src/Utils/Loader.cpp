@@ -129,6 +129,20 @@ Math::Vector3 Utils::Loader::GetVec3(std::string line)
 	return out;
 }
 
+Math::Vector2 Utils::Loader::GetVector2(std::string line)
+{
+	Math::Vector2 out;
+	std::string value;
+	std::string temp = line.substr(line.find_first_of(':') + 2);
+	for (size_t i = 0; i < 2; i++)
+	{
+		value = temp.substr(0, temp.find_first_of(' '));
+		out[i] = std::stof(value);
+		temp = temp.substr(temp.find_first_of(' ') + 1);
+	}
+	return out;
+}
+
 Math::Vector2 Utils::Loader::GetVec2(std::string line)
 {
 	Math::Vector2 out;
@@ -144,6 +158,9 @@ Math::Vector2 Utils::Loader::GetVec2(std::string line)
 	out = Math::Vector2(out.x, 1 - out.y);
 	return out;
 }
+
+
+
 
 Math::Matrix4 Utils::Loader::GetMat4(std::string line)
 {
@@ -168,7 +185,7 @@ Math::Matrix4 Utils::Loader::GetMat4(std::string line)
 const char* Utils::Loader::ReadFile(const char* filename, uint32_t& size, bool& success)
 {
 	std::ifstream is(filename, std::ifstream::binary);
-	if (is) {
+	if (is.is_open()) {
 		success = true;
 		// get length of file:
 		is.seekg(0, is.end);

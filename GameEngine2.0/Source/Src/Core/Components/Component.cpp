@@ -46,6 +46,7 @@ void Core::Components::Data::Destroy()
 
 void Core::Components::Data::NewComponent(Component* comp)
 {
+	comp->SetUIIcon();
 	Components.push_back(comp);
 }
 

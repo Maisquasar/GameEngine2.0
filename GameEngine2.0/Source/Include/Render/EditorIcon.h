@@ -21,7 +21,7 @@ namespace Render {
 		~EditorIcon();
 
 		void Initialize(std::string TextName);
-		void Draw(Math::Matrix4 VP, Core::Transform transform);
+		void Draw(Math::Matrix4 VP, Core::Transform transform, bool selected = false);
 		void DrawPicking(Math::Matrix4 MVP, Core::Transform transform, int id);
 		void SetSize(Math::Vector2 size);
 

@@ -42,7 +42,7 @@ void Render::Gizmo::Draw()
 			glBindVertexArray(mesh->_VAO);
 
 			auto MVP = GetMVP();
-			glDepthRange(0, 0.01);
+			glDepthRange(0.01, 0.02);
 			for (auto Sub : mesh->SubMeshes)
 			{
 				if (!Sub.Material || !Sub.Material->GetShader())
@@ -54,7 +54,7 @@ void Render::Gizmo::Draw()
 
 				glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 			}
-			glDepthRange(0.01, 1);
+			glDepthRange(0.02, 1);
 		}
 
 	}
@@ -137,7 +137,7 @@ void Render::Gizmo::DrawPicking(int id)
 
 
 		auto MVP = GetMVP();
-		glDepthRange(0, 0.01);
+		glDepthRange(0.01, 0.02);
 		for (const auto& Sub : mesh->SubMeshes)
 		{
 			if (!Sub.Material)
@@ -147,7 +147,7 @@ void Render::Gizmo::DrawPicking(int id)
 
 			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
 		}
-		glDepthRange(0.01, 1);
+		glDepthRange(0.02, 1);
 		id++;
 	}
 }

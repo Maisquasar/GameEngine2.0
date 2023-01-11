@@ -18,6 +18,7 @@ namespace Core::Components
 		void ShowInInspector() override;
 
 		void SetSkeleton(Resources::Skeleton* skel);
+		void SetUIIcon() override;
 
 		Resources::Skeleton* Skeleton = nullptr;
 		Resources::SkeletalMesh* Mesh = nullptr;

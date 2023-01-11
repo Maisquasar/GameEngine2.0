@@ -279,7 +279,8 @@ void Core::Node::Load(const char* data, uint32_t& pos)
 		currentLine = Utils::Loader::GetLine(data, pos);
 		if (currentLine.substr(0, 4) == "Name")
 		{
-			this->Name = Utils::Loader::GetString(currentLine);
+			auto name = Utils::Loader::GetString(currentLine);
+			this->Name = name;
 		}
 		else if (currentLine.substr(0, 8) == "IsActive")
 		{

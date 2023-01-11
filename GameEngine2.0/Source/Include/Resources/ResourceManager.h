@@ -1,12 +1,15 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
+#include <ImGui/imgui_internal.h>
 
 #include "IResource.h"
 #include "Texture.h"
 #include "Shader.h"
 #include "Mesh.h"
 #include "Material.h"
+
+#include "Include/Utils/Utils.h"
 
 namespace Core::Components
 {
@@ -21,8 +24,10 @@ namespace Resources {
 
 		template<typename T> T* Create(std::string filename)
 		{
-			if (_deleted || _resource.find(filename) != _resource.end() || !std::filesystem::exists(filename))
+			if (_deleted || !std::filesystem::exists(filename))
 				return nullptr;
+			if (_resource.find(filename) != _resource.end())
+				return dynamic_cast<T*>(_resource[filename]);
 
 			std::string Path = filename;
 			filename = filename.substr(filename.find_last_of("//\\") + 1);
@@ -86,12 +91,16 @@ namespace Resources {
 			T* out = nullptr;
 			int id = 0;
 			if (ImGui::BeginPopupModal(popupName, (bool*)0, ImGuiWindowFlags_AlwaysAutoResize)) {
+				static ImGuiTextFilter filter;
+				filter.Draw();
 				for (auto resource : _resource)
 				{
 					if (auto res = dynamic_cast<T*>(resource.second))
 					{
+						if (!filter.PassFilter(res->GetName().c_str()))
+							continue;
 						ImGui::PushID(id++);
-						if (ImGui::Button(res->GetName().c_str())) {
+						if (ImGui::Selectable(res->GetName().c_str(), false, ImGuiSelectableFlags_SpanAvailWidth)) {
 							out = res;
 							ImGui::CloseCurrentPopup();
 						}

@@ -24,7 +24,12 @@ Core::Components::Component* ComponentsPopup()
 	{
 		for (auto component : Application.Components.Components)
 		{
-			if (ImGui::Button(component->ComponentName.c_str())) {
+			if (auto icon = component->GetUIIcon()) {
+				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1.f);
+				ImGui::Image((ImTextureID)static_cast<uintptr_t>(icon->GetData()), ImVec2(16, 16));
+				ImGui::SameLine();
+			}
+			if (ImGui::Selectable(component->ComponentName.c_str(), false, ImGuiSelectableFlags_SpanAvailWidth)) {
 				out = component->Clone();
 				ImGui::CloseCurrentPopup();
 			}
@@ -67,10 +72,21 @@ void EditorUi::Inspector::Draw()
 				ImGui::PushID(index++);
 				ImGui::Checkbox("##", component->GetEnable());
 				ImGui::SameLine();
-				if (ImGui::CollapsingHeader(component->ComponentName.c_str(), &destroy, ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
+				bool open = ImGui::CollapsingHeader(component->ComponentName.c_str(), &destroy, ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen);
+				if (auto icon = component->GetUIIcon()) {
+					ImGui::SameLine();
+					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1.f);
+					int cx = ImGui::GetCursorPosX();
+					int x = ImGui::GetWindowSize().x * 7/8;
+					ImGui::SetCursorPosX(x);
+					ImGui::Image((ImTextureID)static_cast<uintptr_t>(icon->GetData()), ImVec2(16, 16));
+				}
+				if (open) {
+					ImGui::BeginDisabled(!component->IsEnable());
 					ImGui::TreePush(component->ComponentName.c_str());
 					component->ShowInInspector();
 					ImGui::TreePop();
+					ImGui::EndDisabled();
 				}
 				ImGui::NewLine();
 				ImGui::Separator();

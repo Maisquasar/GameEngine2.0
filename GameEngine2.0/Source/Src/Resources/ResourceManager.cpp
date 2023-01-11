@@ -41,7 +41,7 @@ void Resources::ResourceManager::RecompileShaders()
 		if (auto Shader = dynamic_cast<Resources::Shader*>(resources.second))
 		{
 			PrintLog("Recompiling Shader %s", Shader->GetPath().c_str());
-			Shader->Load("");
+			Shader->Recompile();
 		}
 	}
 }
