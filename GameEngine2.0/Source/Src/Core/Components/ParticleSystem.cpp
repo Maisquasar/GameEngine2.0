@@ -27,11 +27,12 @@ Core::Components::ParticleSystem::~ParticleSystem()
 	}
 	_particles.clear();
 	delete _icon;
+	delete _mesh;
 }
 
 void Core::Components::ParticleSystem::Initialize()
 {
-	_mesh = ((Resources::MeshInstance*)Application.GetResourceManager()->Get<Resources::Mesh>("DefaultPlane"));
+	_mesh = new Resources::MeshInstance(*(Resources::MeshInstance*)Application.GetResourceManager()->Get<Resources::Mesh>("DefaultPlane"));
 	this->_shader = Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/BillboardInstanceShader");
 	SetSize(_maxParticles);
 }
@@ -184,7 +185,7 @@ void Core::Components::ParticleSystem::SetSize(size_t size)
 
 void Core::Components::ParticleSystem::SetMesh(Resources::MeshInstance* mesh)
 {
-	_mesh = mesh;
+	_mesh = new Resources::MeshInstance(*static_cast<Resources::MeshInstance*>(mesh));
 	for (auto p : _particles)
 	{
 		p->SetMesh(_mesh);
@@ -259,10 +260,6 @@ Core::Components::Particle::Particle(ParticleSystem* ps, int index)
 
 Core::Components::Particle::~Particle()
 {
-	if (_mesh) {
-		delete _mesh;
-		_mesh = nullptr;
-	}
 }
 
 void Core::Components::Particle::Initialize()
@@ -277,7 +274,7 @@ void Core::Components::Particle::ResetPosition()
 	_startTime = 0.f;
 	float spread = 1.5f;
 	_position = _particleSystem->GameObject->Transform.GetWorldPosition();
-	float angle = (_particleSystem->GetAngle() * 10.f)/360.f;
+	float angle = (_particleSystem->GetAngle() * 10.f) / 360.f;
 	Math::Vector3 randomdir = Math::Vector3(
 		Utils::RandomFloat(-angle, angle),
 		Utils::RandomFloat(-angle, angle),
@@ -314,7 +311,7 @@ void Core::Components::Particle::SetMesh(Resources::MeshInstance* mesh)
 {
 	if (!mesh)
 		return;
-	_mesh = new Resources::MeshInstance(*static_cast<Resources::MeshInstance*>(mesh));
+	_mesh = mesh;
 }
 
 void Core::Components::Particle::SetMaterial(Resources::Material* mat)
