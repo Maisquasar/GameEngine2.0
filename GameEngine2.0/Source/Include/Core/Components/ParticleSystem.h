@@ -31,17 +31,13 @@ namespace Core::Components
 		void ResetPosition();
 
 		void Update();
-		void Draw(Resources::Shader* shader, int amount);
 
-		void SetMesh(Resources::MeshInstance* mesh);
-		void SetMaterial(Resources::Material* mat);
 		void SetIndex(size_t i) { _index = i; }
 
 		Math::Vector4 GetXYZS() {return { _position, _alive ? _size : 0.0f };}
 		size_t GetIndex() { return _index; }
 		bool IsAlive() { return _alive; }
 	private:
-		Resources::MeshInstance* _mesh = nullptr;
 		size_t _index = -1;
 		Math::Matrix4 _worldMat = Math::Matrix4::Identity();
 		Math::Matrix4 _localMat = Math::Matrix4::Identity();
@@ -71,7 +67,6 @@ namespace Core::Components
 		void ShowInInspector() override;
 
 		void SetSize(size_t size);
-		void SetMesh(Resources::MeshInstance* mesh);
 		void SetUIIcon() override;
 
 		float GetTime() { return _timeSinceStart; }

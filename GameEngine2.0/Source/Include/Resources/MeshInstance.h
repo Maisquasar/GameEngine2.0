@@ -9,9 +9,9 @@ namespace Resources
 		MeshInstance();
 		~MeshInstance();
 
-		void Initialize() override;
+		void Initialize(int buf = -1);
 
-		void Draw(Shader* shader, int amount);
+		void Draw(int amount);
 
 		Math::Matrix4 Transform = Math::Matrix4::Identity();
 

@@ -9,10 +9,11 @@ Resources::MeshInstance::~MeshInstance()
 {
 }
 
-void Resources::MeshInstance::Initialize()
+void Resources::MeshInstance::Initialize(int buf)
 {
-	if (!IsInitialized())
-		Mesh::Initialize();
+	Mesh::Initialize();
+	if (buf != -1)
+		glBindBuffer(GL_ARRAY_BUFFER, buf);
 	glBindVertexArray(_VAO);
 	// vertex attributes
 
@@ -25,11 +26,11 @@ void Resources::MeshInstance::Initialize()
 	glBindVertexArray(0);
 }
 
-void Resources::MeshInstance::Draw(Shader* shader, int amount)
+void Resources::MeshInstance::Draw(int amount)
 {
 	glDepthRange(0.02, 1.0);
 	glBindVertexArray(_VAO);
-	Application.GetSettings()->NumberOfInstancedTriangles += (this->SubMeshes[0].Count/3) * amount;
+	Application.GetSettings()->NumberOfInstancedTriangles += (this->SubMeshes[0].Count / 3) * amount;
 	Application.GetSettings()->NumberOfInstances += amount;
 	glDrawArraysInstanced(GL_TRIANGLES, 0, (GLsizei)this->SubMeshes[0].Count, amount);
 	glBindVertexArray(0);

@@ -53,7 +53,7 @@ void Resources::Mesh::Initialize()
 		// normal attribute
 		glVertexAttribPointer(1U, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[3])));
 		glEnableVertexAttribArray(1U);
-		// texture coord attribute
+		// texture coordinates attribute
 		glVertexAttribPointer(2U, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(sizeof(float[6])));
 		glEnableVertexAttribArray(2U);
 

@@ -49,7 +49,7 @@ void Render::InstancesManager::Draw()
 	//glBindBuffer(GL_ARRAY_BUFFER, _buffer);
 	//auto mat = Math::Matrix4::CreateTransformMatrix(Math::Vector3(0.0f), Math::Vector3(i, 0, 0), Math::Vector3(1));
 	//glBufferSubData(GL_ARRAY_BUFFER, 0, 16 * sizeof(float), &mat.content[0][0]);
-	_instances[0]->Draw(this->_currentShader, (int)_instances.size());
+	_instances[0]->Draw((int)_instances.size());
 
 	i += ImGui::GetIO().DeltaTime * 10;
 }

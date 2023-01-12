@@ -50,6 +50,7 @@ void Core::Components::ParticleSystem::PostInitialize()
 	glBufferData(GL_ARRAY_BUFFER, XYZS.size() * sizeof(float[4]), &XYZS[0], GL_STREAM_DRAW);
 
 	InitializeParticles();
+	_mesh->Initialize(_buffer);
 }
 
 void Core::Components::ParticleSystem::ResetPositions()
@@ -102,12 +103,30 @@ void Core::Components::ParticleSystem::Update()
 	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMRIGHT), right.x, right.y, right.z);
 	auto vp = Application.GetScene()->GetCameraEditor()->GetProjection() * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_VIEWPROJECTIONMATRIX), 1, GL_TRUE, &vp.content[0][0]);
-	_particles[0]->Draw(this->_shader, (int)_particles.size());
+	_mesh->Draw((int)_particles.size());
 }
 
 void Core::Components::ParticleSystem::DrawPicking(int index)
 {
+	auto shader = Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/BillboardPickingInstanceShader");
 	_icon->DrawPicking(Application.GetScene()->GetVPMatrix(), GameObject->Transform, index);
+	// Sent Values to Shader
+	if (!shader || _particles.size() == 0 || !_mesh || !_drawParticles)
+		return;
+
+	int r = (index & 0x000000FF) >> 0;
+	int g = (index & 0x0000FF00) >> 8;
+	int b = (index & 0x00FF0000) >> 16;
+	glUseProgram(shader->Program);
+	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
+	auto right = Application.GetScene()->GetCameraEditor()->Transform.GetRightVector();
+	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
+
+	glUniform3f(shader->GetLocation(Resources::Location::L_CAMUP), up.x, up.y, up.z);
+	glUniform3f(shader->GetLocation(Resources::Location::L_CAMRIGHT), right.x, right.y, right.z);
+	auto vp = Application.GetScene()->GetCameraEditor()->GetProjection() * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
+	glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_VIEWPROJECTIONMATRIX), 1, GL_TRUE, &vp.content[0][0]);
+	_mesh->Draw((int)_particles.size());
 }
 
 void Core::Components::ParticleSystem::ShowInInspector()
@@ -160,10 +179,6 @@ void Core::Components::ParticleSystem::ShowInInspector()
 	if (auto mat = Application.GetResourceManager()->ResourcesPopup<Resources::Material>("MaterialPopup"))
 	{
 		_mesh->SubMeshes[0].Material = mat;
-		for (auto p : _particles)
-		{
-			p->SetMaterial(mat);
-		}
 	}
 }
 
@@ -178,19 +193,10 @@ void Core::Components::ParticleSystem::SetSize(size_t size)
 	for (int i = 0; i < _maxParticles; i++)
 	{
 		_particles.push_back(new Particle(this, i));
-		_particles.back()->SetMesh(_mesh);
 	}
 	this->PostInitialize();
 }
 
-void Core::Components::ParticleSystem::SetMesh(Resources::MeshInstance* mesh)
-{
-	_mesh = new Resources::MeshInstance(*static_cast<Resources::MeshInstance*>(mesh));
-	for (auto p : _particles)
-	{
-		p->SetMesh(_mesh);
-	}
-}
 void Core::Components::ParticleSystem::Save(std::string space, std::string& content)
 {
 	content += space + Utils::StringFormat("MaxParticle : %d\n", _maxParticles);
@@ -264,7 +270,6 @@ Core::Components::Particle::~Particle()
 
 void Core::Components::Particle::Initialize()
 {
-	_mesh->Initialize();
 	ResetPosition();
 	_startTime = (float)(_index * _particleSystem->GetLifeTime()) / (float)_particleSystem->GetMaxParticles();
 }
@@ -300,22 +305,5 @@ void Core::Components::Particle::Update()
 		_position += _speed * (float)ImGui::GetIO().DeltaTime;
 	}
 	_life += ImGui::GetIO().DeltaTime;
-}
-
-void Core::Components::Particle::Draw(Resources::Shader* shader, int amount)
-{
-	_mesh->Draw(shader, amount);
-}
-
-void Core::Components::Particle::SetMesh(Resources::MeshInstance* mesh)
-{
-	if (!mesh)
-		return;
-	_mesh = mesh;
-}
-
-void Core::Components::Particle::SetMaterial(Resources::Material* mat)
-{
-	_mesh->SubMeshes[0].Material = mat;
 }
 #pragma endregion

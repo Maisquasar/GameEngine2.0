@@ -4,7 +4,7 @@
 
 Resources::ResourceManager::ResourceManager() { TextureIndex = 0; }
 
-Resources::ResourceManager::~ResourceManager() 
+Resources::ResourceManager::~ResourceManager()
 {
 	_deleted = true;
 	for (auto it = _resource.begin(); it != _resource.end(); )
@@ -17,6 +17,7 @@ Resources::ResourceManager::~ResourceManager()
 
 void Resources::ResourceManager::LoadDefaultsResources()
 {
+
 	auto billboardPicking = new Resources::Shader();
 
 	billboardPicking->SetPath("Assets/Default/Shaders/BillboardPickingShader");
@@ -32,6 +33,22 @@ void Resources::ResourceManager::LoadDefaultsResources()
 	billboardPicking->Initialize();
 
 	Add(billboardPicking->GetPath(), billboardPicking);
+
+
+	auto billboardInstancePicking = new Resources::Shader();
+
+	billboardInstancePicking->SetPath("Assets/Default/Shaders/BillboardPickingInstanceShader");
+	billboardInstancePicking->SetName("BillboardPickingShader");
+
+	auto billboardInstanceShad = Get<Resources::Shader>("Assets/Default/Shaders/BillboardInstanceShader");
+
+	billboardInstancePicking->SetShader(billboardInstanceShad->VertexPath);
+	billboardInstancePicking->SetFragmentShader(pickingShad->FragmentPath);
+
+	billboardInstancePicking->Link();
+	billboardInstancePicking->Initialize();
+
+	Add(billboardInstancePicking->GetPath(), billboardInstancePicking);
 }
 
 void Resources::ResourceManager::RecompileShaders()

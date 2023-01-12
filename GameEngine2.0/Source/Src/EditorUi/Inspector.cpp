@@ -76,8 +76,8 @@ void EditorUi::Inspector::Draw()
 				if (auto icon = component->GetUIIcon()) {
 					ImGui::SameLine();
 					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1.f);
-					int cx = ImGui::GetCursorPosX();
-					int x = ImGui::GetWindowSize().x * 7/8;
+					float cx = ImGui::GetCursorPosX();
+					float x = ImGui::GetWindowSize().x * 7/8;
 					ImGui::SetCursorPosX(x);
 					ImGui::Image((ImTextureID)static_cast<uintptr_t>(icon->GetData()), ImVec2(16, 16));
 				}
