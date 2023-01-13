@@ -17,10 +17,10 @@ void Main()
 
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//  TODO: Remove Comments
 	// |
 	// V
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // A faire une fois au début de l'application
 	//_CrtSetBreakAlloc(2096843);
 	Main();
 	return 0;
@@ -28,5 +28,5 @@ int main()
 
 //TODO: Lights
 //TODO: Loading Texture from FBX files
-//TODO: Fix Animation for other exportation than mixamo
-//TODO: Particles
+//TODO: Fix Animation for other exportation than Mixamo
+//TODO: Physics

@@ -61,7 +61,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 				switch (column)
 				{
 				case 0:
-					ImGui::Text("%d", row);
+					ImGui::TextUnformatted(std::to_string(row).c_str());
 					break;
 				case 1:
 					if (GetMesh()->SubMeshes[row].Material)
@@ -90,7 +90,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 		ImGui::EndTable();
 	}
 
-	// Material Comnponents List.
+	// Material Components List.
 	int index = 0;
 	for (auto Sub : GetMesh()->SubMeshes)
 	{
