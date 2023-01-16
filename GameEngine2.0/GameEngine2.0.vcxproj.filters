@@ -78,7 +78,7 @@
     <ClCompile Include="Source\Src\Utils\Input.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Src\Render\CameraEditor.cpp">
+    <ClCompile Include="Source\Src\Render\Camera.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\Src\Render\Framebuffer.cpp">
@@ -180,7 +180,7 @@
     <ClCompile Include="Source\Src\Render\EditorIcon.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Src\Core\Components\Camera.cpp">
+    <ClCompile Include="Source\Src\Core\Components\CameraComponent.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\Src\Resources\BillBoard.cpp">
@@ -284,7 +284,7 @@
     <ClInclude Include="Source\Include\Utils\Input.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Include\Render\CameraEditor.h">
+    <ClInclude Include="Source\Include\Render\Camera.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Source\Include\Render\Framebuffer.h">
@@ -389,7 +389,7 @@
     <ClInclude Include="Source\Include\Render\EditorIcon.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Include\Core\Components\Camera.h">
+    <ClInclude Include="Source\Include\Core\Components\CameraComponent.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Source\Include\Resources\BillBoard.h">

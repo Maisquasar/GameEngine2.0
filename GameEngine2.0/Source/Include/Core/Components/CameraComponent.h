@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "Include/Render/CameraEditor.h"
+#include "Include/Render/Camera.h"
 namespace Render
 {
 	class EditorIcon;
@@ -10,11 +10,11 @@ namespace Render
 namespace Core::Components
 {
 
-	class Camera : public BaseComponent<Camera>, public Render::CameraEditor
+	class CameraComponent : public BaseComponent<CameraComponent>, public Render::Camera
 	{
 	public:
-		Camera();
-		~Camera();
+		CameraComponent();
+		~CameraComponent();
 
 		void Initialize() override;
 		void Update() override;

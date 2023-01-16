@@ -5,11 +5,11 @@
 #include "Include/Core/Transform.h"
 
 namespace Render {
-	class CameraEditor
+	class Camera
 	{
 	public:
-		CameraEditor();
-		~CameraEditor();
+		Camera();
+		~Camera();
 
 		Math::Vec3 Position;
 		Math::Vec3 FocusPosition;

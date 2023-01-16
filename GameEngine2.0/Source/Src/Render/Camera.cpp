@@ -1,4 +1,4 @@
-#include "Include/Render/CameraEditor.h"
+#include "Include/Render/Camera.h"
 #include "Include/Utils/Input.h"
 #include "Include/App.h"
 
@@ -13,14 +13,14 @@ void GetRotateAround(Math::Vec3 point, Math::Vec3 axis, float angle, Math::Vec3&
 	rot = rot * rot.GetInverse() * q * rot;
 }
 
-Render::CameraEditor::CameraEditor()
+Render::Camera::Camera()
 {
 	this->Transform.SetWorldPosition(Math::Vec3(0, 0, 10));
 }
 
-Render::CameraEditor::~CameraEditor() {}
+Render::Camera::~Camera() {}
 
-void Render::CameraEditor::Update(bool firstUpdate)
+void Render::Camera::Update(bool firstUpdate)
 {
 	//Transform.Update();
 
@@ -76,7 +76,7 @@ void Render::CameraEditor::Update(bool firstUpdate)
 	Transform.SetLocalRotation(Math::Quat::LookRotation(FocusPosition - Transform.GetLocalPosition(), Math::Vec3::Up()));
 }
 
-Math::Mat4 Render::CameraEditor::GetViewMatrix()
+Math::Mat4 Render::Camera::GetViewMatrix()
 {
 	Math::Mat4 temp;
 	Math::Vec3 z = -Transform.GetForwardVector();
@@ -94,7 +94,7 @@ Math::Mat4 Render::CameraEditor::GetViewMatrix()
 	return temp;
 }
 
-Math::Mat4 Render::CameraEditor::GetProjection()
+Math::Mat4 Render::Camera::GetProjection()
 {
 	float s = 1.0f / ((AspectRatio)*atanf(Math::ToRadians(FOV / 2.0f)));
 	float s2 = 1.0f / atanf(Math::ToRadians(FOV / 2.0f));
@@ -109,22 +109,22 @@ Math::Mat4 Render::CameraEditor::GetProjection()
 	return out;
 }
 
-Math::Mat4 Render::CameraEditor::GetModelMatrix()
+Math::Mat4 Render::Camera::GetModelMatrix()
 {
 	return Transform.GetModelMatrix();
 }
 
-Math::Vec3 Render::CameraEditor::GetUp()
+Math::Vec3 Render::Camera::GetUp()
 {
 	return GetModelMatrix() * Math::Vec3::Up();
 }
 
-Math::Vec3 Render::CameraEditor::GetRight()
+Math::Vec3 Render::Camera::GetRight()
 {
 	return GetModelMatrix() * Math::Vec3::Right();
 }
 
-Math::Vec3 Render::CameraEditor::UnProject(Math::Vec2 point)
+Math::Vec3 Render::Camera::UnProject(Math::Vec2 point)
 {    
 	// Convert the screen position to normalized device coordinates
 	Math::Vec3 ndc;

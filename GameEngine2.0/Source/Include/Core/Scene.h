@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Include/Render/CameraEditor.h"
+#include "Include/Render/Camera.h"
 #include "Include/Render/Framebuffer.h"
 #include "Include/Render/Gizmo.h"
 #include "Include/Render/EditorGrid.h"
@@ -29,7 +29,7 @@ namespace Core
 
 		// ======================== Getters ========================
 		Node* GetSceneNode()					{ return _sceneNode; }
-		Render::CameraEditor* GetCameraEditor() { return &_cameraEditor; }
+		Render::Camera* GetCameraEditor() { return &_cameraEditor; }
 		Render::Gizmo* GetGizmo()				{ return &_gizmo; }
 		std::string GetCurrentScenePath()		{ return _currentScenePath; }
 		Math::Mat4 GetVPMatrix()				{ return _VP; }
@@ -43,7 +43,7 @@ namespace Core
 
 		// Render
 		Render::FrameBuffer* _frameBuffer = nullptr;
-		Render::CameraEditor _cameraEditor;
+		Render::Camera _cameraEditor;
 		Render::Gizmo _gizmo;
 		Render::EditorGrid _grid;
 	};

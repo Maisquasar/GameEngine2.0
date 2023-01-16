@@ -2,7 +2,7 @@
 #include "Include/Physic/Ray.h"
 #include "Include/Core/Transform.h"
 #include "Include/Core/Components/BoxCollider.h"
-#include "Include/Render/CameraEditor.h"
+#include "Include/Render/Camera.h"
 
 bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vec3& intersectionPoint)
 {
@@ -107,7 +107,7 @@ std::vector<float> Physic::GetCubeVertices()
 	return vOut;
 }
 
-Math::Vec3 Physic::ConvertMouseToWorld(Math::Vec2 mousePos, Math::Vec2 screenSize, Render::CameraEditor cameraPos)
+Math::Vec3 Physic::ConvertMouseToWorld(Math::Vec2 mousePos, Math::Vec2 screenSize, Render::Camera cameraPos)
 {
 	if (mousePos.x < 0 || mousePos.y < 0 || screenSize.x < mousePos.x || screenSize.y < mousePos.y)
 		return Math::Vec3(INFINITY);

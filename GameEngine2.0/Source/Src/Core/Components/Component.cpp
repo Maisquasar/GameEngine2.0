@@ -3,7 +3,7 @@
 #include "Include/Core/Components/BoxCollider.h"
 #include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Core/Components/AnimationComponent.h"
-#include "Include/Core/Components/Camera.h"
+#include "Include/Core/Components/CameraComponent.h"
 #include "Include/Core/Components/ParticleSystem.h"
 #include "Include/Core/Node.h"
 
@@ -56,6 +56,6 @@ void Core::Components::Data::Initialize()
 	this->NewComponent(new Core::Components::BoxCollider());
 	this->NewComponent(new Core::Components::SkeletalMeshComponent());
 	this->NewComponent(new Core::Components::AnimationComponent());
-	this->NewComponent(new Core::Components::Camera());
+	this->NewComponent(new Core::Components::CameraComponent());
 	this->NewComponent(new Core::Components::ParticleSystem());
 }
