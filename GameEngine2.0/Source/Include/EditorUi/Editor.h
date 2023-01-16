@@ -16,6 +16,7 @@ namespace EditorUi {
 	class PerformanceWindow;
 	class Console;
 	class AnimationWindow;
+	class SceneWindow;
 
 	void ApplyStyle();
 	class Editor
@@ -38,6 +39,7 @@ namespace EditorUi {
 		static Console* GetConsole();
 		static TextEditorWindow* GetTextEditor() { return &_textEditor; }
 		static AnimationWindow* GetAnimationWindow() { return &_animationWindow; }
+		static SceneWindow* GetSceneWindow() { return &_sceneWindow; }
 	private:
 		static MainBar _mainBar;
 		static Hierarchy _hierarchy;
@@ -49,5 +51,6 @@ namespace EditorUi {
 		static ImGui::NodeWindow _nodeWindow;
 		static TextEditorWindow _textEditor;
 		static AnimationWindow _animationWindow;
+		static SceneWindow _sceneWindow;
 	};
 }

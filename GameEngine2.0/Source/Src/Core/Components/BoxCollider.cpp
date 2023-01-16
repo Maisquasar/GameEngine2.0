@@ -82,7 +82,7 @@ void Core::Components::BoxCollider::Update()
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
 
-	//Application.GetEditorCamera()->UnProject(Application.GetFramebuffer()->GetMousePosition()).Print();
+	//Application.GetEditorCamera()->UnProject(EditorUi::Editor::GetSceneWindow()->GetMousePosition()).Print();
 	//Physic::Ray ray;
 	//ray.Set(Application.GetEditorCamera()->Transform.GetLocalPosition(), Application.GetEditorCamera()->Transform.GetForwardVector() * 10000);
 	//if (RayIntersection(ray))

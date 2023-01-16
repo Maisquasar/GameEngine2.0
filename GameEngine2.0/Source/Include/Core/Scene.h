@@ -42,7 +42,6 @@ namespace Core
 		Math::Vec4 _clearColor = { 0.45f, 0.55f, 0.60f, 1.00f };
 
 		// Render
-		Render::FrameBuffer* _frameBuffer = nullptr;
 		Render::Camera _cameraEditor;
 		Render::Gizmo _gizmo;
 		Render::EditorGrid _grid;

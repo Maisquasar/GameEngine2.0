@@ -43,8 +43,6 @@ public:
 
 	float GetDeltaTime() { return (float)_deltaTime; }
 
-	Render::FrameBuffer* GetFramebuffer() { return &_scene.GetCameraEditor()->FrameBuffer; }
-
 	Utils::AppSettings* GetSettings() { return &_settings; }
 
 	Resources::ResourceManager* GetResourceManager() { return &_resourceManager; }

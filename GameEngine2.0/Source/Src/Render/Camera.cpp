@@ -1,6 +1,7 @@
 #include "Include/Render/Camera.h"
 #include "Include/Utils/Input.h"
 #include "Include/App.h"
+#include "Include/EditorUi/SceneWindow.h"
 
 void GetRotateAround(Math::Vec3 point, Math::Vec3 axis, float angle, Math::Vec3& pos, Math::Quat& rot)
 {
@@ -137,8 +138,8 @@ Math::Vec3 Render::Camera::UnProject(Math::Vec2 point)
 {    
 	// Convert the screen position to normalized device coordinates
 	Math::Vec3 ndc;
-	ndc.x = (point.x / Application.GetFramebuffer()->GetSize().x) * 2 - 1;
-	ndc.y = ((Application.GetFramebuffer()->GetSize().y - point.y) / Application.GetFramebuffer()->GetSize().y) * 2 - 1;
+	ndc.x = (point.x / EditorUi::Editor::GetSceneWindow()->GetSize().x) * 2 - 1;
+	ndc.y = ((EditorUi::Editor::GetSceneWindow()->GetSize().y - point.y) / EditorUi::Editor::GetSceneWindow()->GetSize().y) * 2 - 1;
 	ndc.z = 10;
 
 	// Use the inverse of the projection matrix to convert from NDC to world space

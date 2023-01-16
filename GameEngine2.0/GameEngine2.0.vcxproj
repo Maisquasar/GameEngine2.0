@@ -49,6 +49,7 @@
     <ClCompile Include="Source\Src\Core\Components\BoxCollider.cpp" />
     <ClCompile Include="Source\Src\EditorUi\PerformanceWindow.cpp" />
     <ClCompile Include="Source\Src\EditorUi\ResourcesWindow.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\SceneWindow.cpp" />
     <ClCompile Include="Source\Src\Physic\Physic.cpp" />
     <ClCompile Include="Source\Src\Render\EditorGrid.cpp" />
     <ClCompile Include="Source\Src\Render\Gizmo.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="Source\Include\Core\Components\BoxCollider.h" />
     <ClInclude Include="Source\Include\EditorUi\PerformanceWindow.h" />
     <ClInclude Include="Source\Include\EditorUi\ResourcesWindow.h" />
+    <ClInclude Include="Source\Include\EditorUi\SceneWindow.h" />
     <ClInclude Include="Source\Include\Physic\Physic.h" />
     <ClInclude Include="Source\Include\Render\EditorGrid.h" />
     <ClInclude Include="Source\Include\Render\EditorIcon.h" />

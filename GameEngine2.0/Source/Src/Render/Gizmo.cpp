@@ -5,6 +5,7 @@
 #include "Include/Core/Node.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/EditorUi/Inspector.h"
+#include "Include/EditorUi/SceneWindow.h"
 
 std::string MeshesName[] = {
 	"::XAxisArrow",
@@ -94,7 +95,7 @@ void Render::Gizmo::Draw()
 		if (initializedNumber == 4)
 			_initialized = true;
 	}
-	if (Application.GetFramebuffer()->IsHovered && !Application.GetFramebuffer()->UpdateCameraEditor) {
+	if (EditorUi::Editor::GetSceneWindow()->IsHovered && !EditorUi::Editor::GetSceneWindow()->UpdateCameraEditor) {
 		if (Utils::Input::IsKeyPressed(ImGuiKey_W) && Mode != GizmoMode::Translate)
 		{
 			Mode = GizmoMode::Translate;
@@ -158,8 +159,8 @@ void Render::Gizmo::Update(size_t ArrowClicked, Math::Vec2& mousePosition)
 	{
 		if (ArrowClicked < 3)
 		{
-			Math::Vec2 mouse = Application.GetFramebuffer()->GetMousePosition();
-			mouse = mouse * Math::Vec2(Application.GetWindowSize().x / Application.GetFramebuffer()->GetSize().x, Application.GetWindowSize().y / Application.GetFramebuffer()->GetSize().y);
+			Math::Vec2 mouse = EditorUi::Editor::GetSceneWindow()->GetMousePosition();
+			mouse = mouse * Math::Vec2(Application.GetWindowSize().x / EditorUi::Editor::GetSceneWindow()->GetSize().x, Application.GetWindowSize().y / EditorUi::Editor::GetSceneWindow()->GetSize().y);
 			auto currentMousePos = mouse;
 			auto node = EditorUi::Editor::GetInspector()->NodesSelected[0];
 			float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (this->ForwardDistance * 5), 20);

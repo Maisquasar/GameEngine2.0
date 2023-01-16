@@ -10,6 +10,7 @@
 #include "ImGui/Nodes/NodeWindow.h"
 #include "Include/EditorUi/Console.h"
 #include "Include/EditorUi/AnimationWindow.h"
+#include "Include/EditorUi/SceneWindow.h"
 
 EditorUi::MainBar EditorUi::Editor::_mainBar;
 EditorUi::FileExplorer EditorUi::Editor::_fileExplorer;
@@ -21,6 +22,7 @@ EditorUi::PerformanceWindow EditorUi::Editor::_performanceWindow;
 ImGui::NodeWindow EditorUi::Editor::_nodeWindow;
 TextEditorWindow EditorUi::Editor::_textEditor;
 EditorUi::AnimationWindow EditorUi::Editor::_animationWindow;
+EditorUi::SceneWindow EditorUi::Editor::_sceneWindow;
 
 EditorUi::Editor::Editor() {}
 
@@ -45,6 +47,7 @@ void EditorUi::Editor::Draw()
 	_performanceWindow.Draw();
 	_textEditor.Draw();
 	_animationWindow.Draw();
+	_sceneWindow.Draw();
 }
 
 void EditorUi::Editor::MainDocking()

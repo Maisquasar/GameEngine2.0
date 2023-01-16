@@ -3,6 +3,7 @@
 #include "Include/App.h"
 #include "Include/Utils/Input.h"
 #include "Include/Core/Node.h"
+#include "Include/EditorUi/SceneWindow.h"
 
 
 EditorUi::Hierarchy::Hierarchy() {}
@@ -25,7 +26,7 @@ void EditorUi::Hierarchy::Draw()
 		}
 		RightClickWindow();
 		// Copy
-		if (ImGui::IsWindowFocused() || Application.GetFramebuffer()->IsFocused) {
+		if (ImGui::IsWindowFocused() || EditorUi::Editor::GetSceneWindow()->IsFocused) {
 			if (Inspector::NodesSelected.size() == 1 && (Utils::Input::IsKeyDown(ImGuiKey_LeftCtrl) && Utils::Input::IsKeyPressed(ImGuiKey_C)))
 			{
 				// Save Scene To Temporary Scene.

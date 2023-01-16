@@ -5,6 +5,7 @@
 #include "Include/Debug/Log.h"
 #include "Include/App.h"
 #include "Include/EditorUi/Inspector.h"
+#include "Include/EditorUi/SceneWindow.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
 
@@ -21,7 +22,6 @@ void Core::Scene::Initialize()
 	_cameraEditor.Update(true);
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
 	_grid.Initialize();
-	_frameBuffer = Application.GetFramebuffer();
 }
 
 void Core::Scene::Update()
@@ -35,8 +35,8 @@ void Core::Scene::Update()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// Update Camera AspectRatio.
-	if (_frameBuffer->Window) {
-		_cameraEditor.AspectRatio = _frameBuffer->Window->Size.x / _frameBuffer->Window->Size.y;
+	if (EditorUi::Editor::GetSceneWindow()->Window) {
+		_cameraEditor.AspectRatio = EditorUi::Editor::GetSceneWindow()->Window->Size.x / EditorUi::Editor::GetSceneWindow()->Window->Size.y;
 	}
 
 	_VP = _cameraEditor.GetVP();
@@ -53,13 +53,10 @@ void Core::Scene::Update()
 	_gizmo.Draw();
 
 	// Update Editor Camera.
-	if (_frameBuffer->UpdateCameraEditor) {
+	if (EditorUi::Editor::GetSceneWindow()->UpdateCameraEditor) {
 		_cameraEditor.Update();
 	}
 	_cameraEditor.FrameBuffer.Draw();
-
-	auto mouse = ImGui::GetMousePos();
-	auto vecMouse = Math::Vec2(mouse.x, mouse.y) - _frameBuffer->GetPos();
 }
 
 void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
@@ -67,7 +64,7 @@ void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
 	static bool IsDown = false;
 	static size_t ArrowClicked = -1;
 	static Math::Vec2 mousePosition;
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && _frameBuffer->IsHovered) {
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && EditorUi::Editor::GetSceneWindow()->IsHovered) {
 		IsDown = true;
 		int id = 0;
 		size_t previousSize = nodes.size();
@@ -85,8 +82,8 @@ void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 		unsigned char data[4];
-		Math::Vec2 mouse = _frameBuffer->GetMousePosition();
-		mouse = mouse * Math::Vec2(Application.GetWindowSize().x / _frameBuffer->GetSize().x, Application.GetWindowSize().y / _frameBuffer->GetSize().y);
+		Math::Vec2 mouse = EditorUi::Editor::GetSceneWindow()->GetMousePosition();
+		mouse = mouse * Math::Vec2(Application.GetWindowSize().x / EditorUi::Editor::GetSceneWindow()->GetSize().x, Application.GetWindowSize().y / EditorUi::Editor::GetSceneWindow()->GetSize().y);
 		mouse.y = Application.GetWindowSize().y - mouse.y;
 		glReadPixels((GLint)mouse.x, (GLint)mouse.y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
@@ -106,8 +103,8 @@ void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
 		else
 		{
 			ArrowClicked = pickedID - nodes.size();
-			Math::Vec2 mouse = _frameBuffer->GetMousePosition();
-			mouse = mouse * Math::Vec2(Application.GetWindowSize().x / _frameBuffer->GetSize().x, Application.GetWindowSize().y / _frameBuffer->GetSize().y);
+			Math::Vec2 mouse = EditorUi::Editor::GetSceneWindow()->GetMousePosition();
+			mouse = mouse * Math::Vec2(Application.GetWindowSize().x / EditorUi::Editor::GetSceneWindow()->GetSize().x, Application.GetWindowSize().y / EditorUi::Editor::GetSceneWindow()->GetSize().y);
 			mousePosition = mouse;
 		}
 		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
