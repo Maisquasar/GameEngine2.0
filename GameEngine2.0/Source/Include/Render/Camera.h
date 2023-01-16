@@ -3,6 +3,7 @@
 #include <ImGui/imgui.h>
 #include "Include/Math/Math.h"
 #include "Include/Core/Transform.h"
+#include "Framebuffer.h"
 
 namespace Render {
 	class Camera
@@ -24,6 +25,10 @@ namespace Render {
 
 		Core::Transform Transform;
 
+		void Initialize();
+
+		void PreUpdate();
+
 		void Update(bool firstUpdate = false);
 		// Return the Mat4D view matrix from the camera.
 		Math::Mat4 GetViewMatrix();
@@ -39,6 +44,8 @@ namespace Render {
 		Math::Vec3 UnProject(Math::Vec2 point);
 
 		Math::Mat4 GetVP() { return GetProjection() * GetViewMatrix(); }
+
+		Render::FrameBuffer FrameBuffer;
 	private:
 
 	};

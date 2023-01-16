@@ -184,8 +184,6 @@ const GLFWvidmode* App::GetMonitorVideoMode()
 
 void App::LoadResources()
 {
-	_framebuffer.Initialize(this->GetWindowSize());
-
 	// Load Shaders
 	std::string path = "Assets/Default/Shaders";
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
@@ -368,7 +366,6 @@ void App::BeginFrame()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	glfwGetFramebufferSize(_window, &_width, &_height);
-	glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
 	glEnable(GL_DEPTH_TEST);
 
 	ImGuizmo::BeginFrame();
@@ -397,8 +394,6 @@ void App::Update()
 		_editorUi.Draw();
 
 		_input.Update();
-
-		_framebuffer.Draw();
 
 #if MULTITHREAD_LOADING
 		MultiThreadLoad();

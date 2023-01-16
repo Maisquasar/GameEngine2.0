@@ -20,10 +20,19 @@ Render::Camera::Camera()
 
 Render::Camera::~Camera() {}
 
+void Render::Camera::Initialize()
+{
+	FrameBuffer.Initialize(Math::Vec2(1920, 1080));
+}
+
+void Render::Camera::PreUpdate()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer.FBO);
+}
+
 void Render::Camera::Update(bool firstUpdate)
 {
 	//Transform.Update();
-
 	if (!firstUpdate)
 	{
 		auto mousePos = ImGui::GetMousePos();

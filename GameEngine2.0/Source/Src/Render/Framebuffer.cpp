@@ -45,12 +45,10 @@ void Render::FrameBuffer::Initialize(Math::IVec2 size)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _RBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-const char* TransformSettings[] = { "Local", "World" };
 
 void Render::FrameBuffer::Draw()
 {
 	// Force Fill Mode.
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	if (ImGui::Begin("Scene", (bool*)true, ImGuiWindowFlags_MenuBar))
 	{
 		if (!Window)

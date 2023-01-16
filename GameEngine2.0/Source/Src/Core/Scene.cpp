@@ -17,6 +17,7 @@ Core::Scene::~Scene()
 
 void Core::Scene::Initialize()
 {
+	_cameraEditor.Initialize();
 	_cameraEditor.Update(true);
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
 	_grid.Initialize();
@@ -25,6 +26,7 @@ void Core::Scene::Initialize()
 
 void Core::Scene::Update()
 {
+	_cameraEditor.PreUpdate();
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -41,7 +43,7 @@ void Core::Scene::Update()
 
 	auto ChildList = _sceneNode->GetAllChildrens();
 	Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition(), _cameraEditor.Transform.GetForwardVector());
-	// Draw Meshs with picking Shader.
+	// Draw Meshes with picking Shader.
 	PickingUpdate(ChildList);
 
 	_grid.Draw();
@@ -54,6 +56,7 @@ void Core::Scene::Update()
 	if (_frameBuffer->UpdateCameraEditor) {
 		_cameraEditor.Update();
 	}
+	_cameraEditor.FrameBuffer.Draw();
 
 	auto mouse = ImGui::GetMousePos();
 	auto vecMouse = Math::Vec2(mouse.x, mouse.y) - _frameBuffer->GetPos();
