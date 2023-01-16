@@ -65,11 +65,11 @@ void Resources::Mesh::Initialize()
 
 void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices)
 {
-	std::map<int, Math::Vector3> Tangents;
+	std::map<int, Math::Vec3> Tangents;
 	for (int k = 0; k < Indices.size(); k += 3)
 	{
-		Math::Vector3 Edge1 = Positions[Indices[k + (size_t)1].x] - Positions[Indices[k].x];
-		Math::Vector3 Edge2 = Positions[Indices[k + (size_t)2].x] - Positions[Indices[k].x];
+		Math::Vec3 Edge1 = Positions[Indices[k + (size_t)1].x] - Positions[Indices[k].x];
+		Math::Vec3 Edge2 = Positions[Indices[k + (size_t)2].x] - Positions[Indices[k].x];
 
 		float DeltaU1 = TextureUVs[Indices[k + (size_t)1].y].x - TextureUVs[Indices[k].y].x;
 		float DeltaV1 = TextureUVs[Indices[k + (size_t)1].y].y - TextureUVs[Indices[k].y].y;
@@ -78,7 +78,7 @@ void Resources::Mesh::VerticesLoop(std::vector<unsigned int>& indices, std::vect
 
 		float f = 1.0f / (DeltaU1 * DeltaV2 - DeltaU2 * DeltaV1);
 
-		Math::Vector3 Tangent;
+		Math::Vec3 Tangent;
 
 		Tangent.x = f * (DeltaV2 * Edge1.x - DeltaV1 * Edge2.x);
 		Tangent.y = f * (DeltaV2 * Edge1.y - DeltaV1 * Edge2.y);
@@ -122,7 +122,7 @@ void glDraw(uint32_t model, GLsizei start, GLsizei count)
 	Application.GetSettings()->NumberOfDrawCalls++;
 }
 
-void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
+void Resources::Mesh::Update(Math::Mat4 MVP, bool outline)
 {
 	if (!Loaded)
 		return;
@@ -186,7 +186,7 @@ void Resources::Mesh::Update(Math::Matrix4 MVP, bool outline)
 	}
 }
 
-void Resources::Mesh::DrawPicking(Math::Matrix4 MVP, int id)
+void Resources::Mesh::DrawPicking(Math::Mat4 MVP, int id)
 {
 	if (!Loaded)
 		return;

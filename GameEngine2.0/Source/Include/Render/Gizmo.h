@@ -24,11 +24,11 @@ namespace Render
 
 		void Draw();
 		void DrawPicking(int id);
-		void Update(size_t ArrowClicked, Math::Vector2& mousePosition);
+		void Update(size_t ArrowClicked, Math::Vec2& mousePosition);
 
 		Core::Transform* NodeTransform = nullptr;
 		Core::Node** GetNodes() { return _axis; }
-		Math::Matrix4 GetMVP();
+		Math::Mat4 GetMVP();
 
 		float ForwardDistance = 0;
 		GizmoMode Mode = GizmoMode::Translate;

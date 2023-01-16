@@ -32,14 +32,14 @@ namespace Core
 		Render::CameraEditor* GetCameraEditor() { return &_cameraEditor; }
 		Render::Gizmo* GetGizmo()				{ return &_gizmo; }
 		std::string GetCurrentScenePath()		{ return _currentScenePath; }
-		Math::Matrix4 GetVPMatrix()				{ return _VP; }
-		Math::Vector4 GetClearColor()			{ return _clearColor; }
+		Math::Mat4 GetVPMatrix()				{ return _VP; }
+		Math::Vec4 GetClearColor()			{ return _clearColor; }
 	private:
 		std::string _currentScenePath = "";
-		Math::Matrix4 _VP;
+		Math::Mat4 _VP;
 		Node* _sceneNode = nullptr;
 
-		Math::Vector4 _clearColor = { 0.45f, 0.55f, 0.60f, 1.00f };
+		Math::Vec4 _clearColor = { 0.45f, 0.55f, 0.60f, 1.00f };
 
 		// Render
 		Render::FrameBuffer* _frameBuffer = nullptr;

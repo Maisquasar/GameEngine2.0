@@ -16,7 +16,7 @@ namespace Resources
 
 		void Initialize() override;
 
-		void GetAnimAtFrame(int id, float time, Math::Vector3& Position, Math::Quaternion& Rotation);
+		void GetAnimAtFrame(int id, float time, Math::Vec3& Position, Math::Quat& Rotation);
 
 		float FrameRate = 0;
 
@@ -25,8 +25,8 @@ namespace Resources
 		// List of all Bones, With all Key Inside with :
 		// - first = Current Keyframe
 		// - second = Transform at this keyFrame
-		std::vector < std::unordered_map<int, Math::Vector3>> KeyPositions;
-		std::vector < std::unordered_map<int, Math::Quaternion>> KeyRotations;
+		std::vector < std::unordered_map<int, Math::Vec3>> KeyPositions;
+		std::vector < std::unordered_map<int, Math::Quat>> KeyRotations;
 	private:
 	};
 }

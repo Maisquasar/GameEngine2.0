@@ -18,7 +18,7 @@ Core::Components::BoxCollider::BoxCollider()
 	Initialize();
 }
 
-Core::Components::BoxCollider::BoxCollider(Math::Vector3 Position, Math::Vector3 Size, Math::Quaternion Rotation)
+Core::Components::BoxCollider::BoxCollider(Math::Vec3 Position, Math::Vec3 Size, Math::Quat Rotation)
 {
 	ComponentName = "BoxCollider";
 	Transform.SetLocalPosition(Position);
@@ -61,8 +61,8 @@ void Core::Components::BoxCollider::Update()
 	Transform.Update();
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.
-	Math::Matrix4 M = Transform.GetModelMatrix();
-	Math::Matrix4 MVP = Application.GetScene()->GetVPMatrix() * M;
+	Math::Mat4 M = Transform.GetModelMatrix();
+	Math::Mat4 MVP = Application.GetScene()->GetVPMatrix() * M;
 
 	// Send to the Shader.
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
@@ -107,10 +107,10 @@ void Core::Components::BoxCollider::SetUIIcon()
 
 bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
 {
-	//Math::Vector3 local_origin = glm::vec3(glm::inverse(box_transform) * glm::vec4(origin, 1));
-	//Math::Vector3 local_direction = glm::vec3(glm::inverse(box_transform) * glm::vec4(direction, 0));
-	auto min = Transform.GetWorldRotation() * Math::Vector3(Transform.GetWorldScale().Negate());
-	auto max = Transform.GetWorldRotation() * Math::Vector3(Transform.GetWorldScale());
+	//Math::Vec3 local_origin = glm::vec3(glm::inverse(box_transform) * glm::vec4(origin, 1));
+	//Math::Vec3 local_direction = glm::vec3(glm::inverse(box_transform) * glm::vec4(direction, 0));
+	auto min = Transform.GetWorldRotation() * Math::Vec3(-Transform.GetWorldScale());
+	auto max = Transform.GetWorldRotation() * Math::Vec3(Transform.GetWorldScale());
 	float tmin = (min.x - ray.GetOrigin().x) / ray.GetDirection().x;
 	float tmax = (max.x - ray.GetOrigin().x) / ray.GetDirection().x;
 

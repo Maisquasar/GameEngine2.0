@@ -75,31 +75,7 @@
     <ClCompile Include="Source\Src\Math\Math.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Src\Math\Vector\Vector2.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Math\Vector\Vector3.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Math\Vector\Vector4.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Math\Integer\Integer3.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Math\Matrix\Matrix4.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Math\Matrix\Quaterinon.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Src\Utils\Input.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Math\Integer\Integer2.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Src\Math\MathFunction.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Source\Src\Render\CameraEditor.cpp">
@@ -302,31 +278,7 @@
     <ClInclude Include="Source\Include\Math\Math.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Include\Math\Vector\Vector2.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Math\Vector\Vector3.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Math\Vector\Vector4.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Math\Integer\Integer2.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Math\Integer\Integer3.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Math\Matrix\Matrix4.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Math\Matrix\Quaternion.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Include\Utils\Input.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Math\MathFunction.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Source\Include\Render\CameraEditor.h">
@@ -458,5 +410,10 @@
     <ClInclude Include="Source\Include\Resources\MeshInstance.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Include\Math\Math.inl">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </None>
   </ItemGroup>
 </Project>

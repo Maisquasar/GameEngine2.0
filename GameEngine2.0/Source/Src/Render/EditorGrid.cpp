@@ -24,7 +24,7 @@ void Render::EditorGrid::Draw()
 	if (_meshComponent->GetMesh())
 	{
 		glDisable(GL_CULL_FACE);
-		Math::Matrix4 MVP = Application.GetScene()->GetVPMatrix();
+		Math::Mat4 MVP = Application.GetScene()->GetVPMatrix();
 		_meshComponent->GetMesh()->Update(MVP, false);
 		glEnable(GL_CULL_FACE);
 	}

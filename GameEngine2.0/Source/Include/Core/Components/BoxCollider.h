@@ -18,7 +18,7 @@ namespace Core::Components {
 		typedef BaseComponent<BoxCollider> Super;
 		// Constructors
 		BoxCollider();
-		BoxCollider(Math::Vector3 Position, Math::Vector3 Size, Math::Quaternion Rotation = Math::Quaternion());
+		BoxCollider(Math::Vec3 Position, Math::Vec3 Size, Math::Quat Rotation = Math::Quat());
 
 		void SetGameobject(Core::Node* node) override;
 

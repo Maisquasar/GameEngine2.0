@@ -3,8 +3,8 @@
 #include "Include/App.h"
 
 float Utils::Input::MouseScroll;
-Math::Vector2 Utils::Input::MouseDelta;
-Math::Vector2 Utils::Input::MousePosition;
+Math::Vec2 Utils::Input::MouseDelta;
+Math::Vec2 Utils::Input::MousePosition;
 
 
 Utils::Input::Input() {}
@@ -24,8 +24,8 @@ void Utils::Input::Update()
 {
 	MouseScroll = 0;
 	auto newMouse = ImGui::GetMousePos();
-	MouseDelta = Math::Vector2((float)(newMouse.x - MousePosition.x), (float)(newMouse.y - MousePosition.y));
-	MousePosition = Math::Vector2(newMouse.x, newMouse.y);
+	MouseDelta = Math::Vec2((float)(newMouse.x - MousePosition.x), (float)(newMouse.y - MousePosition.y));
+	MousePosition = Math::Vec2(newMouse.x, newMouse.y);
 
 
 	if (IsKeyPressed(ImGuiKey_F4))

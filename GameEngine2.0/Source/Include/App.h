@@ -35,7 +35,7 @@ public:
 
 	GLFWwindow* GetWindow() { return _window; }
 
-	Math::Integer2 GetWindowSize();
+	Math::IVec2 GetWindowSize();
 
 	const GLFWvidmode* GetMonitorVideoMode();
 

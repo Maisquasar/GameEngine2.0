@@ -56,14 +56,14 @@ void Core::Scene::Update()
 	}
 
 	auto mouse = ImGui::GetMousePos();
-	auto vecMouse = Math::Vector2(mouse.x, mouse.y) - _frameBuffer->GetPos();
+	auto vecMouse = Math::Vec2(mouse.x, mouse.y) - _frameBuffer->GetPos();
 }
 
 void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
 {
 	static bool IsDown = false;
 	static size_t ArrowClicked = -1;
-	static Math::Vector2 mousePosition;
+	static Math::Vec2 mousePosition;
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && _frameBuffer->IsHovered) {
 		IsDown = true;
 		int id = 0;
@@ -82,8 +82,8 @@ void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 		unsigned char data[4];
-		Math::Vector2 mouse = _frameBuffer->GetMousePosition();
-		mouse = mouse * Math::Vector2(Application.GetWindowSize().x / _frameBuffer->GetSize().x, Application.GetWindowSize().y / _frameBuffer->GetSize().y);
+		Math::Vec2 mouse = _frameBuffer->GetMousePosition();
+		mouse = mouse * Math::Vec2(Application.GetWindowSize().x / _frameBuffer->GetSize().x, Application.GetWindowSize().y / _frameBuffer->GetSize().y);
 		mouse.y = Application.GetWindowSize().y - mouse.y;
 		glReadPixels((GLint)mouse.x, (GLint)mouse.y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
@@ -103,8 +103,8 @@ void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
 		else
 		{
 			ArrowClicked = pickedID - nodes.size();
-			Math::Vector2 mouse = _frameBuffer->GetMousePosition();
-			mouse = mouse * Math::Vector2(Application.GetWindowSize().x / _frameBuffer->GetSize().x, Application.GetWindowSize().y / _frameBuffer->GetSize().y);
+			Math::Vec2 mouse = _frameBuffer->GetMousePosition();
+			mouse = mouse * Math::Vec2(Application.GetWindowSize().x / _frameBuffer->GetSize().x, Application.GetWindowSize().y / _frameBuffer->GetSize().y);
 			mousePosition = mouse;
 		}
 		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);

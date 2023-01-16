@@ -4,11 +4,11 @@
 #include "Include/Core/Components/BoxCollider.h"
 #include "Include/Render/CameraEditor.h"
 
-bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vector3& intersectionPoint)
+bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vec3& intersectionPoint)
 {
 	// Transform the ray into the local space of the box.
-	Math::Vector3 localRayOrigin = box->Transform.GetWorldRotation().GetInverse() * (ray->GetOrigin() - box->Transform.GetWorldPosition());
-	Math::Vector3 localRayDirection = box->Transform.GetWorldRotation().GetInverse() * ray->GetDirection();
+	Math::Vec3 localRayOrigin = box->Transform.GetWorldRotation().GetInverse() * (ray->GetOrigin() - box->Transform.GetWorldPosition());
+	Math::Vec3 localRayDirection = box->Transform.GetWorldRotation().GetInverse() * ray->GetDirection();
 
 	// Compute the minimum and maximum t values for the ray.
 	float tMin = -INFINITY;
@@ -55,8 +55,8 @@ bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Ma
 std::vector<float> Physic::GetCubeVertices()
 {
 	std::vector<float> vOut;
-	std::vector<Math::Vector3> v;
-	std::vector<Math::Vector3> n;
+	std::vector<Math::Vec3> v;
+	std::vector<Math::Vec3> n;
 	v = {
 		{ 1.000000, 1.000000, -1.000000},
 		{ 1.000000, -1.000000, -1.000000},
@@ -107,10 +107,10 @@ std::vector<float> Physic::GetCubeVertices()
 	return vOut;
 }
 
-Math::Vector3 Physic::ConvertMouseToWorld(Math::Vector2 mousePos, Math::Vector2 screenSize, Render::CameraEditor cameraPos)
+Math::Vec3 Physic::ConvertMouseToWorld(Math::Vec2 mousePos, Math::Vec2 screenSize, Render::CameraEditor cameraPos)
 {
 	if (mousePos.x < 0 || mousePos.y < 0 || screenSize.x < mousePos.x || screenSize.y < mousePos.y)
-		return Math::Vector3(INFINITY);
-	auto position = cameraPos.GetViewMatrix() * Math::Vector3(mousePos.x, mousePos.y, 0);
+		return Math::Vec3(INFINITY);
+	auto position = cameraPos.GetViewMatrix() * Math::Vec3(mousePos.x, mousePos.y, 0);
 	return position;
 }

@@ -152,18 +152,18 @@ void Render::Gizmo::DrawPicking(int id)
 	}
 }
 
-void Render::Gizmo::Update(size_t ArrowClicked, Math::Vector2& mousePosition)
+void Render::Gizmo::Update(size_t ArrowClicked, Math::Vec2& mousePosition)
 {
 	if (ArrowClicked >= 0)
 	{
 		if (ArrowClicked < 3)
 		{
-			Math::Vector2 mouse = Application.GetFramebuffer()->GetMousePosition();
-			mouse = mouse * Math::Vector2(Application.GetWindowSize().x / Application.GetFramebuffer()->GetSize().x, Application.GetWindowSize().y / Application.GetFramebuffer()->GetSize().y);
+			Math::Vec2 mouse = Application.GetFramebuffer()->GetMousePosition();
+			mouse = mouse * Math::Vec2(Application.GetWindowSize().x / Application.GetFramebuffer()->GetSize().x, Application.GetWindowSize().y / Application.GetFramebuffer()->GetSize().y);
 			auto currentMousePos = mouse;
 			auto node = EditorUi::Editor::GetInspector()->NodesSelected[0];
 			float difValue = (mousePosition[ArrowClicked % 2] - currentMousePos[ArrowClicked % 2]) / Math::Max(200 - (this->ForwardDistance * 5), 20);
-			Math::Vector3 NewPosition;
+			Math::Vec3 NewPosition;
 			NewPosition[ArrowClicked] = ArrowClicked == 2 ? -difValue : difValue;
 			mousePosition = currentMousePos;
 			switch (Mode)
@@ -186,7 +186,7 @@ void Render::Gizmo::Update(size_t ArrowClicked, Math::Vector2& mousePosition)
 	}
 }
 
-Math::Matrix4 Render::Gizmo::GetMVP()
+Math::Mat4 Render::Gizmo::GetMVP()
 {
 	// Project the points onto the custom axis
 	auto axis = Application.GetScene()->GetCameraEditor()->Transform.GetForwardVector();
@@ -204,6 +204,6 @@ Math::Matrix4 Render::Gizmo::GetMVP()
 	else
 	{
 		auto M = *NodeTransform;
-		return Application.GetScene()->GetVPMatrix() * (Math::Matrix4::CreateTranslationMatrix(M.GetWorldPosition()) * Math::Matrix4::CreateScaleMatrix(ForwardDistance / 10));
+		return Application.GetScene()->GetVPMatrix() * (Math::Mat4::CreateTranslationMatrix(M.GetWorldPosition()) * Math::Mat4::CreateScaleMatrix(ForwardDistance / 10));
 	}
 }

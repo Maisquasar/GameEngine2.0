@@ -10,7 +10,7 @@ Render::FrameBuffer::~FrameBuffer()
 	glDeleteRenderbuffers(1, &_RBO);
 }
 
-void Render::FrameBuffer::Initialize(Math::Integer2 size)
+void Render::FrameBuffer::Initialize(Math::IVec2 size)
 {
 	this->shader = Application.GetResourceManager()->Get<Resources::Shader>("DefaultScreenShader");
 	// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
@@ -65,7 +65,7 @@ void Render::FrameBuffer::Draw()
 
 		auto size = ImGui::GetWindowSize();
 		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Tex->GetData()), ImVec2(size.x - 16, size.y - 60), ImVec2(0, 1), ImVec2(1, 0));
-		_size = Math::Vector2(size.x - 16, size.y - 60);
+		_size = Math::Vec2(size.x - 16, size.y - 60);
 		IsHovered = ImGui::IsItemHovered();
 		IsFocused = ImGui::IsWindowFocused();
 		if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
@@ -79,20 +79,20 @@ void Render::FrameBuffer::Draw()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-Math::Vector2 Render::FrameBuffer::GetSize()
+Math::Vec2 Render::FrameBuffer::GetSize()
 {
 	return _size;
 }
 
-Math::Vector2 Render::FrameBuffer::GetPos()
+Math::Vec2 Render::FrameBuffer::GetPos()
 {
 	if (Window)
-		return  Math::Vector2(Window->Pos.x + 7, Window->Pos.y + 46);
-	return  Math::Vector2(0, 0);
+		return  Math::Vec2(Window->Pos.x + 7, Window->Pos.y + 46);
+	return  Math::Vec2(0, 0);
 }
 
-Math::Vector2 Render::FrameBuffer::GetMousePosition()
+Math::Vec2 Render::FrameBuffer::GetMousePosition()
 {
 	auto mouse = ImGui::GetMousePos();
-	return Math::Vector2(mouse.x, mouse.y) - GetPos();
+	return Math::Vec2(mouse.x, mouse.y) - GetPos();
 }

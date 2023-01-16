@@ -16,13 +16,13 @@ void Core::Transform::ComputeModelMatrix()
 	_dirty = false;
 }
 
-void Core::Transform::ComputeModelMatrix(const Math::Matrix4& parent)
+void Core::Transform::ComputeModelMatrix(const Math::Mat4& parent)
 {
 	_modelMatrix = parent * GetLocalModelMatrix();
 	_dirty = false;
 }
 
-void Core::Transform::SetWorldPosition(Math::Vector3 pos)
+void Core::Transform::SetWorldPosition(Math::Vec3 pos)
 {
 	if (!Parent)
 		_localPosition = pos;
@@ -31,7 +31,7 @@ void Core::Transform::SetWorldPosition(Math::Vector3 pos)
 	_dirty = true;
 }
 
-void Core::Transform::SetWorldRotation(Math::Quaternion rot)
+void Core::Transform::SetWorldRotation(Math::Quat rot)
 {
 	if (!Parent)
 		_localRotation = rot;
@@ -40,7 +40,7 @@ void Core::Transform::SetWorldRotation(Math::Quaternion rot)
 	_dirty = true;
 }
 
-void Core::Transform::SetWorldScale(Math::Vector3 sca)
+void Core::Transform::SetWorldScale(Math::Vec3 sca)
 {
 	if (!Parent)
 		_localScale = sca;
@@ -49,7 +49,7 @@ void Core::Transform::SetWorldScale(Math::Vector3 sca)
 	_dirty = true;
 }
 
-Math::Vector3 Core::Transform::GetWorldPosition()
+Math::Vec3 Core::Transform::GetWorldPosition()
 {
 	if (Parent)
 		return Parent->Transform.GetModelMatrix() * (_localPosition);
@@ -57,7 +57,7 @@ Math::Vector3 Core::Transform::GetWorldPosition()
 		return _localPosition;
 }
 
-Math::Quaternion Core::Transform::GetWorldRotation()
+Math::Quat Core::Transform::GetWorldRotation()
 {
 	if (Parent)
 	{
@@ -67,7 +67,7 @@ Math::Quaternion Core::Transform::GetWorldRotation()
 		return _localRotation;
 }
 
-Math::Vector3 Core::Transform::GetWorldScale()
+Math::Vec3 Core::Transform::GetWorldScale()
 {
 	if (Parent)
 	{
@@ -77,7 +77,7 @@ Math::Vector3 Core::Transform::GetWorldScale()
 		return _localScale;
 }
 
-Math::Matrix4 Core::Transform::GetModelMatrix(bool update)
+Math::Mat4 Core::Transform::GetModelMatrix(bool update)
 {
 	if (_dirty || update) {
 		if (Parent)
@@ -87,69 +87,69 @@ Math::Matrix4 Core::Transform::GetModelMatrix(bool update)
 	return _modelMatrix;
 }
 
-void Core::Transform::SetLocalPosition(Math::Vector3 newpos)
+void Core::Transform::SetLocalPosition(Math::Vec3 newpos)
 {
 	_localPosition = newpos;
 	_dirty = true;
 }
 
-void Core::Transform::SetLocalRotation(Math::Quaternion newrot)
+void Core::Transform::SetLocalRotation(Math::Quat newrot)
 {
 	_localRotation = newrot;
 	_localEulerRotation = newrot.ToEuler();
 	_dirty = true;
 }
 
-void Core::Transform::SetLocalScale(Math::Vector3 newscale)
+void Core::Transform::SetLocalScale(Math::Vec3 newscale)
 {
 	_localScale = newscale;
 	_dirty = true;
 }
 
-Math::Vector3 Core::Transform::GetLocalPosition()
+Math::Vec3 Core::Transform::GetLocalPosition()
 {
 	return _localPosition;
 }
 
-Math::Quaternion Core::Transform::GetLocalRotation()
+Math::Quat Core::Transform::GetLocalRotation()
 {
 	return _localRotation;
 }
 
-Math::Vector3 Core::Transform::GetLocalScale()
+Math::Vec3 Core::Transform::GetLocalScale()
 {
 	return _localScale;
 }
 
-Math::Matrix4 Core::Transform::GetLocalModelMatrix()
+Math::Mat4 Core::Transform::GetLocalModelMatrix()
 {
-	return Math::Matrix4::CreateTransformMatrix(_localPosition, _localRotation.ToEuler(), _localScale);
+	return Math::Mat4::CreateTransformMatrix(_localPosition, _localRotation.ToEuler(), _localScale);
 }
 
-Math::Vector3 Core::Transform::GetForwardVector()
+Math::Vec3 Core::Transform::GetForwardVector()
 {
-	return this->GetWorldRotation() * Math::Vector3::Forward();
+	return this->GetWorldRotation() * Math::Vec3::Forward();
 }
 
-Math::Vector3 Core::Transform::GetRightVector()
+Math::Vec3 Core::Transform::GetRightVector()
 {
-	return this->GetWorldRotation() * Math::Vector3::Right();
+	return this->GetWorldRotation() * Math::Vec3::Right();
 }
 
-Math::Vector3 Core::Transform::GetUpVector()
+Math::Vec3 Core::Transform::GetUpVector()
 {
-	return this->GetWorldRotation() * Math::Vector3::Up();
+	return this->GetWorldRotation() * Math::Vec3::Up();
 }
 
-Math::Vector3 Core::Transform::TranformPoint(Math::Vector3 p)
+Math::Vec3 Core::Transform::TranformPoint(Math::Vec3 p)
 {
 	return GetWorldRotation() * p;
 }
 
-void Core::Transform::RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle)
+void Core::Transform::RotateAround(Math::Vec3 point, Math::Vec3 axis, float angle)
 {
-	Math::Quaternion q = Math::Quaternion::AngleAxis(angle, axis);
-	Math::Vector3 dif = GetWorldPosition() - point;
+	Math::Quat q = Math::Quat::AngleAxis(angle, axis);
+	Math::Vec3 dif = GetWorldPosition() - point;
 	dif = q * dif;
 	SetWorldPosition(point + dif);
 	SetWorldRotation(this->GetWorldRotation() * (this->GetWorldRotation().GetInverse() * q * this->GetWorldRotation()));
@@ -255,9 +255,9 @@ bool DrawVec3Control(const std::string& label, float* values, float resetValue =
 
 void Core::Transform::ShowInInspector()
 {
-	Math::Vector3 position = _localPosition;
-	Math::Vector3 rotation = _localEulerRotation;
-	Math::Vector3 scale = _localScale;
+	Math::Vec3 position = _localPosition;
+	Math::Vec3 rotation = _localEulerRotation;
+	Math::Vec3 scale = _localScale;
 
 	DrawVec3Control("Position", &position.x);
 	DrawVec3Control("Rotation", &rotation.x);
@@ -266,7 +266,7 @@ void Core::Transform::ShowInInspector()
 	if (position != _localPosition || rotation != _localEulerRotation || scale != _localScale) {
 		SetLocalPosition(position);
 		float mod = 360.f;
-		_localEulerRotation = Math::Vector3(rotation.x, rotation.y, rotation.z);
+		_localEulerRotation = Math::Vec3(rotation.x, rotation.y, rotation.z);
 		_localRotation = _localEulerRotation.ToQuaternion();
 		SetLocalScale(scale);
 		_dirty = true;

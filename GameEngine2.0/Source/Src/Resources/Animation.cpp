@@ -9,7 +9,7 @@ Resources::Animation::~Animation() {}
 
 void Resources::Animation::Initialize()
 {
-	auto max_size_position = [&](const std::vector < std::unordered_map<int, Math::Vector3>>& a) -> int
+	auto max_size_position = [&](const std::vector < std::unordered_map<int, Math::Vec3>>& a) -> int
 	{
 		int max = 0;
 
@@ -23,7 +23,7 @@ void Resources::Animation::Initialize()
 		return max;
 	};
 
-	auto max_size_rotation = [&](const std::vector < std::unordered_map<int, Math::Quaternion>>& a) -> int
+	auto max_size_rotation = [&](const std::vector < std::unordered_map<int, Math::Quat>>& a) -> int
 	{
 		int max = 0;
 
@@ -37,7 +37,7 @@ void Resources::Animation::Initialize()
 		return max;
 	};
 
-	auto nearest_values_pos = [&](const std::unordered_map<int, Math::Vector3>& m, int target) -> std::pair<int, int>
+	auto nearest_values_pos = [&](const std::unordered_map<int, Math::Vec3>& m, int target) -> std::pair<int, int>
 	{
 		int lower = -1, upper = -1;
 		for (auto i : m) {
@@ -52,7 +52,7 @@ void Resources::Animation::Initialize()
 		return std::make_pair(lower, upper);
 	};
 
-	auto nearest_values_rot = [&](const std::unordered_map<int, Math::Quaternion>& m, int target) -> std::pair<int, int>
+	auto nearest_values_rot = [&](const std::unordered_map<int, Math::Quat>& m, int target) -> std::pair<int, int>
 	{
 		int lower = -1, upper = -1;
 		for (auto i : m) {
@@ -79,7 +79,7 @@ void Resources::Animation::Initialize()
 				auto nearests = nearest_values_pos(Key, i);
 				int lower = nearests.first;
 				int upper = nearests.second;
-				Key[i] = Math::Vector3::Lerp(Key[lower], Key[upper], (float)i / (float)KeyCount);
+				Key[i] = Math::Vec3::Lerp(Key[lower], Key[upper], (float)i / (float)KeyCount);
 			}
 
 		}
@@ -90,7 +90,7 @@ void Resources::Animation::Initialize()
 				auto nearests = nearest_values_rot(Key, i);
 				int lower = nearests.first;
 				int upper = nearests.second;
-				Key[i] = Math::Quaternion::SLerp(Key[lower], Key[upper], (float)i / (float)KeyCount);
+				Key[i] = Math::Quat::SLerp(Key[lower], Key[upper], (float)i / (float)KeyCount);
 			}
 
 		}
@@ -99,21 +99,21 @@ void Resources::Animation::Initialize()
 	SetInitialized();
 }
 
-void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vector3& Position, Math::Quaternion& Rotation)
+void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vec3& Position, Math::Quat& Rotation)
 {
 	int pt0, pt1, rt0, rt1;
 	if (time >= 0) {
 		// Position
 		if (KeyPositions.size() > id && KeyPositions[id].size() > 1) {
-			pt0 = (int)std::floor(abs(time)) % (KeyPositions[id].size() - 1);
-			pt1 = (int)std::ceil(abs(time)) % (KeyPositions[id].size() - 1);
+			pt0 = (int)std::floorf(abs(time)) % (KeyPositions[id].size() - 1);
+			pt1 = (int)std::ceilf(abs(time)) % (KeyPositions[id].size() - 1);
 			if (pt1 == pt0)
 				pt1 += 1;
 
 			// Lerp The Position
-			Math::Vector3 PreviousFramePos = KeyPositions[id][pt0];
-			Math::Vector3 NextFramePos = KeyPositions[id][pt1];
-			Position = Math::Vector3::Lerp(PreviousFramePos, NextFramePos, (float)(time - pt0) / (float)(pt1 - pt0));
+			Math::Vec3 PreviousFramePos = KeyPositions[id][pt0];
+			Math::Vec3 NextFramePos = KeyPositions[id][pt1];
+			Position = Math::Vec3::Lerp(PreviousFramePos, NextFramePos, (float)(time - pt0) / (float)(pt1 - pt0));
 		}
 		else if (KeyPositions.size() > id && KeyPositions[id].size() > 0)
 		{
@@ -122,15 +122,15 @@ void Resources::Animation::GetAnimAtFrame(int id, float time, Math::Vector3& Pos
 
 		// Rotation
 		if (KeyRotations.size() > id && KeyRotations[id].size() > 1) {
-			rt0 = (int)std::floor(abs(time)) % (KeyRotations[id].size() - 1);
-			rt1 = (int)std::ceil(abs(time)) % (KeyRotations[id].size() - 1);
+			rt0 = (int)std::floorf(abs(time)) % (KeyRotations[id].size() - 1);
+			rt1 = (int)std::ceilf(abs(time)) % (KeyRotations[id].size() - 1);
 			if (rt1 == rt0)
 				rt1 += 1;
 
 			// Lerp The Rotation
-			Math::Quaternion PreviousFrameRot = KeyRotations[id][rt0];
-			Math::Quaternion NextFrameRot = KeyRotations[id][rt1];
-			Rotation = Math::Quaternion::SLerp(PreviousFrameRot, NextFrameRot, (float)(time - rt0) / (float)(rt1 - rt0));
+			Math::Quat PreviousFrameRot = KeyRotations[id][rt0];
+			Math::Quat NextFrameRot = KeyRotations[id][rt1];
+			Rotation = Math::Quat::SLerp(PreviousFrameRot, NextFrameRot, (float)(time - rt0) / (float)(rt1 - rt0));
 		}
 		else if (KeyRotations.size() > id && KeyRotations[id].size() > 0)
 		{

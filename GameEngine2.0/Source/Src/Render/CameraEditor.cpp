@@ -2,10 +2,10 @@
 #include "Include/Utils/Input.h"
 #include "Include/App.h"
 
-void GetRotateAround(Math::Vector3 point, Math::Vector3 axis, float angle, Math::Vector3& pos, Math::Quaternion& rot)
+void GetRotateAround(Math::Vec3 point, Math::Vec3 axis, float angle, Math::Vec3& pos, Math::Quat& rot)
 {
-	Math::Quaternion q = Math::Quaternion::AngleAxis(angle, axis);
-	Math::Vector3 dif = pos - point;
+	Math::Quat q = Math::Quat::AngleAxis(angle, axis);
+	Math::Vec3 dif = pos - point;
 	dif = q * dif;
 	pos = point + dif;
 	auto inverse = rot.GetInverse();
@@ -15,7 +15,7 @@ void GetRotateAround(Math::Vector3 point, Math::Vector3 axis, float angle, Math:
 
 Render::CameraEditor::CameraEditor()
 {
-	this->Transform.SetWorldPosition(Math::Vector3(0, 0, 10));
+	this->Transform.SetWorldPosition(Math::Vec3(0, 0, 10));
 }
 
 Render::CameraEditor::~CameraEditor() {}
@@ -49,7 +49,7 @@ void Render::CameraEditor::Update(bool firstUpdate)
 	float movementSpeed = Utils::Input::IsKeyDown(ImGuiKey_LeftShift) ? 15.f : 5.f;
 	if (Utils::Input::IsKeyDown(ImGuiKey_D))
 	{
-		FocusPosition = (FocusPosition + (Transform.GetRightVector().Negate() * movementSpeed * ImGui::GetIO().DeltaTime));
+		FocusPosition = (FocusPosition + (-Transform.GetRightVector() * movementSpeed * ImGui::GetIO().DeltaTime));
 	}
 	if (Utils::Input::IsKeyDown(ImGuiKey_A))
 	{
@@ -57,7 +57,7 @@ void Render::CameraEditor::Update(bool firstUpdate)
 	}
 	if (Utils::Input::IsKeyDown(ImGuiKey_S))
 	{
-		FocusPosition = (FocusPosition + (Transform.GetForwardVector().Negate() * movementSpeed * ImGui::GetIO().DeltaTime));
+		FocusPosition = (FocusPosition + (-Transform.GetForwardVector() * movementSpeed * ImGui::GetIO().DeltaTime));
 	}
 	if (Utils::Input::IsKeyDown(ImGuiKey_W))
 	{
@@ -65,7 +65,7 @@ void Render::CameraEditor::Update(bool firstUpdate)
 	}
 	if (Utils::Input::IsKeyDown(ImGuiKey_F))
 	{
-		FocusPosition = (FocusPosition + (Transform.GetUpVector().Negate() * movementSpeed * ImGui::GetIO().DeltaTime));
+		FocusPosition = (FocusPosition + (-Transform.GetUpVector() * movementSpeed * ImGui::GetIO().DeltaTime));
 	}
 	if (Utils::Input::IsKeyDown(ImGuiKey_Space))
 	{
@@ -73,16 +73,16 @@ void Render::CameraEditor::Update(bool firstUpdate)
 	}
 
 	Transform.SetLocalPosition(FocusPosition - Transform.GetForwardVector() * Distance);
-	Transform.SetLocalRotation(Math::Quaternion::LookRotation(FocusPosition - Transform.GetLocalPosition(), Math::Vector3::Up()));
+	Transform.SetLocalRotation(Math::Quat::LookRotation(FocusPosition - Transform.GetLocalPosition(), Math::Vec3::Up()));
 }
 
-Math::Matrix4 Render::CameraEditor::GetViewMatrix()
+Math::Mat4 Render::CameraEditor::GetViewMatrix()
 {
-	Math::Matrix4 temp;
-	Math::Vector3 z = Transform.GetForwardVector().Negate();
-	Math::Vector3 x = Transform.GetRightVector().Negate();
-	Math::Vector3 y = Transform.GetUpVector();
-	Math::Vector3 delta = Math::Vector3(-x.DotProduct(this->Transform.GetWorldPosition()), -y.DotProduct(this->Transform.GetWorldPosition()), -z.DotProduct(this->Transform.GetWorldPosition()));
+	Math::Mat4 temp;
+	Math::Vec3 z = -Transform.GetForwardVector();
+	Math::Vec3 x = -Transform.GetRightVector();
+	Math::Vec3 y = Transform.GetUpVector();
+	Math::Vec3 delta = Math::Vec3(-x.DotProduct(this->Transform.GetWorldPosition()), -y.DotProduct(this->Transform.GetWorldPosition()), -z.DotProduct(this->Transform.GetWorldPosition()));
 	for (int i = 0; i < 3; i++)
 	{
 		temp.at(i, 0) = x[i];
@@ -94,13 +94,13 @@ Math::Matrix4 Render::CameraEditor::GetViewMatrix()
 	return temp;
 }
 
-Math::Matrix4 Render::CameraEditor::GetProjection()
+Math::Mat4 Render::CameraEditor::GetProjection()
 {
 	float s = 1.0f / ((AspectRatio)*atanf(Math::ToRadians(FOV / 2.0f)));
 	float s2 = 1.0f / atanf(Math::ToRadians(FOV / 2.0f));
 	float param1 = -(Far + Near) / (Far - Near);
 	float param2 = -(2 * Near * Far) / (Far - Near);
-	Math::Matrix4 out;
+	Math::Mat4 out;
 	out.at(0, 0) = s;
 	out.at(1, 1) = s2;
 	out.at(2, 2) = param1;
@@ -109,40 +109,40 @@ Math::Matrix4 Render::CameraEditor::GetProjection()
 	return out;
 }
 
-Math::Matrix4 Render::CameraEditor::GetModelMatrix()
+Math::Mat4 Render::CameraEditor::GetModelMatrix()
 {
 	return Transform.GetModelMatrix();
 }
 
-Math::Vector3 Render::CameraEditor::GetUp()
+Math::Vec3 Render::CameraEditor::GetUp()
 {
-	return GetModelMatrix() * Math::Vector3::Up();
+	return GetModelMatrix() * Math::Vec3::Up();
 }
 
-Math::Vector3 Render::CameraEditor::GetRight()
+Math::Vec3 Render::CameraEditor::GetRight()
 {
-	return GetModelMatrix() * Math::Vector3::Right();
+	return GetModelMatrix() * Math::Vec3::Right();
 }
 
-Math::Vector3 Render::CameraEditor::UnProject(Math::Vector2 point)
+Math::Vec3 Render::CameraEditor::UnProject(Math::Vec2 point)
 {    
 	// Convert the screen position to normalized device coordinates
-	Math::Vector3 ndc;
+	Math::Vec3 ndc;
 	ndc.x = (point.x / Application.GetFramebuffer()->GetSize().x) * 2 - 1;
 	ndc.y = ((Application.GetFramebuffer()->GetSize().y - point.y) / Application.GetFramebuffer()->GetSize().y) * 2 - 1;
 	ndc.z = 10;
 
 	// Use the inverse of the projection matrix to convert from NDC to world space
 	auto invProjectionMatrix = GetProjection().CreateInverseMatrix();
-	Math::Vector4 worldPos = invProjectionMatrix * ndc;
+	Math::Vec4 worldPos = invProjectionMatrix * ndc;
 
 	// Divide by the w-coordinate to get the final world position
-	worldPos = worldPos.Homogenize();
+	worldPos.Homogenize();
 
 	// Use the inverse of the view matrix to transform the world position into the correct space
 	auto invViewMatrix = GetViewMatrix().CreateInverseMatrix();
 	worldPos = invViewMatrix * worldPos;
 
-	return Math::Vector3(worldPos);
+	return Math::Vec3(worldPos);
 }
 

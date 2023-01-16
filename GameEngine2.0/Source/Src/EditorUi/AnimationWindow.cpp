@@ -147,14 +147,14 @@ void EditorUi::AnimationWindow::Draw()
 		if (SelectedPosition)
 		{
 			ImGui::SameLine();
-			Math::Vector3 value = *SelectedPosition;
+			Math::Vec3 value = *SelectedPosition;
 			ImGui::DragFloat3("Position", &value.x, 0.05f, 0.0F, 0.0F, "%.5f");
 			*SelectedPosition = value;
 		}
 		else if (SelectedRotation)
 		{
 			ImGui::SameLine();
-			Math::Quaternion value = *SelectedRotation;
+			Math::Quat value = *SelectedRotation;
 			ImGui::DragFloat4("Rotation", &value.x, 0.05f, 0.0F, 0.0F, "%.5f");
 			*SelectedRotation = value;
 		}

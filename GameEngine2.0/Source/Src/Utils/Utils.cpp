@@ -2,7 +2,7 @@
 #include "Include/Core/Node.h"
 #include <ImGui/imgui.h>
 
-float Utils::GetDistanceAxis(Math::Vector3 point1, Math::Vector3 point2, Math::Vector3 axis)
+float Utils::GetDistanceAxis(Math::Vec3 point1, Math::Vec3 point2, Math::Vec3 axis)
 {
 	// Project the points onto the custom axis
 	float dot1 = point1.DotProduct(axis);
@@ -12,7 +12,7 @@ float Utils::GetDistanceAxis(Math::Vector3 point1, Math::Vector3 point2, Math::V
 	return abs(dot1 - dot2);
 }
 
-void Utils::SortByDistanceFromCamera(std::vector<Core::Node*>& list, Math::Vector3 CameraPosition, Math::Vector3 Forward)
+void Utils::SortByDistanceFromCamera(std::vector<Core::Node*>& list, Math::Vec3 CameraPosition, Math::Vec3 Forward)
 {
 	std::map<Core::Node*, float> distances;
 	for (auto element : list)
@@ -47,24 +47,24 @@ std::vector<std::pair<Core::Node*, float> > Utils::BubbleSort(std::map<Core::Nod
 	return A;
 }
 
-void Utils::GetPlaneVertices(std::vector<Math::Vector3>& Positions, std::vector<Math::Vector2>& TextureUVs, std::vector<Math::Vector3>& Normals, std::vector<Math::Integer3>& Indices)
+void Utils::GetPlaneVertices(std::vector<Math::Vec3>& Positions, std::vector<Math::Vec2>& TextureUVs, std::vector<Math::Vec3>& Normals, std::vector<Math::IVec3>& Indices)
 {
-	std::vector<Math::Vector3> v = {
+	std::vector<Math::Vec3> v = {
 		{1.000000f, 1.000000f, 0.000000},
 		{ 1.000000, -1.000000, 0.000000 },
 		{-1.000000, 1.000000, 0.000000},
 		{-1.000000, -1.000000, 0.000000 },
 	};
 
-	std::vector < Math::Vector2> t = {
+	std::vector < Math::Vec2> t = {
 		{1 - 0.000000, 0.000000},
 		{1 - 1.000000, 0.000000 },
 		{1 - 0.000000, 1.000000},
 		{1 - 1.000000, 1.000000 }
 	};
-	Math::Vector3 n = { -0.0000, 1.0000, -0.0000 };
+	Math::Vec3 n = { -0.0000, 1.0000, -0.0000 };
 
-	std::vector<Math::Integer3> i{
+	std::vector<Math::IVec3> i{
 		{1, 1, 0}, {2, 2, 0}, {0, 0, 0},
 		{1, 1, 0}, {3, 3, 0}, {2, 2, 0}
 	};

@@ -25,7 +25,7 @@ void Core::Components::Camera::Update()
 	{
 		Icon = new Render::EditorIcon();
 		Icon->Initialize("CameraMat");
-		Icon->SetSize(Math::Vector2(0.25f, 0.25f));
+		Icon->SetSize(Math::Vec2(0.25f, 0.25f));
 
 	}
 	Icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform, GameObject->IsSelected());

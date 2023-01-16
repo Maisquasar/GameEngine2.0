@@ -10,14 +10,14 @@ namespace Debug {
 	{
 	public:
 		Line();
-		Line(Math::Vector3 p1, Math::Vector3 p2, float lineWidth = 1);
+		Line(Math::Vec3 p1, Math::Vec3 p2, float lineWidth = 1);
 		~Line();
 		
 		void Initialize();
-		void Draw(Math::Vector3 p1, Math::Vector3 p2);
+		void Draw(Math::Vec3 p1, Math::Vec3 p2);
 	private:
-		Math::Vector3 _point1;
-		Math::Vector3 _point2;
+		Math::Vec3 _point1;
+		Math::Vec3 _point2;
 		float _lineWidth = 1.f;
 
 		unsigned int _VAO = 0;

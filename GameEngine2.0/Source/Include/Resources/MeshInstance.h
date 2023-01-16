@@ -13,7 +13,7 @@ namespace Resources
 
 		void Draw(int amount);
 
-		Math::Matrix4 Transform = Math::Matrix4::Identity();
+		Math::Mat4 Transform = Math::Mat4::Identity();
 
 	private:
 

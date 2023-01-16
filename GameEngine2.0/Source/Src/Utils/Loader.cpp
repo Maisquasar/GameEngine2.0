@@ -61,9 +61,9 @@ float Utils::Loader::GetFloat(std::string line)
 	return out;
 }
 
-std::vector<Math::Integer3> Utils::Loader::GetIndices(std::string line)
+std::vector<Math::IVec3> Utils::Loader::GetIndices(std::string line)
 {
-	std::vector<Math::Integer3> out;
+	std::vector<Math::IVec3> out;
 	out.resize(3);
 	std::string value;
 	std::string temp = line.substr(2);
@@ -86,9 +86,9 @@ std::vector<Math::Integer3> Utils::Loader::GetIndices(std::string line)
 	return out;
 }
 
-Math::Vector4 Utils::Loader::GetVec4(std::string line)
+Math::Vec4 Utils::Loader::GetVec4(std::string line)
 {
-	Math::Vector4 out;
+	Math::Vec4 out;
 	std::string value;
 	std::string temp = line.substr(line.find_first_of(':') + 2);
 	for (size_t i = 0; i < 4; i++)
@@ -100,9 +100,9 @@ Math::Vector4 Utils::Loader::GetVec4(std::string line)
 	return out;
 }
 
-Math::Vector3 Utils::Loader::GetVector3(std::string line)
+Math::Vec3 Utils::Loader::GetVector3(std::string line)
 {
-	Math::Vector3 out;
+	Math::Vec3 out;
 	std::string value;
 	std::string temp = line.substr(line.find_first_of(':') + 2);
 	for (size_t i = 0; i < 3; i++)
@@ -114,9 +114,9 @@ Math::Vector3 Utils::Loader::GetVector3(std::string line)
 	return out;
 }
 
-Math::Vector3 Utils::Loader::GetVec3(std::string line)
+Math::Vec3 Utils::Loader::GetVec3(std::string line)
 {
-	Math::Vector3 out;
+	Math::Vec3 out;
 	std::string value;
 	std::string temp = line.substr(2);
 	temp = temp.substr(temp.find_first_not_of(' '));
@@ -129,9 +129,9 @@ Math::Vector3 Utils::Loader::GetVec3(std::string line)
 	return out;
 }
 
-Math::Vector2 Utils::Loader::GetVector2(std::string line)
+Math::Vec2 Utils::Loader::GetVector2(std::string line)
 {
-	Math::Vector2 out;
+	Math::Vec2 out;
 	std::string value;
 	std::string temp = line.substr(line.find_first_of(':') + 2);
 	for (size_t i = 0; i < 2; i++)
@@ -143,9 +143,9 @@ Math::Vector2 Utils::Loader::GetVector2(std::string line)
 	return out;
 }
 
-Math::Vector2 Utils::Loader::GetVec2(std::string line)
+Math::Vec2 Utils::Loader::GetVec2(std::string line)
 {
-	Math::Vector2 out;
+	Math::Vec2 out;
 	std::string value;
 	std::string temp = line.substr(2);
 	temp = temp.substr(temp.find_first_not_of(' '));
@@ -155,17 +155,17 @@ Math::Vector2 Utils::Loader::GetVec2(std::string line)
 		out[i] = std::stof(value);
 		temp = temp.substr(temp.find_first_of(' ') + 1);
 	}
-	out = Math::Vector2(out.x, 1 - out.y);
+	out = Math::Vec2(out.x, 1 - out.y);
 	return out;
 }
 
 
 
 
-Math::Matrix4 Utils::Loader::GetMat4(std::string line)
+Math::Mat4 Utils::Loader::GetMat4(std::string line)
 {
 	auto temp = line;
-	Math::Matrix4 mat;
+	Math::Mat4 mat;
 	std::string value;
 	line = line.substr(line.find_first_of(' ') + 3);
 	for (int i = 0; i < 4; i++)
@@ -465,7 +465,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 						mat->SetPath(matPath);
 						auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
 						mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
-						mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+						mat->SetDiffuse(Math::Vec4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
 						Application.GetResourceManager()->Add<Resources::Material>(matPath, mat);
 					}
 				}
@@ -492,7 +492,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 			mat->SetPath(matPath);
 			auto mesh_mat = mesh->getMaterial((int)lastMaterial)->getDiffuseColor();
 			mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
-			mat->SetDiffuse(Math::Vector4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
+			mat->SetDiffuse(Math::Vec4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
 			Application.GetResourceManager()->Add<Resources::Material>(matPath.c_str(), mat);
 		}
 	}
@@ -571,9 +571,9 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 		auto rot = link->getPreRotation();
 		auto sca = link->getLocalScaling();
 
-		Math::Vector3 vecPos = Math::Vector3((float)pos.x, (float)pos.y, (float)pos.z) * 0.01f;
-		Math::Vector3 vecRot = Math::Vector3((float)rot.x, (float)rot.y, (float)rot.z);
-		Math::Vector3 vecSca = Math::Vector3((float)sca.x, (float)sca.y, (float)sca.z);
+		Math::Vec3 vecPos = Math::Vec3((float)pos.x, (float)pos.y, (float)pos.z) * 0.01f;
+		Math::Vec3 vecRot = Math::Vec3((float)rot.x, (float)rot.y, (float)rot.z);
+		Math::Vec3 vecSca = Math::Vec3((float)sca.x, (float)sca.y, (float)sca.z);
 
 		bone->Transform.SetLocalPosition(vecPos);
 		bone->DefaultPosition = vecPos;
@@ -704,14 +704,14 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 
 				// Check if the curve node is for translation ("T") or rotation ("R")
 				if (!std::strcmp(node->name, "T")) {
-					// Add a new vector of Math::Vector3 to the KeyPositions field
-					Animation->KeyPositions.push_back(std::unordered_map<int, Math::Vector3>());
+					// Add a new vector of Math::Vec3 to the KeyPositions field
+					Animation->KeyPositions.push_back(std::unordered_map<int, Math::Vec3>());
 					int i = 0;
 
 					if (node->getCurve(i)) {
 
 						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
-							Math::Vector3 Position;
+							Math::Vec3 Position;
 							int keyPosition = -1;
 							for (i = 0; i < 3; i++) {
 								Position[i] = node->getCurve(i)->getKeyValue()[p] * 0.01f;
@@ -727,14 +727,14 @@ void Utils::Loader::LoadAnimation(const ofbx::AnimationStack* stack, std::string
 					}
 				}
 				else if (!std::strcmp(node->name, "R")) {
-					// Add a new vector of Math::Quaternion to the KeyRotations field
-					Animation->KeyRotations.push_back(std::unordered_map<int, Math::Quaternion>());
+					// Add a new vector of Math::Quat to the KeyRotations field
+					Animation->KeyRotations.push_back(std::unordered_map<int, Math::Quat>());
 					int i = 0;
 
 					if (node->getCurve(i)) {
 
 						for (int p = 0; p < node->getCurve(i)->getKeyCount(); p++) {
-							Math::Vector3 Rotation;
+							Math::Vec3 Rotation;
 							int keyPosition = -1;
 							for (i = 0; i < 3; i++) {
 								Rotation[i] = node->getCurve(i)->getKeyValue()[p];

@@ -64,7 +64,7 @@ void Resources::SkeletalMesh::Initialize()
 	_initialized = true;
 }
 
-void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outline)
+void Resources::SkeletalMesh::Update(Math::Mat4 M, Skeleton* skel, bool outline)
 {
 	if (!Loaded || !skel)
 		return;
@@ -128,7 +128,7 @@ void Resources::SkeletalMesh::Update(Math::Matrix4 M, Skeleton* skel, bool outli
 	}
 }
 
-void Resources::SkeletalMesh::DrawPicking(Math::Matrix4 M, Skeleton* skel, int id)
+void Resources::SkeletalMesh::DrawPicking(Math::Mat4 M, Skeleton* skel, int id)
 {
 	if (!Loaded)
 		return;

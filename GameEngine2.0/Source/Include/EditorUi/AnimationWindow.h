@@ -183,8 +183,8 @@ namespace EditorUi
 		Core::Components::AnimationComponent* SelectedAnimationComp = nullptr;
 		Resources::Skeleton* SelectedSkeleton = nullptr;
 
-		Math::Vector3* SelectedPosition = nullptr;
-		Math::Quaternion* SelectedRotation = nullptr;
+		Math::Vec3* SelectedPosition = nullptr;
+		Math::Quat* SelectedRotation = nullptr;
 
 	private:
 

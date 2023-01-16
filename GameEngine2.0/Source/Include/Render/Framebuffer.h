@@ -13,13 +13,13 @@ namespace Render {
 		FrameBuffer();
 		~FrameBuffer();
 
-		void Initialize(Math::Integer2);
+		void Initialize(Math::IVec2);
 		void Draw();
 
-		Math::Vector2 GetSize();
-		Math::Vector2 GetPos();
+		Math::Vec2 GetSize();
+		Math::Vec2 GetPos();
 
-		Math::Vector2 GetMousePosition();
+		Math::Vec2 GetMousePosition();
 
 		ImGuiWindow* Window = nullptr;
 
@@ -34,7 +34,7 @@ namespace Render {
 
 	private:
 		GLuint _RBO = 0;
-		Math::Vector2 _size;
-		Math::Vector2 _pos;
+		Math::Vec2 _size;
+		Math::Vec2 _pos;
 	};
 }

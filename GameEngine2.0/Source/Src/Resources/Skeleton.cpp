@@ -53,8 +53,8 @@ void Bone::DrawDebug()
 #include "Include/Resources/Animation.h"
 void Bone::UpdateBone(Resources::Animation* anim, float time)
 {
-	Math::Vector3 Position = DefaultPosition;
-	Math::Quaternion Rotation;
+	Math::Vec3 Position = DefaultPosition;
+	Math::Quat Rotation;
 	anim->GetAnimAtFrame(Id, time, Position, Rotation);
 
 	Transform.SetLocalPosition(Position);
@@ -214,7 +214,7 @@ std::vector<Bone*> Bone::GetAllBones()
 	return out;
 }
 
-Math::Matrix4 Bone::GetBoneMatrix()
+Math::Mat4 Bone::GetBoneMatrix()
 {
 	auto result = Transform.GetModelMatrix(true) * DefaultMatrix;
 	return result;
@@ -246,13 +246,13 @@ Resources::Skeleton* Resources::Skeleton::Clone() const
 	return skel;
 }
 
-std::vector<Math::Matrix4> Resources::Skeleton::GetBonesMatrices()
+std::vector<Math::Mat4> Resources::Skeleton::GetBonesMatrices()
 {
-	std::vector<Math::Matrix4> Matrix;
+	std::vector<Math::Mat4> Matrix;
 	//Matrix.resize(52);
 	for (size_t i = 0; i < Bones.size(); i++)
 	{
-		//Matrix.push_back(Math::Matrix4::Identity());
+		//Matrix.push_back(Math::Mat4::Identity());
 		Matrix.push_back(Bones[i]->GetBoneMatrix());
 	}
 	return Matrix;

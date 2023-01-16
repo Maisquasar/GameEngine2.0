@@ -14,7 +14,7 @@ namespace Render
 namespace Physic
 {
     class Ray;
-    bool RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vector3& intersectionPoint);
+    bool RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vec3& intersectionPoint);
     std::vector<float> GetCubeVertices();
-    Math::Vector3 ConvertMouseToWorld(Math::Vector2 mousePos, Math::Vector2 screenSize, Render::CameraEditor cameraPos);
+    Math::Vec3 ConvertMouseToWorld(Math::Vec2 mousePos, Math::Vec2 screenSize, Render::CameraEditor cameraPos);
 }

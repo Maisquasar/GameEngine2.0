@@ -45,7 +45,7 @@ void Core::Components::ParticleSystem::PostInitialize()
 		glDeleteBuffers(1, &_buffer);
 	glGenBuffers(1, &_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer);
-	std::vector<Math::Vector4>  XYZS;
+	std::vector<Math::Vec4>  XYZS;
 	XYZS.resize(_particles.size());
 	glBufferData(GL_ARRAY_BUFFER, XYZS.size() * sizeof(float[4]), &XYZS[0], GL_STREAM_DRAW);
 
@@ -67,7 +67,7 @@ void Core::Components::ParticleSystem::Update()
 	{
 		_icon = new Render::EditorIcon();
 		_icon->Initialize("ParticleMat");
-		_icon->SetSize(Math::Vector2(0.25f, 0.25f));
+		_icon->SetSize(Math::Vec2(0.25f, 0.25f));
 
 	}
 	_icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform, GameObject->IsSelected());
@@ -280,7 +280,7 @@ void Core::Components::Particle::ResetPosition()
 	float spread = 1.5f;
 	_position = _particleSystem->GameObject->Transform.GetWorldPosition();
 	float angle = (_particleSystem->GetAngle() * 10.f) / 360.f;
-	Math::Vector3 randomdir = Math::Vector3(
+	Math::Vec3 randomdir = Math::Vec3(
 		Utils::RandomFloat(-angle, angle),
 		Utils::RandomFloat(-angle, angle),
 		Utils::RandomFloat(-angle, angle)
@@ -301,7 +301,7 @@ void Core::Components::Particle::Update()
 	else if (_life >= _startTime)
 	{
 		_alive = true;
-		_speed += Math::Vector3(0.0f, -9.81f, 0.0f) * (float)ImGui::GetIO().DeltaTime * 0.5f;
+		_speed += Math::Vec3(0.0f, -9.81f, 0.0f) * (float)ImGui::GetIO().DeltaTime * 0.5f;
 		_position += _speed * (float)ImGui::GetIO().DeltaTime;
 	}
 	_life += ImGui::GetIO().DeltaTime;

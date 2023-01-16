@@ -12,8 +12,8 @@ namespace Utils {
 		~Input();
 
 		static float MouseScroll;
-		static Math::Vector2 MouseDelta;
-		static Math::Vector2 MousePosition;
+		static Math::Vec2 MouseDelta;
+		static Math::Vec2 MousePosition;
 
 		static void Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset);
 

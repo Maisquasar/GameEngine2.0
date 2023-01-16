@@ -9,23 +9,23 @@ namespace Physic
         Ray() {}
 
         // Set the origin and direction of the ray
-        void Set(const Math::Vector3& origin, const Math::Vector3& direction)
+        void Set(const Math::Vec3& origin, const Math::Vec3& direction)
         {
             _origin = origin;
-            _direction = direction.Normalize();
+            _direction = direction.GetNormal();
         }
 
         // Return the origin of the ray
-        Math::Vector3 GetOrigin() const { return _origin; }
+        Math::Vec3 GetOrigin() const { return _origin; }
 
         // Return the direction of the ray
-        Math::Vector3 GetDirection() const { return _direction; }
+        Math::Vec3 GetDirection() const { return _direction; }
 
         // Return the point on the ray at the given distance
-        Math::Vector3 GetPoint(float distance) const { return _origin + _direction * distance; }
+        Math::Vec3 GetPoint(float distance) const { return _origin + _direction * distance; }
 
     private:
-        Math::Vector3 _origin;    // The origin of the ray
-        Math::Vector3 _direction; // The direction of the ray
+        Math::Vec3 _origin;    // The origin of the ray
+        Math::Vec3 _direction; // The direction of the ray
     };
 }

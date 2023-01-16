@@ -11,10 +11,10 @@ namespace Render {
 		CameraEditor();
 		~CameraEditor();
 
-		Math::Vector3 Position;
-		Math::Vector3 FocusPosition;
-		Math::Vector2 Rotation = Math::Vector2(-PI / 2, -PI / 2);
-		Math::Vector3 UpVector = Math::Vector3(0, 1, 0);
+		Math::Vec3 Position;
+		Math::Vec3 FocusPosition;
+		Math::Vec2 Rotation = Math::Vec2(-PI / 2, -PI / 2);
+		Math::Vec3 UpVector = Math::Vec3(0, 1, 0);
 		float Distance = 5.f;
 		float FOV = 70;
 		float Near = 0.1f;
@@ -26,19 +26,19 @@ namespace Render {
 
 		void Update(bool firstUpdate = false);
 		// Return the Mat4D view matrix from the camera.
-		Math::Matrix4 GetViewMatrix();
+		Math::Mat4 GetViewMatrix();
 		// Return the Mat4D projection matrix from the camera.
-		Math::Matrix4 GetProjection();
+		Math::Mat4 GetProjection();
 		// Return the Mat4D model matrix.
-		Math::Matrix4 GetModelMatrix();
+		Math::Mat4 GetModelMatrix();
 
-		Math::Vector3 GetUp();
+		Math::Vec3 GetUp();
 
-		Math::Vector3 GetRight();
+		Math::Vec3 GetRight();
 
-		Math::Vector3 UnProject(Math::Vector2 point);
+		Math::Vec3 UnProject(Math::Vec2 point);
 
-		Math::Matrix4 GetVP() { return GetProjection() * GetViewMatrix(); }
+		Math::Mat4 GetVP() { return GetProjection() * GetViewMatrix(); }
 	private:
 
 	};

@@ -7,7 +7,7 @@
 
 Debug::Line::Line() {}
 
-Debug::Line::Line(Math::Vector3 p1, Math::Vector3 p2, float lineWidth)
+Debug::Line::Line(Math::Vec3 p1, Math::Vec3 p2, float lineWidth)
 {
 	_point1 = p1;
 	_point2 = p2;
@@ -36,7 +36,7 @@ void Debug::Line::Initialize()
 	_initialized = true;
 }
 
-void Debug::Line::Draw(Math::Vector3 p1, Math::Vector3 p2)
+void Debug::Line::Draw(Math::Vec3 p1, Math::Vec3 p2)
 {
 	if (!_initialized)
 		Initialize();

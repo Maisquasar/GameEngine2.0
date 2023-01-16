@@ -14,7 +14,7 @@ Resources::BillBoard::~BillBoard()
 {
 }
 
-void Resources::BillBoard::Update(Math::Matrix4 MVP, bool outline)
+void Resources::BillBoard::Update(Math::Mat4 MVP, bool outline)
 {
 	if (!Loaded)
 		return;
@@ -78,7 +78,7 @@ void Resources::BillBoard::Update(Math::Matrix4 MVP, bool outline)
 	}
 }
 
-void Resources::BillBoard::DrawPicking(Math::Matrix4 MVP, int id)
+void Resources::BillBoard::DrawPicking(Math::Mat4 MVP, int id)
 {
 	if (!Loaded)
 		return;

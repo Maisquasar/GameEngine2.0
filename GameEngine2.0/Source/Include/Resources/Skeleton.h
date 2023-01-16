@@ -26,12 +26,12 @@ public:
 
 	std::vector<Bone*> GetAllBones();
 
-	Math::Matrix4 GetBoneMatrix();
+	Math::Mat4 GetBoneMatrix();
 
 	int Id = -1;
-	Math::Vector3 DefaultPosition;
-	Math::Quaternion DefaultRotation;
-	Math::Matrix4 DefaultMatrix;
+	Math::Vec3 DefaultPosition;
+	Math::Quat DefaultRotation;
+	Math::Mat4 DefaultMatrix;
 
 	Debug::Line DebugLine;
 private:
@@ -46,7 +46,7 @@ namespace Resources {
 
 		Skeleton* Clone() const override;
 
-		std::vector<Math::Matrix4> GetBonesMatrices();
+		std::vector<Math::Mat4> GetBonesMatrices();
 		void SortBones();
 
 		Bone* RootBone = nullptr;

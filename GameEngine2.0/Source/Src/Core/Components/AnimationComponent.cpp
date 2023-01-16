@@ -64,8 +64,7 @@ void Core::Components::AnimationComponent::ShowInInspector()
 	}
 	if (ImGui::Button("Show in Window")) {
 		if (auto skelmesh = GameObject->GetComponent<Core::Components::SkeletalMeshComponent>())
-			if (auto animComp = GameObject->GetComponent<Core::Components::AnimationComponent>())
-				EditorUi::Editor::GetAnimationWindow()->SetAnimationAndSkeleton(animComp, skelmesh->Skeleton);
+			EditorUi::Editor::GetAnimationWindow()->SetAnimationAndSkeleton(this, skelmesh->Skeleton);
 	}
 }
 
@@ -94,11 +93,15 @@ void Core::Components::AnimationComponent::Load(const char* data, uint32_t& pos)
 void Core::Components::AnimationComponent::SetCurrentAnimation(Resources::Animation* a)
 {
 	_currentAnimation = a;
+	if (auto skelmesh = GameObject->GetComponent<Core::Components::SkeletalMeshComponent>())
+		EditorUi::Editor::GetAnimationWindow()->SetAnimationAndSkeleton(this, skelmesh->Skeleton);
 }
 
 void Core::Components::AnimationComponent::SetSkeleton(SkeletalMeshComponent* s)
 {
 	_skeleton = s;
+	if (auto skelmesh = GameObject->GetComponent<Core::Components::SkeletalMeshComponent>())
+		EditorUi::Editor::GetAnimationWindow()->SetAnimationAndSkeleton(this, skelmesh->Skeleton);
 }
 
 void Core::Components::AnimationComponent::SetUIIcon()

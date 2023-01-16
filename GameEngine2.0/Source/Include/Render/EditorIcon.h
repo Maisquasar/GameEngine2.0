@@ -21,13 +21,13 @@ namespace Render {
 		~EditorIcon();
 
 		void Initialize(std::string TextName);
-		void Draw(Math::Matrix4 VP, Core::Transform transform, bool selected = false);
-		void DrawPicking(Math::Matrix4 MVP, Core::Transform transform, int id);
-		void SetSize(Math::Vector2 size);
+		void Draw(Math::Mat4 VP, Core::Transform transform, bool selected = false);
+		void DrawPicking(Math::Mat4 MVP, Core::Transform transform, int id);
+		void SetSize(Math::Vec2 size);
 
 		Resources::BillBoard* Plane = nullptr;
 
-		Math::Matrix4 GetMVP(const Math::Matrix4& VP, Core::Transform& transform);
+		Math::Mat4 GetMVP(const Math::Mat4& VP, Core::Transform& transform);
 
 		void SetIconSize(float size) { IconSize = size; }
 	private:

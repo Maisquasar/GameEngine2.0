@@ -66,15 +66,7 @@
     <ClCompile Include="Source\Src\EditorUi\Inspector.cpp" />
     <ClCompile Include="Source\Src\EditorUi\MainBar.cpp" />
     <ClCompile Include="Source\Src\GameEngine2.0.cpp" />
-    <ClCompile Include="Source\Src\Math\Integer\Integer2.cpp" />
-    <ClCompile Include="Source\Src\Math\Integer\Integer3.cpp" />
     <ClCompile Include="Source\Src\Math\Math.cpp" />
-    <ClCompile Include="Source\Src\Math\MathFunction.cpp" />
-    <ClCompile Include="Source\Src\Math\Matrix\Matrix4.cpp" />
-    <ClCompile Include="Source\Src\Math\Matrix\Quaterinon.cpp" />
-    <ClCompile Include="Source\Src\Math\Vector\Vector2.cpp" />
-    <ClCompile Include="Source\Src\Math\Vector\Vector3.cpp" />
-    <ClCompile Include="Source\Src\Math\Vector\Vector4.cpp" />
     <ClCompile Include="Source\Src\Render\CameraEditor.cpp" />
     <ClCompile Include="Source\Src\Render\Framebuffer.cpp" />
     <ClCompile Include="Source\Src\Resources\Material.cpp" />
@@ -142,15 +134,7 @@
     <ClInclude Include="Source\Include\EditorUi\EditorWindow.h" />
     <ClInclude Include="Source\Include\EditorUi\Inspector.h" />
     <ClInclude Include="Source\Include\EditorUi\MainBar.h" />
-    <ClInclude Include="Source\Include\Math\Integer\Integer2.h" />
-    <ClInclude Include="Source\Include\Math\Integer\Integer3.h" />
     <ClInclude Include="Source\Include\Math\Math.h" />
-    <ClInclude Include="Source\Include\Math\MathFunction.h" />
-    <ClInclude Include="Source\Include\Math\Matrix\Matrix4.h" />
-    <ClInclude Include="Source\Include\Math\Matrix\Quaternion.h" />
-    <ClInclude Include="Source\Include\Math\Vector\Vector2.h" />
-    <ClInclude Include="Source\Include\Math\Vector\Vector3.h" />
-    <ClInclude Include="Source\Include\Math\Vector\Vector4.h" />
     <ClInclude Include="Source\Include\Render\CameraEditor.h" />
     <ClInclude Include="Source\Include\Render\Framebuffer.h" />
     <ClInclude Include="Source\Include\Resources\MeshInstance.h" />
@@ -168,6 +152,9 @@
     <ClInclude Include="Source\Include\Physic\Ray.h" />
     <ClInclude Include="Source\Include\Utils\ThreadManager.h" />
     <ClInclude Include="Source\Include\Utils\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Include\Math\Math.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

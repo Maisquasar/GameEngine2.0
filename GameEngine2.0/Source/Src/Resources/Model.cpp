@@ -54,7 +54,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	std::string currentLine;
 	std::string prefix;
 	std::vector<Resources::Mesh> Meshes;
-	Math::Vector3 lastSize;
+	Math::Vec3 lastSize;
 
 	while (pos != size)
 	{
@@ -63,7 +63,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 		if (prefix == "o ")
 		{
 			if (Meshes.size() > 0) {
-				lastSize = lastSize + Math::Vector3((float)Meshes.back().Positions.size(), (float)Meshes.back().TextureUVs.size(), (float)Meshes.back().Normals.size());
+				lastSize = lastSize + Math::Vec3((float)Meshes.back().Positions.size(), (float)Meshes.back().TextureUVs.size(), (float)Meshes.back().Normals.size());
 
 				if (Meshes.back().SubMeshes.size() > 0)
 					Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;

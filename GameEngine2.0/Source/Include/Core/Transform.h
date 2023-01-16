@@ -18,37 +18,37 @@ namespace Core
 		Node* Parent = nullptr;
 
 		void ComputeModelMatrix();
-		void ComputeModelMatrix(const Math::Matrix4&);
+		void ComputeModelMatrix(const Math::Mat4&);
 
 		// World Setters
-		void SetWorldPosition(Math::Vector3);
-		void SetWorldRotation(Math::Quaternion);
-		void SetWorldScale(Math::Vector3);
+		void SetWorldPosition(Math::Vec3);
+		void SetWorldRotation(Math::Quat);
+		void SetWorldScale(Math::Vec3);
 
 		// World Getters
-		Math::Vector3 GetWorldPosition();
-		Math::Quaternion GetWorldRotation();
-		Math::Vector3 GetWorldScale();
-		Math::Matrix4 GetModelMatrix(bool update = false);
+		Math::Vec3 GetWorldPosition();
+		Math::Quat GetWorldRotation();
+		Math::Vec3 GetWorldScale();
+		Math::Mat4 GetModelMatrix(bool update = false);
 
 		// Local Setters
-		void SetLocalPosition(Math::Vector3);
-		void SetLocalRotation(Math::Quaternion);
-		void SetLocalScale(Math::Vector3);
+		void SetLocalPosition(Math::Vec3);
+		void SetLocalRotation(Math::Quat);
+		void SetLocalScale(Math::Vec3);
 
 		// Local Getters
-		Math::Vector3 GetLocalPosition();
-		Math::Quaternion GetLocalRotation();
-		Math::Vector3 GetLocalScale();
-		Math::Matrix4 GetLocalModelMatrix();
+		Math::Vec3 GetLocalPosition();
+		Math::Quat GetLocalRotation();
+		Math::Vec3 GetLocalScale();
+		Math::Mat4 GetLocalModelMatrix();
 
-		Math::Vector3 GetForwardVector();
-		Math::Vector3 GetRightVector();
-		Math::Vector3 GetUpVector();
+		Math::Vec3 GetForwardVector();
+		Math::Vec3 GetRightVector();
+		Math::Vec3 GetUpVector();
 
-		Math::Vector3 TranformPoint(Math::Vector3);
+		Math::Vec3 TranformPoint(Math::Vec3);
 
-		void RotateAround(Math::Vector3 point, Math::Vector3 axis, float angle);
+		void RotateAround(Math::Vec3 point, Math::Vec3 axis, float angle);
 
 		void Update();
 		void ForceUpdate();
@@ -60,11 +60,11 @@ namespace Core
 		bool IsDirty() { return _dirty; }
 
 	private:
-		Math::Matrix4 _modelMatrix = Math::Matrix4::Identity();
-		Math::Vector3 _localPosition = Math::Vector3();
-		Math::Quaternion _localRotation = Math::Quaternion();
-		Math::Vector3 _localEulerRotation = Math::Vector3();
-		Math::Vector3 _localScale = Math::Vector3(1);
+		Math::Mat4 _modelMatrix = Math::Mat4::Identity();
+		Math::Vec3 _localPosition = Math::Vec3();
+		Math::Quat _localRotation = Math::Quat();
+		Math::Vec3 _localEulerRotation = Math::Vec3();
+		Math::Vec3 _localScale = Math::Vec3(1);
 		bool _dirty = true;
 
 	};

@@ -30,17 +30,17 @@ namespace Utils::Loader
 	std::string GetString(std::string);
 	int GetInt(std::string line);
 	float GetFloat(std::string line);
-	Math::Vector4 GetVec4(std::string);
-	// Obj Loading Vector3
-	Math::Vector3 GetVec3(std::string);
-	// Scene Loading Vector3
-	Math::Vector3 GetVector3(std::string);
-	// Obj Loading Vector2
-	Math::Vector2 GetVec2(std::string);
-	// Scene Loading Vector2
-	Math::Vector2 GetVector2(std::string);
-	std::vector<Math::Integer3> GetIndices(std::string);
-	Math::Matrix4 GetMat4(std::string line);
+	Math::Vec4 GetVec4(std::string);
+	// Obj Loading Vec3
+	Math::Vec3 GetVec3(std::string);
+	// Scene Loading Vec3
+	Math::Vec3 GetVector3(std::string);
+	// Obj Loading Vec2
+	Math::Vec2 GetVec2(std::string);
+	// Scene Loading Vec2
+	Math::Vec2 GetVector2(std::string);
+	std::vector<Math::IVec3> GetIndices(std::string);
+	Math::Mat4 GetMat4(std::string line);
 
 	const char* ReadFile(const char* filename, uint32_t& size, bool& success);
 

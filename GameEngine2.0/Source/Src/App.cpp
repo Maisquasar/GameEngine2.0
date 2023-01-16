@@ -167,11 +167,11 @@ void App::InitGlad()
 	//stbi_set_flip_vertically_on_load(true);
 }
 
-Math::Integer2 App::GetWindowSize()
+Math::IVec2 App::GetWindowSize()
 {
 	int width, height;
 	glfwGetWindowSize(_window, &width, &height);
-	return Math::Integer2(width, height);
+	return Math::IVec2(width, height);
 }
 
 const GLFWvidmode* App::GetMonitorVideoMode()

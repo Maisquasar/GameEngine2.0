@@ -34,20 +34,20 @@ namespace Core::Components
 
 		void SetIndex(size_t i) { _index = i; }
 
-		Math::Vector4 GetXYZS() {return { _position, _alive ? _size : 0.0f };}
+		Math::Vec4 GetXYZS() {return { _position, _alive ? _size : 0.0f };}
 		size_t GetIndex() { return _index; }
 		bool IsAlive() { return _alive; }
 	private:
 		size_t _index = -1;
-		Math::Matrix4 _worldMat = Math::Matrix4::Identity();
-		Math::Matrix4 _localMat = Math::Matrix4::Identity();
+		Math::Mat4 _worldMat = Math::Mat4::Identity();
+		Math::Mat4 _localMat = Math::Mat4::Identity();
 		ParticleSystem* _particleSystem;
 
 		float _size = 0.25f;
 		float _life = -1;
 		float _startTime = 0.f;
 		bool _alive = false;
-		Math::Vector3 _position = Math::Vector3(0), _speed;
+		Math::Vec3 _position = Math::Vec3(0), _speed;
 	};
 
 	class ParticleSystem : public BaseComponent<ParticleSystem>
@@ -73,8 +73,8 @@ namespace Core::Components
 		float GetLifeTime() { return _particlesLifeTime; }
 		float GetAngle() { return _angle; }
 		size_t GetMaxParticles() { return _maxParticles; }
-		Math::Vector3 GetDirection() { return _mainDirection; }
-		Math::Vector2 GetMinMaxSize() { return _size; }
+		Math::Vec3 GetDirection() { return _mainDirection; }
+		Math::Vec2 GetMinMaxSize() { return _size; }
 
 		void Save(std::string space, std::string& content) override;
 		void Load(const char* data, uint32_t& pos) override;
@@ -85,7 +85,7 @@ namespace Core::Components
 		size_t _maxParticles = 100;
 		Resources::Shader* _shader = nullptr;;
 		std::vector<Particle*> _particles;
-		std::vector<Math::Vector4>  XYZS;
+		std::vector<Math::Vec4>  XYZS;
 		GLuint _buffer;
 		Resources::MeshInstance* _mesh = nullptr;
 
@@ -95,8 +95,8 @@ namespace Core::Components
 		bool _drawParticles = true;
 		float _particlesLifeTime = 5.f;
 		float _angle = 25.f;
-		Math::Vector3 _mainDirection = Math::Vector3(0.0f, 10.0f, 0.0f);
-		Math::Vector2 _size = Math::Vector2(0.1f , 0.2f);
+		Math::Vec3 _mainDirection = Math::Vec3(0.0f, 10.0f, 0.0f);
+		Math::Vec2 _size = Math::Vec2(0.1f , 0.2f);
 
 	};
 }

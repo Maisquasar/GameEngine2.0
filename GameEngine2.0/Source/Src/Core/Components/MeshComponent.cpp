@@ -18,7 +18,7 @@ Core::Components::MeshComponent::~MeshComponent()
 	delete _currentMesh;
 }
 
-float getDistance(Math::Vector3 point1, Math::Vector3 point2, Math::Vector3 axis)
+float getDistance(Math::Vec3 point1, Math::Vec3 point2, Math::Vec3 axis)
 {
 	// Project the points onto the custom axis
 	float dot1 = point1.DotProduct(axis);
