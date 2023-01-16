@@ -1160,7 +1160,7 @@ void TextEditor::Render(const ImVec2& aSize, bool aBorder)
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 		if (!mIgnoreImGuiChild)
 			ImGui::BeginChild(_title.c_str(), aSize, aBorder, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NoMove);
-
+		mHandleKeyboardInputs = ImGui::IsWindowHovered();
 		if (mHandleKeyboardInputs)
 		{
 			HandleKeyboardInputs();

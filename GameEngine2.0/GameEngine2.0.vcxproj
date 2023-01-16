@@ -22,6 +22,7 @@
     <ClCompile Include="External_Includes\glad\glad.c" />
     <ClCompile Include="External_Includes\ImGui\imgui.cpp" />
     <ClCompile Include="External_Includes\ImGui\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="External_Includes\ImGui\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="External_Includes\ImGui\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="External_Includes\ImGui\imgui_demo.cpp" />
     <ClCompile Include="External_Includes\ImGui\imgui_draw.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="External_Includes\ImGui\imconfig.h" />
     <ClInclude Include="External_Includes\ImGui\imgui.h" />
     <ClInclude Include="External_Includes\ImGui\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="External_Includes\ImGui\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="External_Includes\ImGui\ImGuizmo\ImSequencer.h" />
     <ClInclude Include="External_Includes\ImGui\imgui_impl_glfw.h" />
     <ClInclude Include="External_Includes\ImGui\imgui_impl_opengl3.h" />

@@ -4,6 +4,7 @@
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_glfw.h>
 #include <ImGui/imgui_impl_opengl3.h>
+#include <ImGui/ImGuizmo/ImGuizmo.h>
 
 #include "Include/Render/EditorGrid.h"
 #include "Include/Physic/Physic.h"
@@ -296,7 +297,7 @@ void App::EndPlay()
 void App::MultiThreadLoad()
 {
 	// TODO: Move it to a update into resource manager
-	// TODO: Optimize it (create a list with all uninitialize)
+	// TODO: Optimize it (create a list with all uninitialized)
 	if (_everythingIsLoaded)
 		return;
 	size_t loaded = 0, total = 0;
@@ -347,7 +348,7 @@ void App::MultiThreadLoad()
 	}
 	total += this->MultiThreadMeshes.size();
 
-	if (ImGui::Begin("##")) {
+	if (ImGui::Begin("LoadingWindow")) {
 		float fraction = (float)loaded / (float)total;
 		ImGui::ProgressBar(fraction);
 	}
@@ -370,6 +371,8 @@ void App::BeginFrame()
 	glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer.FBO);
 	glEnable(GL_DEPTH_TEST);
 
+	ImGuizmo::BeginFrame();
+
 	GetSettings()->NumberOfDrawCalls = 0;
 	GetSettings()->NumberOfTrianglesDraw = 0;
 	GetSettings()->NumberOfInstances = 0;
@@ -378,7 +381,7 @@ void App::BeginFrame()
 
 void App::Update()
 {
-	// Initilisation
+	// Initializations
 	_lastFrame = 0;
 	Components.Initialize();
 	_editorUi.Initialize();

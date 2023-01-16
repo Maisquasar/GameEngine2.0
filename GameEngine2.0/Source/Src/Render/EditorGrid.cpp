@@ -3,6 +3,7 @@
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
+#include <ImGui/ImGuizmo/ImGuizmo.h>
 
 Render::EditorGrid::EditorGrid()
 {
@@ -11,8 +12,11 @@ Render::EditorGrid::EditorGrid()
 
 Render::EditorGrid::~EditorGrid()
 {
-	delete _meshComponent->GetMesh()->SubMeshes[0].Material;
-	delete _meshComponent;
+	if (_meshComponent) {
+		if (_meshComponent->GetMesh()->SubMeshes[0].Material)
+			delete _meshComponent->GetMesh()->SubMeshes[0].Material;
+		delete _meshComponent;
+	}
 }
 
 void Render::EditorGrid::Initialize()
@@ -21,6 +25,18 @@ void Render::EditorGrid::Initialize()
 
 void Render::EditorGrid::Draw()
 {
+#if 0
+	//static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+	auto cam = Application.GetScene()->GetCameraEditor();
+	auto VP = cam->GetViewMatrix() * cam->GetProjection();
+	ImGui::Begin("Test");
+	ImGuizmo::SetDrawlist();
+	float windowWidth = (float)ImGui::GetWindowWidth();
+	float windowHeight = (float)ImGui::GetWindowHeight();
+	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+	ImGuizmo::DrawGrid(&cam->GetViewMatrix().content[0][0], &cam->GetViewMatrix().content[0][0], &Math::Mat4::Identity().content[0][0], 100.f);
+	ImGui::End();
+#else
 	if (_meshComponent->GetMesh())
 	{
 		glDisable(GL_CULL_FACE);
@@ -43,5 +59,6 @@ void Render::EditorGrid::Draw()
 			_meshComponent->GetMesh()->ShouldDrawCall = false;
 		}
 	}
+#endif
 }
 
