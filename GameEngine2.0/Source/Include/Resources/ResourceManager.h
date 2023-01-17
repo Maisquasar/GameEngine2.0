@@ -122,6 +122,8 @@ namespace Resources {
 			return out;
 		}
 
+		void RemoveResource(Resources::IResource*);
+
 		void LoadDefaultsResources();
 
 		void RecompileShaders();

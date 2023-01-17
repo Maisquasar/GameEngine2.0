@@ -22,8 +22,9 @@ void Render::FrameBuffer::Initialize(Math::IVec2 size)
 	// Create Texture.
 	Tex = new Resources::Texture();
 	Tex->NewTexture("FrameBuffer");
-	auto name = Utils::StringFormat("Framebuffer%d", Tex->GetIndex());
-	Application.GetResourceManager()->Add(name, Tex);
+	auto path = Utils::StringFormat("Framebuffer%d", Tex->GetIndex());
+	Tex->SetPath(path);
+	Application.GetResourceManager()->Add(path, Tex);
 	glActiveTexture(GL_TEXTURE0 + Tex->GetIndex());
 	glGenTextures(1, Tex->GetDataPtr());
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());

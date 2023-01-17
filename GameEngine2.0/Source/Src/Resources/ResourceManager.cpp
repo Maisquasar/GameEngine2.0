@@ -15,6 +15,11 @@ Resources::ResourceManager::~ResourceManager()
 	_resource.clear();
 }
 
+void Resources::ResourceManager::RemoveResource(Resources::IResource* resource)
+{
+	_resource.erase(resource->GetPath());
+}
+
 void Resources::ResourceManager::LoadDefaultsResources()
 {
 

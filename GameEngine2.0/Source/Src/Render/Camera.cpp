@@ -1,6 +1,7 @@
 #include "Include/Render/Camera.h"
 #include "Include/Utils/Input.h"
 #include "Include/App.h"
+#include "Include/Resources/ResourceManager.h"
 #include "Include/EditorUi/SceneWindow.h"
 
 void GetRotateAround(Math::Vec3 point, Math::Vec3 axis, float angle, Math::Vec3& pos, Math::Quat& rot)

@@ -12,6 +12,11 @@ Core::Components::CameraComponent::CameraComponent()
 
 Core::Components::CameraComponent::~CameraComponent()
 {
+	if (this->FrameBuffer.Tex)
+	{
+		Application.GetResourceManager()->RemoveResource(FrameBuffer.Tex);
+		delete FrameBuffer.Tex;
+	}
 	for (int i = 0; i < Application.GetScene()->Cameras.size(); i++)
 	{
 		if (Application.GetScene()->Cameras[i] == this)
