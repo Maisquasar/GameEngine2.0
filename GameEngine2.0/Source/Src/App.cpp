@@ -9,6 +9,8 @@
 #include "Include/Render/EditorGrid.h"
 #include "Include/Physic/Physic.h"
 #include "Include/EditorUi/Inspector.h"
+#include "Include/EditorUi/GameWindow.h"
+#include "Include/EditorUi/SceneWindow.h"
 #include "Include/Debug/Line.h"
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Render/Camera.h"
@@ -282,6 +284,8 @@ void App::BeginPlay()
 	GetScene()->GetSceneNode()->Save("", content);
 	_file.write(content.c_str(), content.size());
 	_file.close();
+
+	ImGui::FocusWindow(this->_editorUi.GetGameWindow()->Window);
 }
 
 void App::EndPlay()
@@ -290,6 +294,8 @@ void App::EndPlay()
 	auto file = "Assets/Default/Scenes/TemporaryScene.scene";
 	GetScene()->LoadScene(file);
 	std::filesystem::remove_all(file);
+
+	ImGui::FocusWindow(this->_editorUi.GetSceneWindow()->Window);
 }
 
 void App::MultiThreadLoad()

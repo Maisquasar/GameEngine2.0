@@ -122,7 +122,8 @@ void Core::Components::CameraComponent::Load(const char* data, uint32_t& pos)
 		currentLine = Utils::Loader::GetLine(data, pos);
 		if (currentLine.substr(0, 10) == "MainCamera")
 		{
-			this->_MainCamera = (bool)Utils::Loader::GetInt(currentLine);
+			if ((bool)Utils::Loader::GetInt(currentLine))
+				SetMainCamera();
 		}
 		pos++;
 	}

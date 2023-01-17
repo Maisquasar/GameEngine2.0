@@ -29,7 +29,7 @@ void Core::Scene::Initialize()
 void Core::Scene::Update()
 {
 	// First Render form camera Editor.
-	if (_cameraEditor.IsVisible()) {
+	if (_cameraEditor.IsVisible() && Application.GetGameState() == GameState::Editor) {
 		_currentCamera = &_cameraEditor;
 		_VP = _cameraEditor.GetVP();
 		_cameraEditor.PreUpdate();
@@ -63,7 +63,7 @@ void Core::Scene::Update()
 
 		_cameraEditor.FrameBuffer.Draw();
 	}
-	if (this->_mainCamera)
+	if (GetMainCamera())
 	{
 		this->_mainCamera->AspectRatio = EditorUi::Editor::GetGameWindow()->Window->Size.x / EditorUi::Editor::GetGameWindow()->Window->Size.y;
 	}

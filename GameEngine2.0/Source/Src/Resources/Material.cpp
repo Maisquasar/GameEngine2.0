@@ -40,7 +40,7 @@ void Resources::Material::ShowInInspector()
 	{
 		ImGui::OpenPopup("TexturePopup");
 	}
-	if (auto tex = Application.GetResourceManager()->ResourcesPopup<Resources::Texture>("TexturePopup"))
+	if (auto tex = Application.GetResourceManager()->TexturePopup("TexturePopup"))
 		SetTexture(tex);
 	ImGui::SameLine();
 	if (GetTexture())

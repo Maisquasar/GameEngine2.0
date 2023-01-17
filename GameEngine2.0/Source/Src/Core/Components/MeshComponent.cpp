@@ -115,7 +115,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 			{
 				ImGui::OpenPopup("TexturePopup");
 			}
-			if (auto tex = Application.GetResourceManager()->ResourcesPopup<Resources::Texture>("TexturePopup"))
+			if (auto tex = Application.GetResourceManager()->TexturePopup("TexturePopup"))
 				Sub.Material->SetTexture(tex);
 			ImGui::SameLine();
 			if (Sub.Material->GetTexture())

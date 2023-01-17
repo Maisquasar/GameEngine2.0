@@ -1,0 +1,42 @@
+#BeginNode
+Name : DefaultScene
+IsActive : 1
+Position : 0.000000 0.000000 0.000000
+Rotation : 0.000000 0.000000 0.000000 1.000000
+Scale : 1.000000 1.000000 1.000000
+	#BeginNode
+	Name : Node
+	IsActive : 1
+	Position : 0.000000 0.000000 0.000000
+	Rotation : 0.000000 0.000000 0.000000 1.000000
+	Scale : 1.000000 1.000000 1.000000
+		#BeginNode
+		Name : Node
+		IsActive : 1
+		Position : 0.000000 0.000000 -4.457776
+		Rotation : 0.000000 0.000000 0.000000 1.000000
+		Scale : 1.000000 1.000000 1.000000
+		#BeginComponent Camera
+		MainCamera : 1
+		#EndComponent Camera
+		#EndNode
+	#EndNode
+	#BeginNode
+	Name : Node
+	IsActive : 1
+	Position : 0.000000 0.000000 0.000000
+	Rotation : 0.000000 0.000000 0.000000 1.000000
+	Scale : 1.000000 1.000000 1.000000
+	#EndNode
+	#BeginNode
+	Name : Node
+	IsActive : 1
+	Position : 0.000000 -2.500000 0.000000
+	Rotation : 0.000000 0.000000 0.000000 1.000000
+	Scale : 5.100000 1.000000 5.900000
+	#BeginComponent MeshComponent
+	Mesh : Assets/Default/Models/Cube.obj::Cube
+	SubMesh[0] : Assets/Default/Models/Material.001.mat
+	#EndComponent MeshComponent
+	#EndNode
+#EndNode

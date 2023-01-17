@@ -121,6 +121,7 @@ namespace Resources {
 			}
 			return out;
 		}
+		Resources::Texture* TexturePopup(const char* popupName);
 
 		void RemoveResource(Resources::IResource*);
 
