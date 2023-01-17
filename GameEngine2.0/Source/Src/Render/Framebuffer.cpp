@@ -13,7 +13,7 @@ Render::FrameBuffer::~FrameBuffer()
 
 void Render::FrameBuffer::Initialize(Math::IVec2 size)
 {
-	this->shader = Application.GetResourceManager()->Get<Resources::Shader>("DefaultScreenShader");
+	//this->shader = Application.GetResourceManager()->Get<Resources::Shader>("DefaultScreenShader");
 	// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
 
 	glGenFramebuffers(1, &FBO);

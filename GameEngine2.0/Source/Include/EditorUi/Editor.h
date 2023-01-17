@@ -17,6 +17,7 @@ namespace EditorUi {
 	class Console;
 	class AnimationWindow;
 	class SceneWindow;
+	class GameWindow;
 
 	void ApplyStyle();
 	class Editor
@@ -40,6 +41,7 @@ namespace EditorUi {
 		static TextEditorWindow* GetTextEditor() { return &_textEditor; }
 		static AnimationWindow* GetAnimationWindow() { return &_animationWindow; }
 		static SceneWindow* GetSceneWindow() { return &_sceneWindow; }
+		static GameWindow* GetGameWindow() { return &_gameWindow; }
 	private:
 		static MainBar _mainBar;
 		static Hierarchy _hierarchy;
@@ -52,5 +54,6 @@ namespace EditorUi {
 		static TextEditorWindow _textEditor;
 		static AnimationWindow _animationWindow;
 		static SceneWindow _sceneWindow;
+		static GameWindow _gameWindow;
 	};
 }

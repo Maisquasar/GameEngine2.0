@@ -3,6 +3,8 @@
 #include "Include/Render/InstancesManager.h"
 #include "Include/App.h"
 #include "Include/Core/Node.h"
+#include "Include/Utils/Loader.h"
+#include "Include/EditorUi/GameWindow.h"
 
 
 Core::Components::CameraComponent::CameraComponent()
@@ -28,6 +30,10 @@ Core::Components::CameraComponent::~CameraComponent()
 	{
 		Application.GetScene()->SetCurrentCamera(nullptr);
 	}
+	if (Application.GetScene()->GetMainCamera() == this)
+	{
+		Application.GetScene()->SetMainCamera(nullptr);
+	}
 	delete Icon;
 }
 
@@ -35,6 +41,10 @@ void Core::Components::CameraComponent::Initialize()
 {
 	Application.GetScene()->Cameras.push_back(this);
 	FrameBuffer.Initialize(Math::Vec2(1920, 1080));
+	if (!Application.GetScene()->GetMainCamera())
+	{
+		SetMainCamera();
+	}
 	
 }
 
@@ -66,10 +76,22 @@ void Core::Components::CameraComponent::DrawPicking(int id)
 
 void Core::Components::CameraComponent::ShowInInspector()
 {
-	ImGui::Begin("Camera Preview", (bool*)true);
-	auto size = ImGui::GetWindowSize();
-	ImGui::Image((ImTextureID)static_cast<uintptr_t>(FrameBuffer.Tex->GetData()), ImVec2(size.x - 16, size.y - 50), ImVec2(0, 1), ImVec2(1, 0));
+	if (ImGui::Begin("Camera Preview", (bool*)true, ImGuiWindowFlags_NoFocusOnAppearing))
+	{
+		auto size = ImGui::GetWindowSize();
+		ImGui::Image((ImTextureID)static_cast<uintptr_t>(FrameBuffer.Tex->GetData()), ImVec2(size.x - 16, size.y - 50), ImVec2(0, 1), ImVec2(1, 0));
+	}
 	ImGui::End();
+	ImGui::BeginDisabled(this->_MainCamera);
+	if (ImGui::Button("Set Main Camera")) { SetMainCamera(); }
+	ImGui::EndDisabled();
+
+}
+
+void Core::Components::CameraComponent::SetMainCamera()
+{
+	this->_MainCamera = true;
+	Application.GetScene()->SetMainCamera(this);
 }
 
 void Core::Components::CameraComponent::SetUIIcon()
@@ -79,10 +101,29 @@ void Core::Components::CameraComponent::SetUIIcon()
 
 bool Core::Components::CameraComponent::IsVisible()
 {
-	return GameObject->IsSelected();
+	return GameObject->IsSelected() || (_MainCamera && EditorUi::Editor::GetGameWindow()->IsOpen());
 }
 
 Core::Transform* Core::Components::CameraComponent::GetTransform()
 {
 	return &this->GameObject->Transform;
+}
+
+void Core::Components::CameraComponent::Save(std::string space, std::string& content)
+{
+	content += space + Utils::StringFormat("MainCamera : %d\n", this->_MainCamera);
+}
+
+void Core::Components::CameraComponent::Load(const char* data, uint32_t& pos)
+{
+	std::string currentLine;
+	while (currentLine.substr(0, 13) != "#EndComponent")
+	{
+		currentLine = Utils::Loader::GetLine(data, pos);
+		if (currentLine.substr(0, 10) == "MainCamera")
+		{
+			this->_MainCamera = (bool)Utils::Loader::GetInt(currentLine);
+		}
+		pos++;
+	}
 }

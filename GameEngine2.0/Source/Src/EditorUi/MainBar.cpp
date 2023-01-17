@@ -11,6 +11,8 @@
 #include "Include/EditorUi/ResourcesWindow.h"
 #include "Include/EditorUi/PerformanceWindow.h"
 #include "Include/EditorUi/AnimationWindow.h"
+#include "Include/EditorUi/SceneWindow.h"
+#include "Include/EditorUi/GameWindow.h"
 
 
 EditorUi::MainBar::MainBar()
@@ -63,6 +65,8 @@ void EditorUi::MainBar::Draw()
 			ImGui::Checkbox("Resources", Editor::GetResourcesWindow()->IsOpen());
 			ImGui::Checkbox("Performance", Editor::GetPerformanceWindow()->IsOpen());
 			ImGui::Checkbox("Animation", Editor::GetAnimationWindow()->IsOpen());
+			ImGui::Checkbox("Scene", Editor::GetSceneWindow()->IsOpen());
+			ImGui::Checkbox("Game", Editor::GetGameWindow()->IsOpen());
 			ImGui::EndMenu();
 		}
 		ImGui::SetCursorPosX((float)(Application.GetWindowSize().x / 2) - 25.f);

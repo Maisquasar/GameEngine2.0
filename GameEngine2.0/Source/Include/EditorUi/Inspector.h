@@ -25,6 +25,8 @@ namespace EditorUi
 		static std::vector<Core::Node*> NodesSelected;
 		static class File* FileSelected;
 
+		bool IsFocused = false;
+
 	private:
 
 	};

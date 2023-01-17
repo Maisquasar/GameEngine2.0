@@ -45,6 +45,7 @@ void EditorUi::Inspector::Draw()
 		return;
 	if (ImGui::Begin("Inspector", &_open))
 	{
+		IsFocused = ImGui::IsWindowFocused();
 		if (NodesSelected.size() == 1 && NodesSelected[0]->Parent)
 		{
 			ImGui::Checkbox("##active", NodesSelected[0]->GetActivePtr());

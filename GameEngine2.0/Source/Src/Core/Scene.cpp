@@ -6,6 +6,7 @@
 #include "Include/App.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/EditorUi/SceneWindow.h"
+#include "Include/EditorUi/GameWindow.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
 #include "Include/Core/Components/CameraComponent.h"
@@ -61,6 +62,10 @@ void Core::Scene::Update()
 		}
 
 		_cameraEditor.FrameBuffer.Draw();
+	}
+	if (this->_mainCamera)
+	{
+		this->_mainCamera->AspectRatio = EditorUi::Editor::GetGameWindow()->Window->Size.x / EditorUi::Editor::GetGameWindow()->Window->Size.y;
 	}
 	// Render CameraComponents
 	for (auto cam : Cameras)
@@ -211,4 +216,9 @@ void Core::Scene::LoadTemporaryScene(std::string Path)
 void Core::Scene::SetCurrentCamera(Render::Camera* camera)
 {
 	_currentCamera = camera;
+}
+
+void Core::Scene::SetMainCamera(Render::Camera* camera)
+{
+	_mainCamera = camera;
 }

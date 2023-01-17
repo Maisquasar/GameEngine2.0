@@ -23,14 +23,19 @@ namespace Core::Components
 		void DrawPicking(int id) override;
 
 		void ShowInInspector() override;
+		
+		void SetMainCamera();
 
 		void SetUIIcon() override;
-
 		bool IsVisible() override;
 
 		class Transform* GetTransform() override;
 
 		Render::EditorIcon* Icon = nullptr;
+
+		void Save(std::string space, std::string& content) override;
+		void Load(const char* data, uint32_t& pos) override;
 	private:
+		bool _MainCamera = false;
 	};
 }

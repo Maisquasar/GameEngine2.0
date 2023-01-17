@@ -47,6 +47,7 @@
     <ClCompile Include="Source\Src\EditorUi\File.cpp" />
     <ClCompile Include="Source\Src\EditorUi\FloatingFileExplorer.cpp" />
     <ClCompile Include="Source\Src\Core\Components\BoxCollider.cpp" />
+    <ClCompile Include="Source\Src\EditorUi\GameWindow.cpp" />
     <ClCompile Include="Source\Src\EditorUi\PerformanceWindow.cpp" />
     <ClCompile Include="Source\Src\EditorUi\ResourcesWindow.cpp" />
     <ClCompile Include="Source\Src\EditorUi\SceneWindow.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="Source\Include\EditorUi\File.h" />
     <ClInclude Include="Source\Include\EditorUi\FloatingFileExplorer.h" />
     <ClInclude Include="Source\Include\Core\Components\BoxCollider.h" />
+    <ClInclude Include="Source\Include\EditorUi\GameWindow.h" />
     <ClInclude Include="Source\Include\EditorUi\PerformanceWindow.h" />
     <ClInclude Include="Source\Include\EditorUi\ResourcesWindow.h" />
     <ClInclude Include="Source\Include\EditorUi\SceneWindow.h" />
