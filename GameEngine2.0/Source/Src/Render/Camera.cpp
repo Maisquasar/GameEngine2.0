@@ -16,13 +16,13 @@ void GetRotateAround(Math::Vec3 point, Math::Vec3 axis, float angle, Math::Vec3&
 
 Render::Camera::Camera()
 {
-	this->Transform.SetWorldPosition(Math::Vec3(0, 0, 10));
 }
 
 Render::Camera::~Camera() {}
 
 void Render::Camera::Initialize()
 {
+	this->GetTransform()->SetWorldPosition(Math::Vec3(0, 0, 10));
 	FrameBuffer.Initialize(Math::Vec2(1920, 1080));
 }
 
@@ -89,10 +89,10 @@ void Render::Camera::Update(bool firstUpdate)
 Math::Mat4 Render::Camera::GetViewMatrix()
 {
 	Math::Mat4 temp;
-	Math::Vec3 z = -Transform.GetForwardVector();
-	Math::Vec3 x = -Transform.GetRightVector();
-	Math::Vec3 y = Transform.GetUpVector();
-	Math::Vec3 delta = Math::Vec3(-x.DotProduct(this->Transform.GetWorldPosition()), -y.DotProduct(this->Transform.GetWorldPosition()), -z.DotProduct(this->Transform.GetWorldPosition()));
+	Math::Vec3 z = -GetTransform()->GetForwardVector();
+	Math::Vec3 x = -GetTransform()->GetRightVector();
+	Math::Vec3 y = GetTransform()->GetUpVector();
+	Math::Vec3 delta = Math::Vec3(-x.DotProduct(this->GetTransform()->GetWorldPosition()), -y.DotProduct(this->GetTransform()->GetWorldPosition()), -z.DotProduct(this->GetTransform()->GetWorldPosition()));
 	for (int i = 0; i < 3; i++)
 	{
 		temp.at(i, 0) = x[i];
@@ -121,7 +121,7 @@ Math::Mat4 Render::Camera::GetProjection()
 
 Math::Mat4 Render::Camera::GetModelMatrix()
 {
-	return Transform.GetModelMatrix();
+	return GetTransform()->GetModelMatrix();
 }
 
 Math::Vec3 Render::Camera::GetUp()
@@ -156,3 +156,7 @@ Math::Vec3 Render::Camera::UnProject(Math::Vec2 point)
 	return Math::Vec3(worldPos);
 }
 
+bool Render::Camera::IsVisible()
+{
+	return EditorUi::Editor::GetSceneWindow()->IsOpen();
+}

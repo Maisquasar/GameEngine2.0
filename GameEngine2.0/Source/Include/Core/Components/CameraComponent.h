@@ -20,7 +20,13 @@ namespace Core::Components
 		void Update() override;
 		void DrawPicking(int id) override;
 
+		void ShowInInspector() override;
+
 		void SetUIIcon() override;
+
+		bool IsVisible() override;
+
+		class Transform* GetTransform() override;
 
 		Render::EditorIcon* Icon = nullptr;
 	private:

@@ -23,8 +23,6 @@ namespace Render {
 		float AspectRatio = (4.0f / 3.0f);
 		float Speed = 25.f;
 
-		Core::Transform Transform;
-
 		void Initialize();
 
 		void PreUpdate();
@@ -45,8 +43,13 @@ namespace Render {
 
 		Math::Mat4 GetVP() { return GetProjection() * GetViewMatrix(); }
 
+		virtual Core::Transform* GetTransform() { return &Transform; }
+
+		virtual bool IsVisible();
+
 		Render::FrameBuffer FrameBuffer;
 	private:
+		Core::Transform Transform;
 
 	};
 }

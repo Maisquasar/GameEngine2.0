@@ -1,6 +1,7 @@
 #include "Include/Render/Framebuffer.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
+#include "Include/Utils/Utils.h"
 
 Render::FrameBuffer::FrameBuffer() {}
 
@@ -21,8 +22,9 @@ void Render::FrameBuffer::Initialize(Math::IVec2 size)
 	// Create Texture.
 	Tex = new Resources::Texture();
 	Tex->NewTexture("FrameBuffer");
-	Application.GetResourceManager()->Add("FrameBuffer", Tex);
-	glActiveTexture(GL_TEXTURE0);
+	auto name = Utils::StringFormat("Framebuffer%d", Tex->GetIndex());
+	Application.GetResourceManager()->Add(name, Tex);
+	glActiveTexture(GL_TEXTURE0 + Tex->GetIndex());
 	glGenTextures(1, Tex->GetDataPtr());
 	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
 
@@ -37,11 +39,13 @@ void Render::FrameBuffer::Initialize(Math::IVec2 size)
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Tex->GetData(), 0);
 	// Set texture to resourcesManager.
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+		PrintLog("Framebuffer %d Complete !", FBO);
 	Tex->Loaded = true;
 
 	glGenRenderbuffers(1, &_RBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, _RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y); // use a single renderbuffer object for both a depth AND stencil buffer.
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, size.x, size.y); // use a single render buffer object for both a depth AND stencil buffer.
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _RBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

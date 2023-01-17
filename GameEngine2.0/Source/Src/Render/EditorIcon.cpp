@@ -42,5 +42,5 @@ void Render::EditorIcon::SetSize(Math::Vec2 size)
 
 Math::Mat4 Render::EditorIcon::GetMVP(const Math::Mat4& VP, Core::Transform& transform)
 {
-	return VP * transform.GetModelMatrix();
+	return VP * Math::Mat4::CreateTranslationMatrix(transform.GetWorldPosition());
 }

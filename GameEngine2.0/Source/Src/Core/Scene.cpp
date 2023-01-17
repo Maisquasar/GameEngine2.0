@@ -8,10 +8,11 @@
 #include "Include/EditorUi/SceneWindow.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
+#include "Include/Core/Components/CameraComponent.h"
 
 Core::Scene::Scene() {}
 
-Core::Scene::~Scene() 
+Core::Scene::~Scene()
 {
 	delete _sceneNode;
 }
@@ -26,7 +27,53 @@ void Core::Scene::Initialize()
 
 void Core::Scene::Update()
 {
-	_cameraEditor.PreUpdate();
+	// First Render form camera Editor.
+	if (_cameraEditor.IsVisible()) {
+		_currentCamera = &_cameraEditor;
+		_VP = _cameraEditor.GetVP();
+		_cameraEditor.PreUpdate();
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Begin Main Update
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		// Update Camera AspectRatio.
+		if (EditorUi::Editor::GetSceneWindow()->Window) {
+			_cameraEditor.AspectRatio = EditorUi::Editor::GetSceneWindow()->Window->Size.x / EditorUi::Editor::GetSceneWindow()->Window->Size.y;
+		}
+
+		// Draw Meshes with picking Shader.
+		PickingUpdate(_sceneNode->GetAllChildrens());
+
+		_grid.Draw();
+
+		_sceneNode->UpdateSelfAndChilds();
+
+		_gizmo.Draw();
+
+		// Update Editor Camera.
+		if (EditorUi::Editor::GetSceneWindow()->UpdateCameraEditor) {
+			_cameraEditor.Update();
+		}
+
+		_cameraEditor.FrameBuffer.Draw();
+	}
+	// Render CameraComponents
+	for (auto cam : Cameras)
+	{
+		if (!cam->IsVisible())
+			return;
+		_VP = cam->GetVP();
+		_currentCamera = cam;
+		RenderScene();
+	}
+}
+
+void Core::Scene::RenderScene()
+{
+	_currentCamera->PreUpdate();
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -34,29 +81,9 @@ void Core::Scene::Update()
 	// Begin Main Update
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	// Update Camera AspectRatio.
-	if (EditorUi::Editor::GetSceneWindow()->Window) {
-		_cameraEditor.AspectRatio = EditorUi::Editor::GetSceneWindow()->Window->Size.x / EditorUi::Editor::GetSceneWindow()->Window->Size.y;
-	}
-
-	_VP = _cameraEditor.GetVP();
-
-	auto ChildList = _sceneNode->GetAllChildrens();
-	Utils::SortByDistanceFromCamera(ChildList, _cameraEditor.Transform.GetLocalPosition(), _cameraEditor.Transform.GetForwardVector());
-	// Draw Meshes with picking Shader.
-	PickingUpdate(ChildList);
-
-	_grid.Draw();
-
 	_sceneNode->UpdateSelfAndChilds();
 
-	_gizmo.Draw();
-
-	// Update Editor Camera.
-	if (EditorUi::Editor::GetSceneWindow()->UpdateCameraEditor) {
-		_cameraEditor.Update();
-	}
-	_cameraEditor.FrameBuffer.Draw();
+	_currentCamera->FrameBuffer.Draw();
 }
 
 void Core::Scene::PickingUpdate(std::vector<Core::Node*> nodes)
@@ -177,4 +204,9 @@ void Core::Scene::LoadTemporaryScene(std::string Path)
 		EditorUi::Inspector().NodesSelected.clear();
 	_sceneNode->RemoveAllChildrens();
 	_sceneNode = LoadNode(Path);
+}
+
+void Core::Scene::SetCurrentCamera(Render::Camera* camera)
+{
+	_currentCamera = camera;
 }

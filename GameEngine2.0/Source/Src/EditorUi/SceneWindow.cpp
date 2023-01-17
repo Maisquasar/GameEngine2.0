@@ -13,7 +13,7 @@ void EditorUi::SceneWindow::Draw()
 {
 	if (!_open)
 		return;
-	if (ImGui::Begin("Scene", (bool*)true, ImGuiWindowFlags_MenuBar))
+	if (ImGui::Begin("Scene", &_open, ImGuiWindowFlags_MenuBar))
 	{
 		if (!Window)
 			Window = ImGui::GetCurrentWindow();
@@ -23,7 +23,6 @@ void EditorUi::SceneWindow::Draw()
 			ImGui::Combo("##", (int*)&Application.GetSettings()->S_Transform, "Local\0World\0");
 			ImGui::EndMenuBar();
 		}
-
 
 		auto size = ImGui::GetWindowSize();
 		ImGui::Image((ImTextureID)static_cast<uintptr_t>(Application.GetScene()->GetCameraEditor()->FrameBuffer.Tex->GetData()), ImVec2(size.x - 16, size.y - 60), ImVec2(0, 1), ImVec2(1, 0));

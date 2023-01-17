@@ -91,8 +91,8 @@ void Core::Components::ParticleSystem::Update()
 	if (!_shader || _particles.size() == 0 || !_mesh || !_drawParticles)
 		return;
 	glUseProgram(_shader->Program);
-	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
-	auto right = Application.GetScene()->GetCameraEditor()->Transform.GetRightVector();
+	auto up = Application.GetScene()->GetCameraEditor()->GetTransform()->GetUpVector();
+	auto right = Application.GetScene()->GetCameraEditor()->GetTransform()->GetRightVector();
 	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), _mesh->SubMeshes[0].Material->GetTexture() ? true : false);
 	if (_mesh->SubMeshes[0].Material->GetTexture())
 		glUniform1i(_shader->GetLocation(Resources::Location::L_TEXTURE), _mesh->SubMeshes[0].Material->GetTexture()->GetIndex());
@@ -118,8 +118,8 @@ void Core::Components::ParticleSystem::DrawPicking(int index)
 	int g = (index & 0x0000FF00) >> 8;
 	int b = (index & 0x00FF0000) >> 16;
 	glUseProgram(shader->Program);
-	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
-	auto right = Application.GetScene()->GetCameraEditor()->Transform.GetRightVector();
+	auto up = Application.GetScene()->GetCameraEditor()->GetTransform()->GetUpVector();
+	auto right = Application.GetScene()->GetCameraEditor()->GetTransform()->GetRightVector();
 	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
 	glUniform3f(shader->GetLocation(Resources::Location::L_CAMUP), up.x, up.y, up.z);

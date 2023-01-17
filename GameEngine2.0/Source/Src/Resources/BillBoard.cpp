@@ -30,8 +30,8 @@ void Resources::BillBoard::Update(Math::Mat4 MVP, bool outline)
 	glStencilFunc(GL_ALWAYS, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
-	auto right = Application.GetScene()->GetCameraEditor()->Transform.GetRightVector();
+	auto up = Application.GetScene()->GetCurrentCamera()->GetTransform()->GetUpVector();
+	auto right = Application.GetScene()->GetCurrentCamera()->GetTransform()->GetRightVector();
 	for (auto Sub : SubMeshes)
 	{
 		if (!Sub.Material)
@@ -93,8 +93,8 @@ void Resources::BillBoard::DrawPicking(Math::Mat4 MVP, int id)
 	int g = (id & 0x0000FF00) >> 8;
 	int b = (id & 0x00FF0000) >> 16;
 
-	auto up = Application.GetScene()->GetCameraEditor()->Transform.GetUpVector();
-	auto right = Application.GetScene()->GetCameraEditor()->Transform.GetRightVector();
+	auto up = Application.GetScene()->GetCameraEditor()->GetTransform()->GetUpVector();
+	auto right = Application.GetScene()->GetCameraEditor()->GetTransform()->GetRightVector();
 	for (const auto& Sub : this->SubMeshes)
 	{
 		if (!Sub.Material)
