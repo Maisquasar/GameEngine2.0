@@ -30,3 +30,5 @@ int main()
 //TODO: Loading Texture from FBX files
 //TODO: Fix Animation for other exportation than Mixamo
 //TODO: Physics
+//TODO: Add Node with Models
+//TODO: Show 3D models on Models selection (Same for Materials spheres)
