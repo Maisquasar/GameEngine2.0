@@ -8,8 +8,8 @@ namespace Resources
 		BillBoard();
 		~BillBoard();
 
-		void Update(Math::Mat4 MVP, bool outline = false) override;
-		void DrawPicking(Math::Mat4 MVP, int id) override;
+		virtual void Update(Math::Mat4 MVP, std::vector<class Material*> materials, bool outline = false);
+		virtual void DrawPicking(Math::Mat4 MVP, std::vector<class Material*> materials, int id);
 
 		BillBoard* Clone() const {
 			return new BillBoard(static_cast<BillBoard const&>(*this));

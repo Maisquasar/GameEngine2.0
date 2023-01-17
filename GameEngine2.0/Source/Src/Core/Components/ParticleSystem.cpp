@@ -17,6 +17,7 @@
 Core::Components::ParticleSystem::ParticleSystem()
 {
 	ComponentName = "Particle System";
+	_material = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
 }
 
 Core::Components::ParticleSystem::~ParticleSystem()
@@ -104,11 +105,11 @@ void Core::Components::ParticleSystem::Draw()
 	glUseProgram(_shader->Program);
 	auto up = Application.GetScene()->GetCameraEditor()->GetTransform()->GetUpVector();
 	auto right = Application.GetScene()->GetCameraEditor()->GetTransform()->GetRightVector();
-	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), _mesh->SubMeshes[0].Material->GetTexture() ? true : false);
-	if (_mesh->SubMeshes[0].Material->GetTexture())
-		glUniform1i(_shader->GetLocation(Resources::Location::L_TEXTURE), _mesh->SubMeshes[0].Material->GetTexture()->GetIndex());
+	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), _material->GetTexture() ? true : false);
+	if (_material->GetTexture())
+		glUniform1i(_shader->GetLocation(Resources::Location::L_TEXTURE), _material->GetTexture()->GetIndex());
 	else
-		glUniform4f(_shader->GetLocation(Resources::Location::L_COLOR), _mesh->SubMeshes[0].Material->GetDiffuse().x, _mesh->SubMeshes[0].Material->GetDiffuse().y, _mesh->SubMeshes[0].Material->GetDiffuse().z, _mesh->SubMeshes[0].Material->GetDiffuse().w);
+		glUniform4f(_shader->GetLocation(Resources::Location::L_COLOR), _material->GetDiffuse().x, _material->GetDiffuse().y, _material->GetDiffuse().z, _material->GetDiffuse().w);
 
 	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMUP), up.x, up.y, up.z);
 	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMRIGHT), right.x, right.y, right.z);
@@ -182,14 +183,14 @@ void Core::Components::ParticleSystem::ShowInInspector()
 	ImGui::Checkbox("Draw Particles", &_drawParticles);
 
 	// Material
-	ImGui::TextUnformatted(_mesh->SubMeshes[0].Material->GetPath().c_str());
+	ImGui::TextUnformatted(_material->GetPath().c_str());
 	if (ImGui::Button("Change Material"))
 	{
 		ImGui::OpenPopup("MaterialPopup");
 	}
 	if (auto mat = Application.GetResourceManager()->ResourcesPopup<Resources::Material>("MaterialPopup"))
 	{
-		_mesh->SubMeshes[0].Material = mat;
+		_material = mat;
 	}
 }
 

@@ -13,8 +13,8 @@ Render::EditorGrid::EditorGrid()
 Render::EditorGrid::~EditorGrid()
 {
 	if (_meshComponent) {
-		if (_meshComponent->GetMesh()->SubMeshes[0].Material)
-			delete _meshComponent->GetMesh()->SubMeshes[0].Material;
+		if ((*_meshComponent->GetMaterials())[0])
+			delete (*_meshComponent->GetMaterials())[0];
 		delete _meshComponent;
 	}
 }
@@ -41,7 +41,7 @@ void Render::EditorGrid::Draw()
 	{
 		glDisable(GL_CULL_FACE);
 		Math::Mat4 MVP = Application.GetScene()->GetVPMatrix();
-		_meshComponent->GetMesh()->Update(MVP, false);
+		_meshComponent->GetMesh()->Update(MVP, *_meshComponent->GetMaterials(), false);
 		glEnable(GL_CULL_FACE);
 	}
 	else
@@ -50,12 +50,10 @@ void Render::EditorGrid::Draw()
 		{
 			if (!mesh->Loaded)
 				return;
-			_meshComponent->SetMesh(dynamic_cast<Resources::Mesh*>(mesh->Clone()));
-			_meshComponent->GetMesh()->SubMeshes[0].Material = new Resources::Material();
-			for (auto sub : _meshComponent->GetMesh()->SubMeshes)
-			{
-				sub.Material->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/GridShader"));
-			}
+			_meshComponent->SetMesh(dynamic_cast<Resources::Mesh*>(mesh));
+			(*_meshComponent->GetMaterials()).back() = new Resources::Material();
+			(*_meshComponent->GetMaterials()).back()->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/GridShader"));
+
 			_meshComponent->GetMesh()->ShouldDrawCall = false;
 		}
 	}

@@ -13,7 +13,6 @@ Core::Components::SkeletalMeshComponent::~SkeletalMeshComponent()
 	if (GameObject)
 		if (auto anim = GameObject->GetComponent<AnimationComponent>())
 			anim->SetSkeleton(nullptr);
-	delete Mesh;
 	delete Skeleton;
 }
 
@@ -22,7 +21,7 @@ void Core::Components::SkeletalMeshComponent::DrawPicking(int id)
 	if (!Mesh || !_enable)
 		return;
 	if (Mesh)
-		Mesh->DrawPicking(this->GameObject->Transform.GetModelMatrix(), Skeleton, id);
+		Mesh->DrawPicking(this->GameObject->Transform.GetModelMatrix(), _materials, Skeleton, id);
 }
 
 #include "Include/EditorUi/Inspector.h"
@@ -32,7 +31,7 @@ void Core::Components::SkeletalMeshComponent::Update()
 		Skeleton->RootBone->DrawDebug();
 	}
 	if (Mesh && _showMesh) {
-		Mesh->Update(GameObject->Transform.GetModelMatrix(), Skeleton, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
+		Mesh->Update(GameObject->Transform.GetModelMatrix(), _materials, Skeleton, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 	}
 }
 
@@ -72,10 +71,15 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 		ImGui::OpenPopup("SkeletalMeshPopup");
 	}
 	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::SkeletalMesh>("SkeletalMeshPopup")) {
-		if (Mesh)
-			delete Mesh;
-		Mesh = Cast(Resources::SkeletalMesh, m->Clone());
-		printf(Mesh->GetName().c_str());
+		Mesh = m;
+		_materials.resize(Mesh->SubMeshes.size());
+		for (auto& mat : _materials)
+		{
+			if (!mat)
+			{
+				mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
+			}
+		}
 	}
 	ImGui::SameLine();
 	name = "None";
@@ -86,6 +90,99 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 	ImGui::Text(name.c_str());
 	if (Skeleton)
 		Skeleton->RootBone->ShowInInspector();
+
+	if (Mesh)
+	{
+		static int SelectedRow = 0;
+		if (ImGui::BeginTable("Materials", 3, ImGuiTableFlags_Borders))
+		{
+			for (int row = 0; row < _materials.size(); row++)
+			{
+				ImGui::TableNextRow();
+				for (int column = 0; column < 3; column++)
+				{
+					ImGui::TableSetColumnIndex(column);
+					switch (column)
+					{
+					case 0:
+						ImGui::TextUnformatted(std::to_string(row).c_str());
+						break;
+					case 1:
+						if (_materials[row])
+							ImGui::TextUnformatted(_materials[row]->GetName().c_str());
+						else
+							ImGui::TextUnformatted("Missing Material");
+						break;
+					case 2:
+						ImGui::PushID(row);
+						if (ImGui::Button("Change Material"))
+						{
+							SelectedRow = row;
+							ImGui::OpenPopup("MaterialPopup");
+						}
+						ImGui::PopID();
+						break;
+					}
+				}
+			}
+			ImGui::PushID(SelectedRow);
+			if (auto mat = Application.GetResourceManager()->ResourcesPopup<Resources::Material>("MaterialPopup")) {
+				_materials[SelectedRow] = mat;
+			}
+			ImGui::PopID();
+			ImGui::EndTable();
+		}
+
+		int index = 0;
+		for (auto mat : _materials)
+		{
+			if (!mat)
+				continue;
+			ImGui::PushID(index++);
+			ImGui::Separator();
+			if (ImGui::CollapsingHeader(mat->GetName().c_str())) {
+
+				ImGui::BeginDisabled(!mat->IsEditable());
+
+				// Shader
+				if (ImGui::Button("Shader"))
+				{
+					ImGui::OpenPopup("ShaderPopup");
+				}
+				if (auto sha = Application.GetResourceManager()->ResourcesPopup<Resources::Shader>("ShaderPopup"))
+					mat->SetShader(sha);
+				ImGui::SameLine();
+				ImGui::Text("%s", mat->GetShader()->GetName().c_str());
+
+				// Texture
+				if (ImGui::Button("Change Texture"))
+				{
+					ImGui::OpenPopup("TexturePopup");
+				}
+				if (auto tex = Application.GetResourceManager()->TexturePopup("TexturePopup"))
+					mat->SetTexture(tex);
+				ImGui::SameLine();
+				if (mat->GetTexture())
+				{
+					ImGui::Text(mat->GetTexture()->GetName().c_str());
+				}
+				else
+					ImGui::Text("None");
+				ImGui::SameLine();
+				if (ImGui::Button("Reset"))
+				{
+					mat->SetTexture(nullptr);
+				}
+
+				// Parameters
+				ImGui::ColorEdit4("Ambient", &(*mat->GetPtrAmbient())[0]);
+				ImGui::ColorEdit4("Diffuse", &(*mat->GetPtrDiffuse())[0]);
+				ImGui::ColorEdit4("Specular", &(*mat->GetPtrSpecular())[0]);
+				ImGui::EndDisabled();
+			}
+			ImGui::PopID();
+		}
+	}
 
 
 	ImGui::Checkbox("Show Mesh", &_showMesh);
@@ -117,7 +214,7 @@ void Core::Components::SkeletalMeshComponent::Load(const char* data, uint32_t& p
 		{
 			auto MeshPath = Utils::Loader::GetString(currentLine);
 			if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>(MeshPath.c_str())) {
-				Mesh = Cast(Resources::SkeletalMesh, mesh->Clone());
+				Mesh = Cast(Resources::SkeletalMesh, mesh);
 			}
 		}
 		else if (currentLine.substr(0, 8) == "Skeleton")

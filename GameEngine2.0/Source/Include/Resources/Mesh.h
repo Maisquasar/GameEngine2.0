@@ -21,7 +21,6 @@ namespace Core::Components
 namespace Resources {
 	struct SubMesh
 	{
-		class Material* Material;
 		size_t StartIndex;
 		size_t Count;
 	};
@@ -37,10 +36,8 @@ namespace Resources {
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
 
 		// Call on MeshComponent Update.
-		virtual void Update(Math::Mat4 MVP, bool outline = false);
-		virtual void DrawPicking(Math::Mat4 MVP, int id);
-
-		virtual void SetShader(class Shader*);
+		virtual void Update(Math::Mat4 MVP, std::vector<class Material*> materials, bool outline = false);
+		virtual void DrawPicking(Math::Mat4 MVP, std::vector<class Material*> materials, int id);
 
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;

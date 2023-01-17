@@ -3,6 +3,7 @@
 
 namespace Resources{
 	class BillBoard;
+	class Material;
 }
 namespace Core
 {
@@ -32,6 +33,7 @@ namespace Render {
 		void SetIconSize(float size) { IconSize = size; }
 	private:
 		float IconSize = 0.5f;
+		Resources::Material* _material = nullptr;
 
 	};
 }

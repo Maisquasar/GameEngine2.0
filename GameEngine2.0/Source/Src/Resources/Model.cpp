@@ -97,7 +97,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 			if (Meshes.back().SubMeshes.size() == 0)
 			{
 				Meshes.back().SubMeshes.push_back(SubMesh());
-				Meshes.back().SubMeshes.back().Material = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
+				//Meshes.back().SubMeshes.back().Material = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
 			}
 			auto indices = Utils::Loader::GetIndices(currentLine);
 			for (size_t i = 0; i < 3; i++)
@@ -119,7 +119,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 			MaterialName = GetPath().substr(0, GetPath().find_last_of('/') + 1) + MaterialName + ".mat";
 			Resources::Material* mat;
 			if (mat = Application.GetResourceManager()->Get<Resources::Material>(MaterialName.c_str())) {
-				subMesh.Material = mat;
+				//subMesh.Material = mat;
 			}
 			else
 			{
@@ -129,7 +129,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 				}
 				else
 					mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
-				subMesh.Material = mat;
+				//subMesh.Material = mat;
 			}
 			Meshes.back().SubMeshes.push_back(subMesh);
 		}

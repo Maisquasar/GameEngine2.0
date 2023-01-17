@@ -404,9 +404,11 @@ void Utils::Loader::FBXLoad(std::string path)
 		return;
 	}
 	ofbx::IScene* Scene = ofbx::load(data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
-
+#if MULTITHREAD_LOADING
 	Application.ThreadManager.QueueJob(&MutlithreadLoad, Scene, path);
-
+#else
+	MutlithreadLoad(Scene, path);
+#endif
 	delete[] data;
 }
 
@@ -471,7 +473,6 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 				}
 
 				Mesh->SubMeshes.push_back(Resources::SubMesh());
-				Mesh->SubMeshes.back().Material = mat;
 				Mesh->SubMeshes.back().StartIndex = lastIndex;
 				Mesh->SubMeshes.back().Count = (i * 3 - lastIndex);
 				lastIndex = i * 3;
@@ -497,7 +498,6 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 		}
 	}
 	Mesh->SubMeshes.push_back(Resources::SubMesh());
-	Mesh->SubMeshes.back().Material = mat;
 	Mesh->SubMeshes.back().StartIndex = lastIndex;
 	Mesh->SubMeshes.back().Count = (size_t)mesh->getGeometry()->getIndexCount() - lastIndex;
 
@@ -672,7 +672,6 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 #if !MULTITHREAD_LOADING
 	mesh->Initialize();
 #endif
-	mesh->SetShader(Application.GetResourceManager()->GetDefaultAnimShader());
 
 	NewSkel->SetInitialized();
 	Application.GetResourceManager()->Add<Resources::SkeletalMesh>(mesh->GetPath(), mesh);

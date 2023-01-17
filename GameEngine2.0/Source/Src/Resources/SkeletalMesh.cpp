@@ -64,7 +64,7 @@ void Resources::SkeletalMesh::Initialize()
 	_initialized = true;
 }
 
-void Resources::SkeletalMesh::Update(Math::Mat4 M, Skeleton* skel, bool outline)
+void Resources::SkeletalMesh::Update(Math::Mat4 M, std::vector<Resources::Material*> materials, Skeleton* skel, bool outline)
 {
 	if (!Loaded || !skel)
 		return;
@@ -82,24 +82,24 @@ void Resources::SkeletalMesh::Update(Math::Mat4 M, Skeleton* skel, bool outline)
 
 	auto MV = Application.GetScene()->GetCameraEditor()->GetViewMatrix();
 	auto P = Application.GetScene()->GetCameraEditor()->GetProjection();
-	for (auto Sub : SubMeshes)
+	for (int i = 0; i < materials.size(); i++)
 	{
-		if (!Sub.Material)
+		if (!materials[i])
 			continue;
 		glDepthRange(0.01, 1.0);
-		glUseProgram(Sub.Material->GetShader()->Program);
-		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MAXBONEWEIGHT), skel->GetMaxBoneWeight());
-		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
-		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
-		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);
+		glUseProgram(materials[i]->GetShader()->Program);
+		glUniform1i(materials[i]->GetShader()->GetLocation(Resources::Location::L_MAXBONEWEIGHT), skel->GetMaxBoneWeight());
+		glUniformMatrix4fv(materials[i]->GetShader()->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
+		glUniformMatrix4fv(materials[i]->GetShader()->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
+		glUniformMatrix4fv(materials[i]->GetShader()->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);
 
-		glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
-		if (Sub.Material->GetTexture())
-			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());
+		glUniform1i(materials[i]->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), materials[i]->GetTexture() ? true : false);
+		if (materials[i]->GetTexture())
+			glUniform1i(materials[i]->GetShader()->GetLocation(Location::L_TEXTURE), materials[i]->GetTexture()->GetIndex());
 		else
-			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
+			glUniform4f(materials[i]->GetShader()->GetLocation(Resources::Location::L_COLOR), materials[i]->GetDiffuse().x, materials[i]->GetDiffuse().y, materials[i]->GetDiffuse().z, materials[i]->GetDiffuse().w);
 
-		glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		glDraw(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 	}
 	if (outline)
 	{
@@ -112,13 +112,13 @@ void Resources::SkeletalMesh::Update(Math::Mat4 M, Skeleton* skel, bool outline)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDepthRange(0, 0.01);
 
-		for (auto Sub : SubMeshes)
+		for (int i = 0; i < materials.size(); i++)
 		{
-			if (!Sub.Material)
+			if (!materials[i])
 				continue;
-			glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-			glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), 0.8f, 0.5f, 0, 1);
-			glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			glUniform1i(materials[i]->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
+			glUniform4f(materials[i]->GetShader()->GetLocation(Resources::Location::L_COLOR), 0.8f, 0.5f, 0, 1);
+			glDraw(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 		}
 
 
@@ -128,7 +128,7 @@ void Resources::SkeletalMesh::Update(Math::Mat4 M, Skeleton* skel, bool outline)
 	}
 }
 
-void Resources::SkeletalMesh::DrawPicking(Math::Mat4 M, Skeleton* skel, int id)
+void Resources::SkeletalMesh::DrawPicking(Math::Mat4 M, std::vector<Resources::Material*> materials, Skeleton* skel, int id)
 {
 	if (!Loaded)
 		return;
@@ -142,13 +142,13 @@ void Resources::SkeletalMesh::DrawPicking(Math::Mat4 M, Skeleton* skel, int id)
 	int b = (id & 0x00FF0000) >> 16;
 	auto MV = Application.GetScene()->GetCameraEditor()->GetViewMatrix();
 	auto P = Application.GetScene()->GetCameraEditor()->GetProjection();
-	for (const auto& Sub : this->SubMeshes)
+	for (int i = 0; i < materials.size(); i++)
 	{
 		glUniformMatrix4fv(picking_shader->GetLocation(Resources::Location::L_MODELVIEWMATRIX), 1, GL_TRUE, &MV.content[0][0]);
 		glUniformMatrix4fv(picking_shader->GetLocation(Resources::Location::L_PROJECTIONMATRIX), 1, GL_TRUE, &P.content[0][0]);
 		glUniformMatrix4fv(picking_shader->GetLocation(Resources::Location::L_SKINNINGMATRICES), (GLsizei)skel->Bones.size(), GL_TRUE, &skel->GetBonesMatrices().data()->content[0][0]);
 		glUniform4f(picking_shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
-		glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+		glDraw(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 	}
 }

@@ -3,10 +3,11 @@
 #include "Include/App.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Resources/Mesh.h"
+#include "Include/Resources/Material.h"
 #include "Include/Core/Node.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
-#include "Include/Render./EditorIcon.h"
+#include "Include/Render/EditorIcon.h"
 
 Core::Components::MeshComponent::MeshComponent()
 {
@@ -15,7 +16,6 @@ Core::Components::MeshComponent::MeshComponent()
 
 Core::Components::MeshComponent::~MeshComponent()
 {
-	delete _currentMesh;
 }
 
 float getDistance(Math::Vec3 point1, Math::Vec3 point2, Math::Vec3 axis)
@@ -41,18 +41,16 @@ void Core::Components::MeshComponent::ShowInInspector()
 	else
 		ImGui::TextUnformatted("None");
 	if (auto Mesh = Application.GetResourceManager()->ResourcesPopup<Resources::Mesh>("MeshPopup")) {
-		delete _currentMesh;
-		_currentMesh = Mesh->Clone();
+		SetMesh(Mesh);
 	}
 	if (!_currentMesh)
 		return;
 
 	// Material List.
-	static Resources::SubMesh* ChangeMat = nullptr;
 	static int SelectedRow = 0;
 	if (ImGui::BeginTable("Materials", 3, ImGuiTableFlags_Borders))
 	{
-		for (int row = 0; row < GetMesh()->SubMeshes.size(); row++)
+		for (int row = 0; row < _materials.size(); row++)
 		{
 			ImGui::TableNextRow();
 			for (int column = 0; column < 3; column++)
@@ -64,8 +62,8 @@ void Core::Components::MeshComponent::ShowInInspector()
 					ImGui::TextUnformatted(std::to_string(row).c_str());
 					break;
 				case 1:
-					if (GetMesh()->SubMeshes[row].Material)
-						ImGui::TextUnformatted(GetMesh()->SubMeshes[row].Material->GetName().c_str());
+					if (_materials[row])
+						ImGui::TextUnformatted(_materials[row]->GetName().c_str());
 					else
 						ImGui::TextUnformatted("Missing Material");
 					break;
@@ -73,7 +71,6 @@ void Core::Components::MeshComponent::ShowInInspector()
 					ImGui::PushID(row);
 					if (ImGui::Button("Change Material"))
 					{
-						ChangeMat = &GetMesh()->SubMeshes[row];
 						SelectedRow = row;
 						ImGui::OpenPopup("MaterialPopup");
 					}
@@ -84,7 +81,7 @@ void Core::Components::MeshComponent::ShowInInspector()
 		}
 		ImGui::PushID(SelectedRow);
 		if (auto mat = Application.GetResourceManager()->ResourcesPopup<Resources::Material>("MaterialPopup")) {
-			ChangeMat->Material = mat;
+			_materials[SelectedRow] = mat;
 		}
 		ImGui::PopID();
 		ImGui::EndTable();
@@ -92,13 +89,15 @@ void Core::Components::MeshComponent::ShowInInspector()
 
 	// Material Components List.
 	int index = 0;
-	for (auto Sub : GetMesh()->SubMeshes)
+	for (auto mat : _materials)
 	{
+		if (!mat)
+			continue;
 		ImGui::PushID(index++);
 		ImGui::Separator();
-		if (ImGui::CollapsingHeader(Sub.Material->GetName().c_str())) {
+		if (ImGui::CollapsingHeader(mat->GetName().c_str())) {
 
-			ImGui::BeginDisabled(!Sub.Material->IsEditable());
+			ImGui::BeginDisabled(!mat->IsEditable());
 
 			// Shader
 			if (ImGui::Button("Shader"))
@@ -106,9 +105,9 @@ void Core::Components::MeshComponent::ShowInInspector()
 				ImGui::OpenPopup("ShaderPopup");
 			}
 			if (auto sha = Application.GetResourceManager()->ResourcesPopup<Resources::Shader>("ShaderPopup"))
-				Sub.Material->SetShader(sha);
+				mat->SetShader(sha);
 			ImGui::SameLine();
-			ImGui::Text("%s", Sub.Material->GetShader()->GetName().c_str());
+			ImGui::Text("%s", mat->GetShader()->GetName().c_str());
 
 			// Texture
 			if (ImGui::Button("Change Texture"))
@@ -116,24 +115,24 @@ void Core::Components::MeshComponent::ShowInInspector()
 				ImGui::OpenPopup("TexturePopup");
 			}
 			if (auto tex = Application.GetResourceManager()->TexturePopup("TexturePopup"))
-				Sub.Material->SetTexture(tex);
+				mat->SetTexture(tex);
 			ImGui::SameLine();
-			if (Sub.Material->GetTexture())
+			if (mat->GetTexture())
 			{
-				ImGui::Text(Sub.Material->GetTexture()->GetName().c_str());
+				ImGui::Text(mat->GetTexture()->GetName().c_str());
 			}
 			else
 				ImGui::Text("None");
 			ImGui::SameLine();
 			if (ImGui::Button("Reset"))
 			{
-				Sub.Material->SetTexture(nullptr);
+				mat->SetTexture(nullptr);
 			}
 
 			// Parameters
-			ImGui::ColorEdit4("Ambient", &(*Sub.Material->GetPtrAmbient())[0]);
-			ImGui::ColorEdit4("Diffuse", &(*Sub.Material->GetPtrDiffuse())[0]);
-			ImGui::ColorEdit4("Specular", &(*Sub.Material->GetPtrSpecular())[0]);
+			ImGui::ColorEdit4("Ambient", &(*mat->GetPtrAmbient())[0]);
+			ImGui::ColorEdit4("Diffuse", &(*mat->GetPtrDiffuse())[0]);
+			ImGui::ColorEdit4("Specular", &(*mat->GetPtrSpecular())[0]);
 			ImGui::EndDisabled();
 		}
 		ImGui::PopID();
@@ -150,7 +149,7 @@ void Core::Components::MeshComponent::Draw()
 		return;
 	auto MVP = Application.GetScene()->GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (_currentMesh)
-		GetMesh()->Update(MVP, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
+		GetMesh()->Update(MVP, _materials, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 }
 
 void Core::Components::MeshComponent::DrawPicking(int id)
@@ -159,7 +158,7 @@ void Core::Components::MeshComponent::DrawPicking(int id)
 		return;
 	auto MVP = Application.GetScene()->GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();
 	if (_currentMesh)
-		GetMesh()->DrawPicking(MVP, id);
+		GetMesh()->DrawPicking(MVP, _materials, id);
 }
 
 Resources::Mesh* Core::Components::MeshComponent::GetMesh()
@@ -170,15 +169,23 @@ Resources::Mesh* Core::Components::MeshComponent::GetMesh()
 void Core::Components::MeshComponent::SetMesh(Resources::IResource* mesh)
 {
 	_currentMesh = mesh;
+	_materials.resize((dynamic_cast<Resources::Mesh*>(_currentMesh))->SubMeshes.size());
+	for (auto& mat : _materials)
+	{
+		if (!mat)
+		{
+			mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
+		}
+	}
 }
 
 void Core::Components::MeshComponent::Save(std::string space, std::string& content)
 {
 	content += space + Utils::StringFormat("Mesh : %s\n", GetMesh()->GetPath().c_str());
 	int index = 0;
-	for (auto Sub : GetMesh()->SubMeshes)
+	for (auto mat : _materials)
 	{
-		content += space + Utils::StringFormat("SubMesh[%d] : %s\n", index++, Sub.Material->GetPath().c_str());
+		content += space + Utils::StringFormat("SubMesh[%d] : %s\n", index++, mat->GetPath().c_str());
 	}
 }
 void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
@@ -192,14 +199,14 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 		{
 			auto MeshPath = Utils::Loader::GetString(currentLine);
 			if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>(MeshPath.c_str())) {
-				this->_currentMesh = mesh->Clone();
+				this->_currentMesh = mesh;
 			}
 			else
 			{
 				_currentMesh = new Resources::Mesh();
 				_currentMesh->SetPath(MeshPath);
 #if MULTITHREAD_LOADING
-				Application.MultiThreadMeshes.push_back(&_currentMesh);
+				//Application.MultiThreadMeshes.push_back(&_currentMesh);
 #endif
 			}
 		}
@@ -210,7 +217,7 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 				if (GetMesh()->SubMeshes.size() <= SubMeshIndex) {
 					GetMesh()->SubMeshes.push_back(Resources::SubMesh());
 				}
-				GetMesh()->SubMeshes[SubMeshIndex].Material = mat;
+				_materials.push_back(mat);
 				SubMeshIndex++;
 			}
 		}
@@ -221,4 +228,9 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 void Core::Components::MeshComponent::SetUIIcon()
 {
 	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/MeshIcon.png");
+}
+
+void Core::Components::MeshComponent::AddMaterial(Resources::Material* mat)
+{
+	this->_materials.push_back(mat);
 }

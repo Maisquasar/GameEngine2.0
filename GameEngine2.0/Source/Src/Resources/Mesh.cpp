@@ -122,7 +122,7 @@ void glDraw(uint32_t model, GLsizei start, GLsizei count)
 	Application.GetSettings()->NumberOfDrawCalls++;
 }
 
-void Resources::Mesh::Update(Math::Mat4 MVP, bool outline)
+void Resources::Mesh::Update(Math::Mat4 MVP, std::vector<Resources::Material*> materials, bool outline)
 {
 	if (!Loaded)
 		return;
@@ -138,28 +138,28 @@ void Resources::Mesh::Update(Math::Mat4 MVP, bool outline)
 	glStencilFunc(GL_ALWAYS, 1, -1);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	for (auto Sub : SubMeshes)
+	for (int i = 0; i < materials.size(); i++)
 	{
-		if (!Sub.Material)
+		if (!materials[i])
 			continue;
-		glUseProgram(Sub.Material->GetShader()->Program);
-		glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+		glUseProgram(materials[i]->GetShader()->Program);
+		glUniformMatrix4fv(materials[i]->GetShader()->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 		glDepthRange(0.02, 1.0);
-		glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
-		if (Sub.Material->GetTexture())
-			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_TEXTURE), Sub.Material->GetTexture()->GetIndex());
+		glUniform1i(materials[i]->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), materials[i]->GetTexture() ? true : false);
+		if (materials[i]->GetTexture())
+			glUniform1i(materials[i]->GetShader()->GetLocation(Location::L_TEXTURE), materials[i]->GetTexture()->GetIndex());
 		else
-			glUniform4f(Sub.Material->GetShader()->GetLocation(Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
+			glUniform4f(materials[i]->GetShader()->GetLocation(Location::L_COLOR), materials[i]->GetDiffuse().x, materials[i]->GetDiffuse().y, materials[i]->GetDiffuse().z, materials[i]->GetDiffuse().w);
 
 		if (ShouldDrawCall)
-			glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			glDraw(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 		else
-			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			glDrawArrays(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 	}
 	if (outline)
 	{
 
-		// Render the thick wireframe version.
+		// Render the thick wire frame version.
 		glStencilFunc(GL_NOTEQUAL, 1, -1);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
@@ -167,16 +167,16 @@ void Resources::Mesh::Update(Math::Mat4 MVP, bool outline)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDepthRange(0, 0.01);
 
-		for (auto Sub : SubMeshes)
+		for (int i = 0; i < materials.size(); i++)
 		{
-			if (!Sub.Material)
+			if (!materials[i])
 				continue;
-			glUniform1i(Sub.Material->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), false);
-			glUniform4f(Sub.Material->GetShader()->GetLocation(Location::L_COLOR), 0.8f, 0.5f, 0, 1);
+			glUniform1i(materials[i]->GetShader()->GetLocation(Location::L_ENABLE_TEXTURE), false);
+			glUniform4f(materials[i]->GetShader()->GetLocation(Location::L_COLOR), 0.8f, 0.5f, 0, 1);
 			if (ShouldDrawCall)
-				glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+				glDraw(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 			else
-				glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+				glDrawArrays(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 		}
 
 
@@ -186,7 +186,7 @@ void Resources::Mesh::Update(Math::Mat4 MVP, bool outline)
 	}
 }
 
-void Resources::Mesh::DrawPicking(Math::Mat4 MVP, int id)
+void Resources::Mesh::DrawPicking(Math::Mat4 MVP, std::vector<Resources::Material*> materials, int id)
 {
 	if (!Loaded)
 		return;
@@ -200,26 +200,16 @@ void Resources::Mesh::DrawPicking(Math::Mat4 MVP, int id)
 	int r = (id & 0x000000FF) >> 0;
 	int g = (id & 0x0000FF00) >> 8;
 	int b = (id & 0x00FF0000) >> 16;
-	for (const auto& Sub : this->SubMeshes)
+	for (int i = 0; i < materials.size(); i++)
 	{
-		if (!Sub.Material)
+		if (!materials[i])
 			continue;
 		glUniformMatrix4fv(shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 		glUniform4f(shader->GetLocation(Location::L_COLOR), r/255.f, g/255.f, b/255.f, 1.f);
 
 		if (ShouldDrawCall)
-			glDraw(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			glDraw(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 		else
-			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
-	}
-}
-
-void Resources::Mesh::SetShader(Shader* s)
-{
-	if (!s)
-		return;
-	for (auto Sub : SubMeshes)
-	{
-		Sub.Material->SetShader(s);
+			glDrawArrays(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 	}
 }

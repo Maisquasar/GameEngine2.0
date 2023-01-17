@@ -4,6 +4,7 @@ namespace Resources
 {
 	class Skeleton;
 	class SkeletalMesh;
+	class Material;
 }
 namespace Core::Components
 {
@@ -29,6 +30,7 @@ namespace Core::Components
 	private:
 		bool _showMesh = true;
 		bool _showSkeleton = true;
+		std::vector<Resources::Material*> _materials;
 
 	};
 }

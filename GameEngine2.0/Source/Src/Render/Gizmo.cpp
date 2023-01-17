@@ -18,6 +18,12 @@ std::string ModelsName[] = {
 	"",
 	"Assets/Default/Models/ScaleGizmo.obj",
 };
+std::string MaterialsName[] = {
+	"Assets/Default/Models/XAxis.mat",
+	"Assets/Default/Models/YAxis.mat",
+	"Assets/Default/Models/ZAxis.mat",
+	"Assets/Default/Models/Center.mat",
+};
 
 Render::Gizmo::Gizmo()
 {
@@ -44,16 +50,18 @@ void Render::Gizmo::Draw()
 
 			auto MVP = GetMVP();
 			glDepthRange(0.01, 0.02);
-			for (auto Sub : mesh->SubMeshes)
+			auto meshcomp = axis->GetComponent<Core::Components::MeshComponent>();
+			for (int i = 0; i < (*meshcomp->GetMaterials()).size(); i++)
 			{
-				if (!Sub.Material || !Sub.Material->GetShader())
+				auto mat = (*meshcomp->GetMaterials())[i];
+				if (!mat || !mat->GetShader())
 					continue;
-				glUseProgram(Sub.Material->GetShader()->Program);
-				glUniformMatrix4fv(Sub.Material->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
-				glUniform1i(Sub.Material->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), Sub.Material->GetTexture() ? true : false);
-				glUniform4f(Sub.Material->GetShader()->GetLocation(Resources::Location::L_COLOR), Sub.Material->GetDiffuse().x, Sub.Material->GetDiffuse().y, Sub.Material->GetDiffuse().z, Sub.Material->GetDiffuse().w);
+				glUseProgram(mat->GetShader()->Program);
+				glUniformMatrix4fv(mat->GetShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+				glUniform1i(mat->GetShader()->GetLocation(Resources::Location::L_ENABLE_TEXTURE), mat->GetTexture() ? true : false);
+				glUniform4f(mat->GetShader()->GetLocation(Resources::Location::L_COLOR), mat->GetDiffuse().x, mat->GetDiffuse().y, mat->GetDiffuse().z, mat->GetDiffuse().w);
 
-				glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+				glDrawArrays(GL_TRIANGLES, (GLsizei)mesh->SubMeshes[i].StartIndex, (GLsizei)mesh->SubMeshes[i].Count);
 			}
 			glDepthRange(0.02, 1);
 		}
@@ -68,22 +76,19 @@ void Render::Gizmo::Draw()
 			{
 				if (auto mesh = Application.GetResourceManager()->Get<Resources::Mesh>((ModelsName[(int)Mode] + MeshesName[i]).c_str()))
 				{
-					Core::Components::MeshComponent* MeshComp;
-					if (MeshComp = _axis[i]->GetComponent<Core::Components::MeshComponent>()) 
+					
+					Core::Components::MeshComponent* MeshComp; 
+					if (MeshComp = _axis[i]->GetComponent<Core::Components::MeshComponent>())
 					{
-						delete MeshComp->GetMesh();
 					}
 					else
 					{
 						MeshComp = new Core::Components::MeshComponent();
-						_axis[i]->AddComponent(MeshComp);
 					}
-					auto clonedMesh = dynamic_cast<Resources::Mesh*>(mesh->Clone());
-					MeshComp->SetMesh(clonedMesh);
-					for (auto Sub : clonedMesh->SubMeshes)
-					{
-						Sub.Material->SetShader(Application.GetResourceManager()->GetDefaultShader());
-					}
+					MeshComp->SetMesh(mesh);
+					(*MeshComp->GetMaterials())[0] = Application.GetResourceManager()->Get<Resources::Material>(MaterialsName[i].c_str());
+					_axis[i]->AddComponent(MeshComp);
+
 					initializedNumber++;
 				}
 			}
@@ -123,7 +128,8 @@ void Render::Gizmo::DrawPicking(int id)
 		return;
 	for (auto axis : _axis)
 	{
-		auto mesh = dynamic_cast<Resources::Mesh*>(axis->GetComponent<Core::Components::MeshComponent>()->GetMesh());
+		auto meshComp = axis->GetComponent<Core::Components::MeshComponent>();
+		auto mesh = meshComp->GetMesh();
 		if (!mesh->IsInitialized())
 			mesh->Initialize();
 		if (!mesh->Loaded)
@@ -139,14 +145,15 @@ void Render::Gizmo::DrawPicking(int id)
 
 		auto MVP = GetMVP();
 		glDepthRange(0.01, 0.02);
-		for (const auto& Sub : mesh->SubMeshes)
+		for (int i = 0; i < (*meshComp->GetMaterials()).size(); i++)
 		{
-			if (!Sub.Material)
+			auto mat = (*meshComp->GetMaterials())[i];
+			if (!mat)
 				continue;
 			glUniformMatrix4fv(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 			glUniform4f(Application.GetResourceManager()->GetPickingShader()->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
-			glDrawArrays(GL_TRIANGLES, (GLsizei)Sub.StartIndex, (GLsizei)Sub.Count);
+			glDrawArrays(GL_TRIANGLES, (GLsizei)mesh->SubMeshes[i].StartIndex, (GLsizei)mesh->SubMeshes[i].Count);
 		}
 		glDepthRange(0.02, 1);
 		id++;

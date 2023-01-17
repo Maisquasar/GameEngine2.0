@@ -51,7 +51,7 @@ public:
 
 	Core::Components::Data Components;
 	Utils::ThreadManager ThreadManager;
-	std::vector<Resources::IResource**> MultiThreadMeshes;
+	//std::vector<Resources::IResource**> MultiThreadMeshes;
 private:
 	// Window
 	GLFWwindow* _window = nullptr;

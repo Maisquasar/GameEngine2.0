@@ -91,6 +91,7 @@ namespace Core::Components
 		std::vector<Math::Vec4>  XYZS;
 		GLuint _buffer;
 		Resources::MeshInstance* _mesh = nullptr;
+		Resources::Material* _material = nullptr;
 
 		float _timeSinceStart = 0.f;
 		float _speed = 1.f;

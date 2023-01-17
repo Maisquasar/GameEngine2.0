@@ -232,7 +232,6 @@ void App::LoadResources()
 	auto sub = Resources::SubMesh();
 	sub.Count = Plane->Indices.size();
 	sub.StartIndex = 0;
-	sub.Material = defaultMat;
 	Plane->SubMeshes.push_back(sub);
 	Plane->Loaded = true;
 
@@ -319,27 +318,6 @@ void App::MultiThreadLoad()
 			if (!Mesh->IsInitialized() && Mesh->Loaded)
 			{
 				Mesh->Initialize();
-				int ResIndex = 0;
-				for (auto res : this->MultiThreadMeshes)
-				{
-					if ((*res)->GetPath() == Mesh->GetPath())
-					{
-						// Clone Mesh That was not loaded on scene loading.
-						auto tmp = Cast(Resources::Mesh, Mesh->Clone());
-						auto resMesh = Cast(Resources::Mesh, *res);
-						int index = 0;
-						for (auto Sub : tmp->SubMeshes)
-						{
-							Sub = resMesh->SubMeshes[index];
-							index++;
-						}
-						delete (*res);
-						(*res) = tmp;
-						loaded++;
-						MultiThreadMeshes.erase(MultiThreadMeshes.begin() + ResIndex);
-					}
-					ResIndex++;
-				}
 			}
 		}
 		if (res.second->IsInitialized())
@@ -350,7 +328,6 @@ void App::MultiThreadLoad()
 		}
 		total++;
 	}
-	total += this->MultiThreadMeshes.size();
 
 	if (ImGui::Begin("LoadingWindow")) {
 		float fraction = (float)loaded / (float)total;
@@ -391,7 +368,11 @@ void App::Update()
 	_scene.Initialize();
 	
 	// Main loop
+#if MULTITHREAD_LOADING
 	while (!((glfwWindowShouldClose(_window) || _shouldClose) && _everythingIsLoaded))
+#else
+	while (!glfwWindowShouldClose(_window) && !_shouldClose)
+#endif
 	{
 		BeginFrame();
 
