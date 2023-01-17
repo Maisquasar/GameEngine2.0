@@ -25,6 +25,9 @@ namespace Core {
 			virtual void Update() {}
 			virtual void EditorUpdate() {}
 			virtual void GameUpdate() {}
+			virtual void Draw() {}
+			virtual void EditorDraw() {}
+			virtual void GameDraw() {}
 
 			virtual void UpdateTransform() {}
 

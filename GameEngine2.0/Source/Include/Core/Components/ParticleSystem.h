@@ -62,7 +62,10 @@ namespace Core::Components
 		void InitializeParticles();
 
 		void Initialize() override;
+		void EditorUpdate() override;
 		void Update() override;
+		void EditorDraw() override;
+		void Draw() override;
 		void DrawPicking(int index) override;
 		void ShowInInspector() override;
 

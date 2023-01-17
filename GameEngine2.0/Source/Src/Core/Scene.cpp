@@ -51,6 +51,8 @@ void Core::Scene::Update()
 
 		_sceneNode->UpdateSelfAndChilds();
 
+		_sceneNode->DrawSelfAndChild(true);
+
 		_gizmo.Draw();
 
 		// Update Editor Camera.
@@ -81,7 +83,7 @@ void Core::Scene::RenderScene()
 	// Begin Main Update
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	_sceneNode->UpdateSelfAndChilds();
+	_sceneNode->DrawSelfAndChild();
 
 	_currentCamera->FrameBuffer.Draw();
 }

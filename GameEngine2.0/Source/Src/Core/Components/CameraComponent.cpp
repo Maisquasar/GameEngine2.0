@@ -35,6 +35,10 @@ void Core::Components::CameraComponent::Initialize()
 
 void Core::Components::CameraComponent::Update()
 {
+}
+
+void Core::Components::CameraComponent::EditorUpdate()
+{
 	if (!Icon)
 	{
 		Icon = new Render::EditorIcon();
@@ -42,7 +46,12 @@ void Core::Components::CameraComponent::Update()
 		Icon->SetSize(Math::Vec2(0.25f, 0.25f));
 
 	}
-	Icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform, GameObject->IsSelected());
+}
+
+void Core::Components::CameraComponent::EditorDraw()
+{
+	if (Icon)
+		Icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform, GameObject->IsSelected());
 }
 
 void Core::Components::CameraComponent::DrawPicking(int id)

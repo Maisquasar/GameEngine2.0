@@ -37,6 +37,17 @@ void Core::Components::ParticleSystem::Initialize()
 	SetSize(_maxParticles);
 }
 
+void Core::Components::ParticleSystem::EditorUpdate()
+{
+	if (!_icon)
+	{
+		_icon = new Render::EditorIcon();
+		_icon->Initialize("ParticleMat");
+		_icon->SetSize(Math::Vec2(0.25f, 0.25f));
+
+	}
+}
+
 void Core::Components::ParticleSystem::PostInitialize()
 {
 	if (_particles.size() == 0)
@@ -63,15 +74,6 @@ void Core::Components::ParticleSystem::ResetPositions()
 
 void Core::Components::ParticleSystem::Update()
 {
-	if (!_icon)
-	{
-		_icon = new Render::EditorIcon();
-		_icon->Initialize("ParticleMat");
-		_icon->SetSize(Math::Vec2(0.25f, 0.25f));
-
-	}
-	_icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform, GameObject->IsSelected());
-
 	if (_updateParticles) {
 		if (XYZS.size() != _particles.size())
 			XYZS.resize(_particles.size());
@@ -86,8 +88,17 @@ void Core::Components::ParticleSystem::Update()
 		}
 		_timeSinceStart += ImGui::GetIO().DeltaTime * _speed;
 	}
+}
 
-	// Sent Values to Shader
+void Core::Components::ParticleSystem::EditorDraw()
+{
+	if (_icon)
+		_icon->Draw(Application.GetScene()->GetVPMatrix(), GameObject->Transform, GameObject->IsSelected());
+}
+
+void Core::Components::ParticleSystem::Draw()
+{
+	// Send Values to Shader
 	if (!_shader || _particles.size() == 0 || !_mesh || !_drawParticles)
 		return;
 	glUseProgram(_shader->Program);

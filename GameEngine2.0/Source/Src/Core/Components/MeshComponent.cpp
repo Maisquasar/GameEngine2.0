@@ -142,6 +142,10 @@ void Core::Components::MeshComponent::ShowInInspector()
 
 void Core::Components::MeshComponent::Update()
 {
+}
+
+void Core::Components::MeshComponent::Draw()
+{
 	if (!_currentMesh || !_enable)
 		return;
 	auto MVP = Application.GetScene()->GetVPMatrix() * this->GameObject->Transform.GetModelMatrix();

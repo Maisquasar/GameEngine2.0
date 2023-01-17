@@ -1,14 +1,9 @@
 #BeginNode
 Name : Node
 IsActive : 1
-Position : 0.000000 0.000000 0.000000
+Position : 0.000000 0.000000 -5.482636
 Rotation : 0.000000 0.000000 0.000000 1.000000
 Scale : 1.000000 1.000000 1.000000
-#BeginComponent Particle System
-MaxParticle : 100
-MainDirection : 0.000000 10.000000 0.000000
-LifeTime : 5.000000
-Size : 0.100000 0.200000
-Angle : 25.000000
-#EndComponent Particle System
+#BeginComponent Camera
+#EndComponent Camera
 #EndNode

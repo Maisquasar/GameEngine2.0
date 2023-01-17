@@ -27,7 +27,7 @@ namespace Core {
 		void AddComponent(Core::Components::Component* comp);
 		void SetParent(Node* node);
 
-		// Clone this Node and his childrens.
+		// Clone this Node and his children.
 		virtual Node* Clone();
 
 		void RemoveChildren(Node* node);
@@ -39,7 +39,7 @@ namespace Core {
 		bool IsSelected() { return _selected; }
 
 		void UpdateSelfAndChilds();
-		void DrawSelf();
+		void DrawSelfAndChild(bool editorCamera = false);
 		void DrawPicking(int id);
 		virtual void DrawDebug() {}
 		virtual void UpdateBone(Resources::Animation*, float) {}

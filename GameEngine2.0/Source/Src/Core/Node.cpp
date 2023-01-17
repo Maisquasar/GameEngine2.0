@@ -161,11 +161,25 @@ void Core::Node::UpdateSelfAndChilds()
 	}
 }
 
-void Core::Node::DrawSelf()
+void Core::Node::DrawSelfAndChild(bool editorCamera)
 {
-	if (_active)
-		if (auto meshComp = GetComponent<Core::Components::MeshComponent>())
-			meshComp->Update();
+	for (auto component : this->Components)
+	{
+		if (component->IsEnable())
+		{
+			if (!editorCamera)
+				component->GameDraw();
+			else
+				component->EditorDraw();
+			component->Draw();
+		}
+	}
+	for (auto child : this->Childrens)
+	{
+		if (!child->_active)
+			continue;
+		child->DrawSelfAndChild(editorCamera);
+	}
 }
 
 #include "Include/Core/Components/SkeletalMeshComponent.h"

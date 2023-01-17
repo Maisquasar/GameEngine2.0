@@ -18,6 +18,8 @@ namespace Core::Components
 
 		void Initialize() override;
 		void Update() override;
+		void EditorUpdate() override;
+		void EditorDraw() override;
 		void DrawPicking(int id) override;
 
 		void ShowInInspector() override;
