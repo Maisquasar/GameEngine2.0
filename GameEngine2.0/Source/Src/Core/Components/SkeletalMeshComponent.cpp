@@ -1,10 +1,12 @@
 #include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Resources/Skeleton.h"
 #include "Include/Resources/SkeletalMesh.h"
+#include "Include/Resources/Mesh.h"
 #include "Include/App.h"
 #include "Include/Core/Components/AnimationComponent.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
+#include "Include/EditorUi/Inspector.h"
 
 Core::Components::SkeletalMeshComponent::SkeletalMeshComponent() { this->ComponentName = "SkeletalMeshComponent"; }
 
@@ -13,19 +15,19 @@ Core::Components::SkeletalMeshComponent::~SkeletalMeshComponent()
 	if (GameObject)
 		if (auto anim = GameObject->GetComponent<AnimationComponent>())
 			anim->SetSkeleton(nullptr);
-	delete Skeleton;
+	if (Skeleton)
+		delete Skeleton;
 }
 
 void Core::Components::SkeletalMeshComponent::DrawPicking(int id)
 {
 	if (!Mesh || !_enable)
 		return;
-	if (Mesh)
+	if (Mesh && _showMesh)
 		Mesh->DrawPicking(this->GameObject->Transform.GetModelMatrix(), _materials, Skeleton, id);
 }
 
-#include "Include/EditorUi/Inspector.h"
-void Core::Components::SkeletalMeshComponent::Update()
+void Core::Components::SkeletalMeshComponent::Draw()
 {
 	if (Skeleton && _showSkeleton && Skeleton->RootBone) {
 		Skeleton->RootBone->DrawDebug();
@@ -33,6 +35,10 @@ void Core::Components::SkeletalMeshComponent::Update()
 	if (Mesh && _showMesh) {
 		Mesh->Update(GameObject->Transform.GetModelMatrix(), _materials, Skeleton, EditorUi::Editor::GetInspector()->IsSelected(GameObject));
 	}
+}
+
+void Core::Components::SkeletalMeshComponent::Update()
+{
 }
 
 void Core::Components::SkeletalMeshComponent::ShowInInspector()
@@ -71,15 +77,7 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 		ImGui::OpenPopup("SkeletalMeshPopup");
 	}
 	if (auto m = Application.GetResourceManager()->ResourcesPopup<Resources::SkeletalMesh>("SkeletalMeshPopup")) {
-		Mesh = m;
-		_materials.resize(Mesh->SubMeshes.size());
-		for (auto& mat : _materials)
-		{
-			if (!mat)
-			{
-				mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
-			}
-		}
+		SetMesh(m);
 	}
 	ImGui::SameLine();
 	name = "None";
@@ -191,10 +189,27 @@ void Core::Components::SkeletalMeshComponent::ShowInInspector()
 
 void Core::Components::SkeletalMeshComponent::SetSkeleton(Resources::Skeleton* skel)
 {
-	if (Skeleton)
+	if (!skel)
+		return;
+	if (Skeleton && Skeleton != skel)
 		delete Skeleton;
-	Skeleton = Cast(Resources::Skeleton, skel->Clone());
+	Skeleton = dynamic_cast<Resources::Skeleton*>(skel)->Clone();
 	Skeleton->RootBone->SetParent(GameObject);
+}
+
+void Core::Components::SkeletalMeshComponent::SetMesh(Resources::Mesh* mesh)
+{
+	if (!mesh)
+		return;
+	Mesh = (Resources::SkeletalMesh*)mesh;
+	_materials.resize(mesh->SubMeshes.size());
+	for (auto& mat : _materials)
+	{
+		if (!mat)
+		{
+			mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
+		}
+	}
 }
 
 void Core::Components::SkeletalMeshComponent::Save(std::string space, std::string& content)
@@ -226,6 +241,18 @@ void Core::Components::SkeletalMeshComponent::Load(const char* data, uint32_t& p
 		}
 		pos++;
 	}
+}
+
+Core::Components::SkeletalMeshComponent* Core::Components::SkeletalMeshComponent::Clone() const
+{
+	auto cloned = new SkeletalMeshComponent(static_cast<SkeletalMeshComponent const&>(*this));
+	cloned->SetSkeleton(this->Skeleton);
+	return cloned;
+}
+
+void Core::Components::SkeletalMeshComponent::AddMaterial(Resources::Material* mat)
+{
+	this->_materials.push_back(mat);
 }
 
 void Core::Components::SkeletalMeshComponent::SetUIIcon()

@@ -12,6 +12,7 @@ namespace Resources
 	class SkeletalMesh;
 	class Mesh;
 	class IResource;
+	class Model;
 }
 
 namespace ofbx
@@ -51,7 +52,7 @@ namespace Utils::Loader
 	void LoadMaterial(std::string path);
 
 	void FBXLoad(std::string path);
-	void LoadMesh(const ofbx::Mesh* mesh, std::string path);
-	void LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resources::SkeletalMesh* res,int index_count);
+	void LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources::Model*);
+	void LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resources::SkeletalMesh* res,int index_count, Resources::Model*);
 	void LoadAnimation(const ofbx::AnimationStack* stack, std::string path);
 }

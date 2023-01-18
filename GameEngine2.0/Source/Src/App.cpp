@@ -331,13 +331,11 @@ void App::MultiThreadLoad()
 
 	if (ImGui::Begin("LoadingWindow")) {
 		float fraction = (float)loaded / (float)total;
+		if (fraction == 1.0f)
+			_everythingIsLoaded = true;
 		ImGui::ProgressBar(fraction);
 	}
 	ImGui::End();
-
-	if (loaded == total)
-		_everythingIsLoaded = true;
-
 }
 #pragma endregion
 

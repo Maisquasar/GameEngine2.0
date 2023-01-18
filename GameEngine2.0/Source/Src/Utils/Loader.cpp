@@ -377,13 +377,29 @@ void Utils::Loader::LoadMaterial(std::string path)
 
 static float FileFrameRate = 0;
 
+#include "Include/Resources/SkeletalMesh.h"
+#include "Include/Resources/Model.h"
+#include "Include/Core/Components/MeshComponent.h"
+#include "Include/Core/Components/SkeletalMeshComponent.h"
+
 void MutlithreadLoad(ofbx::IScene* Scene, std::string path)
 {
 	if (Scene) {
 		FileFrameRate = Scene->getSceneFrameRate();
 		int count = Scene->getMeshCount();
-		for (int i = 0; i < count; i++)
-			Utils::Loader::LoadMesh(Scene->getMesh(i), path);
+		if (count > 0) {
+			Resources::Model* model = new Resources::Model();
+			model->SetPath(path);
+			auto name = path.substr(path.find_last_of('/') + 1);
+			model->SetName(name);
+
+			for (int i = 0; i < count; i++)
+				Utils::Loader::LoadMesh(Scene->getMesh(i), path, model);
+
+			model->Loaded = true;
+			model->SetInitialized();
+			Application.GetResourceManager()->Add(path, model);
+		}
 
 		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
 		{
@@ -412,9 +428,8 @@ void Utils::Loader::FBXLoad(std::string path)
 	delete[] data;
 }
 
-#include "Include/Resources/SkeletalMesh.h"
 
-void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
+void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources::Model* model)
 {
 	// Set-Up Mesh
 	bool HasSkeleton = mesh->getGeometry()->getSkin() != nullptr;
@@ -425,6 +440,22 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 		Mesh = new Resources::SkeletalMesh();
 	Mesh->SetName(mesh->name);
 	Mesh->SetPath(path + "::" + Mesh->GetName());
+
+	// Model Update
+	model->AddChildren(new Core::Node());
+	auto node = model->Childrens.back();
+	node->Name = mesh->name;
+	Core::Components::MeshComponent* meshComp = nullptr;
+	Core::Components::SkeletalMeshComponent* skelMeshComp = nullptr;
+	if (!HasSkeleton) {
+		meshComp = new Core::Components::MeshComponent();
+		node->AddComponent(meshComp);
+	}
+	else
+	{
+		skelMeshComp = new Core::Components::SkeletalMeshComponent();
+		node->AddComponent(skelMeshComp);
+	}
 
 	// Vertices Loading.
 	auto sca = mesh->getLocalScaling();
@@ -471,7 +502,12 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 						Application.GetResourceManager()->Add<Resources::Material>(matPath, mat);
 					}
 				}
-
+				if (meshComp)
+					meshComp->AddMaterial(mat);
+				else if (skelMeshComp) {
+					mat->SetShader(Application.GetResourceManager()->GetDefaultAnimShader());
+					skelMeshComp->AddMaterial(mat);
+				}
 				Mesh->SubMeshes.push_back(Resources::SubMesh());
 				Mesh->SubMeshes.back().StartIndex = lastIndex;
 				Mesh->SubMeshes.back().Count = (i * 3 - lastIndex);
@@ -495,6 +531,12 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 			mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
 			mat->SetDiffuse(Math::Vec4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
 			Application.GetResourceManager()->Add<Resources::Material>(matPath.c_str(), mat);
+		}
+		if (meshComp)
+			meshComp->AddMaterial(mat);
+		else if (skelMeshComp) {
+			mat->SetShader(Application.GetResourceManager()->GetDefaultAnimShader());
+			skelMeshComp->AddMaterial(mat);
 		}
 	}
 	Mesh->SubMeshes.push_back(Resources::SubMesh());
@@ -527,9 +569,13 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path)
 #endif
 		Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
 	}
+	if (meshComp)
+		meshComp->SetMesh(Mesh);
+	else if (skelMeshComp)
+		skelMeshComp->SetMesh(Mesh);
 
 	if (auto skin = mesh->getGeometry()->getSkin())
-		LoadSkeleton(skin, path + "::" + Mesh->GetName(), dynamic_cast<Resources::SkeletalMesh*>(Mesh), index_count);
+		LoadSkeleton(skin, path + "::" + Mesh->GetName(), dynamic_cast<Resources::SkeletalMesh*>(Mesh), index_count, model);
 }
 
 #include "Include/Resources/Skeleton.h"
@@ -540,7 +586,7 @@ struct BonesVertices
 	float weigth;
 };
 
-void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resources::SkeletalMesh* mesh, int index_count)
+void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resources::SkeletalMesh* mesh, int index_count, Resources::Model* model)
 {
 	if (!mesh)
 		PrintError("Error mesh == nullptr");
@@ -676,7 +722,7 @@ void Utils::Loader::LoadSkeleton(const ofbx::Skin* Skel, std::string path, Resou
 	NewSkel->SetInitialized();
 	Application.GetResourceManager()->Add<Resources::SkeletalMesh>(mesh->GetPath(), mesh);
 	Application.GetResourceManager()->Add(NewSkel->GetPath(), NewSkel);
-
+	model->Childrens.back()->GetComponent<Core::Components::SkeletalMeshComponent>()->SetSkeleton(NewSkel);
 }
 
 #include "Include/Resources/Animation.h"

@@ -83,6 +83,7 @@ Bone* Bone::CloneNode()
 	auto node = new Bone(static_cast<Bone const&>(*this));
 	node->Childrens.clear();
 	node->Components.clear();
+	node->Transform.GameObject = node;
 	for (auto child : Childrens)
 	{
 		node->AddChildren(child->CloneNode());
