@@ -217,7 +217,7 @@ std::vector<Bone*> Bone::GetAllBones()
 
 Math::Mat4 Bone::GetBoneMatrix()
 {
-	auto result = Transform.GetModelMatrix(true) * DefaultMatrix;
+	auto result = Transform.GetModelMatrix() * DefaultMatrix;
 	return result;
 }
 #pragma endregion

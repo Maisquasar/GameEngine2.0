@@ -31,3 +31,4 @@ int main()
 //TODO: Fix Animation for other exportation than Mixamo
 //TODO: Physics
 //TODO: Show 3D models on Models selection (Same for Materials spheres)
+//TODO: Fix Skeletal Model Node Creation

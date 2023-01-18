@@ -36,7 +36,7 @@ namespace Core::Components
 
 	private:
 		bool _showMesh = true;
-		bool _showSkeleton = true;
+		bool _showSkeleton = false;
 		std::vector<Resources::Material*> _materials;
 
 	};
