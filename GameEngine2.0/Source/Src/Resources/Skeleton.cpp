@@ -78,14 +78,14 @@ void Bone::SetDefault()
 	}
 }
 
-Bone* Bone::Clone()
+Bone* Bone::CloneNode()
 {
 	auto node = new Bone(static_cast<Bone const&>(*this));
 	node->Childrens.clear();
 	node->Components.clear();
 	for (auto child : Childrens)
 	{
-		node->AddChildren(child->Clone());
+		node->AddChildren(child->CloneNode());
 	}
 	for (auto child : Components)
 	{
@@ -238,7 +238,7 @@ Resources::Skeleton* Resources::Skeleton::Clone() const
 	// Clone The Skeleton.
 	auto skel = dynamic_cast<Resources::Skeleton*>(BaseResource::Clone());
 	// Clone All Bones.
-	Bone* node = skel->RootBone->Clone();
+	Bone* node = skel->RootBone->CloneNode();
 	skel->RootBone = node;
 	auto bones = skel->RootBone->GetAllBones();
 	skel->Bones = bones;

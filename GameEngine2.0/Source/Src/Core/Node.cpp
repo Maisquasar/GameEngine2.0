@@ -59,18 +59,20 @@ void Core::Node::SetParent(Node* node)
 	}
 }
 
-Core::Node* Core::Node::Clone()
+Core::Node* Core::Node::CloneNode()
 {
 	auto node = new Node(static_cast<Node const&>(*this));
 	node->Childrens.clear();
 	node->Components.clear();
+	node->Transform.GameObject = node;
+	for (auto comp : Components)
+	{
+		node->AddComponent(comp->Clone());
+	}
 	for (auto child : Childrens)
 	{
-		node->AddChildren(child->Clone());
-	}
-	for (auto child : Components)
-	{
-		node->AddComponent(child->Clone());
+		auto newChild = child->CloneNode();
+		node->AddChildren(newChild);
 	}
 	return node;
 }

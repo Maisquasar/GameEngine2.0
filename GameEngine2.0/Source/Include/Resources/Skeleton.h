@@ -19,7 +19,7 @@ public:
 	void SetDefault();
 
 	// Clone this Bones and his childrens.
-	Bone* Clone() override;
+	Bone* CloneNode() override;
 
 	void Save(std::string space, std::string& content) override;
 	void Load(const char* data, uint32_t& pos) override;

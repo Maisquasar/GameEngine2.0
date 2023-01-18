@@ -32,6 +32,23 @@ void Resources::Model::MultiThreadLoad(std::string filename)
 	delete[] data;
 }
 
+Core::Node* Resources::Model::CreateFromModel()
+{
+	auto node = new Core::Node(*this);
+	node->Childrens.clear();
+	for (int i = 0; i < Childrens.size(); i++)
+	{
+		auto newChild = new Core::Node(*Childrens[i]);
+		newChild->Components.clear();
+		for (auto comp : newChild->Components)
+		{
+			newChild->AddComponent(comp->Clone());
+		}
+		node->AddChildren(newChild);
+	}
+	return node;
+}
+
 bool Resources::Model::IsInitialized()
 {
 	/*
@@ -55,7 +72,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	std::string prefix;
 	std::vector<Resources::Mesh> Meshes;
 	Math::Vec3 lastSize;
-
+	this->Name = GetName();
 	while (pos != size)
 	{
 		currentLine = Utils::Loader::GetLine(data, pos);
@@ -67,10 +84,18 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 
 				if (Meshes.back().SubMeshes.size() > 0)
 					Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
+				Meshes.back().Load("");
+				Meshes.back().SetPath(GetPath() + "::" + Meshes.back().GetName());
+				auto meshptr = new Resources::Mesh(Meshes.back());
+				Application.GetResourceManager()->Add(GetPath() + "::" + Meshes.back().GetName(), meshptr);
+				this->Childrens.back()->GetComponent<Core::Components::MeshComponent>()->SetMesh(meshptr);
+				this->Childrens.back()->Name = meshptr->GetName().c_str();
 			}
 			Meshes.push_back(Resources::Mesh());
 			std::string Name = Utils::Loader::GetString(currentLine);
 			Meshes.back().SetName(Name);
+			this->AddChildren(new Node());
+			this->Childrens.back()->AddComponent(new Core::Components::MeshComponent());
 		}
 		else if (prefix == "mt")
 		{
@@ -119,7 +144,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 			MaterialName = GetPath().substr(0, GetPath().find_last_of('/') + 1) + MaterialName + ".mat";
 			Resources::Material* mat;
 			if (mat = Application.GetResourceManager()->Get<Resources::Material>(MaterialName.c_str())) {
-				//subMesh.Material = mat;
+				this->Childrens.back()->GetComponent<Core::Components::MeshComponent>()->AddMaterial(mat);
 			}
 			else
 			{
@@ -129,19 +154,20 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 				}
 				else
 					mat = Application.GetResourceManager()->Get<Resources::Material>("DefaultMaterial");
-				//subMesh.Material = mat;
+				this->Childrens.back()->GetComponent<Core::Components::MeshComponent>()->AddMaterial(mat);
 			}
 			Meshes.back().SubMeshes.push_back(subMesh);
 		}
 		pos++;
 	}
-	if (Meshes.back().SubMeshes.size() > 0)
+	if (Meshes.back().SubMeshes.size() > 0) {
 		Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
-	for (auto mesh : Meshes)
-	{
-		mesh.Load("");
-		mesh.SetPath(GetPath() + "::" + mesh.GetName());
-		Application.GetResourceManager()->Add(GetPath() + "::" + mesh.GetName(), new Resources::Mesh(mesh));
+		Meshes.back().Load("");
+		Meshes.back().SetPath(GetPath() + "::" + Meshes.back().GetName());
+		auto meshptr = new Resources::Mesh(Meshes.back());
+		Application.GetResourceManager()->Add(GetPath() + "::" + Meshes.back().GetName(), meshptr);
+		this->Childrens.back()->GetComponent<Core::Components::MeshComponent>()->SetMesh(meshptr);
+		this->Childrens.back()->Name = meshptr->GetName().c_str();
 	}
 	_initialized = true;
 }

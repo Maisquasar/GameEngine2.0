@@ -29,7 +29,8 @@ void Core::Scene::Initialize()
 void Core::Scene::Update()
 {
 	// First Render form camera Editor.
-	if (_cameraEditor.IsVisible() && Application.GetGameState() == GameState::Editor) {
+	_sceneNode->UpdateSelfAndChilds();
+	if (_cameraEditor.IsVisible()) {
 		_currentCamera = &_cameraEditor;
 		_VP = _cameraEditor.GetVP();
 		_cameraEditor.PreUpdate();
@@ -49,8 +50,6 @@ void Core::Scene::Update()
 		PickingUpdate(_sceneNode->GetAllChildrens());
 
 		_grid.Draw();
-
-		_sceneNode->UpdateSelfAndChilds();
 
 		_sceneNode->DrawSelfAndChild(true);
 

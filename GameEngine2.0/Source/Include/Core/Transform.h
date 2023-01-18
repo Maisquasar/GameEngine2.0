@@ -59,6 +59,8 @@ namespace Core
 
 		bool IsDirty() { return _dirty; }
 
+		void SetDirty() { _dirty = true; }
+
 	private:
 		Math::Mat4 _modelMatrix = Math::Mat4::Identity();
 		Math::Vec3 _localPosition = Math::Vec3();

@@ -101,7 +101,7 @@ void Core::Components::CameraComponent::SetUIIcon()
 
 bool Core::Components::CameraComponent::IsVisible()
 {
-	return GameObject->IsSelected() || (_MainCamera && EditorUi::Editor::GetGameWindow()->IsOpen());
+	return GameObject->IsSelected() || (_MainCamera && EditorUi::Editor::GetGameWindow()->Window->DockTabIsVisible);
 }
 
 Core::Transform* Core::Components::CameraComponent::GetTransform()

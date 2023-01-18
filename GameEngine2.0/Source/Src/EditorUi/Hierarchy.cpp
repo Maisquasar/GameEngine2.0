@@ -1,5 +1,6 @@
 #include "Include/EditorUi/Hierarchy.h"
 #include "Include/EditorUi/Inspector.h"
+#include "Include/Resources/Model.h"
 #include "Include/App.h"
 #include "Include/Utils/Input.h"
 #include "Include/Core/Node.h"
@@ -83,10 +84,22 @@ void EditorUi::Hierarchy::RightClickWindow()
 			}
 			ImGui::CloseCurrentPopup();
 		}
+		if (ImGui::Button("Load Model"))
+		{
+			ImGui::OpenPopup("ModelPopup");
+		}
+		if (auto model = Application.GetResourceManager()->ResourcesPopup<Resources::Model>("ModelPopup"))
+		{
+			auto m = model->CloneNode();
+			//_rightClicked[0]->AddChildren(m);
+			_rightClicked[0]->AddChildren(m);
+			ImGui::CloseCurrentPopup();
+		}
 		if (ImGui::Button("Clear Parent"))
 		{
 			for (auto node : _rightClicked) {
-				node->SetParent(Application.GetScene()->GetSceneNode());
+				if (node->Parent)
+					node->SetParent(Application.GetScene()->GetSceneNode());
 			}
 			ImGui::CloseCurrentPopup();
 		}

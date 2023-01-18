@@ -15,6 +15,8 @@ namespace Resources
 		void ModelLoop(const char* data, const int32_t& size);
 		void MultiThreadLoad(std::string filename);
 
+		Core::Node* CreateFromModel();
+
 		bool IsInitialized() override;
 	private:
 

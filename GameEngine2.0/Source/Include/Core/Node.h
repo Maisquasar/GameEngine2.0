@@ -28,7 +28,7 @@ namespace Core {
 		void SetParent(Node* node);
 
 		// Clone this Node and his children.
-		virtual Node* Clone();
+		virtual Node* CloneNode();
 
 		void RemoveChildren(Node* node);
 		void RemoveFromParent();
