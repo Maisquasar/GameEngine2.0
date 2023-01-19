@@ -30,6 +30,16 @@ void TextEditorWindow::Draw()
 	ImGui::End();
 }
 
+bool TextEditorWindow::IsTabOpen(std::string tabName)
+{
+	for (auto&& tab : Tabs) {
+		if (tab.GetPath() == tabName && tab.IsOpen()) {
+			return true;
+		}
+	}
+	return false;
+}
+
 
 // TODO
 // - multiline comments vs single-line: latter is blocking start of a ML
@@ -2931,7 +2941,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::GLSL()
 		static const char* const keywords[] = {
 			"auto", "break", "case", "char", "const", "continue", "default", "do", "double", "else", "enum", "extern", "float", "for", "goto", "if", "inline", "int", "long", "register", "restrict", "return", "short",
 			"signed", "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned", "void", "volatile", "while", "_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary",
-			"_Noreturn", "_Static_assert", "_Thread_local"
+			"_Noreturn", "_Static_assert", "_Thread_local", "vec4", "vec3", "vec2", "uniform"
 		};
 		for (auto& k : keywords)
 			langDef.mKeywords.insert(k);

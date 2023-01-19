@@ -23,8 +23,12 @@ Core::Components::Component* ComponentsPopup()
 	Core::Components::Component* out = nullptr;
 	if (ImGui::BeginPopup("Components", ImGuiWindowFlags_AlwaysVerticalScrollbar))
 	{
+		static ImGuiTextFilter filter;
+		filter.Draw("##");
 		for (auto component : Application.Components.Components)
 		{
+			if (!filter.PassFilter(component->ComponentName.c_str()))
+				continue;
 			if (auto icon = component->GetUIIcon()) {
 				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1.f);
 				ImGui::Image((ImTextureID)static_cast<uintptr_t>(icon->GetData()), ImVec2(16, 16));

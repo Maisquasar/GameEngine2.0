@@ -34,7 +34,7 @@ void EditorUi::FileExplorer::Draw()
 	if (ImGui::Begin(_windowName.c_str(), &_open, flag))
 	{
 		// ------------- Folders List ------------- //
-		ImGui::BeginChild("List", ImVec2(ImGui::GetWindowWidth() * 0.1f, 0));
+		ImGui::BeginChild("List", ImVec2(ImGui::GetWindowWidth() * 0.15f, 0), false, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
 		File* clicked = nullptr;
 		_main->DrawInFileExplorer(clicked);
 		if (clicked)
@@ -147,7 +147,7 @@ void EditorUi::FileExplorer::Draw()
 			}
 		}
 		ImGui::EndChild();
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && !rightclick)
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && !rightclick)
 		{
 			ImGui::OpenPopup("RightClick");
 			_rightClicked = nullptr;

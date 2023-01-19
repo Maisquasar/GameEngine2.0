@@ -267,6 +267,7 @@ public:
 	static const Palette& GetRetroBluePalette();
 
 	std::string GetTitle() { return _title; }
+	std::string GetPath() { return _path; }
 	bool IsOpen() { return _open; }
 
 	void SetOpen(bool value) { _open = value; }
@@ -409,6 +410,7 @@ public :
 
 	void SetOpen(bool value) { _open = value; }
 	bool IsOpen() { return _open; }
+	bool IsTabOpen(std::string tabName);
 
 	std::vector<TextEditor> Tabs;
 private:

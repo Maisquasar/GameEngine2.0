@@ -369,6 +369,8 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 				if (ImGui::Button("Edit"))
 				{
 					// Settings Parameters
+					if (EditorUi::Editor::GetTextEditor()->IsTabOpen(_rightClicked->Directory.c_str()))
+						break;
 					EditorUi::Editor::GetTextEditor()->Tabs.push_back(TextEditor());
 					EditorUi::Editor::GetTextEditor()->Tabs.back().SetTitle(_rightClicked->Name.c_str());
 					EditorUi::Editor::GetTextEditor()->Tabs.back().SetOpen(true);
@@ -406,7 +408,6 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 			// ------------- Show in Explorer ------------- //
 			if (ImGui::Button("Show in Explorer"))
 			{
-
 				auto dir = _rightClicked->Directory;
 				dir = dir.substr(0, dir.find_last_of('/'));
 				if (_rightClicked->Directory.substr(0, _rightClicked->Directory.find_first_of('/')) == "Assets")
