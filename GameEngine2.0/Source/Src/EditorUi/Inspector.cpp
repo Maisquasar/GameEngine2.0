@@ -5,6 +5,7 @@
 #include "Include/EditorUi/FileExplorer.h"
 #include "Include/EditorUi/File.h"
 #include "Include/Core/Node.h"
+#include "Include/Resources/Texture.h"
 
 std::vector<Core::Node*> EditorUi::Inspector::NodesSelected;
 EditorUi::File* EditorUi::Inspector::FileSelected;
@@ -60,6 +61,14 @@ void EditorUi::Inspector::Draw()
 			// Transform
 			if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 			{
+				if (auto icon = NodesSelected[0]->Transform.GetUIIcon()) {
+					ImGui::SameLine();
+					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1.f);
+					float cx = ImGui::GetCursorPosX();
+					float x = ImGui::GetWindowSize().x * 7 / 8;
+					ImGui::SetCursorPosX(x);
+					ImGui::Image((ImTextureID)static_cast<uintptr_t>(icon->GetData()), ImVec2(16, 16));
+				}
 				NodesSelected[0]->Transform.ShowInInspector();
 			}
 			ImGui::NewLine();

@@ -391,11 +391,6 @@ void App::Update()
 void App::EndFrame()
 {
 	// End Main Update.
-	auto clearColor = _scene.GetClearColor();
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(clearColor.x * clearColor.w, clearColor.y * clearColor.w, clearColor.z * clearColor.w, clearColor.w);
-	glClear(GL_DEPTH_BUFFER_BIT);
-
 	// Rendering.
 	ImGui::Render();
 

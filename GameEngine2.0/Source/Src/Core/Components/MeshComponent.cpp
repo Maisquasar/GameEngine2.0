@@ -4,6 +4,7 @@
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Resources/Mesh.h"
 #include "Include/Resources/Material.h"
+#include "Include/Resources/Model.h"
 #include "Include/Core/Node.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
@@ -141,6 +142,8 @@ void Core::Components::MeshComponent::ShowInInspector()
 
 void Core::Components::MeshComponent::Update()
 {
+	if (!_currentMesh && !_tempMeshPath.empty())
+		_currentMesh = Application.GetResourceManager()->Get<Resources::Mesh>(_tempMeshPath.c_str());
 }
 
 void Core::Components::MeshComponent::Draw()
@@ -163,10 +166,10 @@ void Core::Components::MeshComponent::DrawPicking(int id)
 
 Resources::Mesh* Core::Components::MeshComponent::GetMesh()
 {
-	return static_cast<Resources::Mesh*>(_currentMesh);
+	return _currentMesh;
 }
 
-void Core::Components::MeshComponent::SetMesh(Resources::IResource* mesh)
+void Core::Components::MeshComponent::SetMesh(Resources::Mesh* mesh)
 {
 	_currentMesh = mesh;
 	_materials.resize((dynamic_cast<Resources::Mesh*>(_currentMesh))->SubMeshes.size());
@@ -191,7 +194,6 @@ void Core::Components::MeshComponent::Save(std::string space, std::string& conte
 void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 {
 	std::string currentLine;
-	int SubMeshIndex = 0;
 	while (currentLine.substr(0, 13) != "#EndComponent")
 	{
 		currentLine = Utils::Loader::GetLine(data, pos);
@@ -203,22 +205,14 @@ void Core::Components::MeshComponent::Load(const char* data, uint32_t& pos)
 			}
 			else
 			{
-				_currentMesh = new Resources::Mesh();
-				_currentMesh->SetPath(MeshPath);
-#if MULTITHREAD_LOADING
-				//Application.MultiThreadMeshes.push_back(&_currentMesh);
-#endif
+				_tempMeshPath = MeshPath;
 			}
 		}
 		else if (currentLine.substr(0, 7) == "SubMesh")
 		{
 			auto SubMeshMaterialPath = Utils::Loader::GetString(currentLine);
 			if (auto mat = Application.GetResourceManager()->Get<Resources::Material>(SubMeshMaterialPath.c_str())) {
-				if (GetMesh()->SubMeshes.size() <= SubMeshIndex) {
-					GetMesh()->SubMeshes.push_back(Resources::SubMesh());
-				}
 				_materials.push_back(mat);
-				SubMeshIndex++;
 			}
 		}
 		pos++;

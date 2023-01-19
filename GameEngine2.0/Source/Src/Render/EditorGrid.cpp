@@ -50,7 +50,7 @@ void Render::EditorGrid::Draw()
 		{
 			if (!mesh->Loaded)
 				return;
-			_meshComponent->SetMesh(dynamic_cast<Resources::Mesh*>(mesh));
+			_meshComponent->SetMesh(mesh);
 			(*_meshComponent->GetMaterials()).back() = new Resources::Material();
 			(*_meshComponent->GetMaterials()).back()->SetShader(Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/GridShader"));
 

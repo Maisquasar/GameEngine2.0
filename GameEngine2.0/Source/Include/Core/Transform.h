@@ -54,6 +54,7 @@ namespace Core
 		void ForceUpdate();
 
 		void ShowInInspector();
+		void SetUIIcon() override;
 
 		void Save(std::string space, std::string& content) override;
 

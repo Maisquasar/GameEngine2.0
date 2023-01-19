@@ -20,6 +20,11 @@ void Resources::Model::Load(std::string filename)
 #endif
 }
 
+void Resources::Model::LoadSingleThread(std::string filename)
+{
+	MultiThreadLoad(filename);
+}
+
 void Resources::Model::MultiThreadLoad(std::string filename)
 {
 	uint32_t size = 0;
@@ -28,6 +33,8 @@ void Resources::Model::MultiThreadLoad(std::string filename)
 	auto data = Utils::Loader::ReadFile(_path.c_str(), size, sucess);
 	if (sucess)
 		ModelLoop(data, size);
+	else
+		PrintError("Failed loaded Model : %s", _path.c_str());
 	LOG(Debug::LogType::INFO, "Successfully loaded Model : %s", _path.c_str());
 	delete[] data;
 }

@@ -2,10 +2,13 @@
 #include "Include/Core/Components/Component.h"
 #include "Include/Core/Node.h"
 #include "Include/Utils/Loader.h"
+#include "Include/Resources/Texture.h"
+#include "Include/App.h"
 
 Core::Transform::Transform()
 {
 	ComponentName = "Transform";
+	SetUIIcon();
 }
 
 Core::Transform::~Transform() {}
@@ -271,6 +274,11 @@ void Core::Transform::ShowInInspector()
 		SetLocalScale(scale);
 		_dirty = true;
 	}
+}
+
+void Core::Transform::SetUIIcon()
+{
+	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/TransformIcon.png");
 }
 
 void Core::Transform::Save(std::string space, std::string& content)

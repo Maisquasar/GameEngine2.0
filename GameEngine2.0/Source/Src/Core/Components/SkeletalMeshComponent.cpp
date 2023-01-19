@@ -193,8 +193,10 @@ void Core::Components::SkeletalMeshComponent::SetSkeleton(Resources::Skeleton* s
 		return;
 	if (Skeleton && Skeleton != skel)
 		delete Skeleton;
-	Skeleton = dynamic_cast<Resources::Skeleton*>(skel)->Clone();
-	Skeleton->RootBone->SetParent(GameObject);
+	if (!Application.GetResourceManager()->IsDeleted()) {
+		Skeleton = dynamic_cast<Resources::Skeleton*>(skel->Clone());
+		Skeleton->RootBone->SetParent(GameObject);
+	}
 }
 
 void Core::Components::SkeletalMeshComponent::SetMesh(Resources::Mesh* mesh)

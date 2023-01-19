@@ -62,7 +62,7 @@ void Core::Scene::Update()
 
 		_cameraEditor.FrameBuffer.Draw();
 	}
-	if (GetMainCamera())
+	if (GetMainCamera() && EditorUi::Editor::GetGameWindow()->Window)
 	{
 		this->_mainCamera->AspectRatio = EditorUi::Editor::GetGameWindow()->Window->Size.x / EditorUi::Editor::GetGameWindow()->Window->Size.y;
 	}

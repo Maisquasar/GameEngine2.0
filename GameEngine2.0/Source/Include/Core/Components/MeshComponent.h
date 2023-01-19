@@ -27,7 +27,7 @@ namespace Core::Components {
 		void DrawPicking(int id) override;
 
 		Resources::Mesh* GetMesh();
-		void SetMesh(Resources::IResource* mesh);
+		void SetMesh(Resources::Mesh* mesh);
 		void SetUIIcon() override;
 
 		void AddMaterial(Resources::Material* mat);
@@ -37,6 +37,7 @@ namespace Core::Components {
 		void Load(const char* data, uint32_t& pos) override;
 	private:
 		std::vector<Resources::Material*> _materials;
-		Resources::IResource* _currentMesh;
+		Resources::Mesh* _currentMesh;
+		std::string _tempMeshPath;
 	};
 }
