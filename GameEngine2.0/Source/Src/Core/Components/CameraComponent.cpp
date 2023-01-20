@@ -45,7 +45,6 @@ void Core::Components::CameraComponent::Initialize()
 	{
 		SetMainCamera();
 	}
-	
 }
 
 void Core::Components::CameraComponent::Update()
@@ -85,6 +84,16 @@ void Core::Components::CameraComponent::ShowInInspector()
 	ImGui::BeginDisabled(this->_MainCamera);
 	if (ImGui::Button("Set Main Camera")) { SetMainCamera(); }
 	ImGui::EndDisabled();
+	if (ImGui::Button("Screen Shader"))
+	{
+		ImGui::OpenPopup("ScreenShaderPopup");
+	}
+	if (auto shad = Application.GetResourceManager()->ResourcesPopup<Resources::Shader>("ScreenShaderPopup"))
+	{
+		FrameBuffer.shader = shad;
+	}
+	ImGui::SameLine();
+	ImGui::TextUnformatted(FrameBuffer.shader->GetName().c_str());
 
 }
 
@@ -112,6 +121,7 @@ Core::Transform* Core::Components::CameraComponent::GetTransform()
 void Core::Components::CameraComponent::Save(std::string space, std::string& content)
 {
 	content += space + Utils::StringFormat("MainCamera : %d\n", this->_MainCamera);
+	content += space + Utils::StringFormat("ScreenShader : %s\n", this->FrameBuffer.shader->GetPath().c_str());
 }
 
 void Core::Components::CameraComponent::Load(const char* data, uint32_t& pos)
@@ -124,6 +134,11 @@ void Core::Components::CameraComponent::Load(const char* data, uint32_t& pos)
 		{
 			if ((bool)Utils::Loader::GetInt(currentLine))
 				SetMainCamera();
+		}
+		else if (currentLine.substr(0, 12) == "ScreenShader")
+		{
+			auto string = Utils::Loader::GetString(currentLine);
+			FrameBuffer.shader = Application.GetResourceManager()->Get<Resources::Shader>(string.c_str());
 		}
 		pos++;
 	}

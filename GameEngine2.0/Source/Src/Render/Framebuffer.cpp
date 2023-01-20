@@ -3,18 +3,49 @@
 #include "Include/App.h"
 #include "Include/Utils/Utils.h"
 
-Render::FrameBuffer::FrameBuffer() {}
+Render::FrameBuffer::FrameBuffer() {
+}
 
 Render::FrameBuffer::~FrameBuffer()
 {
+	if (_VAO != 0)
+		glDeleteVertexArrays(1, &_VAO);
+	if (_VBO != 0)
+		glDeleteBuffers(1, &_VBO);
 	glDeleteFramebuffers(1, &FBO);
 	glDeleteRenderbuffers(1, &_RBO);
 }
 
 void Render::FrameBuffer::Initialize(Math::IVec2 size)
 {
-	//this->shader = Application.GetResourceManager()->Get<Resources::Shader>("DefaultScreenShader");
-	// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+	if (!shader)
+	{
+		this->shader = Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/DefaultScreenShader");
+	}
+	float quadVertices[] = {
+		// positions   // texCoords
+		-1.0f,  1.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		 1.0f, -1.0f, 1.0f, 0.0f,
+
+		-1.0f,  1.0f, 0.0f, 1.0f,
+		 1.0f, -1.0f, 1.0f, 0.0f,
+		 1.0f,  1.0f, 1.0f, 1.0f,
+	};
+
+	glGenVertexArrays(1, &_VAO);
+	glGenBuffers(1, &_VBO);
+
+	glBindVertexArray(_VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -53,6 +84,17 @@ void Render::FrameBuffer::Initialize(Math::IVec2 size)
 
 void Render::FrameBuffer::Draw()
 {
+	// Force Fill Mode.
+	//glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+	// clear all relevant buffers
+
+	glUseProgram(shader->Program);
+	glUniform1i(shader->GetLocation(Resources::Location::L_TEXTURE), Tex->GetIndex());
+	glBindVertexArray(_VAO);
+	glActiveTexture(GL_TEXTURE0 + Tex->GetIndex());
+	glBindTexture(GL_TEXTURE_2D, Tex->GetData());
 	// Draw The Quad
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

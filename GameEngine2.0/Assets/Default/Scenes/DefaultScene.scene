@@ -12,6 +12,7 @@ Scale : 1.000000 1.000000 1.000000
 	Scale : 1.000000 1.000000 1.000000
 	#BeginComponent Camera
 	MainCamera : 1
+	ScreenShader : Assets/Default/Shaders/InvertedShader
 	#EndComponent Camera
 	#EndNode
 	#BeginNode

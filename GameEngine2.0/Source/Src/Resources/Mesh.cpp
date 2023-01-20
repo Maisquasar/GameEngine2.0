@@ -10,6 +10,10 @@ Resources::Mesh::Mesh()
 
 Resources::Mesh::~Mesh()
 {
+	if (_VAO != 0)
+		glDeleteVertexArrays(1, &_VAO);
+	if (_VBO != 0)
+		glDeleteBuffers(1, &_VBO);
 }
 
 void Resources::Mesh::Load(std::string filename)

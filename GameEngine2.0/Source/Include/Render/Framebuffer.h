@@ -4,8 +4,11 @@
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_internal.h>
 #include "../Math/Math.h"
-#include "../Resources/ResourceManager.h"
-
+namespace Resources
+{
+	class Texture;
+	class Shader;
+}
 namespace Render {
 	class FrameBuffer
 	{
@@ -20,6 +23,8 @@ namespace Render {
 		Resources::Shader* shader = nullptr;
 
 		GLuint FBO = 0;
+		GLuint _VAO;
+		GLuint _VBO;
 
 	private:
 		GLuint _RBO = 0;
