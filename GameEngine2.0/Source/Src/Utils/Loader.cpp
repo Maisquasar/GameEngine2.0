@@ -497,7 +497,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources
 		ofbx::Vec3 n = normals[i];
 		ofbx::Vec2 uv = uvs[i];
 		Mesh->Normals.push_back({ (float)n.x, (float)n.y, (float)n.z });
-		Mesh->TextureUVs.push_back({ (float)uv.x, (float)uv.y });
+		Mesh->TextureUVs.push_back({ (float)uv.x, 1 - (float)uv.y });
 
 	}
 
