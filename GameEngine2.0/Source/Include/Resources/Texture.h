@@ -15,9 +15,13 @@ namespace Resources {
 
 		void Load(std::string filename) override;
 
+		void Load(std::string filename, bool shouldFlip);
+
+		void Write();
+
 		void LoadFromMemory(unsigned char* data, int len);
 
-		void MultiThreadLoading(std::string filename);
+		void MultiThreadLoading(std::string filename, bool shouldFlip);
 
 		void Initialize() override;
 

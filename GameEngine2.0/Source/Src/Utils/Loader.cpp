@@ -381,6 +381,7 @@ static float FileFrameRate = 0;
 #include "Include/Resources/Model.h"
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Core/Components/SkeletalMeshComponent.h"
+#include <STB_Image/stb_image.h>
 
 void MutlithreadLoad(ofbx::IScene* Scene, std::string path)
 {
@@ -399,6 +400,29 @@ void MutlithreadLoad(ofbx::IScene* Scene, std::string path)
 			model->Loaded = true;
 			model->SetInitialized();
 			Application.GetResourceManager()->Add(path, model);
+		}
+		for (int i = 0; i < Scene->getEmbeddedDataCount(); i++) {
+			const int size = 4096;
+			char tmp[size];
+			Scene->getEmbeddedFilename(i).toString(tmp);
+			std::string texpath = tmp;
+			auto name = texpath.substr(texpath.find_last_of('\\') + 1);
+			texpath = path.substr(0, path.find_last_of('/') + 1) + name;
+			if (std::filesystem::exists(texpath))
+				continue;
+			auto embedded = Scene->getEmbeddedData(i);
+			auto m_handle = (void*)INVALID_HANDLE_VALUE;
+			m_handle = (HANDLE)::CreateFileA(texpath.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+			assert(INVALID_HANDLE_VALUE != (HANDLE)m_handle);
+			int written = 0;
+			::WriteFile((HANDLE)m_handle, embedded.begin + 4, (DWORD)(embedded.end - embedded.begin - 4), (LPDWORD)&written, nullptr);
+			if (INVALID_HANDLE_VALUE != (HANDLE)m_handle)
+			{
+				::CloseHandle((HANDLE)m_handle);
+				m_handle = (void*)INVALID_HANDLE_VALUE;
+			}
+			// Texture Creation.
+			Application.GetResourceManager()->Create<Resources::Texture>(texpath);
 		}
 
 		for (int i = 0, n = Scene->getAnimationStackCount(); i < n; ++i)
@@ -426,7 +450,7 @@ void Utils::Loader::FBXLoad(std::string path)
 	MutlithreadLoad(Scene, path);
 #endif
 	delete[] data;
-}
+	}
 
 
 void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources::Model* model)
@@ -500,6 +524,15 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources
 						mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
 						mat->SetDiffuse(Math::Vec4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
 						Application.GetResourceManager()->Add<Resources::Material>(matPath, mat);
+						if (auto dif = mesh->getMaterial((int)lastMaterial)->getTexture(ofbx::Texture::DIFFUSE)) {
+							const int size = 4096;
+							char tmp[size];
+							dif->getRelativeFileName().toString(tmp);
+							std::string name = tmp;
+							name = path.substr(0, path.find_last_of('/') + 1) + name.substr(name.find_last_of('\\') + 1);
+							if (auto tex = Application.GetResourceManager()->Get<Resources::Texture>(name.c_str()))
+								mat->SetTexture(tex);
+						}
 					}
 				}
 				if (meshComp)
@@ -531,6 +564,15 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources
 			mat->SetShader(Application.GetResourceManager()->GetDefaultShader());
 			mat->SetDiffuse(Math::Vec4(mesh_mat.r, mesh_mat.g, mesh_mat.b, 1.f));
 			Application.GetResourceManager()->Add<Resources::Material>(matPath.c_str(), mat);
+			if (auto dif = mesh->getMaterial((int)lastMaterial)->getTexture(ofbx::Texture::DIFFUSE)) {
+				const int size = 4096;
+				char tmp[size];
+				dif->getRelativeFileName().toString(tmp);
+				std::string name = tmp;
+				name = path.substr(0, path.find_last_of('/') + 1) + name.substr(name.find_last_of('\\') + 1);
+				if (auto tex = Application.GetResourceManager()->Get<Resources::Texture>(name.c_str()))
+					mat->SetTexture(tex);
+			}
 		}
 		if (meshComp)
 			meshComp->AddMaterial(mat);
@@ -568,7 +610,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources
 		Mesh->Initialize();
 #endif
 		Application.GetResourceManager()->Add(Mesh->GetPath(), Mesh);
-	}
+		}
 	if (meshComp)
 		meshComp->SetMesh(Mesh);
 	else if (skelMeshComp)
@@ -576,7 +618,7 @@ void Utils::Loader::LoadMesh(const ofbx::Mesh* mesh, std::string path, Resources
 
 	if (auto skin = mesh->getGeometry()->getSkin())
 		LoadSkeleton(skin, path + "::" + Mesh->GetName(), dynamic_cast<Resources::SkeletalMesh*>(Mesh), index_count, model);
-}
+	}
 
 #include "Include/Resources/Skeleton.h"
 

@@ -122,7 +122,7 @@ Resources::Texture* Resources::ResourceManager::TexturePopup(const char* popupNa
 				if (!filter.PassFilter(res->GetName().c_str()))
 					continue;
 				ImGui::PushID(id++);
-				ImGui::Image((ImTextureID)static_cast<uintptr_t>(res->GetData()), ImVec2(16, 16), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image((ImTextureID)static_cast<uintptr_t>(res->GetData()), ImVec2(16, 16));
 				ImGui::SameLine();
 				if (ImGui::Selectable(res->GetName().c_str(), false, ImGuiSelectableFlags_SpanAllColumns)) {
 					out = res;

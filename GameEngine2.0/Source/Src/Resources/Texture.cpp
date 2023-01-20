@@ -2,6 +2,8 @@
 #include "Include/App.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <STB_Image/stb_image.h>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <STB_Image/stb_image_write.h>
 
 Resources::Texture::Texture() {}
 
@@ -18,10 +20,24 @@ void Resources::Texture::NewTexture(std::string filename)
 void Resources::Texture::Load(std::string filename)
 {
 #if MULTITHREAD_LOADING
-	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename);
+	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename, false);
 #else
 	MultiThreadLoading(filename);
 #endif
+}
+
+void Resources::Texture::Load(std::string filename, bool shouldFlip)
+{
+#if MULTITHREAD_LOADING
+	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename, shouldFlip);
+#else
+	MultiThreadLoading(filename, shouldFlip);
+#endif
+}
+
+void Resources::Texture::Write()
+{
+	stbi_write_png(GetPath().c_str(), _width, _height, 4, _data, _width * 4);
 }
 
 void Resources::Texture::LoadFromMemory(unsigned char* data, int len)
@@ -44,8 +60,9 @@ void Resources::Texture::LoadFromMemory(unsigned char* data, int len)
 	_initialized = true;
 }
 
-void Resources::Texture::MultiThreadLoading(std::string filename)
+void Resources::Texture::MultiThreadLoading(std::string filename, bool flip)
 {
+	stbi_set_flip_vertically_on_load_thread(flip);
 	_index = Application.GetResourceManager()->TextureIndex;
 	Application.GetResourceManager()->TextureIndex++;
 	int NrChannels;

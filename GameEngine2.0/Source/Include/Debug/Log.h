@@ -53,7 +53,7 @@ namespace Debug {
 #define LOG(t, x, ...) Debug::Log::Print(__FILENAME__, __LINE__, t, x, __VA_ARGS__);
 #define PrintLog(x, ...) Debug::Log::Print(__FILENAME__, __LINE__, Debug::LogType::INFO, x, __VA_ARGS__);
 #define PrintWarning(x, ...) Debug::Log::Print(__FILENAME__, __LINE__, Debug::LogType::WARNING, x, __VA_ARGS__);
-#define PrintError(x, ...) Debug::Log::Print(__FILENAME__, __LINE__, Debug::LogType::WARNING, x, __VA_ARGS__);
+#define PrintError(x, ...) Debug::Log::Print(__FILENAME__, __LINE__, Debug::LogType::L_ERROR, x, __VA_ARGS__);
 #define Serialize(Variable) (#Variable)
 #define Cast(T,x) dynamic_cast<T*>(x)
 #define MULTITHREAD_LOADING true
