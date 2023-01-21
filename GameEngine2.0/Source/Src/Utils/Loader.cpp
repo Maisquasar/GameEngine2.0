@@ -292,6 +292,8 @@ void Utils::Loader::MtlLoader(std::string path)
 
 void Utils::Loader::WriteMaterial(Resources::Material* material)
 {
+	if (!material)
+		return;
 	std::string output;
 	output += StringFormat("Editable : %d\n", material->IsEditable());
 	if (material->GetShader())
