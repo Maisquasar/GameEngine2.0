@@ -21,6 +21,20 @@ void EditorUi::SceneWindow::Draw()
 		if (ImGui::BeginMenuBar()) {
 			ImGui::SetNextItemWidth(100);
 			ImGui::Combo("##", (int*)&Application.GetSettings()->S_Transform, "Local\0World\0");
+			ImGui::SameLine();
+			if (ImGui::BeginMenu("Settings"))
+			{
+				ImGui::Checkbox("Show Grid", &Application.GetScene()->_showGrid);
+				if (ImGui::Button(Application.GetScene()->GetCameraEditor()->FrameBuffer.shader->GetName().c_str()))
+				{
+					ImGui::OpenPopup("ScreenShaderPopup");
+				}
+				if (auto shad = Application.GetResourceManager()->ResourcesPopup<Resources::Shader>("ScreenShaderPopup"))
+				{
+					Application.GetScene()->GetCameraEditor()->FrameBuffer.shader = shad;
+				}
+				ImGui::EndMenu();
+			}
 			ImGui::EndMenuBar();
 		}
 

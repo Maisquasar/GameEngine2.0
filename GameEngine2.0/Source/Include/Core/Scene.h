@@ -8,6 +8,9 @@ namespace Render
 {
 	class Camera;
 }
+namespace EditorUi {
+	class SceneWindow;
+}
 namespace Core
 {
 	namespace Components
@@ -47,10 +50,15 @@ namespace Core
 		Math::Mat4 GetVPMatrix() { return _VP; }
 		Math::Vec4 GetClearColor() { return _clearColor; }
 		std::vector<Render::Camera*> Cameras;
+
 	private:
 		std::string _currentScenePath = "";
+		bool _showGrid = true;
+
 		Math::Mat4 _VP;
+
 		Node* _sceneNode = nullptr;
+
 		Render::Camera* _currentCamera;
 		Render::Camera* _mainCamera;
 
@@ -60,5 +68,6 @@ namespace Core
 		Render::Camera _cameraEditor;
 		Render::Gizmo _gizmo;
 		Render::EditorGrid _grid;
+		friend class EditorUi::SceneWindow;
 	};
 }

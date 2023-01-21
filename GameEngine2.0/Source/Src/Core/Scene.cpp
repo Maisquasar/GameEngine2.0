@@ -49,7 +49,8 @@ void Core::Scene::Update()
 		// Draw Meshes with picking Shader.
 		PickingUpdate(_sceneNode->GetAllChildrens());
 
-		_grid.Draw();
+		if (_showGrid)
+			_grid.Draw();
 
 		_sceneNode->DrawSelfAndChild(true);
 

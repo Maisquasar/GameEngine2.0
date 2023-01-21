@@ -160,7 +160,7 @@ void Resources::Mesh::Update(Math::Mat4 MVP, std::vector<Resources::Material*> m
 		else
 			glDrawArrays(GL_TRIANGLES, (GLsizei)SubMeshes[i].StartIndex, (GLsizei)SubMeshes[i].Count);
 	}
-	if (outline)
+	if (outline && Application.GetScene()->GetCurrentCamera() == Application.GetScene()->GetCameraEditor())
 	{
 
 		// Render the thick wire frame version.
