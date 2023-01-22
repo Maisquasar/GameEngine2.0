@@ -51,6 +51,13 @@ namespace Math {
 		return b;
 	}
 
+	Vec3 GetSphericalCoords(float r, float theta, float phi)
+	{
+		return { r * sinf(theta) * cosf(phi),
+				r * cosf(theta),
+				r * sinf(theta) * sinf(phi) };
+	}
+
 #pragma region Vector 2
 	// ============== Vec2 Class ==============
 	inline Vec2::Vec2(const IVec2& a) : x((float)a.x), y((float)a.y) {}

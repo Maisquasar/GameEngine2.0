@@ -28,7 +28,12 @@ namespace Physic {
 
 		void AddCollider(Core::Components::Collider* object);
 		void RemoveCollider(Core::Components::Collider* object);
-		physx::PxRigidDynamic* CreateCube(const Math::Vec3& shape, physx::PxTransform transform, float mass = 10.f);
+		// Cube
+		physx::PxRigidDynamic* CreateDynamicCube(const Math::Vec3& shape, physx::PxTransform transform, float mass = 10.f);
+		physx::PxRigidStatic* CreateStaticCube(const Math::Vec3& shape, physx::PxTransform transform);
+		// Sphere
+		physx::PxRigidDynamic* CreateDynamicSphere(float radius, physx::PxTransform transform, float mass = 10.f);
+		physx::PxRigidStatic* CreateStaticSphere(float radius, physx::PxTransform transform);
 
 	private:
 		physx::PxDefaultAllocator      _defaultAllocatorCallback;

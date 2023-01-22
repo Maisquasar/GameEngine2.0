@@ -38,11 +38,12 @@ namespace Core::Components {
 		void ShowInInspector() override;
 		void SetUIIcon() override;
 
-		bool RayIntersection(Physic::Ray ray);
-
 		Core::Transform Transform;
+
+		//TODO : Add Save/Load
 	private:
-		physx::PxRigidDynamic* _body;
+		physx::PxRigidDynamic* _dynamicBody;
+		physx::PxRigidStatic* _staticBody;
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;
 		std::vector<float> _vertices;

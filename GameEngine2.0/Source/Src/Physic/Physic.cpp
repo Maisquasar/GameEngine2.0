@@ -107,6 +107,61 @@ std::vector<float> Physic::GetCubeVertices()
 	return vOut;
 }
 
+std::vector<float> Physic::GetSphereVertices(float radius)
+{
+	std::vector<float> vOut;
+	std::vector<Math::Vec3> v;
+	std::vector<Math::Vec3> n;
+	float r = radius;
+	int mLat = 20;
+	int mLon = 20;
+	for (int j = 0; j < mLat; ++j)
+	{
+		float theta0 = ((j + 0) / (float)mLat) * PI;
+		float theta1 = ((j + 1) / (float)mLat) * PI;
+
+		for (int i = 0; i < mLon; ++i)
+		{
+			float phi0 = ((i + 0) / (float)mLon) * 2.f * PI;
+			float phi1 = ((i + 1) / (float)mLon) * 2.f * PI;
+
+			Math::Vec3 c0 = Math::GetSphericalCoords(r, theta0, phi0);
+			Math::Vec3 c1 = Math::GetSphericalCoords(r, theta0, phi1);
+			Math::Vec3 c2 = Math::GetSphericalCoords(r, theta1, phi1);
+			Math::Vec3 c3 = Math::GetSphericalCoords(r, theta1, phi0);
+
+			v.push_back(c0);
+			v.push_back(c1);
+			v.push_back(c2);
+
+			v.push_back(c0);
+			v.push_back(c2);
+			v.push_back(c3);
+
+			n.push_back(c0.UnitVector());
+			n.push_back(c1.UnitVector());
+			n.push_back(c2.UnitVector());
+
+			n.push_back(c0.UnitVector());
+			n.push_back(c2.UnitVector());
+			n.push_back(c3.UnitVector());
+		}
+	}
+
+	for (int k = 0; k < v.size(); k++)
+	{
+		vOut.push_back(v[k].x);
+		vOut.push_back(v[k].y);
+		vOut.push_back(v[k].z);
+
+		vOut.push_back(n[k].x);
+		vOut.push_back(n[k].y);
+		vOut.push_back(n[k].z);
+	}
+
+	return vOut;
+}
+
 Math::Vec3 Physic::ConvertMouseToWorld(Math::Vec2 mousePos, Math::Vec2 screenSize, Render::Camera cameraPos)
 {
 	if (mousePos.x < 0 || mousePos.y < 0 || screenSize.x < mousePos.x || screenSize.y < mousePos.y)

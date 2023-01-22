@@ -1,11 +1,15 @@
 #BeginNode
-Name : Camera
+Name : Cube
 IsActive : 1
-Position : 0.000000 0.000000 -0.282632
+Position : 0.000000 4.863109 0.000000
 Rotation : 0.000000 0.000000 0.000000 1.000000
 Scale : 1.000000 1.000000 1.000000
-#BeginComponent Camera
-MainCamera : 1
-ScreenShader : Assets/Default/Shaders/DefaultScreenShader
-#EndComponent Camera
+#BeginComponent MeshComponent
+Mesh : Assets/Default/Models/Cubic.fbx::Cube
+SubMesh[0] : Assets/Default/Models/Border.mat
+#EndComponent MeshComponent
+#BeginComponent BoxCollider
+#EndComponent BoxCollider
+#BeginComponent Rigidbody
+#EndComponent Rigidbody
 #EndNode

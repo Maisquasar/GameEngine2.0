@@ -34,7 +34,6 @@
     <ClCompile Include="External_Includes\ImGui\TextEditor.cpp" />
     <ClCompile Include="External_Includes\OpenFBX\miniz.c" />
     <ClCompile Include="External_Includes\OpenFBX\ofbx.cpp" />
-    <ClCompile Include="Source\Include\Core\Components\Collider.cpp" />
     <ClCompile Include="Source\Src\Core\Components\AnimationComponent.cpp" />
     <ClCompile Include="Source\Src\Core\Components\CameraComponent.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Collider.cpp" />
@@ -42,7 +41,9 @@
     <ClCompile Include="Source\Src\App.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Component.cpp" />
     <ClCompile Include="Source\Src\Core\Components\ParticleSystem.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\Rigidbody.cpp" />
     <ClCompile Include="Source\Src\Core\Components\SkeletalMeshComponent.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\SphereCollider.cpp" />
     <ClCompile Include="Source\Src\Core\Scene.cpp" />
     <ClCompile Include="Source\Src\Debug\Line.cpp" />
     <ClCompile Include="Source\Src\EditorUi\AnimationWindow.cpp" />
@@ -115,7 +116,9 @@
     <ClInclude Include="Source\Include\Core\Components\Component.h" />
     <ClInclude Include="Source\Include\Core\Components\MeshComponent.h" />
     <ClInclude Include="Source\Include\Core\Components\ParticleSystem.h" />
+    <ClInclude Include="Source\Include\Core\Components\Rigidbody.h" />
     <ClInclude Include="Source\Include\Core\Components\SkeletalMeshComponent.h" />
+    <ClInclude Include="Source\Include\Core\Components\SphereCollider.h" />
     <ClInclude Include="Source\Include\Core\Scene.h" />
     <ClInclude Include="Source\Include\Debug\Line.h" />
     <ClInclude Include="Source\Include\EditorUi\AnimationWindow.h" />

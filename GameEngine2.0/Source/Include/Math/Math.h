@@ -7,6 +7,13 @@
 
 namespace Math
 {
+	class IVec2;
+	class IVec3;
+	class IVec4;
+	class Vec3;
+	class Vec4;
+	class Quat;
+
 	inline float ToRadians(float in);
 
 	inline float ToDegrees(float in);
@@ -26,12 +33,7 @@ namespace Math
 	// Return the Maximum number of the two given.
 	inline float Max(float a, float b);
 
-	class IVec2;
-	class IVec3;
-	class IVec4;
-	class Vec3;
-	class Vec4;
-	class Quat;
+	inline Vec3 GetSphericalCoords(float r, float t, float p);
 
 	class Vec2
 	{

@@ -60,7 +60,7 @@ void Physic::PhysicHandler::Initialize()
 	//mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, PxTolerancesScale(),true, mPvd);
 	_toleranceScale.length = 100;        // typical length of an object
 	_toleranceScale.speed = 981;         // typical speed of an object, gravity*1s is a reasonable choice
-	_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, _toleranceScale, true, _pvd);
+	_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, _toleranceScale, false, _pvd);
 	//mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, mToleranceScale);
 
 	physx::PxSceneDesc sceneDesc(_physics->getTolerancesScale());
@@ -78,9 +78,6 @@ void Physic::PhysicHandler::Initialize()
 		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 	}
 	_defaultMaterial = _physics->createMaterial(0.5f, 0.5f, 0.6f);
-
-	physx::PxRigidStatic* groundPlane = PxCreatePlane(*_physics, physx::PxPlane(0, 1, 0, 0), *_defaultMaterial);
-	_scene->addActor(*groundPlane);
 }
 
 void Physic::PhysicHandler::Update()
@@ -108,10 +105,20 @@ void Physic::PhysicHandler::RemoveCollider(Core::Components::Collider* object)
 	}
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateCube(const Math::Vec3& extent, physx::PxTransform transform, float mass)
+physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCube(const Math::Vec3& extent, physx::PxTransform transform)
 {
-	auto size = extent;
-	physx::PxShape* shape = _physics->createShape(physx::PxBoxGeometry(size.x, size.y, size.z), *_defaultMaterial);
+	physx::PxShape* shape = _physics->createShape(physx::PxBoxGeometry(extent.x, extent.y, extent.z), *_defaultMaterial);
+	physx::PxRigidStatic* body = _physics->createRigidStatic(transform);
+	body->attachShape(*shape);
+	_scene->addActor(*body);
+	shape->release();
+	return body;
+}
+
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCube(const Math::Vec3& extent, physx::PxTransform transform, float mass)
+{
+	physx::PxShape* shape = _physics->createShape(physx::PxBoxGeometry(extent.x, extent.y, extent.z), *_defaultMaterial);
+
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
 	physx::PxRigidBodyExt::updateMassAndInertia(*body, mass);
@@ -120,3 +127,22 @@ physx::PxRigidDynamic* Physic::PhysicHandler::CreateCube(const Math::Vec3& exten
 	return body;
 }
 
+physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticSphere(float radius, physx::PxTransform transform)
+{
+	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
+	physx::PxRigidStatic* body = _physics->createRigidStatic(transform);
+	body->attachShape(*shape);
+	_scene->addActor(*body);
+	shape->release();
+	return body;
+}
+
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, physx::PxTransform transform, float mass)
+{
+	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
+	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
+	body->attachShape(*shape);
+	_scene->addActor(*body);
+	shape->release();
+	return body;
+}

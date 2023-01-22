@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <array>
+
 #include "Include/Math/Math.h"
 #include "Include/Physic/Physic.h"
 #include "Include/Physic/PhysicHandler.h"
@@ -12,6 +13,7 @@
 #include "Include/Debug/Line.h"
 #include "Include/Core/Transform.h"
 #include "Include/Core/Node.h"
+#include "Include/Core/Components/Rigidbody.h"
 
 
 Core::Components::BoxCollider::BoxCollider()
@@ -68,8 +70,11 @@ void Core::Components::BoxCollider::InitializePhysics()
 	auto modelMatrix = GameObject->Transform.GetModelMatrix();
 	auto worlpos = modelMatrix.GetPosition();
 	auto quat = modelMatrix.GetRotation();
-	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w));
-	_body = Application.GetScene()->GetPhysicHandler()->CreateCube(Transform.GetWorldScale(), transform);
+	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
+	if (GameObject->GetComponent<Core::Components::Rigidbody>())
+		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCube(Transform.GetWorldScale(), transform);
+	else
+		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCube(Transform.GetWorldScale(), transform);
 }
 
 void Core::Components::BoxCollider::Draw()
@@ -91,7 +96,7 @@ void Core::Components::BoxCollider::Draw()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glBindVertexArray(_VAO);
-	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices.size());
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices.size() / 3);
 
 	// Disable Wire frame.
 	glEnable(GL_CULL_FACE);
@@ -100,8 +105,6 @@ void Core::Components::BoxCollider::Draw()
 
 void Core::Components::BoxCollider::Update()
 {
-	Transform.Update();
-
 	//Application.GetEditorCamera()->UnProject(EditorUi::Editor::GetSceneWindow()->GetMousePosition()).Print();
 	//Physic::Ray ray;
 	//ray.Set(Application.GetEditorCamera()->Transform.GetLocalPosition(), Application.GetEditorCamera()->Transform.GetForwardVector() * 10000);
@@ -112,10 +115,12 @@ void Core::Components::BoxCollider::Update()
 
 void Core::Components::BoxCollider::GameUpdate()
 {
-	auto pos = Math::Vec3(_body->getGlobalPose().p.x, _body->getGlobalPose().p.y, _body->getGlobalPose().p.z);
-	auto rot = Math::Quat(_body->getGlobalPose().q.x, _body->getGlobalPose().q.y, _body->getGlobalPose().q.z, _body->getGlobalPose().q.w);
-	GameObject->Transform.SetLocalPosition(pos);
-	GameObject->Transform.SetLocalRotation(rot);
+	if (_dynamicBody) {
+		auto pos = Math::Vec3(_dynamicBody->getGlobalPose().p.x, _dynamicBody->getGlobalPose().p.y, _dynamicBody->getGlobalPose().p.z);
+		auto rot = Math::Quat(_dynamicBody->getGlobalPose().q.x, _dynamicBody->getGlobalPose().q.y, _dynamicBody->getGlobalPose().q.z, _dynamicBody->getGlobalPose().q.w);
+		GameObject->Transform.SetLocalPosition(pos);
+		GameObject->Transform.SetLocalRotation(rot);
+	}
 }
 
 void Core::Components::BoxCollider::UpdateTransform()
@@ -131,48 +136,6 @@ void Core::Components::BoxCollider::ShowInInspector()
 void Core::Components::BoxCollider::SetUIIcon()
 {
 	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/BoxColliderIcon.png");
-}
-
-bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
-{
-	//Math::Vec3 local_origin = glm::vec3(glm::inverse(box_transform) * glm::vec4(origin, 1));
-	//Math::Vec3 local_direction = glm::vec3(glm::inverse(box_transform) * glm::vec4(direction, 0));
-	auto min = Transform.GetWorldRotation() * Math::Vec3(-Transform.GetWorldScale());
-	auto max = Transform.GetWorldRotation() * Math::Vec3(Transform.GetWorldScale());
-	float tmin = (min.x - ray.GetOrigin().x) / ray.GetDirection().x;
-	float tmax = (max.x - ray.GetOrigin().x) / ray.GetDirection().x;
-
-	if (tmin > tmax) std::swap(tmin, tmax);
-
-	float tymin = (min.y - ray.GetOrigin().y) / ray.GetDirection().y;
-	float tymax = (max.y - ray.GetOrigin().y) / ray.GetDirection().y;
-
-	if (tymin > tymax) std::swap(tymin, tymax);
-
-	if ((tmin > tymax) || (tymin > tmax))
-		return false;
-
-	if (tymin > tmin)
-		tmin = tymin;
-
-	if (tymax < tmax)
-		tmax = tymax;
-
-	float tzmin = (min.z - ray.GetOrigin().z) / ray.GetDirection().z;
-	float tzmax = (max.z - ray.GetOrigin().z) / ray.GetDirection().z;
-
-	if (tzmin > tzmax) std::swap(tzmin, tzmax);
-
-	if ((tmin > tzmax) || (tzmin > tmax))
-		return false;
-
-	if (tzmin > tmin)
-		tmin = tzmin;
-
-	if (tzmax < tmax)
-		tmax = tzmax;
-	return true;
-
 }
 
 
