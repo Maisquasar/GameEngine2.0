@@ -118,7 +118,7 @@ void App::InitGlfw()
 	glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
 
 	// Disable V-Sync
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
 }
 
 void App::InitImGui()
@@ -198,6 +198,7 @@ void App::LoadResources()
 	auto defaultMat = new Resources::Material();
 	defaultMat->SetEditable(false);
 	defaultMat->SetName("DefaultMaterial");
+	defaultMat->SetPath("DefaultMaterial");
 	defaultMat->SetShader(_resourceManager.GetDefaultShader());
 	_resourceManager.Add<Resources::Material>("DefaultMaterial", defaultMat);
 
@@ -274,6 +275,7 @@ void App::FilesLoad(std::string path)
 
 void App::BeginPlay()
 {
+	_scene.BeginPlay();
 	_gameState = GameState::Play;
 	// Save Scene To Temporary Scene.
 	std::ofstream _file;
@@ -283,8 +285,8 @@ void App::BeginPlay()
 	GetScene()->GetSceneNode()->Save("", content);
 	_file.write(content.c_str(), content.size());
 	_file.close();
-
-	ImGui::FocusWindow(this->_editorUi.GetGameWindow()->Window);
+	if (Application.GetScene()->GetMainCamera())
+		ImGui::FocusWindow(this->_editorUi.GetGameWindow()->Window);
 }
 
 void App::EndPlay()

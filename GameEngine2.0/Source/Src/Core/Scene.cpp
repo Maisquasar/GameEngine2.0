@@ -10,26 +10,36 @@
 #include "Include/Utils/Utils.h"
 #include "Include/Utils/Loader.h"
 #include "Include/Core/Components/CameraComponent.h"
+#include "Include/Physic/PhysicHandler.h"
 
 Core::Scene::Scene() {}
 
 Core::Scene::~Scene()
 {
 	delete _sceneNode;
+	delete _physicHandler;
 }
 
 void Core::Scene::Initialize()
 {
+	_physicHandler = new Physic::PhysicHandler();
+	_physicHandler->Initialize();
 	_cameraEditor.Initialize();
 	_cameraEditor.Update(true);
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
 	_grid.Initialize();
 }
 
+void Core::Scene::BeginPlay()
+{
+	_physicHandler->BeginPlay();
+}
+
 void Core::Scene::Update()
 {
 	// First Render form camera Editor.
 	_sceneNode->UpdateSelfAndChilds();
+	_physicHandler->Update();
 	if (_cameraEditor.IsVisible()) {
 		_currentCamera = &_cameraEditor;
 		_VP = _cameraEditor.GetVP();

@@ -5,17 +5,18 @@
 #include <array>
 #include "Include/Math/Math.h"
 #include "Include/Physic/Physic.h"
+#include "Include/Physic/PhysicHandler.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
 #include "Include/Physic/Ray.h"
 #include "Include/Debug/Line.h"
 #include "Include/Core/Transform.h"
+#include "Include/Core/Node.h"
 
 
 Core::Components::BoxCollider::BoxCollider()
 {
 	ComponentName = "BoxCollider";
-	Initialize();
 }
 
 Core::Components::BoxCollider::BoxCollider(Math::Vec3 Position, Math::Vec3 Size, Math::Quat Rotation)
@@ -24,7 +25,11 @@ Core::Components::BoxCollider::BoxCollider(Math::Vec3 Position, Math::Vec3 Size,
 	Transform.SetLocalPosition(Position);
 	Transform.SetLocalRotation(Rotation);
 	Transform.SetLocalScale(Size);
-	Initialize();
+}
+
+Core::Components::BoxCollider::~BoxCollider()
+{
+	Application.GetScene()->GetPhysicHandler()->RemoveCollider(this);
 }
 
 void Core::Components::BoxCollider::SetGameobject(Core::Node* node)
@@ -54,11 +59,21 @@ void Core::Components::BoxCollider::Initialize()
 
 	glVertexAttribPointer(2U, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float[3])));
 	glEnableVertexAttribArray(2U);
+
+	Application.GetScene()->GetPhysicHandler()->AddCollider(this);
 }
 
-void Core::Components::BoxCollider::Update()
+void Core::Components::BoxCollider::InitializePhysics()
 {
-	Transform.Update();
+	auto modelMatrix = GameObject->Transform.GetModelMatrix() * Transform.GetModelMatrix();
+	auto worlpos = modelMatrix.GetPosition();
+	auto quat = modelMatrix.GetRotation();
+	_body = Application.GetScene()->GetPhysicHandler()->CreateCube(Transform.GetWorldScale(),
+		physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w)));
+}
+
+void Core::Components::BoxCollider::Draw()
+{
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.
 	Math::Mat4 M = Transform.GetModelMatrix();
@@ -81,6 +96,11 @@ void Core::Components::BoxCollider::Update()
 	// Disable Wire frame.
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+}
+
+void Core::Components::BoxCollider::Update()
+{
+	Transform.Update();
 
 	//Application.GetEditorCamera()->UnProject(EditorUi::Editor::GetSceneWindow()->GetMousePosition()).Print();
 	//Physic::Ray ray;
@@ -88,6 +108,14 @@ void Core::Components::BoxCollider::Update()
 	//if (RayIntersection(ray))
 		//printf("Collision");
 
+}
+
+void Core::Components::BoxCollider::GameUpdate()
+{
+	auto pos = Math::Vec3(_body->getGlobalPose().p.x, _body->getGlobalPose().p.y, _body->getGlobalPose().p.z);
+	auto rot = Math::Quat(_body->getGlobalPose().q.x, _body->getGlobalPose().q.y, _body->getGlobalPose().q.z, _body->getGlobalPose().q.w);
+	GameObject->Transform.SetLocalPosition(pos);
+	GameObject->Transform.SetLocalRotation(rot);
 }
 
 void Core::Components::BoxCollider::UpdateTransform()

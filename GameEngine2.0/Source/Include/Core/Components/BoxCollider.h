@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "Include/Core/Transform.h"
+#include "Include/Core/Components/Collider.h"
+
 namespace Resources
 {
 	class Shader;
@@ -12,7 +14,7 @@ namespace Physic
 }
 
 namespace Core::Components {
-	class BoxCollider : public Core::Components::BaseComponent<BoxCollider>
+	class BoxCollider : public Core::Components::BaseComponent<BoxCollider>, public Collider
 	{
 	public:
 		typedef BaseComponent<BoxCollider> Super;
@@ -20,11 +22,17 @@ namespace Core::Components {
 		BoxCollider();
 		BoxCollider(Math::Vec3 Position, Math::Vec3 Size, Math::Quat Rotation = Math::Quat());
 
+		~BoxCollider();
+
 		void SetGameobject(Core::Node* node) override;
 
 		void Initialize() override;
 
+		void InitializePhysics() override;
+
+		void Draw() override;
 		void Update() override;
+		void GameUpdate() override;
 		void UpdateTransform() override;
 
 		void ShowInInspector() override;
@@ -34,6 +42,7 @@ namespace Core::Components {
 
 		Core::Transform Transform;
 	private:
+		physx::PxRigidDynamic* _body;
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;
 		std::vector<float> _vertices;

@@ -7,23 +7,38 @@ Scale : 1.000000 1.000000 1.000000
 	#BeginNode
 	Name : Camera
 	IsActive : 1
-	Position : 0.000000 0.000000 0.000000
+	Position : 0.000000 0.000000 -0.282632
 	Rotation : 0.000000 0.000000 0.000000 1.000000
 	Scale : 1.000000 1.000000 1.000000
 	#BeginComponent Camera
 	MainCamera : 1
-	ScreenShader : Assets/Default/Shaders/InvertedShader
+	ScreenShader : Assets/Default/Shaders/DefaultScreenShader
 	#EndComponent Camera
 	#EndNode
 	#BeginNode
-	Name : Mario
+	Name : Cube
 	IsActive : 1
-	Position : 0.000000 -0.524032 1.541086
+	Position : 0.000000 2.206420 3.845544
 	Rotation : -0.000000 1.000000 -0.000000 -0.000000
 	Scale : 1.000000 1.000000 1.000000
 	#BeginComponent MeshComponent
-	Mesh : Assets/Default/Models/Mario.obj::Mario
-	SubMesh[0] : Assets/Default/Models/MarioMaterial.mat
+	Mesh : Assets/Default/Models/Cubic.fbx::Cube
+	SubMesh[0] : DefaultMaterial
 	#EndComponent MeshComponent
+	#BeginComponent BoxCollider
+	#EndComponent BoxCollider
+	#EndNode
+	#BeginNode
+	Name : Cube
+	IsActive : 1
+	Position : 1.222529 -0.361930 3.845544
+	Rotation : -0.000000 1.000000 -0.000000 -0.000000
+	Scale : 1.000000 1.000000 1.000000
+	#BeginComponent MeshComponent
+	Mesh : Assets/Default/Models/Cubic.fbx::Cube
+	SubMesh[0] : DefaultMaterial
+	#EndComponent MeshComponent
+	#BeginComponent BoxCollider
+	#EndComponent BoxCollider
 	#EndNode
 #EndNode
