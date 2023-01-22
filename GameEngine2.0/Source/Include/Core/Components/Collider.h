@@ -5,12 +5,13 @@ namespace Core::Components {
 	{
 	public:
 		Collider() {}
-		~Collider() {}
+		~Collider();
+
+		physx::PxRigidDynamic* GetRigidDynamic() { return _body; }
 
 		virtual void InitializePhysics() {}
+
 	protected:
 		physx::PxRigidDynamic* _body = NULL;
-	private:
-
 	};
 }

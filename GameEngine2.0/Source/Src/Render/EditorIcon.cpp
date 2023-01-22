@@ -9,17 +9,15 @@ Render::EditorIcon::EditorIcon()
 }
 
 Render::EditorIcon::~EditorIcon() {
-	if (Plane)
-		delete Plane;
 }
 
 void Render::EditorIcon::Initialize(std::string MatName)
 {
 	auto mesh = Application.GetResourceManager()->GetDefaultPlane();
-	Plane = new Resources::BillBoard(*static_cast<Resources::BillBoard*>(mesh));
+	Plane = mesh;
 	_material = Application.GetResourceManager()->Get<Resources::Material>(MatName.c_str());
 	_material->SetShader(Application.GetResourceManager()->GetBillboardShader());
-	Plane->SetSize(Math::Vec2(1, 1));
+	IconSize = { 1.f, 1.f };
 }
 
 void Render::EditorIcon::Draw(Math::Mat4 VP, Core::Transform transform, bool selected)
@@ -27,7 +25,7 @@ void Render::EditorIcon::Draw(Math::Mat4 VP, Core::Transform transform, bool sel
 	if (!Plane)
 		return;
 	std::vector<Resources::Material*> mat = { _material };
-	Plane->Update(GetMVP(VP, transform), mat, selected);
+	Plane->BillboardUpdate(GetMVP(VP, transform), mat, IconSize, selected);
 }
 
 
@@ -36,12 +34,12 @@ void Render::EditorIcon::DrawPicking(Math::Mat4 VP, Core::Transform transform, i
 	if (!Plane)
 		return;
 	std::vector<Resources::Material*> mat = { _material };
-	Plane->DrawPicking(GetMVP(VP, transform), mat, id);
+	Plane->BillboardPicking(GetMVP(VP, transform), mat, IconSize, id);
 }
 
 void Render::EditorIcon::SetSize(Math::Vec2 size)
 {
-	if (Plane) Plane->SetSize(size);
+	IconSize = size;
 }
 
 Math::Mat4 Render::EditorIcon::GetMVP(const Math::Mat4& VP, Core::Transform& transform)

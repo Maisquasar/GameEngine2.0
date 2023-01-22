@@ -6,6 +6,7 @@ namespace Resources
 	{
 	public:
 		BillBoard();
+		BillBoard(Mesh mesh);
 		~BillBoard();
 
 		virtual void Update(Math::Mat4 MVP, std::vector<class Material*> materials, bool outline = false);

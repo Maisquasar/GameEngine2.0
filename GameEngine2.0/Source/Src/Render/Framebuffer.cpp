@@ -88,6 +88,7 @@ void Render::FrameBuffer::Draw()
 	//glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 	// clear all relevant buffers
 
+	
 	glUseProgram(shader->Program);
 	glUniform1i(shader->GetLocation(Resources::Location::L_TEXTURE), Tex->GetIndex());
 	glBindVertexArray(_VAO);

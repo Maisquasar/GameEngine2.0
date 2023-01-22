@@ -36,8 +36,10 @@ namespace Resources {
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);
 
 		// Call on MeshComponent Update.
-		virtual void Update(Math::Mat4 MVP, std::vector<class Material*> materials, bool outline = false);
+		virtual void Update(Math::Mat4 MVP, std::vector<class Material*> materials, bool outline = false); 
+		void BillboardUpdate(Math::Mat4 MVP, std::vector<Resources::Material*> materials, const Math::Vec2& _size, bool outline = false);
 		virtual void DrawPicking(Math::Mat4 MVP, std::vector<class Material*> materials, int id);
+		void BillboardPicking(Math::Mat4 MVP, std::vector<class Material*> materials, const Math::Vec2& _size, int id);
 
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;

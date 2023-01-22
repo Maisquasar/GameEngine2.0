@@ -65,11 +65,11 @@ void Core::Components::BoxCollider::Initialize()
 
 void Core::Components::BoxCollider::InitializePhysics()
 {
-	auto modelMatrix = GameObject->Transform.GetModelMatrix() * Transform.GetModelMatrix();
+	auto modelMatrix = GameObject->Transform.GetModelMatrix();
 	auto worlpos = modelMatrix.GetPosition();
 	auto quat = modelMatrix.GetRotation();
-	_body = Application.GetScene()->GetPhysicHandler()->CreateCube(Transform.GetWorldScale(),
-		physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w)));
+	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w));
+	_body = Application.GetScene()->GetPhysicHandler()->CreateCube(Transform.GetWorldScale(), transform);
 }
 
 void Core::Components::BoxCollider::Draw()
@@ -172,7 +172,7 @@ bool Core::Components::BoxCollider::RayIntersection(Physic::Ray ray)
 	if (tzmax < tmax)
 		tmax = tzmax;
 	return true;
-	
+
 }
 
 

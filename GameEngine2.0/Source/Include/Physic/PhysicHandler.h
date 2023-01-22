@@ -36,6 +36,8 @@ namespace Physic {
 		physx::PxDefaultCpuDispatcher* _dispatcher = NULL;
 		physx::PxTolerancesScale _toleranceScale;
 		physx::PxPvd* _pvd = NULL;
+		physx::PxPvdTransport* _transport = NULL;
+		physx::PxPvdSceneClient* _sceneClient = NULL;
 		physx::PxFoundation* _foundation = NULL;
 
 		physx::PxScene* _scene = NULL;

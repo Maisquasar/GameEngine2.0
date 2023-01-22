@@ -4,6 +4,7 @@
 namespace Resources{
 	class BillBoard;
 	class Material;
+	class Mesh;
 }
 namespace Core
 {
@@ -26,13 +27,13 @@ namespace Render {
 		void DrawPicking(Math::Mat4 MVP, Core::Transform transform, int id);
 		void SetSize(Math::Vec2 size);
 
-		Resources::BillBoard* Plane = nullptr;
+		Resources::Mesh* Plane = nullptr;
 
 		Math::Mat4 GetMVP(const Math::Mat4& VP, Core::Transform& transform);
 
-		void SetIconSize(float size) { IconSize = size; }
+		void SetIconSize(Math::Vec2 size) { IconSize = size; }
 	private:
-		float IconSize = 0.5f;
+		Math::Vec2 IconSize = Math::Vec2(0.5f , 0.5f);
 		Resources::Material* _material = nullptr;
 
 	};

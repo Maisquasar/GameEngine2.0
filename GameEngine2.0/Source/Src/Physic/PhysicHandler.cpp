@@ -20,12 +20,29 @@ Physic::PhysicHandler::~PhysicHandler()
 		_dispatcher->release();
 	if (_pvd)
 		_pvd->release();
+	if (_transport)
+		_transport->release();
 	if (_foundation)
 		_foundation->release();
 }
 
 void Physic::PhysicHandler::BeginPlay()
 {
+	if (_defaultMaterial)
+		_defaultMaterial->release();
+	if (_scene)
+		_scene->release();
+	if (_physics)
+		_physics->release();
+	if (_dispatcher)
+		_dispatcher->release();
+	if (_pvd)
+		_pvd->release();
+	if (_transport)
+		_transport->release();
+	if (_foundation)
+		_foundation->release();
+	Initialize();
 	for (auto obj : _objects)
 	{
 		obj->InitializePhysics();
@@ -38,8 +55,8 @@ void Physic::PhysicHandler::Initialize()
 	_foundation = PxCreateFoundation(PX_PHYSICS_VERSION, _defaultAllocatorCallback, _defaultErrorCallback);
 	if (!_foundation) throw("PxCreateFoundation failed!");
 	_pvd = PxCreatePvd(*_foundation);
-	physx::PxPvdTransport* transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
-	_pvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
+	_transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
+	_pvd->connect(*_transport, physx::PxPvdInstrumentationFlag::eALL);
 	//mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, PxTolerancesScale(),true, mPvd);
 	_toleranceScale.length = 100;        // typical length of an object
 	_toleranceScale.speed = 981;         // typical speed of an object, gravity*1s is a reasonable choice
@@ -53,16 +70,16 @@ void Physic::PhysicHandler::Initialize()
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 	_scene = _physics->createScene(sceneDesc);
 
-	physx::PxPvdSceneClient* pvdClient = _scene->getScenePvdClient();
-	if (pvdClient)
+	_sceneClient = _scene->getScenePvdClient();
+	if (_sceneClient)
 	{
-		pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
-		pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
-		pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
+		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
+		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 	}
 	_defaultMaterial = _physics->createMaterial(0.5f, 0.5f, 0.6f);
 
-	physx::PxRigidStatic* groundPlane = PxCreatePlane(*_physics, physx::PxPlane(0, 1, 0, 50), *_defaultMaterial);
+	physx::PxRigidStatic* groundPlane = PxCreatePlane(*_physics, physx::PxPlane(0, 1, 0, 0), *_defaultMaterial);
 	_scene->addActor(*groundPlane);
 }
 

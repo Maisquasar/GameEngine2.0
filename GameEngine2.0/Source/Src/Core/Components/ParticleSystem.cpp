@@ -33,7 +33,7 @@ Core::Components::ParticleSystem::~ParticleSystem()
 
 void Core::Components::ParticleSystem::Initialize()
 {
-	_mesh = new Resources::MeshInstance(*(Resources::MeshInstance*)Application.GetResourceManager()->Get<Resources::Mesh>("DefaultPlane"));
+	_mesh = new Resources::MeshInstance(*static_cast<Resources::MeshInstance*>(Application.GetResourceManager()->GetDefaultPlane()));
 	this->_shader = Application.GetResourceManager()->Get<Resources::Shader>("Assets/Default/Shaders/BillboardInstanceShader");
 	SetSize(_maxParticles);
 }
@@ -103,8 +103,8 @@ void Core::Components::ParticleSystem::Draw()
 	if (!_shader || _particles.size() == 0 || !_mesh || !_drawParticles)
 		return;
 	glUseProgram(_shader->Program);
-	auto up = Application.GetScene()->GetCameraEditor()->GetTransform()->GetUpVector();
-	auto right = Application.GetScene()->GetCameraEditor()->GetTransform()->GetRightVector();
+	auto up = Application.GetScene()->GetCurrentCamera()->GetTransform()->GetUpVector();
+	auto right = Application.GetScene()->GetCurrentCamera()->GetTransform()->GetRightVector();
 	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), _material->GetTexture() ? true : false);
 	if (_material->GetTexture())
 		glUniform1i(_shader->GetLocation(Resources::Location::L_TEXTURE), _material->GetTexture()->GetIndex());
@@ -113,7 +113,7 @@ void Core::Components::ParticleSystem::Draw()
 
 	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMUP), up.x, up.y, up.z);
 	glUniform3f(_shader->GetLocation(Resources::Location::L_CAMRIGHT), right.x, right.y, right.z);
-	auto vp = Application.GetScene()->GetCameraEditor()->GetProjection() * Application.GetScene()->GetCameraEditor()->GetViewMatrix();
+	auto vp = Application.GetScene()->GetVPMatrix();
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_VIEWPROJECTIONMATRIX), 1, GL_TRUE, &vp.content[0][0]);
 	_mesh->Draw((int)_particles.size());
 }

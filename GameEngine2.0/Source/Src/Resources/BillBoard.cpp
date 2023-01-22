@@ -10,6 +10,14 @@ Resources::BillBoard::BillBoard()
 {
 }
 
+Resources::BillBoard::BillBoard(Mesh mesh)
+{
+	this->Positions = mesh.Positions;
+	this->TextureUVs = mesh.TextureUVs;
+	this->Normals = mesh.Normals;
+	this->Initialize();
+}
+
 Resources::BillBoard::~BillBoard()
 {
 }
@@ -75,6 +83,7 @@ void Resources::BillBoard::Update(Math::Mat4 MVP, std::vector<Resources::Materia
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glLineWidth(1);
 	}
+
 }
 
 void Resources::BillBoard::DrawPicking(Math::Mat4 MVP, std::vector<Resources::Material*> materials, int id)
