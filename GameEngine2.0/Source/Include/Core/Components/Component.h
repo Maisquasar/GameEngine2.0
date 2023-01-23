@@ -39,6 +39,9 @@ namespace Core {
 			// Call On Creation.
 			virtual void Initialize() {}
 
+			// Call on End Pause
+			virtual void EndPause() {}
+
 			virtual void ShowInInspector() { }
 
 			virtual void SetGameobject(Core::Node* node);

@@ -299,6 +299,12 @@ void App::EndPlay()
 	ImGui::FocusWindow(this->_editorUi.GetSceneWindow()->Window);
 }
 
+void App::EndPause()
+{
+	Application.SetGameState(GameState::Play);
+	Application.GetScene()->GetSceneNode()->EndPause();
+}
+
 void App::MultiThreadLoad()
 {
 	// TODO: Move it to a update into resource manager

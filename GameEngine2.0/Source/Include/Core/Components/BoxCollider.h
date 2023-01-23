@@ -29,11 +29,12 @@ namespace Core::Components {
 
 		void InitializePhysics() override;
 
+		void EndPause() override;
+
 		void Draw() override;
 		void DrawPicking(int id) override;
 		void Update() override;
 		void GameUpdate() override;
-		void UpdateTransform() override;
 
 		void ShowInInspector() override;
 		void SetUIIcon() override;

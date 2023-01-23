@@ -63,6 +63,15 @@ void Core::Components::CapsuleCollider::InitializePhysics()
 		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCaspule(_radius, _height / 2, transform);
 }
 
+void Core::Components::CapsuleCollider::EndPause()
+{
+	if (_dynamicBody) {
+		auto pos = GameObject->Transform.GetWorldPosition();
+		auto rot = GameObject->Transform.GetWorldRotation();
+		_dynamicBody->setGlobalPose(physx::PxTransform(pos.x, pos.y, pos.z, physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
+	}
+}
+
 void Core::Components::CapsuleCollider::GameUpdate()
 {
 	if (_dynamicBody) {

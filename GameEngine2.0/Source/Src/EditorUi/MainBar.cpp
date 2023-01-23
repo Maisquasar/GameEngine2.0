@@ -77,7 +77,7 @@ void EditorUi::MainBar::Draw()
 				Application.BeginPlay();
 				EditorUi::Editor::GetConsole()->Clear();
 			}
-			else if (Application.GetGameState() == GameState::Play)
+			else if (Application.GetGameState() == GameState::Play || Application.GetGameState() == GameState::Pause)
 			{
 				Application.EndPlay();
 			}
@@ -90,8 +90,28 @@ void EditorUi::MainBar::Draw()
 			}
 			else if (Application.GetGameState() == GameState::Pause)
 			{
-				Application.SetGameState(GameState::Play);
+				Application.EndPause();
 			}
+		}
+		switch (Application.GetGameState())
+		{
+		case GameState::Editor:
+		{
+			ImGui::TextUnformatted("Editor");
+			break;
+		}
+		case GameState::Play:
+		{
+			ImGui::TextUnformatted("Play");
+			break;
+		}
+		case GameState::Pause:
+		{
+			ImGui::TextUnformatted("Pause");
+			break;
+		}
+		default:
+			break;
 		}
 	}
 	ImGui::EndMainMenuBar();

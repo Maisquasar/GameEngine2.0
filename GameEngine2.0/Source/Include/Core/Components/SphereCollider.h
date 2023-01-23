@@ -16,6 +16,7 @@ namespace Core
 
 			void Initialize() override;
 			void InitializePhysics() override;
+			void EndPause() override;
 
 			void SetGameobject(Core::Node* node) override;
 			void GameUpdate() override;

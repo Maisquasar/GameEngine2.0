@@ -33,6 +33,7 @@ public:
 
 	void BeginPlay();
 	void EndPlay();
+	void EndPause();
 
 	void SetGameState(GameState gs) { _gameState = gs; }
 

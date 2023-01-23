@@ -15,6 +15,7 @@ namespace Core::Components
 
 		void Initialize() override;
 		void InitializePhysics() override;
+		void EndPause() override;
 
 		void GameUpdate() override;
 		void Draw() override;

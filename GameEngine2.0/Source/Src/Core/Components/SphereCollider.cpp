@@ -62,6 +62,15 @@ void Core::Components::SphereCollider::InitializePhysics()
 		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticSphere(_radius, transform);
 }
 
+void Core::Components::SphereCollider::EndPause()
+{
+	if (_dynamicBody) {
+		auto pos = GameObject->Transform.GetWorldPosition();
+		auto rot = GameObject->Transform.GetWorldRotation();
+		_dynamicBody->setGlobalPose(physx::PxTransform(pos.x, pos.y, pos.z, physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
+	}
+}
+
 void Core::Components::SphereCollider::GameUpdate()
 {
 	if (_dynamicBody) {

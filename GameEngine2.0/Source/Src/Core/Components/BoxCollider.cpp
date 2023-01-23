@@ -73,6 +73,15 @@ void Core::Components::BoxCollider::InitializePhysics()
 		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCube(scale * _extent, transform);
 }
 
+void Core::Components::BoxCollider::EndPause()
+{
+	if (_dynamicBody) {
+		auto pos = GameObject->Transform.GetWorldPosition();
+		auto rot= GameObject->Transform.GetWorldRotation();
+		_dynamicBody->setGlobalPose(physx::PxTransform(pos.x, pos.y, pos.z, physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
+	}
+}
+
 void Core::Components::BoxCollider::Draw()
 {
 	glUseProgram(_shader->Program);
@@ -137,10 +146,6 @@ void Core::Components::BoxCollider::GameUpdate()
 		GameObject->Transform.SetLocalPosition(pos);
 		GameObject->Transform.SetLocalRotation(rot);
 	}
-}
-
-void Core::Components::BoxCollider::UpdateTransform()
-{
 }
 
 void Core::Components::BoxCollider::ShowInInspector()

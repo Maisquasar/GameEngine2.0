@@ -38,6 +38,8 @@ namespace Core {
 		bool IsAParent(Node* node);
 		bool IsSelected() { return _selected; }
 
+		void EndPause();
+
 		void UpdateSelfAndChilds();
 		void DrawSelfAndChild(bool editorCamera = false);
 		void DrawPicking(int id);
