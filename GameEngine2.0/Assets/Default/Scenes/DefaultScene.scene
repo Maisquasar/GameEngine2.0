@@ -15,6 +15,7 @@ Scale : 1.000000 1.000000 1.000000
 	SubMesh[0] : DefaultMaterial
 	#EndComponent MeshComponent
 	#BeginComponent BoxCollider
+	Extent : 1.000000 1.000000 1.000000
 	#EndComponent BoxCollider
 	#EndNode
 	#BeginNode
@@ -34,6 +35,7 @@ Scale : 1.000000 1.000000 1.000000
 		SubMesh[0] : Assets/Default/Models/Border.mat
 		#EndComponent MeshComponent
 		#BeginComponent BoxCollider
+		Extent : 1.000000 1.000000 1.000000
 		#EndComponent BoxCollider
 		#BeginComponent Rigidbody
 		#EndComponent Rigidbody
@@ -45,13 +47,13 @@ Scale : 1.000000 1.000000 1.000000
 		Rotation : 0.000000 0.000000 0.000000 1.000000
 		Scale : 1.000000 1.000000 1.000000
 		#BeginComponent MeshComponent
-		Mesh : Assets/Default/Models/Cubic.fbx::Cube
-		SubMesh[0] : Assets/Default/Models/Border.mat
+		Mesh : Assets/Default/Models/Mario.obj::Mario
+		SubMesh[0] : Assets/Default/Models/MarioMaterial.mat
 		#EndComponent MeshComponent
-		#BeginComponent BoxCollider
-		#EndComponent BoxCollider
 		#BeginComponent Rigidbody
 		#EndComponent Rigidbody
+		#BeginComponent Capsule Collider
+		#EndComponent Capsule Collider
 		#EndNode
 		#BeginNode
 		Name : Cube
@@ -66,6 +68,7 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginComponent Rigidbody
 		#EndComponent Rigidbody
 		#BeginComponent SphereCollider
+		Radius : 1.000000
 		#EndComponent SphereCollider
 		#EndNode
 	#EndNode

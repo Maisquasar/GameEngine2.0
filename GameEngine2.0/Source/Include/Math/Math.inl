@@ -531,18 +531,7 @@ namespace Math {
 
 	inline Quat Vec3::ToQuaternion() const
 	{
-		auto a = this->ToRadians();
-		// Calculate the cosine of each half angle
-		float cy = std::cosf(a.z * 0.5f);
-		float cp = std::cosf(a.y * 0.5f);
-		float cr = std::cosf(a.x * 0.5f);
-
-		// Calculate the sine of each half angle
-		float sy = std::sinf(a.z * 0.5f);
-		float sp = std::sinf(a.y * 0.5f);
-		float sr = std::sinf(a.x * 0.5f);
-
-		return { cy * cp * sr - sy * sp * cr , sy * cp * sr + cy * sp * cr, sy * cp * cr - cy * sp * sr, cy * cp * cr + sy * sp * sr };
+		return Quat::AngleAxis(x, Vec3(1, 0, 0)) * Quat::AngleAxis(y, Vec3(0, 1, 0)) * Quat::AngleAxis(z, Vec3(0, 0, 1));
 	}
 
 	inline Vec3 Vec3::Lerp(const Vec3& a, const Vec3& b, float t)
@@ -1244,7 +1233,7 @@ namespace Math {
 		q.x = sinf(rad / 2) * axis.x;
 		q.y = sinf(rad / 2) * axis.y;
 		q.z = sinf(rad / 2) * axis.z;
-		return { sinf(rad / 2) * axis.x, sinf(rad / 2) * axis.y, sinf(rad / 2) * axis.z, cosf(rad / 2) };
+		return q;
 	}
 	inline Quat Quat::LookRotation(Vec3 forward, Vec3 up)
 	{

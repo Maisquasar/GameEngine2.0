@@ -34,6 +34,7 @@
     <ClCompile Include="External_Includes\ImGui\TextEditor.cpp" />
     <ClCompile Include="External_Includes\OpenFBX\miniz.c" />
     <ClCompile Include="External_Includes\OpenFBX\ofbx.cpp" />
+    <ClCompile Include="Source\Src\Core\Components\CapsuleCollider.cpp" />
     <ClCompile Include="Source\Src\Core\Components\AnimationComponent.cpp" />
     <ClCompile Include="Source\Src\Core\Components\CameraComponent.cpp" />
     <ClCompile Include="Source\Src\Core\Components\Collider.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Source\Include\Physic\Ray.h" />
     <ClInclude Include="Source\Include\Utils\ThreadManager.h" />
     <ClInclude Include="Source\Include\Utils\Utils.h" />
+    <ClInclude Include="Source\Include\Core\Components\CapsuleCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Include\Math\Math.inl" />

@@ -34,6 +34,9 @@ namespace Physic {
 		// Sphere
 		physx::PxRigidDynamic* CreateDynamicSphere(float radius, physx::PxTransform transform, float mass = 10.f);
 		physx::PxRigidStatic* CreateStaticSphere(float radius, physx::PxTransform transform);
+		// Capsule
+		physx::PxRigidDynamic* CreateDynamicCaspule(float radius, float height, physx::PxTransform transform, float mass = 10.f);
+		physx::PxRigidStatic* CreateStaticCaspule(float radius, float height, physx::PxTransform transform);
 
 	private:
 		physx::PxDefaultAllocator      _defaultAllocatorCallback;

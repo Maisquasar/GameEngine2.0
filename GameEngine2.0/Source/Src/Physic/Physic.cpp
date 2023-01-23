@@ -114,6 +114,129 @@ std::vector<float> Physic::GetSphereVertices(float radius)
 	return vOut;
 }
 
+std::vector<float> Physic::GetDemiSphereVertices(float radius, bool up)
+{
+	std::vector<Math::Vec3> v;
+	std::vector<Math::Vec3> n;
+	std::vector<float> vOut;
+	float r = radius;
+	int mLat = 10;
+	int mLon = 20;
+
+	for (int j = 0; j < mLat; ++j)
+	{
+		float theta0;
+		float theta1;
+		if (!up)
+		{
+			theta0 = ((j + 0) / (float)mLat) * PI + PI / 2;
+			theta1 = ((j + 1) / (float)mLat) * PI + PI / 2;
+		}
+		else
+		{
+			theta0 = ((j + 0) / (float)mLat) * PI / 2;
+			theta1 = ((j + 1) / (float)mLat) * PI / 2;
+		}
+
+		for (int i = 0; i < mLon; ++i)
+		{
+			float phi0 = ((i + 0) / (float)mLon) * 2.f * PI;
+			float phi1 = ((i + 1) / (float)mLon) * 2.f * PI;
+
+			Math::Vec3 c0 = Math::GetSphericalCoords(r, theta0, phi0);
+			Math::Vec3 c1 = Math::GetSphericalCoords(r, theta0, phi1);
+			Math::Vec3 c2 = Math::GetSphericalCoords(r, theta1, phi1);
+			Math::Vec3 c3 = Math::GetSphericalCoords(r, theta1, phi0);
+
+			v.push_back(c0);
+			v.push_back(c1);
+			v.push_back(c2);
+
+			v.push_back(c0);
+			v.push_back(c2);
+			v.push_back(c3);
+
+			n.push_back(c0.UnitVector());
+			n.push_back(c1.UnitVector());
+			n.push_back(c2.UnitVector());
+
+			n.push_back(c0.UnitVector());
+			n.push_back(c2.UnitVector());
+			n.push_back(c3.UnitVector());
+		}
+	}
+
+	for (int k = 0; k < v.size(); k++)
+	{
+		vOut.push_back(v[k].x);
+		vOut.push_back(v[k].y);
+		vOut.push_back(v[k].z);
+
+		vOut.push_back(n[k].x);
+		vOut.push_back(n[k].y);
+		vOut.push_back(n[k].z);
+	}
+
+	return vOut;
+}
+
+std::vector<float> Physic::GetCylindreVertices(float radius, float height)
+{
+	int res = 20;
+	std::vector<Math::Vec3> v;
+	std::vector<Math::Vec3> n;
+	std::vector<float> vOut;
+	float r = radius;
+	int mLon = 20;
+
+	float theta0 = ((10 + 0) / (float)20) * PI;
+	float theta1 = ((10 + 1) / (float)20) * PI;
+	for (int i = 0; i < mLon; ++i)
+	{
+		float phi0 = ((i + 0) / (float)mLon) * 2.f * PI;
+		float phi1 = ((i + 1) / (float)mLon) * 2.f * PI;
+
+		Math::Vec3 c0 = Math::GetSphericalCoords(r, theta0, phi0);
+		Math::Vec3 c1 = Math::GetSphericalCoords(r, theta0, phi1);
+		Math::Vec3 c2 = Math::GetSphericalCoords(r, theta1, phi1);
+		Math::Vec3 c3 = Math::GetSphericalCoords(r, theta1, phi0);
+
+		c0.y += (height / 2);
+		c1.y += (height / 2);
+		c2.y -= (height / 2);
+		c3.y -= (height / 2);
+
+		v.push_back(c0);
+		v.push_back(c1);
+		v.push_back(c2);
+
+		v.push_back(c0);
+		v.push_back(c2);
+		v.push_back(c3);
+
+		n.push_back(c0.UnitVector());
+		n.push_back(c1.UnitVector());
+		n.push_back(c2.UnitVector());
+
+		n.push_back(c0.UnitVector());
+		n.push_back(c2.UnitVector());
+		n.push_back(c3.UnitVector());
+	}
+
+	for (int k = 0; k < v.size(); k++)
+	{
+		vOut.push_back(v[k].x);
+		vOut.push_back(v[k].y);
+		vOut.push_back(v[k].z);
+
+		vOut.push_back(n[k].x);
+		vOut.push_back(n[k].y);
+		vOut.push_back(n[k].z);
+	}
+
+	return vOut;
+}
+
 Math::Vec3 Physic::ConvertMouseToWorld(Math::Vec2 mousePos, Math::Vec2 screenSize, Render::Camera cameraPos)
 {
 	if (mousePos.x < 0 || mousePos.y < 0 || screenSize.x < mousePos.x || screenSize.y < mousePos.y)

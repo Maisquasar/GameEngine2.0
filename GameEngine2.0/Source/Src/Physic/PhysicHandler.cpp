@@ -127,6 +127,16 @@ physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCube(const Math::Vec3
 	return body;
 }
 
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, physx::PxTransform transform, float mass)
+{
+	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
+	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
+	body->attachShape(*shape);
+	_scene->addActor(*body);
+	shape->release();
+	return body;
+}
+
 physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticSphere(float radius, physx::PxTransform transform)
 {
 	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
@@ -137,10 +147,20 @@ physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticSphere(float radius, ph
 	return body;
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, physx::PxTransform transform, float mass)
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCaspule(float radius, float height, physx::PxTransform transform, float mass)
 {
-	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
+	physx::PxShape* shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *_defaultMaterial);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
+	body->attachShape(*shape);
+	_scene->addActor(*body);
+	shape->release();
+	return body;
+}
+
+physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCaspule(float radius, float height, physx::PxTransform transform)
+{
+	physx::PxShape* shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *_defaultMaterial);
+	physx::PxRigidStatic* body = _physics->createRigidStatic(transform);
 	body->attachShape(*shape);
 	_scene->addActor(*body);
 	shape->release();

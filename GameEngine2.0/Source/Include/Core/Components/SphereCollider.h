@@ -1,7 +1,6 @@
 #pragma once
 #include "Component.h"
 #include "Collider.h"
-#include "Include/Core/Transform.h"
 namespace Resources{
 	class Shader;
 }
@@ -27,7 +26,7 @@ namespace Core
 			void SetUIIcon() override;
 
 			Math::Mat4 GetModelMatrix();
-			//TODO : Add Save/Load
+
 			void Save(std::string space, std::string& content);
 			void Load(const char* data, uint32_t& pos);
 		private:
@@ -37,6 +36,7 @@ namespace Core
 			unsigned int _VAO = 0;
 			std::vector<float> _vertices;
 			Resources::Shader* _shader;
+
 			float _radius = 1.f;
 
 		};
