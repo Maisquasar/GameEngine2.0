@@ -293,7 +293,7 @@ void App::EndPlay()
 {
 	_gameState = GameState::Editor;
 	auto file = "Assets/Default/Scenes/TemporaryScene.scene";
-	GetScene()->LoadScene(file);
+	GetScene()->LoadScene(file, true);
 	std::filesystem::remove_all(file);
 
 	ImGui::FocusWindow(this->_editorUi.GetSceneWindow()->Window);

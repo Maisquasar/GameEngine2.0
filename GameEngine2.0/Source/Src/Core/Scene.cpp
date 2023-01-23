@@ -185,7 +185,7 @@ void Core::Scene::SaveNode(std::string Path, Core::Node* node)
 	}
 }
 
-void Core::Scene::LoadScene(std::string Path)
+void Core::Scene::LoadScene(std::string Path, bool temporary)
 {
 	if (EditorUi::Inspector().NodesSelected.size() > 0)
 		EditorUi::Inspector().NodesSelected.clear();
@@ -195,7 +195,8 @@ void Core::Scene::LoadScene(std::string Path)
 	if (_sceneNode)
 		_sceneNode->RemoveAllChildrens();
 	delete _sceneNode;
-	_currentScenePath = Path;
+	if (!temporary)
+		_currentScenePath = Path;
 	_sceneNode = LoadNode(Path);
 }
 

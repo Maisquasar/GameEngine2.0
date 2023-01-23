@@ -30,6 +30,7 @@ namespace Core::Components {
 		void InitializePhysics() override;
 
 		void Draw() override;
+		void DrawPicking(int id) override;
 		void Update() override;
 		void GameUpdate() override;
 		void UpdateTransform() override;

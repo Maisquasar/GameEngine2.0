@@ -56,9 +56,8 @@ void Core::Components::CapsuleCollider::InitializePhysics()
 	auto quat = rot.ToQuaternion();
 	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
 	if (auto rb = GameObject->GetComponent<Core::Components::Rigidbody>()) {
-		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCaspule(_radius, _height / 2, transform, rb->GetMass());
-		auto vel = rb->GetInitialVelocity();
-		_dynamicBody->addForce({ vel.x, vel.y, vel.z }, physx::PxForceMode::eVELOCITY_CHANGE);
+		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCaspule(_radius, _height / 2, transform);
+		rb->SetParameters(_dynamicBody);
 	}
 	else
 		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCaspule(_radius, _height / 2, transform);
@@ -101,7 +100,7 @@ void Core::Components::CapsuleCollider::Draw()
 	glGetIntegerv(GL_POLYGON_MODE, &polygonMode);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBindVertexArray(_VAO[0]);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)_vertices[0].size());
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[0].size() / 3);
 
 	// Draw Cylinder.
 	M = ObjModelMat * (Mat4::CreateTransformMatrix(_center, Vec3(0), Vec3(_radius, _height, _radius)));
@@ -112,7 +111,7 @@ void Core::Components::CapsuleCollider::Draw()
 	glUniform4f(_shader->GetLocation(Location::L_COLOR), 0, 1, 0, 1);
 
 	glBindVertexArray(_VAO[1]);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)_vertices[1].size());
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[1].size() / 3);
 
 	// Draw Down Sphere.
 	M = ObjModelMat * (Mat4::CreateTransformMatrix(_center - Vec3(0, _height / 1.52f, 0), Vec3(0), _radius));
@@ -123,11 +122,56 @@ void Core::Components::CapsuleCollider::Draw()
 	glUniform4f(_shader->GetLocation(Location::L_COLOR), 0, 1, 0, 1);
 
 	glBindVertexArray(_VAO[2]);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)_vertices[2].size());
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[2].size() / 3);
 
 	//Disable Wire frame.
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+}
+
+void Core::Components::CapsuleCollider::DrawPicking(int id)
+{
+	auto shader = Application.GetResourceManager()->GetPickingShader();
+	if (!shader)
+		return;
+	glBindVertexArray(_VAO[0]);
+	glUseProgram(shader->Program);
+	int r = (id & 0x000000FF) >> 0;
+	int g = (id & 0x0000FF00) >> 8;
+	int b = (id & 0x00FF0000) >> 16;
+
+	auto pos = GameObject->Transform.GetWorldPosition();
+	auto rot = GameObject->Transform.GetWorldRotation().ToEuler();
+	Mat4 ObjModelMat = Mat4::CreateTransformMatrix(pos, rot, 1);
+	Mat4 M = ObjModelMat * Mat4::CreateTransformMatrix(_center + Vec3(0, _height / 2, 0), Vec3(0), _radius);
+	Mat4 MVP = Application.GetScene()->GetVPMatrix() * M;
+
+	// Send to the Shader.
+	glUniformMatrix4fv(_shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
+
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[0].size() / 3);
+
+	glBindVertexArray(_VAO[1]);
+	M = ObjModelMat * (Mat4::CreateTransformMatrix(_center, Vec3(0), Vec3(_radius, _height, _radius)));
+	MVP = Application.GetScene()->GetVPMatrix() * M;
+
+	// Send to the Shader.
+	glUniformMatrix4fv(_shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
+
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[1].size() / 3);
+	glBindVertexArray(_VAO[2]);
+
+	// Draw Down Sphere.
+	M = ObjModelMat * (Mat4::CreateTransformMatrix(_center - Vec3(0, _height / 1.52f, 0), Vec3(0), _radius));
+	MVP = Application.GetScene()->GetVPMatrix() * M;
+
+	// Send to the Shader.
+	glUniformMatrix4fv(_shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
+
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[2].size() / 3);
 }
 
 void Core::Components::CapsuleCollider::ShowInInspector()

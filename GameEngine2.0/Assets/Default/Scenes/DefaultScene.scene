@@ -9,7 +9,7 @@ Scale : 1.000000 1.000000 1.000000
 	IsActive : 1
 	Position : 0.000000 2.227438 0.000000
 	Rotation : 0.000000 0.000000 0.000000 1.000000
-	Scale : 6.185255 0.408348 6.332702
+	Scale : 15.571168 0.408348 32.490734
 	#BeginComponent MeshComponent
 	Mesh : Assets/Default/Models/Cubic.fbx::Cube
 	SubMesh[0] : DefaultMaterial
@@ -40,6 +40,7 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginComponent Rigidbody
 		Mass : 10.000000
 		Velocity : 0.000000 0.000000 0.000000
+		Angular : 0.000000 0.000000 0.000000
 		#EndComponent Rigidbody
 		#EndNode
 		#BeginNode
@@ -58,6 +59,7 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginComponent Rigidbody
 		Mass : 10.000000
 		Velocity : 0.000000 0.000000 0.000000
+		Angular : 0.000000 0.000000 0.000000
 		#EndComponent Rigidbody
 		#EndNode
 		#BeginNode
@@ -76,6 +78,7 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginComponent Rigidbody
 		Mass : 10.000000
 		Velocity : 0.000000 0.000000 0.000000
+		Angular : 0.000000 0.000000 0.000000
 		#EndComponent Rigidbody
 		#EndNode
 		#BeginNode
@@ -94,6 +97,7 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginComponent Rigidbody
 		Mass : 10.000000
 		Velocity : 0.000000 0.000000 0.000000
+		Angular : 0.000000 0.000000 0.000000
 		#EndComponent Rigidbody
 		#EndNode
 		#BeginNode
@@ -112,6 +116,7 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginComponent Rigidbody
 		Mass : 10.000000
 		Velocity : 0.000000 0.000000 0.000000
+		Angular : 0.000000 0.000000 0.000000
 		#EndComponent Rigidbody
 		#EndNode
 		#BeginNode
@@ -130,12 +135,13 @@ Scale : 1.000000 1.000000 1.000000
 		#BeginComponent Rigidbody
 		Mass : 10.000000
 		Velocity : 0.000000 0.000000 0.000000
+		Angular : 0.000000 0.000000 0.000000
 		#EndComponent Rigidbody
 		#EndNode
 		#BeginNode
-		Name : Cube
+		Name : Sphere
 		IsActive : 1
-		Position : 1.780944 12.524380 0.000000
+		Position : 1.780944 12.524380 -24.946203
 		Rotation : 0.000000 0.000000 0.000000 1.000000
 		Scale : 1.000000 1.000000 1.000000
 		#BeginComponent MeshComponent
@@ -143,8 +149,9 @@ Scale : 1.000000 1.000000 1.000000
 		SubMesh[0] : Assets/Default/Models/Border.mat
 		#EndComponent MeshComponent
 		#BeginComponent Rigidbody
-		Mass : 10.000000
-		Velocity : 0.000000 -10.000000 0.000000
+		Mass : 100.000000
+		Velocity : 0.000000 0.000000 20.000000
+		Angular : 0.000000 0.000000 0.000000
 		#EndComponent Rigidbody
 		#BeginComponent SphereCollider
 		Radius : 1.000000

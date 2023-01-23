@@ -16,9 +16,11 @@ namespace Utils
 		{
 			std::function<void()> task_function = std::bind(std::forward<F>(task), std::forward<A>(args)...);
 			{
-				_tasks.push(task_function);
+				if (task_function) {
+					_tasks.push(task_function);
+					++_totalTasks;
+				}
 			}
-			++_totalTasks;
 		}
 		void ThreadLoop();
 		void Lock();

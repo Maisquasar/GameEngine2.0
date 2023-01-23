@@ -39,7 +39,7 @@ namespace Core
 		void SaveNode(std::string Path, Core::Node* node);
 
 		// Load functions
-		void LoadScene(std::string Path);
+		void LoadScene(std::string Path, bool temporary = false);
 		Core::Node* LoadNode(std::string Path);
 		void LoadTemporaryScene(std::string Path);
 

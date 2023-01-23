@@ -18,6 +18,7 @@ namespace Core::Components
 
 		void GameUpdate() override;
 		void Draw() override;
+		void DrawPicking(int id) override;
 
 		void ShowInInspector() override;
 		void SetUIIcon() override;

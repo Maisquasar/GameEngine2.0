@@ -66,9 +66,8 @@ void Core::Components::BoxCollider::InitializePhysics()
 	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
 	if (auto rb = GameObject->GetComponent<Core::Components::Rigidbody>())
 	{
-		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCube(scale * _extent, transform, rb->GetMass());
-		auto vel = rb->GetInitialVelocity();
-		_dynamicBody->addForce({ vel.x, vel.y, vel.z }, physx::PxForceMode::eVELOCITY_CHANGE);
+		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCube(scale * _extent, transform);
+		rb->SetParameters(_dynamicBody);
 	}
 	else
 		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCube(scale * _extent, transform);
@@ -98,6 +97,26 @@ void Core::Components::BoxCollider::Draw()
 	// Disable Wire frame.
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+}
+
+void Core::Components::BoxCollider::DrawPicking(int id)
+{
+	glBindVertexArray(_VAO);
+	auto shader = Application.GetResourceManager()->GetPickingShader();
+	if (!shader)
+		return;
+	glUseProgram(shader->Program);
+	int r = (id & 0x000000FF) >> 0;
+	int g = (id & 0x0000FF00) >> 8;
+	int b = (id & 0x00FF0000) >> 16;
+
+	Math::Mat4 M = this->GameObject->Transform.GetModelMatrix() * Math::Mat4::CreateScaleMatrix(_extent);
+	Math::Mat4 MVP = Application.GetScene()->GetVPMatrix() * M;
+
+	glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
+
+	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices.size() / 3);
 }
 
 void Core::Components::BoxCollider::Update()

@@ -29,13 +29,13 @@ namespace Physic {
 		void AddCollider(Core::Components::Collider* object);
 		void RemoveCollider(Core::Components::Collider* object);
 		// Cube
-		physx::PxRigidDynamic* CreateDynamicCube(const Math::Vec3& shape, physx::PxTransform transform, float mass = 10.f);
+		physx::PxRigidDynamic* CreateDynamicCube(const Math::Vec3& shape, physx::PxTransform transform);
 		physx::PxRigidStatic* CreateStaticCube(const Math::Vec3& shape, physx::PxTransform transform);
 		// Sphere
-		physx::PxRigidDynamic* CreateDynamicSphere(float radius, physx::PxTransform transform, float mass = 10.f);
+		physx::PxRigidDynamic* CreateDynamicSphere(float radius, physx::PxTransform transform);
 		physx::PxRigidStatic* CreateStaticSphere(float radius, physx::PxTransform transform);
 		// Capsule
-		physx::PxRigidDynamic* CreateDynamicCaspule(float radius, float height, physx::PxTransform transform, float mass = 10.f);
+		physx::PxRigidDynamic* CreateDynamicCaspule(float radius, float height, physx::PxTransform transform);
 		physx::PxRigidStatic* CreateStaticCaspule(float radius, float height, physx::PxTransform transform);
 
 	private:

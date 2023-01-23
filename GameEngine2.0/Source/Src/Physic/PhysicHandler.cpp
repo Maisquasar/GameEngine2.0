@@ -58,9 +58,9 @@ void Physic::PhysicHandler::Initialize()
 	_transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 	_pvd->connect(*_transport, physx::PxPvdInstrumentationFlag::eALL);
 	//mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, PxTolerancesScale(),true, mPvd);
-	_toleranceScale.length = 100;        // typical length of an object
+	_toleranceScale.length = 1;        // typical length of an object
 	_toleranceScale.speed = 981;         // typical speed of an object, gravity*1s is a reasonable choice
-	_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, _toleranceScale, false, _pvd);
+	_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, _toleranceScale, true, _pvd);
 	//mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, mToleranceScale);
 
 	physx::PxSceneDesc sceneDesc(_physics->getTolerancesScale());
@@ -115,24 +115,21 @@ physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCube(const Math::Vec3& 
 	return body;
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCube(const Math::Vec3& extent, physx::PxTransform transform, float mass)
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCube(const Math::Vec3& extent, physx::PxTransform transform)
 {
 	physx::PxShape* shape = _physics->createShape(physx::PxBoxGeometry(extent.x, extent.y, extent.z), *_defaultMaterial);
-
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
-	physx::PxRigidBodyExt::updateMassAndInertia(*body, mass);
 	_scene->addActor(*body);
 	shape->release();
 	return body;
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, physx::PxTransform transform, float mass)
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, physx::PxTransform transform)
 {
 	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
-	physx::PxRigidBodyExt::updateMassAndInertia(*body, mass);
 	_scene->addActor(*body);
 	shape->release();
 	return body;
@@ -148,12 +145,11 @@ physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticSphere(float radius, ph
 	return body;
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCaspule(float radius, float height, physx::PxTransform transform, float mass)
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCaspule(float radius, float height, physx::PxTransform transform)
 {
 	physx::PxShape* shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *_defaultMaterial);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
-	physx::PxRigidBodyExt::updateMassAndInertia(*body, mass);
 	_scene->addActor(*body);
 	shape->release();
 	return body;
