@@ -70,19 +70,27 @@ void EditorUi::MainBar::Draw()
 			ImGui::EndMenu();
 		}
 		ImGui::SetCursorPosX((float)(Application.GetWindowSize().x / 2) - 25.f);
-		if (ImGui::MenuItem("I>"))
+		if (ImGui::MenuItem(Application.GetGameState() == GameState::Play || Application.GetGameState() == GameState::Pause ? "[]" : "I>"))
 		{
 			if (Application.GetGameState() != GameState::Play)
 			{
 				Application.BeginPlay();
 				EditorUi::Editor::GetConsole()->Clear();
 			}
+			else if (Application.GetGameState() == GameState::Play)
+			{
+				Application.EndPlay();
+			}
 		}
 		if (ImGui::MenuItem("||"))
 		{
-			if (Application.GetGameState() != GameState::Editor)
+			if (Application.GetGameState() == GameState::Play)
 			{
-				Application.EndPlay();
+				Application.SetGameState(GameState::Pause);
+			}
+			else if (Application.GetGameState() == GameState::Pause)
+			{
+				Application.SetGameState(GameState::Play);
 			}
 		}
 	}

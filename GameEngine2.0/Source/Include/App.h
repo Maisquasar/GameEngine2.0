@@ -14,6 +14,7 @@ enum class GameState
 {
 	Play,
 	Editor,
+	Pause
 };
 
 class App
@@ -32,6 +33,8 @@ public:
 
 	void BeginPlay();
 	void EndPlay();
+
+	void SetGameState(GameState gs) { _gameState = gs; }
 
 	GLFWwindow* GetWindow() { return _window; }
 
