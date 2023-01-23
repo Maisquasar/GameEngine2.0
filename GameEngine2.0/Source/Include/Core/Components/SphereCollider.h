@@ -28,6 +28,8 @@ namespace Core
 
 			Math::Mat4 GetModelMatrix();
 			//TODO : Add Save/Load
+			void Save(std::string space, std::string& content);
+			void Load(const char* data, uint32_t& pos);
 		private:
 			physx::PxRigidDynamic* _dynamicBody;
 			physx::PxRigidStatic* _staticBody;

@@ -14,19 +14,12 @@
 #include "Include/Core/Transform.h"
 #include "Include/Core/Node.h"
 #include "Include/Core/Components/Rigidbody.h"
+#include "Include/Utils/Loader.h"
 
 
 Core::Components::BoxCollider::BoxCollider()
 {
 	ComponentName = "BoxCollider";
-}
-
-Core::Components::BoxCollider::BoxCollider(Math::Vec3 Position, Math::Vec3 Size, Math::Quat Rotation)
-{
-	ComponentName = "BoxCollider";
-	Transform.SetLocalPosition(Position);
-	Transform.SetLocalRotation(Rotation);
-	Transform.SetLocalScale(Size);
 }
 
 Core::Components::BoxCollider::~BoxCollider()
@@ -37,7 +30,6 @@ Core::Components::BoxCollider::~BoxCollider()
 void Core::Components::BoxCollider::SetGameobject(Core::Node* node)
 {
 	Super::SetGameobject(node);
-	Transform.Parent = node;
 }
 
 void Core::Components::BoxCollider::Initialize()
@@ -70,18 +62,19 @@ void Core::Components::BoxCollider::InitializePhysics()
 	auto modelMatrix = GameObject->Transform.GetModelMatrix();
 	auto worlpos = modelMatrix.GetPosition();
 	auto quat = modelMatrix.GetRotation();
+	auto scale = modelMatrix.GetScale();
 	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
 	if (GameObject->GetComponent<Core::Components::Rigidbody>())
-		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCube(Transform.GetWorldScale(), transform);
+		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCube(scale * _extent, transform);
 	else
-		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCube(Transform.GetWorldScale(), transform);
+		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCube(scale * _extent, transform);
 }
 
 void Core::Components::BoxCollider::Draw()
 {
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.
-	Math::Mat4 M = Transform.GetModelMatrix();
+	Math::Mat4 M = this->GameObject->Transform.GetModelMatrix() * Math::Mat4::CreateScaleMatrix(_extent);
 	Math::Mat4 MVP = Application.GetScene()->GetVPMatrix() * M;
 
 	// Send to the Shader.
@@ -125,17 +118,35 @@ void Core::Components::BoxCollider::GameUpdate()
 
 void Core::Components::BoxCollider::UpdateTransform()
 {
-	Transform.ForceUpdate();
 }
 
 void Core::Components::BoxCollider::ShowInInspector()
 {
-	Transform.ShowInInspector();
+	ImGui::DragFloat3("Extent", &_extent[0], 0.1f);
 }
 
 void Core::Components::BoxCollider::SetUIIcon()
 {
 	this->_UIIcon = Application.GetResourceManager()->Get<Resources::Texture>("Assets/Default/Textures/BoxColliderIcon.png");
+}
+
+void Core::Components::BoxCollider::Save(std::string space, std::string& content)
+{
+	content += space + Utils::StringFormat("Extent : %s\n", _extent.ToString().c_str());
+}
+
+void Core::Components::BoxCollider::Load(const char* data, uint32_t& pos)
+{
+	std::string currentLine;
+	while (currentLine.substr(0, 13) != "#EndComponent")
+	{
+		currentLine = Utils::Loader::GetLine(data, pos);
+		if (currentLine.substr(0, 6) == "Extent")
+		{
+			_extent = Utils::Loader::GetVector3(currentLine);
+		}
+		pos++;
+	}
 }
 
 

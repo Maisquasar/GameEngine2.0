@@ -20,7 +20,6 @@ namespace Core::Components {
 		typedef BaseComponent<BoxCollider> Super;
 		// Constructors
 		BoxCollider();
-		BoxCollider(Math::Vec3 Position, Math::Vec3 Size, Math::Quat Rotation = Math::Quat());
 
 		~BoxCollider();
 
@@ -38,12 +37,13 @@ namespace Core::Components {
 		void ShowInInspector() override;
 		void SetUIIcon() override;
 
-		Core::Transform Transform;
+		void Save(std::string space, std::string& content);
+		void Load(const char* data, uint32_t& pos);
 
-		//TODO : Add Save/Load
 	private:
 		physx::PxRigidDynamic* _dynamicBody;
 		physx::PxRigidStatic* _staticBody;
+		Math::Vec3 _extent = Math::Vec3(1);
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;
 		std::vector<float> _vertices;

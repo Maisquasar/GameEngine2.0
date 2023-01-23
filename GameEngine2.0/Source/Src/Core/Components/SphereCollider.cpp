@@ -6,6 +6,7 @@
 #include "Include/Physic/Physic.h"
 #include "Include/Core/Node.h"
 #include "Include/Core/Components/Rigidbody.h"
+#include "Include/Utils/Loader.h"
 
 Core::Components::SphereCollider::SphereCollider()
 {	
@@ -113,4 +114,23 @@ Math::Mat4 Core::Components::SphereCollider::GetModelMatrix()
 	auto pos = GameObject->Transform.GetWorldPosition();
 	auto rot = GameObject->Transform.GetWorldRotation().ToEuler();
 	return Math::Mat4::CreateTransformMatrix(pos, rot, _radius);
+}
+
+void Core::Components::SphereCollider::Save(std::string space, std::string& content)
+{
+	content += space + Utils::StringFormat("Radius : %f\n", _radius);
+}
+
+void Core::Components::SphereCollider::Load(const char* data, uint32_t& pos)
+{
+	std::string currentLine;
+	while (currentLine.substr(0, 13) != "#EndComponent")
+	{
+		currentLine = Utils::Loader::GetLine(data, pos);
+		if (currentLine.substr(0, 6) == "Radius")
+		{
+			_radius = Utils::Loader::GetFloat(currentLine);
+		}
+		pos++;
+	}
 }

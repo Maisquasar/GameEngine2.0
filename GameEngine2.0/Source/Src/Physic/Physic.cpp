@@ -4,54 +4,6 @@
 #include "Include/Core/Components/BoxCollider.h"
 #include "Include/Render/Camera.h"
 
-bool Physic::RayBoxIntersection(Ray* ray, Core::Components::BoxCollider* box, Math::Vec3& intersectionPoint)
-{
-	// Transform the ray into the local space of the box.
-	Math::Vec3 localRayOrigin = box->Transform.GetWorldRotation().GetInverse() * (ray->GetOrigin() - box->Transform.GetWorldPosition());
-	Math::Vec3 localRayDirection = box->Transform.GetWorldRotation().GetInverse() * ray->GetDirection();
-
-	// Compute the minimum and maximum t values for the ray.
-	float tMin = -INFINITY;
-	float tMax = INFINITY;
-
-	// Check intersection with the x-aligned planes of the box.
-	if (std::abs(localRayDirection.x) > 1e-6)
-	{
-		float t1 = (box->Transform.GetWorldScale().x - localRayOrigin.x) / localRayDirection.x;
-		float t2 = (-box->Transform.GetWorldScale().x - localRayOrigin.x) / localRayDirection.x;
-		tMin = max(tMin, min(t1, t2));
-		tMax = min(tMax, max(t1, t2));
-	}
-
-	// Check intersection with the y-aligned planes of the box.
-	if (std::abs(localRayDirection.y) > 1e-6)
-	{
-		float t1 = (box->Transform.GetWorldScale().y - localRayOrigin.y) / localRayDirection.y;
-		float t2 = (-box->Transform.GetWorldScale().y - localRayOrigin.y) / localRayDirection.y;
-		tMin = max(tMin, min(t1, t2));
-		tMax = min(tMax, max(t1, t2));
-	}
-
-	// Check intersection with the z-aligned planes of the box.
-	if (std::abs(localRayDirection.z) > 1e-6)
-	{
-		float t1 = (box->Transform.GetWorldScale().z - localRayOrigin.z) / localRayDirection.z;
-		float t2 = (-box->Transform.GetWorldScale().z - localRayOrigin.z) / localRayDirection.z;
-		tMin = max(tMin, min(t1, t2));
-		tMax = min(tMax, max(t1, t2));
-	}
-
-	// Check if there is an intersection.
-	if (tMin > tMax)
-		return false;
-
-	// Compute the intersection point.
-	intersectionPoint = ray->GetOrigin() + ray->GetDirection() * tMin;
-
-	return true;
-}
-
-
 std::vector<float> Physic::GetCubeVertices()
 {
 	std::vector<float> vOut;
