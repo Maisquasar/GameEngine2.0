@@ -147,7 +147,7 @@ void Core::Components::CapsuleCollider::DrawPicking(int id)
 	Mat4 MVP = Application.GetScene()->GetVPMatrix() * M;
 
 	// Send to the Shader.
-	glUniformMatrix4fv(_shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+	glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
 	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[0].size() / 3);
@@ -157,7 +157,7 @@ void Core::Components::CapsuleCollider::DrawPicking(int id)
 	MVP = Application.GetScene()->GetVPMatrix() * M;
 
 	// Send to the Shader.
-	glUniformMatrix4fv(_shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+	glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
 	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[1].size() / 3);
@@ -168,7 +168,7 @@ void Core::Components::CapsuleCollider::DrawPicking(int id)
 	MVP = Application.GetScene()->GetVPMatrix() * M;
 
 	// Send to the Shader.
-	glUniformMatrix4fv(_shader->GetLocation(Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
+	glUniformMatrix4fv(shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 	glUniform4f(shader->GetLocation(Resources::Location::L_COLOR), r / 255.f, g / 255.f, b / 255.f, 1.f);
 
 	glDraw(GL_TRIANGLES, 0, (GLsizei)_vertices[2].size() / 3);
