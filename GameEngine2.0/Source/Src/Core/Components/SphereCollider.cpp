@@ -54,8 +54,11 @@ void Core::Components::SphereCollider::InitializePhysics()
 	auto worlpos = modelMatrix.GetPosition();
 	auto quat = modelMatrix.GetRotation();
 	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
-	if (GameObject->GetComponent<Core::Components::Rigidbody>())
-		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicSphere(_radius, transform);
+	if (auto rb = GameObject->GetComponent<Core::Components::Rigidbody>()) {
+		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicSphere(_radius, transform, rb->GetMass());
+		auto vel = rb->GetInitialVelocity();
+		_dynamicBody->addForce({ vel.x, vel.y, vel.z }, physx::PxForceMode::eVELOCITY_CHANGE);
+	}
 	else
 		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticSphere(_radius, transform);
 }

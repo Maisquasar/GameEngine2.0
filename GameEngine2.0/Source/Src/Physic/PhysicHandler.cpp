@@ -132,6 +132,7 @@ physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, 
 	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
+	physx::PxRigidBodyExt::updateMassAndInertia(*body, mass);
 	_scene->addActor(*body);
 	shape->release();
 	return body;
@@ -152,6 +153,7 @@ physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCaspule(float radius,
 	physx::PxShape* shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *_defaultMaterial);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
+	physx::PxRigidBodyExt::updateMassAndInertia(*body, mass);
 	_scene->addActor(*body);
 	shape->release();
 	return body;
