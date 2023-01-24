@@ -24,7 +24,9 @@ namespace Physic {
 
 		void BeginPlay();
 		void Initialize();
+		void EndPause();
 		void Update();
+
 
 		void AddCollider(Core::Components::Collider* object);
 		void RemoveCollider(Core::Components::Collider* object);

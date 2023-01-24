@@ -79,6 +79,8 @@ void Core::Components::BoxCollider::EndPause()
 		auto pos = GameObject->Transform.GetWorldPosition();
 		auto rot= GameObject->Transform.GetWorldRotation();
 		_dynamicBody->setGlobalPose(physx::PxTransform(pos.x, pos.y, pos.z, physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
+		auto rb = GameObject->GetComponent<Core::Components::Rigidbody>();
+		rb->SetParameters(_dynamicBody);
 	}
 }
 

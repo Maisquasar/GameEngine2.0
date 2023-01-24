@@ -29,14 +29,14 @@ Core::Components::Component* ComponentsPopup()
 		{
 			if (!filter.PassFilter(component->ComponentName.c_str()))
 				continue;
-			if (auto icon = component->GetUIIcon()) {
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1.f);
-				ImGui::Image((ImTextureID)static_cast<uintptr_t>(icon->GetData()), ImVec2(16, 16));
-				ImGui::SameLine();
-			}
-			if (ImGui::Selectable(component->ComponentName.c_str(), false, ImGuiSelectableFlags_SpanAvailWidth)) {
+			if (ImGui::Selectable(component->ComponentName.c_str(), false, ImGuiSelectableFlags_SpanAllColumns)) {
 				out = component->Clone();
 				ImGui::CloseCurrentPopup();
+			}
+			if (auto icon = component->GetUIIcon()) {
+				ImGui::SameLine();
+				ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 1.f);
+				ImGui::Image((ImTextureID)static_cast<uintptr_t>(icon->GetData()), ImVec2(16, 16));
 			}
 		}
 		ImGui::EndPopup();

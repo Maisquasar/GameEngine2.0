@@ -80,6 +80,10 @@ void Physic::PhysicHandler::Initialize()
 	_defaultMaterial = _physics->createMaterial(0.5f, 0.5f, 0.6f);
 }
 
+void Physic::PhysicHandler::EndPause()
+{
+}
+
 void Physic::PhysicHandler::Update()
 {
 	if (Application.GetGameState() == GameState::Play) {

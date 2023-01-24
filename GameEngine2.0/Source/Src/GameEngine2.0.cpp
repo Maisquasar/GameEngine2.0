@@ -27,10 +27,8 @@ int main()
 }
 
 //TODO: Lights
-//TODO: Loading Texture from FBX files
 //TODO: Fix Animation for other exportation than Mixamo
 //TODO: Physics
 //TODO: Add Icon Capsule Collide
-//TODO: Fix Collision rotation
 //TODO: Show 3D models on Models selection (Same for Materials spheres)
 //TODO: Fix Skeletal Model Node Creation

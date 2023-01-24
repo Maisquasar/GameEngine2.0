@@ -25,6 +25,7 @@ namespace Core::Components
 		float _mass = 10.f;
 		Math::Vec3 _velocity = { 0 };
 		Math::Vec3 _angularVelocity = { 0 };
+		bool _useGravity = true;
 
 	};
 }
