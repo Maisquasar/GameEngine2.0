@@ -77,7 +77,7 @@ void Physic::PhysicHandler::Initialize()
 		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 	}
-	_defaultMaterial = _physics->createMaterial(0.5f, 0.5f, 0.6f);
+	_defaultMaterial = _physics->createMaterial(0.f, 0.f, 1.f);
 }
 
 void Physic::PhysicHandler::EndPause()
@@ -87,7 +87,7 @@ void Physic::PhysicHandler::EndPause()
 void Physic::PhysicHandler::Update()
 {
 	if (Application.GetGameState() == GameState::Play) {
-		_scene->simulate(1.f / 60.f);
+		_scene->simulate(ImGui::GetIO().DeltaTime);
 		_scene->fetchResults(true);
 	}
 }

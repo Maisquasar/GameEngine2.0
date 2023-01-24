@@ -39,6 +39,8 @@ namespace Core {
 			// Call On Creation.
 			virtual void Initialize() {}
 
+			// Call on Begin Pause
+			virtual void BeginPause() {}
 			// Call on End Pause
 			virtual void EndPause() {}
 

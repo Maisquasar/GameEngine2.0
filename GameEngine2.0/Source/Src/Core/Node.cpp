@@ -134,6 +134,23 @@ bool Core::Node::IsAParent(Node* node)
 	return false;
 }
 
+void Core::Node::BeginPause()
+{
+	for (auto component : this->Components)
+	{
+		if (component->IsEnable())
+		{
+			component->BeginPause();
+		}
+	}
+	for (auto child : this->Childrens)
+	{
+		if (!child->_active)
+			continue;
+		child->BeginPause();
+	}
+}
+
 void Core::Node::EndPause()
 {
 	for (auto component : this->Components)

@@ -32,6 +32,7 @@ public:
 	void CloseApp();
 
 	void BeginPlay();
+	void BeginPause();
 	void EndPlay();
 	void EndPause();
 

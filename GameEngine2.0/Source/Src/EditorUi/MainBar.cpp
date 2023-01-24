@@ -86,7 +86,7 @@ void EditorUi::MainBar::Draw()
 		{
 			if (Application.GetGameState() == GameState::Play)
 			{
-				Application.SetGameState(GameState::Pause);
+				Application.BeginPause();
 			}
 			else if (Application.GetGameState() == GameState::Pause)
 			{

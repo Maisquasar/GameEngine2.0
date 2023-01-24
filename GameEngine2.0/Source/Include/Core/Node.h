@@ -38,6 +38,7 @@ namespace Core {
 		bool IsAParent(Node* node);
 		bool IsSelected() { return _selected; }
 
+		void BeginPause();
 		void EndPause();
 
 		void UpdateSelfAndChilds();

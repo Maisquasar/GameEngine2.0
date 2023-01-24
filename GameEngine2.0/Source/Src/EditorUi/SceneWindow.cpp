@@ -25,6 +25,7 @@ void EditorUi::SceneWindow::Draw()
 			if (ImGui::BeginMenu("Settings"))
 			{
 				ImGui::Checkbox("Show Grid", &Application.GetScene()->_showGrid);
+				ImGui::Checkbox("Show Colliders", &Application.GetSettings()->ShowCollider);
 				if (ImGui::Button(Application.GetScene()->GetCameraEditor()->FrameBuffer.shader->GetName().c_str()))
 				{
 					ImGui::OpenPopup("ScreenShaderPopup");

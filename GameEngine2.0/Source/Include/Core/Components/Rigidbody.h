@@ -12,6 +12,8 @@ namespace Core::Components
 
 		void SetUIIcon();
 
+		void BeginPause();
+
 		void ShowInInspector() override;
 
 		void Save(std::string space, std::string& content) override;
@@ -21,7 +23,9 @@ namespace Core::Components
 
 		float GetMass() { return _mass; }
 		Math::Vec3 GetInitialVelocity() { return _velocity; }
+
 	private:
+		physx::PxRigidDynamic* _body;
 		float _mass = 10.f;
 		Math::Vec3 _velocity = { 0 };
 		Math::Vec3 _angularVelocity = { 0 };

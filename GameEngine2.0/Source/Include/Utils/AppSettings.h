@@ -17,6 +17,7 @@ namespace Utils {
 		~AppSettings();
 
 		Settings::Transform S_Transform = Settings::Transform::World;
+		bool ShowCollider = true;
 		size_t NumberOfDrawCalls;
 		size_t NumberOfTrianglesDraw;
 		size_t NumberOfInstances;

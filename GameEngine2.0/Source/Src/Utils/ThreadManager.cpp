@@ -38,6 +38,7 @@ void Utils::ThreadManager::ThreadLoop()
 				}
 				else {
 					_tasks.pop();
+					Unlock();
 				}
 				break;
 			}

@@ -75,17 +75,17 @@ void Core::Components::BoxCollider::InitializePhysics()
 
 void Core::Components::BoxCollider::EndPause()
 {
-	if (_dynamicBody) {
+	if (_dynamicBody) {		
 		auto pos = GameObject->Transform.GetWorldPosition();
 		auto rot= GameObject->Transform.GetWorldRotation();
 		_dynamicBody->setGlobalPose(physx::PxTransform(pos.x, pos.y, pos.z, physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
-		auto rb = GameObject->GetComponent<Core::Components::Rigidbody>();
-		rb->SetParameters(_dynamicBody);
 	}
 }
 
 void Core::Components::BoxCollider::EditorDraw()
 {
+	if (!Application.GetSettings()->ShowCollider)
+		return;
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.
 	Math::Mat4 M = this->GameObject->Transform.GetModelMatrix() * Math::Mat4::CreateScaleMatrix(_extent);

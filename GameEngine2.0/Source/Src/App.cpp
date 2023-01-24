@@ -8,6 +8,7 @@
 
 #include "Include/Render/EditorGrid.h"
 #include "Include/Physic/Physic.h"
+#include "Include/Physic/PhysicHandler.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/EditorUi/GameWindow.h"
 #include "Include/EditorUi/SceneWindow.h"
@@ -118,7 +119,7 @@ void App::InitGlfw()
 	glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
 
 	// Disable V-Sync
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 }
 
 void App::InitImGui()
@@ -287,6 +288,12 @@ void App::BeginPlay()
 	_file.close();
 	if (Application.GetScene()->GetMainCamera())
 		ImGui::FocusWindow(this->_editorUi.GetGameWindow()->Window);
+}
+
+void App::BeginPause()
+{
+	GetScene()->GetPhysicHandler()->Update();
+	_gameState = GameState::Pause;
 }
 
 void App::EndPlay()

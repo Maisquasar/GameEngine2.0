@@ -24,6 +24,9 @@ namespace Math
 	// Return the number cut between the two int values.
 	inline int CutInt(int in, int min, int max);
 
+	// Return the number cut between the two int values.
+	inline bool EquivalentFloat(float a, float b, float dif);
+
 	// Function Modulo.
 	inline float Mod(float in, float value);
 
@@ -593,6 +596,8 @@ namespace Math
 		inline Quat operator*(const float& a) const;
 
 		inline Vec3 operator*(const Vec3& a) const;
+
+		inline bool operator!=(const Quat& q) const;
 
 		inline float& operator[](const size_t index);
 

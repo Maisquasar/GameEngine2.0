@@ -32,6 +32,11 @@ namespace Math {
 		return in;
 	}
 
+	bool EquivalentFloat(float a, float b, float dif)
+	{
+		return (a - dif < b&& a + dif > b);
+	}
+
 	inline float Mod(float in, float value)
 	{
 		return in - value * floorf(in / value);
@@ -1235,6 +1240,11 @@ namespace Math {
 		return { (1.f - (yy + zz)) * a.x + (xy - wz) * a.y + (xz + wy) * a.z ,
 				(xy + wz) * a.x + (1.f - (xx + zz)) * a.y + (yz - wx) * a.z ,
 				(xz - wy) * a.x + (yz + wx) * a.y + (1.f - (xx + yy)) * a.z };
+	}
+
+	inline bool Quat::operator!=(const Quat& q) const
+	{
+		return (x != q.x || y != q.y || z != q.z || w != q.w);
 	}
 
 	inline float& Quat::operator[](const size_t index)
