@@ -72,7 +72,7 @@ void EditorUi::MainBar::Draw()
 		ImGui::SetCursorPosX((float)(Application.GetWindowSize().x / 2) - 25.f);
 		if (ImGui::MenuItem(Application.GetGameState() == GameState::Play || Application.GetGameState() == GameState::Pause ? "[]" : "I>"))
 		{
-			if (Application.GetGameState() != GameState::Play)
+			if (Application.GetGameState() == GameState::Editor)
 			{
 				Application.BeginPlay();
 				EditorUi::Editor::GetConsole()->Clear();

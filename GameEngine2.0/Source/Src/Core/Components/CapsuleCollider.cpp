@@ -85,7 +85,7 @@ void Core::Components::CapsuleCollider::GameUpdate()
 
 using namespace Math;
 using namespace Resources;
-void Core::Components::CapsuleCollider::Draw()
+void Core::Components::CapsuleCollider::EditorDraw()
 {
 	glUseProgram(_shader->Program);
 	// Draw Up Demi-Sphere.

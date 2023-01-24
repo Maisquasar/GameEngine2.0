@@ -81,7 +81,7 @@ void Core::Components::SphereCollider::GameUpdate()
 	}
 }
 
-void Core::Components::SphereCollider::Draw()
+void Core::Components::SphereCollider::EditorDraw()
 {
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.

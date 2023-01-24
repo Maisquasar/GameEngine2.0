@@ -82,7 +82,7 @@ void Core::Components::BoxCollider::EndPause()
 	}
 }
 
-void Core::Components::BoxCollider::Draw()
+void Core::Components::BoxCollider::EditorDraw()
 {
 	glUseProgram(_shader->Program);
 	// Set the Model Matrix.

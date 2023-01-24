@@ -31,7 +31,7 @@ namespace Core::Components {
 
 		void EndPause() override;
 
-		void Draw() override;
+		void EditorDraw() override;
 		void DrawPicking(int id) override;
 		void Update() override;
 		void GameUpdate() override;

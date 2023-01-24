@@ -18,7 +18,7 @@ namespace Core::Components
 		void EndPause() override;
 
 		void GameUpdate() override;
-		void Draw() override;
+		void EditorDraw() override;
 		void DrawPicking(int id) override;
 
 		void ShowInInspector() override;

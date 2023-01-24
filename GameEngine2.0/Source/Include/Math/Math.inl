@@ -531,7 +531,25 @@ namespace Math {
 
 	inline Quat Vec3::ToQuaternion() const
 	{
-		return Quat::AngleAxis(x, Vec3(1, 0, 0)) * Quat::AngleAxis(y, Vec3(0, 1, 0)) * Quat::AngleAxis(z, Vec3(0, 0, 1));
+		auto a = this->ToRadians();
+		// Calculate the cosine of each half angle
+		float cy = std::cosf(a.z * 0.5f);
+		float cp = std::cosf(a.y * 0.5f);
+		float cr = std::cosf(a.x * 0.5f);
+
+		// Calculate the sine of each half angle
+		float sy = std::sinf(a.z * 0.5f);
+		float sp = std::sinf(a.y * 0.5f);
+		float sr = std::sinf(a.x * 0.5f);
+
+		// Calculate the quaternion elements
+		Quat q;
+		q.w = cy * cp * cr + sy * sp * sr;
+		q.x = cy * cp * sr - sy * sp * cr;
+		q.y = sy * cp * sr + cy * sp * cr;
+		q.z = sy * cp * cr - cy * sp * sr;
+
+		return q;
 	}
 
 	inline Vec3 Vec3::Lerp(const Vec3& a, const Vec3& b, float t)
@@ -1367,50 +1385,62 @@ namespace Math {
 
 		// Get Rotation from rotation matrix.
 		float thetaX, thetaY, thetaZ;
-		if (rotMat.at(2, 1) < 1)
+		if (rotMat.content[1][2] < 0.9999f)
 		{
-			if (rotMat.at(2, 1) > -1)
+			if (rotMat.content[1][2] > -0.9999f)
 			{
-				thetaX = asin(-rotMat.at(2, 1));
-				thetaY = atan2(rotMat.at(2, 0), rotMat.at(2, 2));
-				thetaZ = atan2(rotMat.at(0, 1), rotMat.at(1, 1));
+				thetaX = asinf(-rotMat.content[1][2]);
+				thetaY = atan2f(rotMat.content[0][2], rotMat.content[2][2]);
+				thetaZ = atan2f(rotMat.content[1][0], rotMat.content[1][1]);
 			}
 			else
 			{
-				thetaX = (float)PI / 2;
-				thetaY = -atan2(rotMat.at(1, 0), rotMat.at(0, 0));
+				thetaX = PI;
+				thetaY = -atan2f(-rotMat.content[0][1], rotMat.content[0][0]);
 				thetaZ = 0;
 			}
 		}
 		else
 		{
-			thetaX = -PI / 2;
-			thetaY = atan2(rotMat.at(1, 0), rotMat.at(0, 0));
+			thetaX = -PI;
+			thetaY = atan2f(-rotMat.content[0][1], rotMat.content[0][0]);
 			thetaZ = 0;
 		}
-		if (thetaX == -0)
-			thetaX = 0;
-		if (thetaY == -0)
-			thetaY = 0;
-		if (thetaZ == -0)
-			thetaZ = 0;
 		return Vec3(thetaX, thetaY, thetaZ).ToDegrees();
 	}
 
 	inline Mat4 Quat::ToRotationMatrix() const
 	{
 		Mat4 m = Mat4::Identity();
-		m.at(0, 0) = 1 - 2 * pow(y, 2.f) - 2 * pow(z, 2.f);
+#if 1
+		auto q0 = w;
+		auto q1 = x;
+		auto q2 = y;
+		auto q3 = z;
+		m.content[0][0] = 2 * (q0 * q0 + q1 * q1) - 1;
+		m.content[0][1]= 2 * (q1 * q2 - q0 * q3);
+		m.content[0][2]= 2 * (q1 * q3 + q0 * q2);
+					 
+		m.content[1][0]= 2 * (q1 * q2 + q0 * q3);
+		m.content[1][1]= 2 * (q0 * q0 + q2 * q2) - 1;
+		m.content[1][2]= 2 * (q2 * q3 - q0 * q1);
+					 
+		m.content[2][0]= 2 * (q1 * q3 - q0 * q2);
+		m.content[2][1]= 2 * (q2 * q3 + q0 * q1);
+		m.content[2][2]= 2 * (q0 * q0 + q3 * q3) - 1;
+#else
+		m.at(0, 0) = 1 - 2 * (y * y) - 2 * (z * z);
 		m.at(1, 0) = 2 * x * y + 2 * w * z;
 		m.at(2, 0) = 2 * x * z + 2 * w * y;
 
 		m.at(0, 1) = 2 * x * y + 2 * w * z;
-		m.at(1, 1) = 1 - 2 * pow(x, 2.f) - 2 * pow(z, 2.f);
+		m.at(1, 1) = 1 - 2 * (x * x) - 2 * (z * z);
 		m.at(2, 1) = 2 * y * z - 2 * w * x;
 
 		m.at(0, 2) = 2 * x * z - 2 * w * y;
 		m.at(1, 2) = 2 * y * z + 2 * w * x;
-		m.at(2, 2) = 1 - 2 * pow(x, 2.f) - 2 * pow(y, 2.f);
+		m.at(2, 2) = 1 - 2 * (x * x) - 2 * (y * y);
+#endif
 		return m;
 	}
 

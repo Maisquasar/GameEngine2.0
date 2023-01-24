@@ -20,7 +20,7 @@ namespace Core
 
 			void SetGameobject(Core::Node* node) override;
 			void GameUpdate() override;
-			void Draw() override; 
+			void EditorDraw() override;
 			void DrawPicking(int id) override;
 			void UpdateTransform() override;
 
