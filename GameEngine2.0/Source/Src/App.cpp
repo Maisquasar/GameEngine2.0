@@ -20,6 +20,7 @@
 #include "Include/Render/Gizmo.h"
 #include "Include/Debug/Log.h"
 #include "Include/Resources/Model.h"
+#include "Include/Resources/PhysicMaterial.h"
 
 App Application;
 
@@ -95,6 +96,7 @@ void App::InitializeApp(const char* Name, int width, int height)
 	InitGlfw();
 	InitGlad();
 	InitImGui();
+	Application._physicHandler.Initialize();
 	LoadResources();
 }
 
@@ -271,12 +273,16 @@ void App::FilesLoad(std::string path)
 		{
 			Utils::Loader::FBXLoad(entry.path().generic_string().data());
 		}
+		else if (ext == "phm")
+		{
+			_resourceManager.Create<Resources::PhysicMaterial>(entry.path().generic_string().data());
+		}
 	}
 }
 
 void App::BeginPlay()
 {
-	_scene.BeginPlay();
+	_physicHandler.BeginPlay();
 	_gameState = GameState::Play;
 	// Save Scene To Temporary Scene.
 	std::ofstream _file;
@@ -292,7 +298,6 @@ void App::BeginPlay()
 
 void App::BeginPause()
 {
-	GetScene()->GetPhysicHandler()->Update();
 	_gameState = GameState::Pause;
 }
 

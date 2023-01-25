@@ -133,14 +133,16 @@ void Resources::Mesh::Update(Math::Mat4 MVP, std::vector<Resources::Material*> m
 	if (!_initialized)
 		Initialize();
 	glBindVertexArray(_VAO);
-	glClearStencil(0);
-	glClear(GL_STENCIL_BUFFER_BIT);
-	// Render the mesh into the stencil buffer.
+	if (outline) {
+		glClearStencil(0);
+		glClear(GL_STENCIL_BUFFER_BIT);
+		// Render the mesh into the stencil buffer.
 
-	glEnable(GL_STENCIL_TEST);
+		glEnable(GL_STENCIL_TEST);
 
-	glStencilFunc(GL_ALWAYS, 1, -1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilFunc(GL_ALWAYS, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	}
 
 	for (int i = 0; i < materials.size(); i++)
 	{

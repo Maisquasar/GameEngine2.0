@@ -1,17 +1,15 @@
 #include "..\..\Include\Physic\PhysicHandler.h"
 #include "Include/Core/Components/Collider.h"
 #include "Include/App.h"
+#include "Include/Utils/Loader.h"
 
 
 Physic::PhysicHandler::PhysicHandler()
 {
-
 }
 
 Physic::PhysicHandler::~PhysicHandler()
 {
-	if (_defaultMaterial)
-		_defaultMaterial->release();
 	if (_scene)
 		_scene->release();
 	if (_physics)
@@ -28,21 +26,9 @@ Physic::PhysicHandler::~PhysicHandler()
 
 void Physic::PhysicHandler::BeginPlay()
 {
-	if (_defaultMaterial)
-		_defaultMaterial->release();
 	if (_scene)
 		_scene->release();
-	if (_physics)
-		_physics->release();
-	if (_dispatcher)
-		_dispatcher->release();
-	if (_pvd)
-		_pvd->release();
-	if (_transport)
-		_transport->release();
-	if (_foundation)
-		_foundation->release();
-	Initialize();
+	CreateScene();
 	for (auto obj : _objects)
 	{
 		obj->InitializePhysics();
@@ -57,15 +43,18 @@ void Physic::PhysicHandler::Initialize()
 	_pvd = PxCreatePvd(*_foundation);
 	_transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 	_pvd->connect(*_transport, physx::PxPvdInstrumentationFlag::eALL);
-	//mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, PxTolerancesScale(),true, mPvd);
 	_toleranceScale.length = 1;        // typical length of an object
 	_toleranceScale.speed = 981;         // typical speed of an object, gravity*1s is a reasonable choice
 	_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, _toleranceScale, true, _pvd);
-	//mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, mToleranceScale);
+	
+	_dispatcher = physx::PxDefaultCpuDispatcherCreate(2);
+}
 
+void Physic::PhysicHandler::CreateScene()
+{
 	physx::PxSceneDesc sceneDesc(_physics->getTolerancesScale());
 	sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
-	_dispatcher = physx::PxDefaultCpuDispatcherCreate(2);
+	sceneDesc.bounceThresholdVelocity = 0.f;
 	sceneDesc.cpuDispatcher = _dispatcher;
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 	_scene = _physics->createScene(sceneDesc);
@@ -77,7 +66,6 @@ void Physic::PhysicHandler::Initialize()
 		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 		_sceneClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 	}
-	_defaultMaterial = _physics->createMaterial(0.f, 0.f, 1.f);
 }
 
 void Physic::PhysicHandler::EndPause()
@@ -109,9 +97,9 @@ void Physic::PhysicHandler::RemoveCollider(Core::Components::Collider* object)
 	}
 }
 
-physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCube(const Math::Vec3& extent, physx::PxTransform transform)
+physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCube(const Math::Vec3& extent, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material)
 {
-	physx::PxShape* shape = _physics->createShape(physx::PxBoxGeometry(extent.x, extent.y, extent.z), *_defaultMaterial);
+	shape = _physics->createShape(physx::PxBoxGeometry(extent.x, extent.y, extent.z), *Material);
 	physx::PxRigidStatic* body = _physics->createRigidStatic(transform);
 	body->attachShape(*shape);
 	_scene->addActor(*body);
@@ -119,9 +107,9 @@ physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCube(const Math::Vec3& 
 	return body;
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCube(const Math::Vec3& extent, physx::PxTransform transform)
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCube(const Math::Vec3& extent, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material)
 {
-	physx::PxShape* shape = _physics->createShape(physx::PxBoxGeometry(extent.x, extent.y, extent.z), *_defaultMaterial);
+	shape = _physics->createShape(physx::PxBoxGeometry(extent.x, extent.y, extent.z), *Material);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
 	_scene->addActor(*body);
@@ -129,9 +117,9 @@ physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCube(const Math::Vec3
 	return body;
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, physx::PxTransform transform)
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material)
 {
-	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
+	shape = _physics->createShape(physx::PxSphereGeometry(radius), *Material);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
 	_scene->addActor(*body);
@@ -139,9 +127,9 @@ physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicSphere(float radius, 
 	return body;
 }
 
-physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticSphere(float radius, physx::PxTransform transform)
+physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticSphere(float radius, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material)
 {
-	physx::PxShape* shape = _physics->createShape(physx::PxSphereGeometry(radius), *_defaultMaterial);
+	shape = _physics->createShape(physx::PxSphereGeometry(radius), *Material);
 	physx::PxRigidStatic* body = _physics->createRigidStatic(transform);
 	body->attachShape(*shape);
 	_scene->addActor(*body);
@@ -149,9 +137,9 @@ physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticSphere(float radius, ph
 	return body;
 }
 
-physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCaspule(float radius, float height, physx::PxTransform transform)
+physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCaspule(float radius, float height, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material)
 {
-	physx::PxShape* shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *_defaultMaterial);
+	shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *Material);
 	physx::PxRigidDynamic* body = _physics->createRigidDynamic(transform);
 	body->attachShape(*shape);
 	_scene->addActor(*body);
@@ -159,9 +147,9 @@ physx::PxRigidDynamic* Physic::PhysicHandler::CreateDynamicCaspule(float radius,
 	return body;
 }
 
-physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCaspule(float radius, float height, physx::PxTransform transform)
+physx::PxRigidStatic* Physic::PhysicHandler::CreateStaticCaspule(float radius, float height, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material)
 {
-	physx::PxShape* shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *_defaultMaterial);
+	shape = _physics->createShape(physx::PxCapsuleGeometry(radius, height), *Material);
 	physx::PxRigidStatic* body = _physics->createRigidStatic(transform);
 	body->attachShape(*shape);
 	_scene->addActor(*body);

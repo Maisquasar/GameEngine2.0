@@ -55,8 +55,8 @@ float Utils::Loader::GetFloat(std::string line)
 	std::string temp = line;
 	temp = temp.substr(temp.find_first_of(' '));
 	temp = temp.substr(temp.find_first_of(':') + 2);
-	value = temp.substr(0, temp.find_first_of('\n') - 1);
-	value = value.substr(0, value.find_first_of('\r') - 1);
+	value = temp.substr(0, temp.find_first_of('\n'));
+	value = value.substr(0, value.find_first_of('\r'));
 	out = std::stof(value);
 	return out;
 }

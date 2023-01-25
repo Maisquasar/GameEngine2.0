@@ -8,13 +8,9 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "PhysicMaterial.h"
 
 #include "Include/Utils/Utils.h"
-
-namespace Core::Components
-{
-	class Mesh;
-}
 namespace Resources {
 	class ResourceManager
 	{
@@ -129,6 +125,7 @@ namespace Resources {
 
 		void RecompileShaders();
 
+		PhysicMaterial* GetDefaultPhysicMaterial();
 		Shader* GetDefaultShader();
 		Shader* GetDefaultAnimShader();
 		Shader* GetPickingShader();

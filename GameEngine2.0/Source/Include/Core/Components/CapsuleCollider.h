@@ -27,8 +27,6 @@ namespace Core::Components
 		void Save(std::string space, std::string& content) override;
 		void Load(const char* data, uint32_t& pos) override;
 	private:
-		physx::PxRigidDynamic* _dynamicBody;
-		physx::PxRigidStatic* _staticBody;
 		unsigned int _VBO[3] = { 0, 0, 0 };
 		unsigned int _VAO[3] = { 0, 0, 0 };
 		std::vector<float> _vertices[3];

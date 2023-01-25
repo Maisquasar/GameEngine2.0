@@ -15,7 +15,7 @@ Core::Components::SphereCollider::SphereCollider()
 
 Core::Components::SphereCollider::~SphereCollider()
 {
-	Application.GetScene()->GetPhysicHandler()->RemoveCollider(this);
+	Application.GetPhysicHandler()->RemoveCollider(this);
 }
 
 void Core::Components::SphereCollider::SetGameobject(Core::Node* node)
@@ -45,7 +45,7 @@ void Core::Components::SphereCollider::Initialize()
 	glVertexAttribPointer(2U, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float[3])));
 	glEnableVertexAttribArray(2U);
 
-	Application.GetScene()->GetPhysicHandler()->AddCollider(this);
+	Application.GetPhysicHandler()->AddCollider(this);
 }
 
 void Core::Components::SphereCollider::InitializePhysics()
@@ -55,11 +55,11 @@ void Core::Components::SphereCollider::InitializePhysics()
 	auto quat = modelMatrix.GetRotation();
 	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
 	if (auto rb = GameObject->GetComponent<Core::Components::Rigidbody>()) {
-		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicSphere(_radius, transform);
+		_dynamicBody = Application.GetPhysicHandler()->CreateDynamicSphere(_radius, transform, _shape, _physicalMaterial->GetMaterial());
 		rb->SetParameters(_dynamicBody);
 	}
 	else
-		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticSphere(_radius, transform);
+		_staticBody = Application.GetPhysicHandler()->CreateStaticSphere(_radius, transform, _shape, _physicalMaterial->GetMaterial());
 }
 
 void Core::Components::SphereCollider::EndPause()
@@ -135,6 +135,18 @@ void Core::Components::SphereCollider::UpdateTransform()
 void Core::Components::SphereCollider::ShowInInspector()
 {
 	ImGui::DragFloat("Radius", &_radius, 0.1f);
+	if (ImGui::Button("Change Physical Material"))
+	{
+		ImGui::OpenPopup("Physical Material Popup");
+	}
+	if (auto phm = Application.GetResourceManager()->ResourcesPopup<Resources::PhysicMaterial>("Physical Material Popup"))
+	{
+		_physicalMaterial = phm;
+		if (_shape)
+			_shape->setMaterials(phm->GetMaterials(), 1);
+	}
+	ImGui::SameLine();
+	ImGui::TextUnformatted(_physicalMaterial->GetName().c_str());
 }
 
 void Core::Components::SphereCollider::SetUIIcon()
@@ -152,6 +164,7 @@ Math::Mat4 Core::Components::SphereCollider::GetModelMatrix()
 void Core::Components::SphereCollider::Save(std::string space, std::string& content)
 {
 	content += space + Utils::StringFormat("Radius : %f\n", _radius);
+	content += space + Utils::StringFormat("Material : %s\n", _physicalMaterial->GetPath().c_str());
 }
 
 void Core::Components::SphereCollider::Load(const char* data, uint32_t& pos)
@@ -163,6 +176,10 @@ void Core::Components::SphereCollider::Load(const char* data, uint32_t& pos)
 		if (currentLine.substr(0, 6) == "Radius")
 		{
 			_radius = Utils::Loader::GetFloat(currentLine);
+		}
+		else if (currentLine.substr(0, 8) == "Material")
+		{
+			_physicalMaterial = Application.GetResourceManager()->Get<Resources::PhysicMaterial>(Utils::Loader::GetString(currentLine).c_str());
 		}
 		pos++;
 	}

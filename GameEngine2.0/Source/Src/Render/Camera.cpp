@@ -159,6 +159,6 @@ Math::Vec3 Render::Camera::UnProject(Math::Vec2 point)
 
 bool Render::Camera::IsVisible()
 {
-	 if (EditorUi::Editor::GetSceneWindow()->Window) return EditorUi::Editor::GetSceneWindow()->Window->DockTabIsVisible;
+	 if (EditorUi::Editor::GetSceneWindow()->Window) return (*EditorUi::Editor::GetSceneWindow()->IsOpen() && EditorUi::Editor::GetSceneWindow()->Window->DockTabIsVisible);
 	 return true;
 }

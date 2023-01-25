@@ -17,13 +17,10 @@ Core::Scene::Scene() {}
 Core::Scene::~Scene()
 {
 	delete _sceneNode;
-	delete _physicHandler;
 }
 
 void Core::Scene::Initialize()
 {
-	_physicHandler = new Physic::PhysicHandler();
-	_physicHandler->Initialize();
 	_cameraEditor.Initialize();
 	_cameraEditor.Update(true);
 	LoadScene("Assets/Default/Scenes/DefaultScene.scene");
@@ -32,14 +29,14 @@ void Core::Scene::Initialize()
 
 void Core::Scene::BeginPlay()
 {
-	_physicHandler->BeginPlay();
 }
 
 void Core::Scene::Update()
 {
 	// First Render form camera Editor.
 	_sceneNode->UpdateSelfAndChilds();
-	_physicHandler->Update();
+	// Update Physic.
+	Application.GetPhysicHandler()->Update();
 	if (_cameraEditor.IsVisible()) {
 		_currentCamera = &_cameraEditor;
 		_VP = _cameraEditor.GetVP();

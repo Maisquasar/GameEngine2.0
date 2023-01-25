@@ -80,6 +80,7 @@
     <ClCompile Include="Source\Src\Resources\Material.cpp" />
     <ClCompile Include="Source\Src\Resources\MeshInstance.cpp" />
     <ClCompile Include="Source\Src\Resources\Model.cpp" />
+    <ClCompile Include="Source\Src\Resources\PhysicMaterial.cpp" />
     <ClCompile Include="Source\Src\Resources\ResourceManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Shader.cpp" />
     <ClCompile Include="Source\Src\Resources\SkeletalMesh.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Source\Include\Resources\Model.h" />
     <ClInclude Include="Source\Include\Resources\IResource.h" />
     <ClInclude Include="Source\Include\Resources\Material.h" />
+    <ClInclude Include="Source\Include\Resources\PhysicMaterial.h" />
     <ClInclude Include="Source\Include\Resources\ResourceManager.h" />
     <ClInclude Include="Source\Include\Resources\Shader.h" />
     <ClInclude Include="Source\Include\Resources\SkeletalMesh.h" />

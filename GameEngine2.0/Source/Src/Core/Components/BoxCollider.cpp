@@ -24,7 +24,7 @@ Core::Components::BoxCollider::BoxCollider()
 
 Core::Components::BoxCollider::~BoxCollider()
 {
-	Application.GetScene()->GetPhysicHandler()->RemoveCollider(this);
+	Application.GetPhysicHandler()->RemoveCollider(this);
 }
 
 void Core::Components::BoxCollider::SetGameobject(Core::Node* node)
@@ -54,7 +54,7 @@ void Core::Components::BoxCollider::Initialize()
 	glVertexAttribPointer(2U, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float[3])));
 	glEnableVertexAttribArray(2U);
 
-	Application.GetScene()->GetPhysicHandler()->AddCollider(this);
+	Application.GetPhysicHandler()->AddCollider(this);
 }
 
 void Core::Components::BoxCollider::InitializePhysics()
@@ -66,11 +66,11 @@ void Core::Components::BoxCollider::InitializePhysics()
 	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
 	if (auto rb = GameObject->GetComponent<Core::Components::Rigidbody>())
 	{
-		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCube(scale * _extent, transform);
+		_dynamicBody = Application.GetPhysicHandler()->CreateDynamicCube(scale * _extent, transform, _shape, _physicalMaterial->GetMaterial());
 		rb->SetParameters(_dynamicBody);
 	}
 	else
-		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCube(scale * _extent, transform);
+		_staticBody = Application.GetPhysicHandler()->CreateStaticCube(scale * _extent, transform, _shape, _physicalMaterial->GetMaterial());
 }
 
 void Core::Components::BoxCollider::EndPause()
@@ -153,6 +153,18 @@ void Core::Components::BoxCollider::GameUpdate()
 void Core::Components::BoxCollider::ShowInInspector()
 {
 	ImGui::DragFloat3("Extent", &_extent[0], 0.1f);
+	if (ImGui::Button("Change Physical Material"))
+	{
+		ImGui::OpenPopup("Physical Material Popup");
+	}
+	if (auto phm = Application.GetResourceManager()->ResourcesPopup<Resources::PhysicMaterial>("Physical Material Popup"))
+	{
+		_physicalMaterial = phm;
+		if (_shape)
+			_shape->setMaterials(phm->GetMaterials(), 1);
+	}
+	ImGui::SameLine();
+	ImGui::TextUnformatted(_physicalMaterial->GetName().c_str());
 }
 
 void Core::Components::BoxCollider::SetUIIcon()
@@ -163,6 +175,7 @@ void Core::Components::BoxCollider::SetUIIcon()
 void Core::Components::BoxCollider::Save(std::string space, std::string& content)
 {
 	content += space + Utils::StringFormat("Extent : %s\n", _extent.ToString().c_str());
+	content += space + Utils::StringFormat("Material : %s\n", _physicalMaterial->GetPath().c_str());
 }
 
 void Core::Components::BoxCollider::Load(const char* data, uint32_t& pos)
@@ -174,6 +187,10 @@ void Core::Components::BoxCollider::Load(const char* data, uint32_t& pos)
 		if (currentLine.substr(0, 6) == "Extent")
 		{
 			_extent = Utils::Loader::GetVector3(currentLine);
+		}
+		else if (currentLine.substr(0, 8) == "Material")
+		{
+			_physicalMaterial = Application.GetResourceManager()->Get<Resources::PhysicMaterial>(Utils::Loader::GetString(currentLine).c_str());
 		}
 		pos++;
 	}

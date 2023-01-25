@@ -9,7 +9,7 @@
 #include "Include/Utils/ThreadManager.h"
 #include "Include/Utils/AppSettings.h"
 #include "Include/Core/Scene.h"
-
+#include "Include/Physic/PhysicHandler.h"
 enum class GameState
 {
 	Play,
@@ -52,6 +52,8 @@ public:
 
 	Resources::ResourceManager* GetResourceManager() { return &_resourceManager; }
 
+	Physic::PhysicHandler* GetPhysicHandler() { return &_physicHandler; }
+
 	Core::Scene* GetScene() { return &_scene; }
 
 	Core::Components::Data Components;
@@ -78,6 +80,7 @@ private:
 
 	// Managers
 	Resources::ResourceManager _resourceManager;
+	Physic::PhysicHandler _physicHandler;
 
 	// Utils
 	Utils::Input _input;

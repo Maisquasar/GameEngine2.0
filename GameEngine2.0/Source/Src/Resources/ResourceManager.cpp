@@ -68,6 +68,11 @@ void Resources::ResourceManager::RecompileShaders()
 	}
 }
 
+Resources::PhysicMaterial* Resources::ResourceManager::GetDefaultPhysicMaterial()
+{
+	return Get<Resources::PhysicMaterial>("Assets/Default/Physic/Default.phm");
+}
+
 Resources::Shader* Resources::ResourceManager::GetDefaultShader()
 {
 	return Get<Resources::Shader>("Assets/Default/Shaders/UnlitShader");

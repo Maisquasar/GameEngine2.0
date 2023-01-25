@@ -32,8 +32,6 @@ namespace Core
 			void Save(std::string space, std::string& content);
 			void Load(const char* data, uint32_t& pos);
 		private:
-			physx::PxRigidDynamic* _dynamicBody;
-			physx::PxRigidStatic* _staticBody;
 			unsigned int _VBO = 0;
 			unsigned int _VAO = 0;
 			std::vector<float> _vertices;

@@ -22,6 +22,7 @@ namespace EditorUi {
 		Obj,
 		Scn,
 		Shdr,
+		Phm,
 	};
 
 	class File

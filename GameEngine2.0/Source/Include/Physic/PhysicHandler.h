@@ -24,21 +24,23 @@ namespace Physic {
 
 		void BeginPlay();
 		void Initialize();
+		void CreateScene();
 		void EndPause();
 		void Update();
-
 
 		void AddCollider(Core::Components::Collider* object);
 		void RemoveCollider(Core::Components::Collider* object);
 		// Cube
-		physx::PxRigidDynamic* CreateDynamicCube(const Math::Vec3& shape, physx::PxTransform transform);
-		physx::PxRigidStatic* CreateStaticCube(const Math::Vec3& shape, physx::PxTransform transform);
+		physx::PxRigidDynamic* CreateDynamicCube(const Math::Vec3& extent, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material);
+		physx::PxRigidStatic* CreateStaticCube(const Math::Vec3& extent, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material);
 		// Sphere
-		physx::PxRigidDynamic* CreateDynamicSphere(float radius, physx::PxTransform transform);
-		physx::PxRigidStatic* CreateStaticSphere(float radius, physx::PxTransform transform);
+		physx::PxRigidDynamic* CreateDynamicSphere(float radius, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material);
+		physx::PxRigidStatic* CreateStaticSphere(float radius, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material);
 		// Capsule
-		physx::PxRigidDynamic* CreateDynamicCaspule(float radius, float height, physx::PxTransform transform);
-		physx::PxRigidStatic* CreateStaticCaspule(float radius, float height, physx::PxTransform transform);
+		physx::PxRigidDynamic* CreateDynamicCaspule(float radius, float height, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material);
+		physx::PxRigidStatic* CreateStaticCaspule(float radius, float height, physx::PxTransform transform, physx::PxShape* shape, physx::PxMaterial* Material);
+
+		physx::PxPhysics* GetPhysics() { return _physics; }
 
 	private:
 		physx::PxDefaultAllocator      _defaultAllocatorCallback;

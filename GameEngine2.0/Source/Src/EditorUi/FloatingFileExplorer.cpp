@@ -245,7 +245,7 @@ void EditorUi::FloatingFileExplorer::DrawAndSave(std::string data)
 				if (ImGui::IsItemHovered())
 				{
 					ImGui::BeginTooltip();
-					ImGui::Text(f->Name.c_str());
+					ImGui::TextUnformatted(f->Name.c_str());
 					ImGui::EndTooltip();
 				}
 				ImGui::TextUnformatted(f->Name.substr(0, 10).c_str());
@@ -336,6 +336,17 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 			mat->SetName("NewMaterial");
 			Application.GetResourceManager()->Add(mat->GetPath().c_str(), mat);
 			Utils::Loader::WriteMaterial(mat);
+			_current->FoundChildren();
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("New Physic Material"))
+		{
+			auto phmat = new Resources::PhysicMaterial();
+			phmat->SetPath(_current->Directory + "/NewPhysicMaterial.phm");
+			phmat->SetName("NewMaterial");
+			phmat->Save();
+			phmat->Initialize();
+			Application.GetResourceManager()->Add(phmat->GetPath().c_str(), phmat);
 			_current->FoundChildren();
 			ImGui::CloseCurrentPopup();
 		}

@@ -15,7 +15,7 @@ Core::Components::CapsuleCollider::CapsuleCollider()
 
 Core::Components::CapsuleCollider::~CapsuleCollider()
 {
-	Application.GetScene()->GetPhysicHandler()->RemoveCollider(this);
+	Application.GetPhysicHandler()->RemoveCollider(this);
 }
 
 void Core::Components::CapsuleCollider::Initialize()
@@ -44,7 +44,7 @@ void Core::Components::CapsuleCollider::Initialize()
 		glEnableVertexAttribArray(2);
 	}
 
-	Application.GetScene()->GetPhysicHandler()->AddCollider(this);
+	Application.GetPhysicHandler()->AddCollider(this);
 }
 
 void Core::Components::CapsuleCollider::InitializePhysics()
@@ -56,11 +56,11 @@ void Core::Components::CapsuleCollider::InitializePhysics()
 	auto quat = rot.ToQuaternion();
 	auto transform = physx::PxTransform(physx::PxVec3(worlpos.x, worlpos.y, worlpos.z), physx::PxQuat(quat.x, quat.y, quat.z, quat.w).getConjugate());
 	if (auto rb = GameObject->GetComponent<Core::Components::Rigidbody>()) {
-		_dynamicBody = Application.GetScene()->GetPhysicHandler()->CreateDynamicCaspule(_radius, _height / 2, transform);
+		_dynamicBody = Application.GetPhysicHandler()->CreateDynamicCaspule(_radius, _height / 2, transform, _shape, _physicalMaterial->GetMaterial());
 		rb->SetParameters(_dynamicBody);
 	}
 	else
-		_staticBody = Application.GetScene()->GetPhysicHandler()->CreateStaticCaspule(_radius, _height / 2, transform);
+		_staticBody = Application.GetPhysicHandler()->CreateStaticCaspule(_radius, _height / 2, transform, _shape, _physicalMaterial->GetMaterial());
 }
 
 void Core::Components::CapsuleCollider::EndPause()
@@ -189,7 +189,19 @@ void Core::Components::CapsuleCollider::ShowInInspector()
 {
 	ImGui::DragFloat3("Center", &_center[0], 0.1f);
 	ImGui::DragFloat("Height", &_height, 0.1f);
-	ImGui::DragFloat("Radius", &_radius, 0.1f);
+	ImGui::DragFloat("Radius", &_radius, 0.1f); 
+	if (ImGui::Button("Change Physical Material"))
+	{
+		ImGui::OpenPopup("Physical Material Popup");
+	}
+	if (auto phm = Application.GetResourceManager()->ResourcesPopup<Resources::PhysicMaterial>("Physical Material Popup"))
+	{
+		_physicalMaterial = phm;
+		if (_shape)
+			_shape->setMaterials(phm->GetMaterials(), 1);
+	}
+	ImGui::SameLine();
+	ImGui::TextUnformatted(_physicalMaterial->GetName().c_str());
 }
 
 void Core::Components::CapsuleCollider::SetUIIcon()
@@ -201,6 +213,7 @@ void Core::Components::CapsuleCollider::Save(std::string space, std::string& con
 	content += space + Utils::StringFormat("Center : %s\n", this->_center.ToString().c_str());
 	content += space + Utils::StringFormat("Radius : %f\n", this->_radius);
 	content += space + Utils::StringFormat("Height : %f\n", this->_height);
+	content += space + Utils::StringFormat("Material : %s\n", _physicalMaterial->GetPath().c_str());
 }
 
 void Core::Components::CapsuleCollider::Load(const char* data, uint32_t& pos)
@@ -220,6 +233,10 @@ void Core::Components::CapsuleCollider::Load(const char* data, uint32_t& pos)
 		else if (currentLine.substr(0, 6) == "Center")
 		{
 			_center = Utils::Loader::GetVector3(currentLine);
+		}
+		else if (currentLine.substr(0, 8) == "Material")
+		{
+			_physicalMaterial = Application.GetResourceManager()->Get<Resources::PhysicMaterial>(Utils::Loader::GetString(currentLine).c_str());
 		}
 		pos++;
 	}

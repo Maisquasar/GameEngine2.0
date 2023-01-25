@@ -55,7 +55,6 @@ namespace Core
 		std::string GetCurrentScenePath() { return _currentScenePath; }
 		Math::Mat4 GetVPMatrix() { return _VP; }
 		Math::Vec4 GetClearColor() { return _clearColor; }
-		Physic::PhysicHandler* GetPhysicHandler() { return _physicHandler; }
 		std::vector<Render::Camera*> Cameras;
 
 	private:
@@ -76,8 +75,6 @@ namespace Core
 		Render::Gizmo _gizmo;
 		Render::EditorGrid _grid;
 
-		//Phyic
-		Physic::PhysicHandler* _physicHandler;
 		friend class EditorUi::SceneWindow;
 	};
 }

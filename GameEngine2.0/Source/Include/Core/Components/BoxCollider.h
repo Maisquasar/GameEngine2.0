@@ -6,6 +6,7 @@
 namespace Resources
 {
 	class Shader;
+	class PhysicMaterial;
 }
 
 namespace Physic
@@ -43,8 +44,6 @@ namespace Core::Components {
 		void Load(const char* data, uint32_t& pos);
 
 	private:
-		physx::PxRigidDynamic* _dynamicBody;
-		physx::PxRigidStatic* _staticBody;
 		Math::Vec3 _extent = Math::Vec3(1);
 		unsigned int _VBO = 0;
 		unsigned int _VAO = 0;
