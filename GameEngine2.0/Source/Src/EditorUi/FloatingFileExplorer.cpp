@@ -363,9 +363,7 @@ void EditorUi::FloatingFileExplorer::RightClickWindow()
 				// Change Resource Linked key to the new Path.
 				if (_rightClicked->ResourceLink)
 				{
-					std::string NewName = Name;
-					NewName = NewName.substr(0, NewName.find_last_of(".") - 1);
-					_rightClicked->ResourceLink->SetName(NewName);
+					_rightClicked->ResourceLink->SetName(Name);
 					Application.GetResourceManager()->ChangeKey(_rightClicked->ResourceLink->GetPath(), NewPath, _rightClicked->ResourceLink);
 					_rightClicked->ResourceLink->SetPath(NewPath);
 				}
