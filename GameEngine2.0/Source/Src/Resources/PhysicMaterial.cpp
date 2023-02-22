@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Resources/PhysicMaterial.h"
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"

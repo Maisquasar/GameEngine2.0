@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Render/Gizmo.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"

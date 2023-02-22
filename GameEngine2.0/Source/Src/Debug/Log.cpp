@@ -1,4 +1,4 @@
-#include "Include/Debug/Log.h"
+#include "stdafx.h"
 EditorUi::Console Debug::Log::Console;
 
 Debug::Log::Log() {}

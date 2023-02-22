@@ -1,7 +1,6 @@
+#include "stdafx.h"
 #include "Include/Debug/Line.h"
 
-#include <glad/glad.h>
-#include <vector>
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
 

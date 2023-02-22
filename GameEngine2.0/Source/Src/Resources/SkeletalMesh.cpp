@@ -1,5 +1,4 @@
-#include <Windows.h>
-#include <glad/glad.h>
+#include "stdafx.h"
 
 #include "Include/Resources/SkeletalMesh.h"
 #include "Include/Resources/Material.h"

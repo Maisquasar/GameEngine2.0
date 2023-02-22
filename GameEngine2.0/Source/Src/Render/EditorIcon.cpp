@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Render/EditorIcon.h"
 #include "Include/App.h"
 #include "Include/Resources/Mesh.h"

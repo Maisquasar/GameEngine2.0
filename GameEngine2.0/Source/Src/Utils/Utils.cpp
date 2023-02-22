@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "Include/Utils/Utils.h"
 #include "Include/Core/Node.h"
-#include <ImGui/imgui.h>
 
 float Utils::GetDistanceAxis(Math::Vec3 point1, Math::Vec3 point2, Math::Vec3 axis)
 {

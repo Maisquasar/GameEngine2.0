@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "..\..\..\Include\Core\Components\CapsuleCollider.h"
-#include <ImGui/imgui.h>
 
 #include "Include\App.h"
 #include "Include/Physic/PhysicHandler.h"

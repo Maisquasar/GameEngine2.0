@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "..\..\Include\EditorUi\GameWindow.h"
 #include "Include\App.h"
 

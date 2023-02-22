@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Resources/ResourceManager.h"
 
 #include "Include/Utils/Utils.h"

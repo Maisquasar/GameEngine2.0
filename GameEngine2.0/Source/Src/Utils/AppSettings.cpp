@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Utils/AppSettings.h"
 
 Utils::AppSettings::AppSettings()

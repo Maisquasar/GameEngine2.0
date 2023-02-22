@@ -1,5 +1,5 @@
+#include "stdafx.h"
 
-#include <iostream>
 #include "Include/App.h"
 
 #define _CRTDBG_MAP_ALLOC

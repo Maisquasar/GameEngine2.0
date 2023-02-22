@@ -1,7 +1,5 @@
 #pragma once
 #include "Transform.h"
-#include <ImGui/imgui.h>
-#include <ImGui/imgui_internal.h>
 #include "Components/Component.h"
 namespace Resources
 {

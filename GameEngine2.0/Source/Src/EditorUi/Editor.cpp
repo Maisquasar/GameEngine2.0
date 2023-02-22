@@ -1,4 +1,4 @@
-#include "Include/Debug/Log.h"
+#include "stdafx.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/EditorUi/Hierarchy.h"
 #include "Include/EditorUi/MainBar.h"

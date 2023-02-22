@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "..\..\Include\Resources\Mesh.h"
-#include <map>
 #include "Include/App.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/Resources/Material.h"

@@ -1,8 +1,7 @@
-#include <ImGui/imgui.h>
+#include "stdafx.h"
 
 #include "Include/Core/Scene.h"
 #include "Include/Core/Node.h"
-#include "Include/Debug/Log.h"
 #include "Include/App.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/EditorUi/SceneWindow.h"

@@ -1,7 +1,6 @@
+#include "stdafx.h"
 #include "..\..\Include\Resources\BillBoard.h"
 
-#include <Windows.h>
-#include <glad/glad.h>
 #include "Include/Resources/Material.h"
 #include "Include/Resources/Shader.h"
 #include "Include/App.h"

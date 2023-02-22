@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Core/Components/AnimationComponent.h"
 #include "Include/Core/Components/SkeletalMeshComponent.h"
 

@@ -1,7 +1,7 @@
+#include "stdafx.h"
 #include "Include/Resources/Skeleton.h"
 #include "Include/Core/Components/SkeletalMeshComponent.h"
 #include "Include/Debug/Line.h"
-#include "Include/Debug/Log.h"
 #include "Include/EditorUi/Editor.h"
 #include "Include/EditorUi/AnimationWindow.h"
 

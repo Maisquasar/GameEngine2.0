@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "..\..\Include\Utils\Loader.h"
 
-#include <OpenFBX/ofbx.h>
 #include "Include/App.h"
 #include "Include/Resources/Mesh.h"
 
@@ -445,7 +445,15 @@ void Utils::Loader::FBXLoad(std::string path)
 		delete[] data;
 		return;
 	}
+
+	auto begin = std::chrono::high_resolution_clock::now();
+
+	PrintLog("Loading Model : %s", path.data());
 	ofbx::IScene* Scene = ofbx::load(data, size, (ofbx::u64)ofbx::LoadFlags::TRIANGULATE);
+
+	auto end = std::chrono::high_resolution_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+	PrintLog("Model %s Loading Time : %.5f seconds.", path.data(), elapsed.count() * 1e-9);
 #if MULTITHREAD_LOADING
 	Application.ThreadManager.QueueJob(&MutlithreadLoad, Scene, path);
 #else

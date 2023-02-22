@@ -1,6 +1,4 @@
 #pragma once
-#include <Windows.h>
-#include <ImGui/imgui.h>
 #include "Include/Math/Math.h"
 #include "Include/Core/Transform.h"
 #include "Framebuffer.h"

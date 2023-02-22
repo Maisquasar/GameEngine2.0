@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Resources/Shader.h"
 std::string ReadFile(std::filesystem::path const& filename);
 

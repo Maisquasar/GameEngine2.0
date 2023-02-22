@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Core/Transform.h"
 #include "Include/Core/Components/Component.h"
 #include "Include/Core/Node.h"

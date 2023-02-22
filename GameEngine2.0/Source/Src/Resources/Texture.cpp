@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Resources/Texture.h"
 #include "Include/App.h"
 #define STB_IMAGE_IMPLEMENTATION

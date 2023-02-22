@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "Include/Utils/Input.h"
-#include "Include/Debug/Log.h"
 #include "Include/App.h"
 
 float Utils::Input::MouseScroll;

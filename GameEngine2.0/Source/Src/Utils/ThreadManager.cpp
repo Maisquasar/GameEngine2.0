@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "Include/Utils/ThreadManager.h"
-#include "Include/Debug/Log.h"
 
 Utils::ThreadManager::ThreadManager()
 {
