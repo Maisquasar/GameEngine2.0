@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/EditorUi/Hierarchy.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Resources/Model.h"

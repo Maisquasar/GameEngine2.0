@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include\Core\Components\Component.h"
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Core/Components/SphereCollider.h"

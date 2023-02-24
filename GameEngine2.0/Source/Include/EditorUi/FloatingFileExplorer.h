@@ -1,10 +1,6 @@
 #pragma once
-#include "Include/Debug/Log.h"
-#include <memory>
-#include <string>
 
 #include "File.h"
-#include "ImGui/imgui.h"
 #include "EditorWindow.h"
 
 

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/EditorUi/MainBar.h"
 #include "Include/App.h"
 #include "Include/EditorUi/Editor.h"

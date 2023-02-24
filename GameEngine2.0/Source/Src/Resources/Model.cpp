@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "..\..\Include\Resources\Model.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"

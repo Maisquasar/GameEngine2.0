@@ -1,9 +1,9 @@
+#include "stdafx.h"
 #include "..\..\Include\EditorUi\AnimationWindow.h"
 #include "Include/Resources/Animation.h"
 #include "Include/Core/Components/AnimationComponent.h"
 #include "Include/Resources/Skeleton.h"
 #include "Include/App.h"
-#include <ImGui/ImGuizmo/ImSequencer.h>
 
 void MySequence::CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& legendRect, const ImRect& clippingRect, const ImRect& legendClippingRect)
 {

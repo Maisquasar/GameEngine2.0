@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Core/Components/Rigidbody.h"
 #include "Include/App.h"
 #include "Include/Resources/Texture.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Core/Components/ParticleSystem.h"
 #include "Include/Render/InstancesManager.h"
 #include "Include/Render/EditorIcon.h"
@@ -8,10 +9,6 @@
 #include "Include/App.h"
 #include "Include/Core/Node.h"
 #include "Include/Core/Transform.h"
-
-#include <Windows.h>
-#include <glad/glad.h>
-#include <algorithm>
 
 #pragma region ParticleSystem
 Core::Components::ParticleSystem::ParticleSystem()

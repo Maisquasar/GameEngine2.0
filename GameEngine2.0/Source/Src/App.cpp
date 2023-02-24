@@ -1,9 +1,6 @@
+#include "stdafx.h"
 #include "Include/App.h"
 
-#include <glad/glad.h>
-#include <ImGui/imgui.h>
-#include <ImGui/imgui_impl_glfw.h>
-#include <ImGui/imgui_impl_opengl3.h>
 #include <ImGui/ImGuizmo/ImGuizmo.h>
 
 #include "Include/Render/EditorGrid.h"
@@ -18,7 +15,6 @@
 #include "Include/Render/Framebuffer.h"
 #include "Include/Core/Node.h"
 #include "Include/Render/Gizmo.h"
-#include "Include/Debug/Log.h"
 #include "Include/Resources/Model.h"
 #include "Include/Resources/PhysicMaterial.h"
 
@@ -272,6 +268,7 @@ void App::FilesLoad(std::string path)
 		else if (ext == "fbx")
 		{
 			Utils::Loader::FBXLoad(entry.path().generic_string().data());
+
 		}
 		else if (ext == "phm")
 		{

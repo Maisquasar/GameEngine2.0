@@ -1,6 +1,4 @@
 #pragma once
-#include <ImGui/imgui.h>
-#include <vector>
 #include "EditorWindow.h"
 
 namespace Core {

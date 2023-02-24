@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "..\..\..\Include\Core\Components\CameraComponent.h"
 #include "Include/Render/EditorIcon.h"
 #include "Include/Render/InstancesManager.h"

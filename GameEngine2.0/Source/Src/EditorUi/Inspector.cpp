@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Utils/Input.h"
 #include "Include/App.h"

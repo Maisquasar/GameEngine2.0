@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/EditorUi/FloatingFileExplorer.h"
 #include "Include/EditorUi/Inspector.h"
 #include "Include/Resources/ResourceManager.h"

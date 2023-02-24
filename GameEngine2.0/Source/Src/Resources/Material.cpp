@@ -1,8 +1,8 @@
+#include "stdafx.h"
 #include "..\..\Include\Resources\Material.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"
-#include <functional>
 
 Resources::Material::Material()
 {

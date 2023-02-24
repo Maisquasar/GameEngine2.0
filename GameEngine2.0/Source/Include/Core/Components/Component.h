@@ -1,8 +1,4 @@
 #pragma once
-#include <Windows.h>
-#include <string>
-#include <vector>
-#include <ImGui/imgui.h>
 #include "Include/Math/Math.h"
 namespace Resources
 {

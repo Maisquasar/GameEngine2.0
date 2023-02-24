@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Render/InstancesManager.h"
 #include "Include/Resources/MeshInstance.h"
 #include "Include/Resources/Shader.h"

@@ -1,6 +1,5 @@
+#include "stdafx.h"
 #include "Include/Resources/Animation.h"
-
-#include <algorithm>
 
 Resources::Animation::Animation() {}
 

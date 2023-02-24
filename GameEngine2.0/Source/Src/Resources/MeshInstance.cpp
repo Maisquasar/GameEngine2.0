@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "..\..\Include\Resources\MeshInstance.h"
 #include "Include/App.h"
 

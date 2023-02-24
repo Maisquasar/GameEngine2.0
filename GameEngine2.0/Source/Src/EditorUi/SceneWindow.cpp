@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "..\..\Include\EditorUi\SceneWindow.h"
 #include "Include/App.h"
 

@@ -1,8 +1,4 @@
 #pragma once
-#include <Windows.h>
-#include <glad/glad.h>
-#include <ImGui/imgui.h>
-#include <ImGui/imgui_internal.h>
 #include "../Math/Math.h"
 namespace Resources
 {

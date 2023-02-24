@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Render/Camera.h"
 #include "Include/Utils/Input.h"
 #include "Include/App.h"

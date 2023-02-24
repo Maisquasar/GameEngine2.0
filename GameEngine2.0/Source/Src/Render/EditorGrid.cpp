@@ -1,9 +1,9 @@
+#include "stdafx.h"
 #include "Include/Render/EditorGrid.h"
 #include "Include/Resources/Mesh.h"
 #include "Include/Core/Components/MeshComponent.h"
 #include "Include/Resources/ResourceManager.h"
 #include "Include/App.h"
-#include <ImGui/ImGuizmo/ImGuizmo.h>
 
 Render::EditorGrid::EditorGrid()
 {

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Physic/Physic.h"
 #include "Include/Physic/Ray.h"
 #include "Include/Core/Transform.h"

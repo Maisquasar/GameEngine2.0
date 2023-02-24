@@ -1,7 +1,5 @@
+#include "stdafx.h"
 #include "..\..\Include\EditorUi\PerformanceWindow.h"
-#include <algorithm>
-#include <Windows.h>
-#include <GLFW/glfw3.h>
 
 #include "Include/App.h"
 

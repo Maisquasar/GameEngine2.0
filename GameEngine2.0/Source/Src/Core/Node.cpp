@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Include/Core/Node.h"
 #include "Include/Utils/Loader.h"
 #include "Include/App.h"
