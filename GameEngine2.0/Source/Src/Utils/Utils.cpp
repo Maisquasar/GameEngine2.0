@@ -155,7 +155,6 @@ static int TextEditCallback(ImGuiInputTextCallbackData* data)
 	return inputText->TextEditCallbackStub(data);
 }
 
-
 bool Utils::InputTextAutoCompletion(std::vector<std::string> datas, std::string& result)
 {
 	InputTextCompletion it;
@@ -166,16 +165,14 @@ bool Utils::InputTextAutoCompletion(std::vector<std::string> datas, std::string&
 	bool value = ImGui::InputText("Test", out, 256, ImGuiInputTextFlags_CallbackCompletion, TextEditCallback, &it);
 	//ImGui::SameLine();
 	static bool isOpen = false;
-	bool isFocused = ImGui::IsItemFocused();
-	isOpen |= ImGui::IsItemActive();
-	if (isOpen && ImGui::IsItemEdited())
+	isOpen = ImGui::IsItemActive();
+	if (isOpen)
 	{
 		ImGui::SetNextWindowPos({ ImGui::GetItemRectMin().x, ImGui::GetItemRectMax().y });
 		ImGui::SetNextWindowSize({ ImGui::GetItemRectSize().x, 0 });
 		if (ImGui::Begin("##popup", &isOpen, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_Tooltip))
 		{
 			ImGui::BringWindowToDisplayFront(ImGui::GetCurrentWindow());
-			isFocused |= ImGui::IsWindowFocused();
 			for (int i = 0; i < datas.size(); i++)
 			{
 				if (strstr(datas[i].c_str(), out) == NULL)
@@ -188,7 +185,6 @@ bool Utils::InputTextAutoCompletion(std::vector<std::string> datas, std::string&
 			}
 		}
 		ImGui::End();
-		isOpen &= isFocused;
 	}
 	result = out;
 	return value;
