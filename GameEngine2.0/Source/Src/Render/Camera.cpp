@@ -75,11 +75,11 @@ void Render::Camera::Update(bool firstUpdate)
 	{
 		FocusPosition = (FocusPosition + (Transform.GetForwardVector() * movementSpeed * ImGui::GetIO().DeltaTime));
 	}
-	if (Utils::Input::IsKeyDown(ImGuiKey_F))
+	if (Utils::Input::IsKeyDown(ImGuiKey_E))
 	{
 		FocusPosition = (FocusPosition + (-Transform.GetUpVector() * movementSpeed * ImGui::GetIO().DeltaTime));
 	}
-	if (Utils::Input::IsKeyDown(ImGuiKey_Space))
+	if (Utils::Input::IsKeyDown(ImGuiKey_Q))
 	{
 		FocusPosition = (FocusPosition + (Transform.GetUpVector() * movementSpeed * ImGui::GetIO().DeltaTime));
 	}

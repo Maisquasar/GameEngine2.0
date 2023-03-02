@@ -30,7 +30,8 @@ void Utils::ThreadManager::ThreadLoop()
 		{
 			Lock();
 			if (!_tasks.empty()) {
-				if (auto task = _tasks.front()) {
+				if (_tasks.front() != nullptr) {
+					auto task = _tasks.front();
 					_tasks.pop();
 					Unlock();
 					if (task != nullptr)
