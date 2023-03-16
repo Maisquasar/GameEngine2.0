@@ -54,7 +54,7 @@ namespace Resources
 		// Set Fragment Shader.
 		bool SetFragmentShader(std::string filename);
 
-		void Load(std::string filename) override;
+		void Load() override;
 
 		void Recompile();
 

@@ -12,21 +12,21 @@ Resources::Model::~Model()
 {
 }
 
-void Resources::Model::Load(std::string filename)
+void Resources::Model::Load()
 {
 #if MULTITHREAD_LOADING
-	Application.ThreadManager.QueueJob(&Model::MultiThreadLoad, this, filename);
+	Application.ThreadManager.QueueJob(&Model::MultiThreadLoad, this);
 #else
-	MultiThreadLoad(filename);
+	MultiThreadLoad();
 #endif
 }
 
 void Resources::Model::LoadSingleThread(std::string filename)
 {
-	MultiThreadLoad(filename);
+	MultiThreadLoad();
 }
 
-void Resources::Model::MultiThreadLoad(std::string filename)
+void Resources::Model::MultiThreadLoad()
 {
 	uint32_t size = 0;
 	bool sucess = false;
@@ -92,7 +92,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 
 				if (Meshes.back().SubMeshes.size() > 0)
 					Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
-				Meshes.back().Load("");
+				Meshes.back().Load();
 				Meshes.back().SetPath(GetPath() + "::" + Meshes.back().GetName());
 				auto meshptr = new Resources::Mesh(Meshes.back());
 				Application.GetResourceManager()->Add(GetPath() + "::" + Meshes.back().GetName(), meshptr);
@@ -170,7 +170,7 @@ void Resources::Model::ModelLoop(const char* data, const int32_t& size)
 	}
 	if (Meshes.back().SubMeshes.size() > 0) {
 		Meshes.back().SubMeshes.back().Count = Meshes.back().Indices.size() - Meshes.back().SubMeshes.back().StartIndex;
-		Meshes.back().Load("");
+		Meshes.back().Load();
 		Meshes.back().SetPath(GetPath() + "::" + Meshes.back().GetName());
 		auto meshptr = new Resources::Mesh(Meshes.back());
 		Application.GetResourceManager()->Add(GetPath() + "::" + Meshes.back().GetName(), meshptr);

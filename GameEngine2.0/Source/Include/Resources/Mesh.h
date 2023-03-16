@@ -30,7 +30,7 @@ namespace Resources {
 		Mesh();
 		~Mesh();
 
-		void Load(std::string filename) override;
+		void Load() override;
 		virtual void Initialize() override;
 		
 		void VerticesLoop(std::vector<unsigned int>& indices, std::vector<float>& vertices);

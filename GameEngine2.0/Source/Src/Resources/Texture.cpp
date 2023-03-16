@@ -18,21 +18,21 @@ void Resources::Texture::NewTexture(std::string filename)
 	this->_initialized = true;
 }
 
-void Resources::Texture::Load(std::string filename)
+void Resources::Texture::Load()
 {
 #if MULTITHREAD_LOADING
-	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename, false);
+	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, false);
 #else
-	MultiThreadLoading(filename);
+	MultiThreadLoading();
 #endif
 }
 
-void Resources::Texture::Load(std::string filename, bool shouldFlip)
+void Resources::Texture::Load(bool shouldFlip)
 {
 #if MULTITHREAD_LOADING
-	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, filename, shouldFlip);
+	Application.ThreadManager.QueueJob(&Texture::MultiThreadLoading, this, shouldFlip);
 #else
-	MultiThreadLoading(filename, shouldFlip);
+	MultiThreadLoading(shouldFlip);
 #endif
 }
 
@@ -61,9 +61,9 @@ void Resources::Texture::LoadFromMemory(unsigned char* data, int len)
 	_initialized = true;
 }
 
-void Resources::Texture::MultiThreadLoading(std::string filename, bool flip)
+void Resources::Texture::MultiThreadLoading(bool shouldFlip)
 {
-	stbi_set_flip_vertically_on_load_thread(flip);
+	stbi_set_flip_vertically_on_load_thread(shouldFlip);
 	_index = Application.GetResourceManager()->TextureIndex;
 	Application.GetResourceManager()->TextureIndex++;
 	int NrChannels;

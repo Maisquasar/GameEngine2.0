@@ -57,7 +57,7 @@ bool Resources::Shader::SetFragmentShader(std::string filename)
 	return true;
 }
 
-void Resources::Shader::Load(std::string filename)
+void Resources::Shader::Load()
 {
 	if (SetShader(_path + "/vertex.glsl") && SetFragmentShader(_path + "/fragment.glsl"))
 	{

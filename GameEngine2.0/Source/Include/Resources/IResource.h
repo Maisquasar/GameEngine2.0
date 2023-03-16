@@ -6,7 +6,7 @@ namespace Resources {
 	public:
 		IResource() {}
 		virtual ~IResource() {}
-		virtual void Load(std::string filename) {}
+		virtual void Load() {}
 		virtual IResource* Clone() const = 0;
 		virtual void ShowInInspector() {}
 		virtual void Initialize() {}
@@ -18,7 +18,6 @@ namespace Resources {
 		std::string GetName() { return _name; }
 
 		virtual bool IsInitialized() { return _initialized; }
-		bool IsInLoading() { return _inLoading; }
 
 		void SetInitialized() { _initialized = true; }
 
@@ -27,7 +26,6 @@ namespace Resources {
 		std::string _path;
 		std::string _name;
 		bool _initialized = false;
-		bool _inLoading = false;
 		friend class ResourceManager;
 	};
 

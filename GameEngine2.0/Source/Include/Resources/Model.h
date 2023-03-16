@@ -11,10 +11,10 @@ namespace Resources
 		Model();
 		~Model();
 
-		void Load(std::string filename) override;
+		void Load() override;
 		void LoadSingleThread(std::string filename);
 		void ModelLoop(const char* data, const int32_t& size);
-		void MultiThreadLoad(std::string filename);
+		void MultiThreadLoad();
 
 		Core::Node* CreateFromModel();
 

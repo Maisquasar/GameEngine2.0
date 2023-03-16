@@ -8,8 +8,8 @@ namespace Resources {
 		PhysicMaterial();
 		~PhysicMaterial();
 
-		void Load(std::string filename) override;
-		void MultiThreadLoad(std::string filename);
+		void Load() override;
+		void MultiThreadLoad();
 
 		void Save();
 

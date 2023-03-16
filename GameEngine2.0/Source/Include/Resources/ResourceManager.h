@@ -18,7 +18,7 @@ namespace Resources {
 		ResourceManager();
 		~ResourceManager();
 
-		template<typename T> T* Create(std::string filename)
+		template<typename T> T* Create(std::string filename, bool load = false)
 		{
 			if (_deleted || !std::filesystem::exists(filename))
 				return nullptr;
@@ -30,8 +30,7 @@ namespace Resources {
 			_resource[Path] = new T();
 			_resource[Path]->SetPath(Path);
 			_resource[Path]->SetName(filename);
-			_resource[Path]->_inLoading = true;
-			_resource[Path]->Load(filename);
+			_resource[Path]->Load();
 			return dynamic_cast<T*>(_resource[Path]);
 		}
 

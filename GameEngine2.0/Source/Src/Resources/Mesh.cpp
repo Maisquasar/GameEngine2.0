@@ -16,7 +16,7 @@ Resources::Mesh::~Mesh()
 		glDeleteBuffers(1, &_VBO);
 }
 
-void Resources::Mesh::Load(std::string filename)
+void Resources::Mesh::Load()
 {
 	if (Loaded)
 		return;

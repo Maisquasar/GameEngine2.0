@@ -72,16 +72,16 @@ void Resources::Material::ShowInInspector()
 	}
 }
 
-void Resources::Material::Load(std::string filename)
+void Resources::Material::Load()
 {
 #if MULTITHREAD_LOADING
-	Application.ThreadManager.QueueJob(&Material::MultiThreadLoad, this, filename);
+	Application.ThreadManager.QueueJob(&Material::MultiThreadLoad, this);
 #else
-	MultiThreadLoad(filename);
+	MultiThreadLoad();
 #endif
 }
 
-void Resources::Material::MultiThreadLoad(std::string filename)
+void Resources::Material::MultiThreadLoad()
 {
 	if (Loaded)
 		return;

@@ -13,15 +13,15 @@ namespace Resources {
 
 		void NewTexture(std::string filename);
 
-		void Load(std::string filename) override;
+		void Load() override;
 
-		void Load(std::string filename, bool shouldFlip);
+		void Load(bool shouldFlip);
 
 		void Write();
 
 		void LoadFromMemory(unsigned char* data, int len);
 
-		void MultiThreadLoading(std::string filename, bool shouldFlip);
+		void MultiThreadLoading(bool shouldFlip);
 
 		void Initialize() override;
 

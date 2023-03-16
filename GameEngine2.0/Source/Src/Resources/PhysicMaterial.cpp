@@ -11,16 +11,16 @@ Resources::PhysicMaterial::~PhysicMaterial()
 {
 }
 
-void Resources::PhysicMaterial::Load(std::string filename)
+void Resources::PhysicMaterial::Load()
 {
 #if MULTITHREAD_LOADING
-	Application.ThreadManager.QueueJob(&Resources::PhysicMaterial::MultiThreadLoad, this, filename);
+	Application.ThreadManager.QueueJob(&Resources::PhysicMaterial::MultiThreadLoad, this);
 #else
-	MultiThreadLoad(filename);
+	MultiThreadLoad();
 #endif
 }
 
-void Resources::PhysicMaterial::MultiThreadLoad(std::string path)
+void Resources::PhysicMaterial::MultiThreadLoad()
 {
 	uint32_t size;
 	bool sucess;
