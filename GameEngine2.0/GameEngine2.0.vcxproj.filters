@@ -183,9 +183,6 @@
     <ClCompile Include="Source\Src\Core\Components\CameraComponent.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Src\Resources\BillBoard.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Src\EditorUi\AnimationWindow.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -417,9 +414,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Source\Include\Core\Components\CameraComponent.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Include\Resources\BillBoard.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Source\Include\EditorUi\AnimationWindow.h">

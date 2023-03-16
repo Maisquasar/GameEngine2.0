@@ -69,6 +69,10 @@ void Core::Scene::Update()
 
 		_cameraEditor.FrameBuffer.Draw();
 	}
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(_clearColor.x * _clearColor.w, _clearColor.y * _clearColor.w, _clearColor.z * _clearColor.w, _clearColor.w);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	if (GetMainCamera() && EditorUi::Editor::GetGameWindow()->Window)
 	{
 		this->_mainCamera->AspectRatio = EditorUi::Editor::GetGameWindow()->Window->Size.x / EditorUi::Editor::GetGameWindow()->Window->Size.y;

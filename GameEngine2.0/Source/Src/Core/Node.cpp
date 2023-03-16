@@ -20,7 +20,7 @@ Core::Node::~Node()
 		Components.erase(Components.begin() + i);
 		delete comp;
 	}
-	for (auto child : Childrens)
+	for (auto&& child : Childrens)
 	{
 		delete child;
 	}

@@ -137,7 +137,6 @@
     <ClCompile Include="Source\Src\Render\EditorIcon.cpp" />
     <ClCompile Include="Source\Src\Render\InstancesManager.cpp" />
     <ClCompile Include="Source\Src\Resources\Animation.cpp" />
-    <ClCompile Include="Source\Src\Resources\BillBoard.cpp" />
     <ClCompile Include="Source\Src\Resources\Mesh.cpp" />
     <ClCompile Include="Source\Src\Core\Node.cpp" />
     <ClCompile Include="Source\Src\Core\Transform.cpp" />
@@ -219,7 +218,6 @@
     <ClInclude Include="Source\Include\Render\Gizmo.h" />
     <ClInclude Include="Source\Include\Render\InstancesManager.h" />
     <ClInclude Include="Source\Include\Resources\Animation.h" />
-    <ClInclude Include="Source\Include\Resources\BillBoard.h" />
     <ClInclude Include="Source\Include\Resources\Mesh.h" />
     <ClInclude Include="Source\Include\Core\Node.h" />
     <ClInclude Include="Source\Include\Core\Transform.h" />

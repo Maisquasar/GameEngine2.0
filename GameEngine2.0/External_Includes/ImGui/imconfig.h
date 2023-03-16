@@ -13,6 +13,7 @@
 //-----------------------------------------------------------------------------
 
 #pragma once
+#include "Include/Math/Math.h"
 
 //---- Define assertion handler. Defaults to calling assert().
 // If your macro uses multiple statements, make sure is enclosed in a 'do { .. } while (0)' block so it can be used as a single statement.
@@ -81,15 +82,15 @@
 
 //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
 // This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
+
 #define IM_VEC2_CLASS_EXTRA                                                     \
-        constexpr ImVec2(const MyVec2& f) : x(f.x), y(f.y) {}                   \
-        operator MyVec2() const { return MyVec2(x,y); }
+        constexpr ImVec2(const Math::Vec2& f) : x(f.x), y(f.y) {}                   \
+        operator Math::Vec2() const { return Math::Vec2(x,y); }
 
 #define IM_VEC4_CLASS_EXTRA                                                     \
-        constexpr ImVec4(const MyVec4& f) : x(f.x), y(f.y), z(f.z), w(f.w) {}   \
-        operator MyVec4() const { return MyVec4(x,y,z,w); }
-*/
+        constexpr ImVec4(const Math::Vec4& f) : x(f.x), y(f.y), z(f.z), w(f.w) {}   \
+        operator Math::Vec4() const { return Math::Vec4(x,y,z,w); }
+
 
 //---- Use 32-bit vertex indices (default is 16-bit) is one way to allow large meshes with more than 64K vertices.
 // Your renderer backend will need to support it (most example renderer backends support both 16/32-bit indices).

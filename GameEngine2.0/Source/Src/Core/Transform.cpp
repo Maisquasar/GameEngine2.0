@@ -341,7 +341,6 @@ void Core::Transform::ShowInInspector()
 
 	if (position != _localPosition || rotation != _localEulerRotation || scale != _localScale) {
 		SetLocalPosition(position);
-		float mod = 360.f;
 		_localEulerRotation = Math::Vec3(rotation.x, rotation.y, rotation.z);
 		_localRotation = _localEulerRotation.ToQuaternion();
 		SetLocalScale(scale);

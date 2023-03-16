@@ -2,7 +2,6 @@
 #include "Include/Math/Math.h"
 
 namespace Resources{
-	class BillBoard;
 	class Material;
 	class Mesh;
 }

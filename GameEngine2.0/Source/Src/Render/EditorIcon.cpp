@@ -2,7 +2,6 @@
 #include "Include/Render/EditorIcon.h"
 #include "Include/App.h"
 #include "Include/Resources/Mesh.h"
-#include "Include/Resources/BillBoard.h"
 #include "Include/Utils/Utils.h"
 
 Render::EditorIcon::EditorIcon()
