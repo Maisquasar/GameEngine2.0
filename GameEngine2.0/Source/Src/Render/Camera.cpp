@@ -136,26 +136,11 @@ Math::Vec3 Render::Camera::GetRight()
 	return GetModelMatrix() * Math::Vec3::Right();
 }
 
-Math::Vec3 Render::Camera::UnProject(Math::Vec2 point)
+Math::Vec3 Render::Camera::UnProject(Math::Vec3 point)
 {    
-	// Convert the screen position to normalized device coordinates
-	Math::Vec3 ndc;
-	ndc.x = (point.x / EditorUi::Editor::GetSceneWindow()->GetSize().x) * 2 - 1;
-	ndc.y = ((EditorUi::Editor::GetSceneWindow()->GetSize().y - point.y) / EditorUi::Editor::GetSceneWindow()->GetSize().y) * 2 - 1;
-	ndc.z = 10;
-
-	// Use the inverse of the projection matrix to convert from NDC to world space
-	auto invProjectionMatrix = GetProjection().CreateInverseMatrix();
-	Math::Vec4 worldPos = invProjectionMatrix * ndc;
-
-	// Divide by the w-coordinate to get the final world position
-	worldPos.Homogenize();
-
-	// Use the inverse of the view matrix to transform the world position into the correct space
-	auto invViewMatrix = GetViewMatrix().CreateInverseMatrix();
-	worldPos = invViewMatrix * worldPos;
-
-	return Math::Vec3(worldPos);
+	auto screenSize = EditorUi::Editor::GetSceneWindow()->GetSize();
+	Math::Vec4 mousePosition = { (float)(2.0f * point.x) / (float)screenSize.x - 1.0f, (float)1.0f - (2.0f * point.y) / (float)screenSize.y, 1.f, 1.f };
+	return Transform.GetWorldPosition() + (GetVP().CreateInverseMatrix() * mousePosition) * point.z;
 }
 
 bool Render::Camera::IsVisible()

@@ -159,6 +159,7 @@ void EditorUi::FileExplorer::Draw()
 	ImGui::End();
 	ImGui::PopID();
 }
+
 void EditorUi::FileExplorer::Refresh()
 {
 	FloatingFileExplorer::Refresh();

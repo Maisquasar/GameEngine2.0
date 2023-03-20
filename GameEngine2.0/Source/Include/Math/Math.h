@@ -225,6 +225,8 @@ namespace Math
 
 		Vec3(const Vec2& a) : x(a.x), y(a.y), z(0) {}
 
+		Vec3(const Vec2& a, float _z) : x(a.x), y(a.y), z(_z) {}
+
 		inline Vec3(const Vec4& a);
 
 		inline Vec3 operator=(const Vec4& b) const;

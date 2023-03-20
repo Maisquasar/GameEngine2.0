@@ -37,7 +37,7 @@ namespace Render {
 
 		Math::Vec3 GetRight();
 
-		Math::Vec3 UnProject(Math::Vec2 point);
+		Math::Vec3 UnProject(Math::Vec3 point);
 
 		Math::Mat4 GetVP() { return GetProjection() * GetViewMatrix(); }
 

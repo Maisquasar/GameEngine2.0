@@ -6,6 +6,11 @@
 
 Debug::Line::Line() {}
 
+Debug::Line::Line(float lineWidth)
+{
+	_lineWidth = lineWidth;
+}
+
 Debug::Line::Line(Math::Vec3 p1, Math::Vec3 p2, float lineWidth)
 {
 	_point1 = p1;
@@ -52,7 +57,7 @@ void Debug::Line::Draw(Math::Vec3 p1, Math::Vec3 p2)
 	auto MVP = Application.GetScene()->GetVPMatrix();
 	glUniformMatrix4fv(_shader->GetLocation(Resources::Location::L_MVP), 1, GL_TRUE, &MVP.content[0][0]);
 	glUniform1i(_shader->GetLocation(Resources::Location::L_ENABLE_TEXTURE), false);
-	glUniform4f(_shader->GetLocation(Resources::Location::L_COLOR), 1, 1, 1, 1);
+	glUniform4f(_shader->GetLocation(Resources::Location::L_COLOR), 1, 0, 0, 1);
 
 	glDraw(GL_LINES, 0, 9);
 	glLineWidth(defaultWidth);

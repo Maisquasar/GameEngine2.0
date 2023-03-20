@@ -10,6 +10,7 @@ namespace Debug {
 	{
 	public:
 		Line();
+		Line(float lineWidth);
 		Line(Math::Vec3 p1, Math::Vec3 p2, float lineWidth = 1);
 		~Line();
 		

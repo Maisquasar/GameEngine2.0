@@ -29,9 +29,12 @@ void Core::Scene::Initialize()
 void Core::Scene::BeginPlay()
 {
 }
+#include "Include/Debug/Line.h"
 
 void Core::Scene::Update()
 {
+	static Debug::Line line(10);
+
 	// First Render form camera Editor.
 	_sceneNode->UpdateSelfAndChilds();
 	// Update Physic.
@@ -51,6 +54,16 @@ void Core::Scene::Update()
 		if (EditorUi::Editor::GetSceneWindow()->Window) {
 			_cameraEditor.AspectRatio = EditorUi::Editor::GetSceneWindow()->Window->Size.x / EditorUi::Editor::GetSceneWindow()->Window->Size.y;
 		}
+
+		// Debug Line
+		static Math::Vec3 origin;
+		static Math::Vec3 Direction;
+		if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+
+			origin = _currentCamera->GetTransform()->GetLocalPosition();
+			Direction = _currentCamera->UnProject({ EditorUi::Editor::GetSceneWindow()->GetMousePosition(), 1000.f });
+		}
+		line.Draw(origin, Direction);
 
 		// Draw Meshes with picking Shader.
 		PickingUpdate(_sceneNode->GetAllChildrens());
