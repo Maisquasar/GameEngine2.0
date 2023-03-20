@@ -33,10 +33,6 @@ namespace Render {
 		// Return the Mat4D model matrix.
 		Math::Mat4 GetModelMatrix();
 
-		Math::Vec3 GetUp();
-
-		Math::Vec3 GetRight();
-
 		Math::Vec3 UnProject(Math::Vec3 point);
 
 		Math::Mat4 GetVP() { return GetProjection() * GetViewMatrix(); }

@@ -83,9 +83,7 @@ void Render::Camera::Update(bool firstUpdate)
 	{
 		FocusPosition = (FocusPosition + (Transform.GetUpVector() * movementSpeed * ImGui::GetIO().DeltaTime));
 	}
-
 	Transform.SetLocalPosition(FocusPosition - Transform.GetForwardVector() * Distance);
-	Transform.SetLocalRotation(Math::Quat::LookRotation(FocusPosition - Transform.GetLocalPosition(), Math::Vec3::Up()));
 }
 
 Math::Mat4 Render::Camera::GetViewMatrix()
@@ -124,16 +122,6 @@ Math::Mat4 Render::Camera::GetProjection()
 Math::Mat4 Render::Camera::GetModelMatrix()
 {
 	return GetTransform()->GetModelMatrix();
-}
-
-Math::Vec3 Render::Camera::GetUp()
-{
-	return GetModelMatrix() * Math::Vec3::Up();
-}
-
-Math::Vec3 Render::Camera::GetRight()
-{
-	return GetModelMatrix() * Math::Vec3::Right();
 }
 
 Math::Vec3 Render::Camera::UnProject(Math::Vec3 point)

@@ -25,6 +25,11 @@ void Utils::Input::Update()
 	MouseScroll = 0;
 	auto newMouse = ImGui::GetMousePos();
 	MouseDelta = Math::Vec2((float)(newMouse.x - MousePosition.x), (float)(newMouse.y - MousePosition.y));
+	if (abs(MouseDelta.x) >= Application.GetMonitorVideoMode()->width - 10.f || abs(MouseDelta.y) >= Application.GetMonitorVideoMode()->height - 10.f)
+	{
+		MouseDelta = Math::Vec2(0, 0);
+	}
+	MouseDelta.Print();
 	MousePosition = Math::Vec2(newMouse.x, newMouse.y);
 
 
